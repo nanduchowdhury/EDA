@@ -1,0 +1,71 @@
+/* QLabel */
+QLabel {
+    background-color: qlineargradient(
+        spread: pad, 
+        x1:0, y1:1, x2:0, y2:0,
+        stop:0 #f1ecb6, 
+        stop:1 #f4f2dd
+    );
+    color: #0b0615;
+    padding: 4px;
+    border: none;
+    border-radius: 3px;
+}
+
+/* QPushButton */
+QPushButton {
+    background: qlineargradient(
+        spread: pad, 
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #e6f2ff,
+        stop:1 #b3d9ff
+    );
+    color: #0a0b0a;
+    padding: 6px 12px;
+    border: 1px solid #7da9d9;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Not supported in Qt, visual only */
+}
+
+QPushButton:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #a0cfff,
+        stop:1 #d9ecff
+    );
+    border: 1px solid #5b90c8;
+    padding-top: 7px; /* simulate push-down */
+    padding-bottom: 5px;
+}
+
+
+/* QTextEdit */
+QTextEdit {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 4px;
+    border-radius: 3px;
+}
+
+/* QComboBox */
+QComboBox {
+    background-color: #ffffff;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* QListWidget */
+QListWidget {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+/* QTableWidget */
+QTableWidget {
+    background-color: #ffffff;
+    gridline-color: #ccc;
+    border: 1px solid #ccc;
+}
