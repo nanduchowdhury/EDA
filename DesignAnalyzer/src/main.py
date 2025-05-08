@@ -1,34 +1,85 @@
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
-    QListWidget,
+    QListWidget, QTabWidget,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
-    QAction
+    QAction, QFileDialog, 
 )
 
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
 
 from PyQt5.QtCore import Qt
 import sys
+
+import json
+
+import os
+import psutil
+import threading
 
 from main_menu import MainMenu
 from main_menu import MenuItemAbstract
 
 from def_parser import DefParser
 
+import logging
+from datetime import datetime
+
+class UILogHandler(logging.Handler):
+    def __init__(self, ui_log_callback):
+        super().__init__()
+        self.ui_log_callback = ui_log_callback
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.ui_log_callback(now, log_entry)
+
+class ParseWorker(QObject):
+    finished = pyqtSignal(dict)
+
+    def __init__(self, file_path):
+        super().__init__()
+        self.file_path = file_path
+
+    @pyqtSlot()
+    def run(self):
+        parser = DefParser()
+
+        with open(self.file_path, 'r') as def_file:
+            def_file_content = def_file.read()
+
+        json_def = parser.parse(def_file_content)
+
+        self.finished.emit(json_def)
 
 class FileOpenMenuItem(MenuItemAbstract):
     def onClick(self):
-
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
+
         if file_path:
             self.selectedFile = file_path
-        
-        parser = DefParser()
-        json_def = parser.parse(self.selectedFile)
 
-        print(json_def)
+            self.worker = ParseWorker(file_path)
+            self.thread = QThread()
+
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)  # ✅ Correct slot usage
+
+            self.worker.finished.connect(self.on_parse_finished)
+            self.worker.finished.connect(self.thread.quit)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+
+            logging.info("DEF parser started...")
+
+    def on_parse_finished(self, json_def):
+
+        json_data = json.dumps(json_def, indent=4)
+
+        # print(json_data)
+        logging.info("DEF parser finished.")
 
 
 class MainUI(QMainWindow):
@@ -47,6 +98,8 @@ class MainUI(QMainWindow):
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
+
+        self.setup_logging()
 
         self.menu = MainMenu(self)
 
@@ -67,6 +120,31 @@ class MainUI(QMainWindow):
         with open("main.qss", "r") as f:
             self.setStyleSheet(f.read())
 
+    def setup_logging(self):
+        # Create logger
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
+
+        # File and console handlers
+        file_handler = logging.FileHandler('app.log')
+        console_handler = logging.StreamHandler()
+
+        # Format for logs
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        console_handler.setFormatter(formatter)
+
+        # Custom UI handler
+        ui_handler = UILogHandler(self.appendLog)
+        ui_handler.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
+
+        # Add handlers to logger
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+        logger.addHandler(ui_handler)
+
+        self.logger = logger  # Optional: store if you want to call directly
+
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
@@ -84,11 +162,58 @@ class MainUI(QMainWindow):
         self.layoutArea.setStyleSheet("background-color: #e3f2fd; border: 1px solid black;")
         self.layoutArea.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
+
     def create_control_area(self):
         self.controlArea = QWidget()
         self.controlArea.setMinimumHeight(self.WINDOW_HEIGHT - self.LAYOUT_HEIGHT)
         self.controlArea.setStyleSheet("background-color: #fce4ec; border: 1px solid black;")
+        
+        layout = QVBoxLayout(self.controlArea)
+        self.tabWidget = QTabWidget()
+        
+        # Design Info tab
+        self.designInfoTab = QWidget()
+        self.designInfoText = QTextEdit()
+        self.designInfoText.setReadOnly(True)
+        designLayout = QVBoxLayout()
+        designLayout.addWidget(self.designInfoText)
+        self.designInfoTab.setLayout(designLayout)
+        self.tabWidget.addTab(self.designInfoTab, "Design Info")
+        
+        # Logs tab
+        self.logsTab = QWidget()
+        self.logTable = QTableWidget(0, 2)
+        self.logTable.setHorizontalHeaderLabels(["Date", "Log"])
+        logLayout = QVBoxLayout()
+        logLayout.addWidget(self.logTable)
+        self.logsTab.setLayout(logLayout)
+        self.tabWidget.addTab(self.logsTab, "Logs")
+        
+        layout.addWidget(self.tabWidget)
         self.mainLayout.addWidget(self.controlArea)
+
+        self.appendSystemInfo()
+
+    def appendDesignInfo(self, info):
+        self.designInfoText.append(info)
+
+    def appendLog(self, date, log):
+        row = self.logTable.rowCount()
+        self.logTable.insertRow(row)
+        self.logTable.setItem(row, 0, QTableWidgetItem(date))
+        self.logTable.setItem(row, 1, QTableWidgetItem(log))
+
+    def appendSystemInfo(self):
+        process = psutil.Process(os.getpid())
+        mem_used = process.memory_info().rss / (1024 * 1024)  # in MB
+        mem_available = psutil.virtual_memory().available / (1024 * 1024)  # in MB
+        num_cpus = os.cpu_count()
+        num_threads = threading.active_count()
+
+        self.appendDesignInfo(f"Memory Used: {mem_used:.2f} MB")
+        self.appendDesignInfo(f"Memory Available: {mem_available:.2f} MB")
+        self.appendDesignInfo(f"CPUs Available: {num_cpus}")
+        self.appendDesignInfo(f"Threads Running: {num_threads}")
 
     def create_command_area(self):
         self.commandArea = QWidget()
