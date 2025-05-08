@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget, QTabWidget,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
-    QAction, QFileDialog, 
+    QAction, QFileDialog, QMessageBox
 )
 
 from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
@@ -21,6 +21,8 @@ from main_menu import MainMenu
 from main_menu import MenuItemAbstract
 
 from def_parser import DefParser
+
+from predicates import Predicates, GetViasPredicate
 
 import logging
 from datetime import datetime
@@ -49,9 +51,9 @@ class ParseWorker(QObject):
         with open(self.file_path, 'r') as def_file:
             def_file_content = def_file.read()
 
-        json_def = parser.parse(def_file_content)
+        def_dict = parser.parse(def_file_content)
 
-        self.finished.emit(json_def)
+        self.finished.emit(def_dict)
 
 class FileOpenMenuItem(MenuItemAbstract):
     def onClick(self):
@@ -74,9 +76,9 @@ class FileOpenMenuItem(MenuItemAbstract):
 
             logging.info("DEF parser started...")
 
-    def on_parse_finished(self, json_def):
+    def on_parse_finished(self, def_dict):
 
-        json_data = json.dumps(json_def, indent=4)
+        json_data = json.dumps(def_dict, indent=4)
 
         # print(json_data)
         logging.info("DEF parser finished.")
@@ -99,7 +101,11 @@ class MainUI(QMainWindow):
 
         self.apply_global_styles()
 
+        self.all_predicates = Predicates()
+
         self.setup_logging()
+
+        self.registerPredicates()
 
         self.menu = MainMenu(self)
 
@@ -238,33 +244,43 @@ class MainUI(QMainWindow):
         # Row 3: List + Column of Label+TextEdit
         row3 = QHBoxLayout()
 
+        # Command List
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.commandList.addItems(["Option 1", "Option 2", "Option 3"])
-        self.commandList.setMaximumWidth(100)
+
+        # Add only predicate names
+        self.commandList.addItems(list(self.all_predicates.getAllPredicates().keys()))
+        self.commandList.setMaximumWidth(300)
+        self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
 
         row3.addWidget(self.commandList)
 
+        # Parameter Area
         paramWidget = QWidget()
-        paramLayout = QVBoxLayout()
-        self.paramEdits = []
+        self.paramLayout = QVBoxLayout()
+        self.paramEdits = []  # List of (label, lineEdit) tuples
 
-        for labelText in ["Param 1", "Param 2", "Param 3"]:
+        # Create enough editable rows (you can change the count as needed)
+        for _ in range(5):
             hbox = QHBoxLayout()
-            label = QLabel(labelText)
+            label = QLabel("Param")
+            label.setMinimumWidth(80)
             edit = QLineEdit()
             hbox.addWidget(label)
             hbox.addWidget(edit)
-            paramLayout.addLayout(hbox)
-            self.paramEdits.append(edit)
+            self.paramLayout.addLayout(hbox)
+            self.paramEdits.append((label, edit))
 
-        paramWidget.setLayout(paramLayout)
+        paramWidget.setLayout(self.paramLayout)
         row3.addWidget(paramWidget)
+
         layout.addLayout(row3)
 
+
         # Row 4: Execute Button
-        executeButton = QPushButton("Execute")
-        layout.addWidget(executeButton)
+        self.runButton = QPushButton("Run Predicate")
+        self.runButton.clicked.connect(self.runSelectedPredicate)
+        layout.addWidget(self.runButton)
 
         # Row 5: Results Label + Table
         layout.addWidget(QLabel("Results"))
@@ -277,6 +293,76 @@ class MainUI(QMainWindow):
         layout.addWidget(self.commandTable)
 
         self.commandArea.setLayout(layout)
+
+
+    def runSelectedPredicate(self):
+        selected_items = self.commandList.selectedItems()
+        if not selected_items:
+            print("No predicate selected.")
+            return
+
+        predicate_name = selected_items[0].text()
+
+        try:
+            # Get the expected argument names and the predicate object
+            arg_names, predicate = self.all_predicates.getAllPredicates()[predicate_name]
+        except KeyError:
+            print(f"Predicate '{predicate_name}' not found.")
+            return
+
+        # Build a dict of argument values from the paramEdits
+        arg_values = {}
+        for label, edit in self.paramEdits:
+            if label.isVisible():
+                arg_name = label.text()
+                arg_values[arg_name] = edit.text()
+
+        # Set arguments and run the predicate
+        predicate.setArgs(arg_values)
+        try:
+            result = predicate.run()
+            print(f"Result of '{predicate_name}': {result}")
+            return result
+        except Exception as e:
+            print(f"Error running predicate '{predicate_name}': {e}")
+            raise
+
+
+
+    def updateParamLabels(self):
+        selected_items = self.commandList.selectedItems()
+        if not selected_items:
+            return
+
+        selected_name = selected_items[0].text()
+
+        try:
+            arg_names = self.all_predicates.getPredicateArgs(selected_name)
+        except ValueError:
+            arg_names = []
+
+        # Update labels and visibility
+        for i, (label, edit) in enumerate(self.paramEdits):
+            if i < len(arg_names):
+                label.setText(arg_names[i])
+                label.show()
+                edit.show()
+            else:
+                label.hide()
+                edit.hide()
+
+
+    def registerPredicates(self):
+        
+        predObj = GetViasPredicate()
+        self.all_predicates.addPredicate("get_vias", ["a", "b"], predObj)
+
+        # Iterate
+        for name, (args, obj) in self.all_predicates:
+            print(f"{name} with args {args}")
+
+        # Get args for specific predicate
+        print("Args for 'multiply':", self.all_predicates.getPredicateArgs("get_vias"))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
