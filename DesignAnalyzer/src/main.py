@@ -2,24 +2,44 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget,
-    QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit
+    QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
+    QAction
 )
 
+from PyQt5.QtWidgets import QFileDialog
 
 from PyQt5.QtCore import Qt
 import sys
 
+from main_menu import MainMenu
+from main_menu import MenuItemAbstract
+
+from def_parser import DefParser
+
+
+class FileOpenMenuItem(MenuItemAbstract):
+    def onClick(self):
+
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
+        if file_path:
+            self.selectedFile = file_path
+        
+        parser = DefParser()
+        json_def = parser.parse(self.selectedFile)
+
+        print(json_def)
 
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
-    WINDOW_WIDTH = 1500
-    WINDOW_HEIGHT = 800
+    WINDOW_WIDTH = 1800
+    WINDOW_HEIGHT = 900
 
     LAYOUT_WIDTH = 700
     LAYOUT_HEIGHT = 700
 
-    COMMAND_WIDTH = 700
+    COMMAND_WIDTH = 800
 
     def __init__(self):
         super().__init__()
@@ -27,6 +47,11 @@ class MainUI(QMainWindow):
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
+
+        self.menu = MainMenu(self)
+
+        self.fileOpenMenuObj = FileOpenMenuItem()
+        self.menu.createItem("File", "Open", self.fileOpenMenuObj)
 
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)

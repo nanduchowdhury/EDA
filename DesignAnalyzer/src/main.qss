@@ -12,32 +12,75 @@ QLabel {
     border-radius: 3px;
 }
 
-/* QPushButton */
-QPushButton {
+QMenuBar {
     background: qlineargradient(
-        spread: pad, 
-        x1:0, y1:0, x2:0, y2:1,
-        stop:0 #e6f2ff,
-        stop:1 #b3d9ff
+        x1: 0, y1: 1, 
+        x2: 0, y2: 0, 
+        stop: 0 #f1ecb6, 
+        stop: 1 #f4f2dd
     );
-    color: #0a0b0a;
+    color: #2c2c2c;
+    padding: 4px;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+    margin: 0px;
+}
+
+QMenuBar::item:selected {
+    background: #a8a8a8;
+    border-radius: 3px;
+}
+
+QMenu {
+    background: qlineargradient(
+        x1: 0, y1: 1, 
+        x2: 0, y2: 0, 
+        stop: 0 #f1ecb6, 
+        stop: 1 #f4f2dd
+    );
+    color: #0b0615;
+    padding: 4px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+QMenu::item {
+    padding: 4px 10px;
+    background: transparent;
+}
+
+QMenu::item:selected {
+    background: #c7c3a3;
+    color: #000;
+    border-radius: 3px;
+}
+
+
+QPushButton {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #e0f7ff, stop:1 #b2ebf2);
+    color: #0a0a0a;
     padding: 6px 12px;
-    border: 1px solid #7da9d9;
-    border-radius: 4px;
+    border: 1px solid #8ab6c9;
+    border-radius: 5px;
     font-weight: bold;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Not supported in Qt, visual only */
 }
 
 QPushButton:hover {
-    background: qlineargradient(
-        x1:0, y1:0, x2:0, y2:1,
-        stop:0 #a0cfff,
-        stop:1 #d9ecff
-    );
-    border: 1px solid #5b90c8;
-    padding-top: 7px; /* simulate push-down */
-    padding-bottom: 5px;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #d0f0ff, stop:1 #a2dbe2);
 }
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1:0, y1:1, x2:0, y2:0,
+                                      stop:0 #a2dbe2, stop:1 #d0f0ff);
+    padding-top: 8px;
+    padding-left: 13px;
+}
+
 
 
 /* QTextEdit */
