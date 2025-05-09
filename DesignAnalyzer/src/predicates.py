@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from abc import ABC, abstractmethod
+import json
 
 class PredicateBase(ABC):
     def __init__(self):
@@ -85,7 +85,7 @@ class Predicates:
         return iter(self.predicates.items())
 
 
-class GetViasPredicate(PredicateBase):
+class MultiplyTwoNumbers(PredicateBase):
     def run(self):
         a = int(self.args["a"])
         b = int(self.args["b"])
@@ -93,3 +93,23 @@ class GetViasPredicate(PredicateBase):
         result = a * b
         self.setOutput("result", [result])  # Store result as a list
         return result
+    
+class GetViasForLayer(PredicateBase):
+    def __init__(self, _defParserImplement):
+        super().__init__()
+        self.defParserImplement = _defParserImplement
+
+    def run(self):
+        layerName = self.args['layer']
+        def_dict = self.defParserImplement.def_dict
+
+        result = ''
+
+        vias = def_dict.get("vias", [])
+        if not layerName:
+            result = [via.get("name") for via in vias]
+        result = [via.get("name") for via in vias if layerName in via.get("layers", [])]
+
+        self.setOutput("result", result)  # Store result as a list
+        return result
+

@@ -22,7 +22,7 @@ from main_menu import MenuItemAbstract
 
 from def_parser import DefParser
 
-from predicates import Predicates, GetViasPredicate
+from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer
 
 import logging
 from datetime import datetime
@@ -55,19 +55,25 @@ class ParseWorker(QObject):
 
         self.finished.emit(def_dict)
 
-class FileOpenMenuItem(MenuItemAbstract):
-    def onClick(self):
-        file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
+class DefParserImplement():
+    def __init__(self):
 
-        if file_path:
-            self.selectedFile = file_path
+        self.def_file_path = ''
+        self.def_dict = {}
 
-            self.worker = ParseWorker(file_path)
+    def setDefFile(self, file_path):
+        self.def_file_path = file_path
+
+    def execute(self):
+
+        if self.def_file_path:
+            self.selectedFile = self.def_file_path
+
+            self.worker = ParseWorker(self.def_file_path)
             self.thread = QThread()
 
             self.worker.moveToThread(self.thread)
-            self.thread.started.connect(self.worker.run)  # ✅ Correct slot usage
+            self.thread.started.connect(self.worker.run)
 
             self.worker.finished.connect(self.on_parse_finished)
             self.worker.finished.connect(self.thread.quit)
@@ -76,12 +82,26 @@ class FileOpenMenuItem(MenuItemAbstract):
 
             logging.info("DEF parser started...")
 
+
     def on_parse_finished(self, def_dict):
 
+        self.def_dict = def_dict
         json_data = json.dumps(def_dict, indent=4)
 
         # print(json_data)
+        # print(self.def_dict)
         logging.info("DEF parser finished.")
+
+class FileOpenMenuItem(MenuItemAbstract):
+    def __init__(self, _defParserImplement):
+        self.defParserImplement = _defParserImplement
+
+    def onClick(self):
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
+
+        self.defParserImplement.setDefFile(file_path)
+        self.defParserImplement.execute()
 
 
 class MainUI(QMainWindow):
@@ -105,12 +125,13 @@ class MainUI(QMainWindow):
 
         self.setup_logging()
 
-        self.registerPredicates()
-
         self.menu = MainMenu(self)
 
-        self.fileOpenMenuObj = FileOpenMenuItem()
+        self.defParserImplement = DefParserImplement()
+        self.fileOpenMenuObj = FileOpenMenuItem(self.defParserImplement)
         self.menu.createItem("File", "Open", self.fileOpenMenuObj)
+
+        self.registerPredicates()
 
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
@@ -372,15 +393,18 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        predObj = GetViasPredicate()
-        self.all_predicates.addPredicate("get_vias", ["a", "b"], predObj)
+        multObj = MultiplyTwoNumbers()
+        self.all_predicates.addPredicate("multiply_2_numbers", ["a", "b"], multObj)
+
+        viaObj = GetViasForLayer(self.defParserImplement)
+        self.all_predicates.addPredicate("get_vias_for_layer", ["layer"], viaObj)
 
         # Iterate
         for name, (args, obj) in self.all_predicates:
             print(f"{name} with args {args}")
 
         # Get args for specific predicate
-        print("Args for 'multiply':", self.all_predicates.getPredicateArgs("get_vias"))
+        print("Args for 'multiply':", self.all_predicates.getPredicateArgs("multiply_2_numbers"))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
