@@ -1,8 +1,11 @@
 from abc import ABC, abstractmethod
 
+from abc import ABC, abstractmethod
+
 class PredicateBase(ABC):
     def __init__(self):
-        self.args = {}
+        self.args = {}            # input arguments
+        self.outputs = {}         # output data
 
     def setArg(self, name, value):
         self.args[name] = value
@@ -10,10 +13,29 @@ class PredicateBase(ABC):
     def setArgs(self, args_dict):
         self.args.update(args_dict)
 
+    def setOutput(self, argName, valueList):
+        """Sets the output values for a given argument name."""
+        if not isinstance(valueList, list):
+            raise ValueError("Output value must be a list.")
+        self.outputs[argName] = valueList
+
+    def getNumOutputArgs(self):
+        """Returns the number of output arguments set."""
+        return len(self.outputs)
+
+    def getArgOutput(self, argName):
+        """Gets the list of output values for the given argument name."""
+        return self.outputs.get(argName, [])
+
+    def iterateOutputs(self):
+        for name, values in self.outputs.items():
+            yield name, values
+
     @abstractmethod
     def run(self):
-        """Override this method in subclasses"""
+        """Override this method in subclasses."""
         pass
+
 
 class Predicates:
     def __init__(self):
@@ -68,4 +90,6 @@ class GetViasPredicate(PredicateBase):
         a = int(self.args["a"])
         b = int(self.args["b"])
         print(f"Value a & b : {a} {b}")
-        return a * b
+        result = a * b
+        self.setOutput("result", [result])  # Store result as a list
+        return result

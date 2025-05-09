@@ -285,11 +285,8 @@ class MainUI(QMainWindow):
         # Row 5: Results Label + Table
         layout.addWidget(QLabel("Results"))
 
-        self.commandTable = QTableWidget(3, 2)
-        self.commandTable.setHorizontalHeaderLabels(["Column A", "Column B"])
-        self.commandTable.setItem(0, 0, QTableWidgetItem("Row0-Col0"))
-        self.commandTable.setItem(0, 1, QTableWidgetItem("Row0-Col1"))
-
+        self.commandTable = QTableWidget(0, 2)  # Start with 0 rows
+        self.commandTable.setHorizontalHeaderLabels(["Arg Name", "Values"])
         layout.addWidget(self.commandTable)
 
         self.commandArea.setLayout(layout)
@@ -298,11 +295,10 @@ class MainUI(QMainWindow):
     def runSelectedPredicate(self):
         selected_items = self.commandList.selectedItems()
         if not selected_items:
-            print("No predicate selected.")
+            QMessageBox.warning(self, "Warning", "No predicate selected.")
             return
 
         predicate_name = selected_items[0].text()
-
         try:
             # Get the expected argument names and the predicate object
             arg_names, predicate = self.all_predicates.getAllPredicates()[predicate_name]
@@ -310,7 +306,7 @@ class MainUI(QMainWindow):
             print(f"Predicate '{predicate_name}' not found.")
             return
 
-        # Build a dict of argument values from the paramEdits
+         # Build a dict of argument values from the paramEdits
         arg_values = {}
         for label, edit in self.paramEdits:
             if label.isVisible():
@@ -319,13 +315,35 @@ class MainUI(QMainWindow):
 
         # Set arguments and run the predicate
         predicate.setArgs(arg_values)
+
+        # Execute the predicate
         try:
             result = predicate.run()
             print(f"Result of '{predicate_name}': {result}")
-            return result
         except Exception as e:
             print(f"Error running predicate '{predicate_name}': {e}")
             raise
+
+        # Fetch all output argument names and their corresponding values
+        outputs = list(predicate.iterateOutputs())
+
+        # Set the number of columns based on output args
+        num_columns = len(outputs)
+        self.commandTable.setColumnCount(num_columns)
+
+        # Set column headers as the output arg names
+        column_headers = [arg_name for arg_name, _ in outputs]
+        self.commandTable.setHorizontalHeaderLabels(column_headers)
+
+        # Determine the maximum number of values in any column to set row count
+        max_rows = max((len(values) for _, values in outputs), default=0)
+        self.commandTable.setRowCount(max_rows)
+
+        # Populate the table: each column corresponds to one output arg
+        for col, (arg_name, values) in enumerate(outputs):
+            for row, val in enumerate(values):
+                item = QTableWidgetItem(str(val))
+                self.commandTable.setItem(row, col, item)
 
 
 
