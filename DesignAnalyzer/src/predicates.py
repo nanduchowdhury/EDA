@@ -3,7 +3,9 @@ from abc import ABC, abstractmethod
 import json
 
 class PredicateBase(ABC):
-    def __init__(self):
+    def __init__(self, _defParserImplement):
+        self.defParserImplement = _defParserImplement
+
         self.args = {}            # input arguments
         self.outputs = {}         # output data
 
@@ -95,21 +97,23 @@ class MultiplyTwoNumbers(PredicateBase):
         return result
     
 class GetViasForLayer(PredicateBase):
-    def __init__(self, _defParserImplement):
-        super().__init__()
-        self.defParserImplement = _defParserImplement
 
     def run(self):
         layerName = self.args['layer']
-        def_dict = self.defParserImplement.def_dict
 
-        result = ''
-
-        vias = def_dict.get("vias", [])
-        if not layerName:
-            result = [via.get("name") for via in vias]
-        result = [via.get("name") for via in vias if layerName in via.get("layers", [])]
+        result = self.defParserImplement.get_via_names(layerName)
 
         self.setOutput("result", result)  # Store result as a list
         return result
 
+class GetInstanceCoords(PredicateBase):
+
+    def run(self):
+
+        result = self.defParserImplement.get_instances_coords()
+
+        self.setOutput("inst", result["inst"])
+        self.setOutput("coords", result["coords"])
+
+        return result
+    

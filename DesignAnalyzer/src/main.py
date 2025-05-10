@@ -20,9 +20,11 @@ import threading
 from main_menu import MainMenu
 from main_menu import MenuItemAbstract
 
+from bottom_area import BottomArea;
+
 from def_parser import DefParser
 
-from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer
+from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
 import logging
 from datetime import datetime
@@ -92,6 +94,36 @@ class DefParserImplement():
         # print(self.def_dict)
         logging.info("DEF parser finished.")
 
+    def get_via_names(self, layer):
+
+        result = []
+        vias = self.def_dict.get("vias", [])
+        if not layer:
+            result = [via.get("name") for via in vias]
+        result = [via.get("name") for via in vias if layer in via.get("layers", [])]
+
+        return result
+    
+    def get_instances_coords(self):
+
+        components = self.def_dict.get("components", [])
+
+        inst_list = []
+        coord_list = []
+
+        for comp in components:
+            inst_name = comp.get("cell_name")
+            location = comp.get("location")
+
+            if inst_name is not None and isinstance(location, (list, tuple)) and len(location) == 2:
+                inst_list.append(inst_name)
+                coord_list.append(f"({location[0]} {location[1]})")
+
+        return {
+            "inst": inst_list,
+            "coords": coord_list
+        }
+
 class FileOpenMenuItem(MenuItemAbstract):
     def __init__(self, _defParserImplement):
         self.defParserImplement = _defParserImplement
@@ -123,8 +155,6 @@ class MainUI(QMainWindow):
 
         self.all_predicates = Predicates()
 
-        self.setup_logging()
-
         self.menu = MainMenu(self)
 
         self.defParserImplement = DefParserImplement()
@@ -140,8 +170,11 @@ class MainUI(QMainWindow):
         self.centralWidget.setLayout(self.mainLayout)
 
         self.create_top_layout()
-        self.create_control_area()
 
+        self.bottomArea = BottomArea(self.mainLayout, 
+                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
+
+        self.setup_logging()
 
     def apply_global_styles(self):
         with open("main.qss", "r") as f:
@@ -162,7 +195,7 @@ class MainUI(QMainWindow):
         console_handler.setFormatter(formatter)
 
         # Custom UI handler
-        ui_handler = UILogHandler(self.appendLog)
+        ui_handler = UILogHandler(self.bottomArea.appendLog)
         ui_handler.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
 
         # Add handlers to logger
@@ -190,57 +223,7 @@ class MainUI(QMainWindow):
         self.layoutArea.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
 
-    def create_control_area(self):
-        self.controlArea = QWidget()
-        self.controlArea.setMinimumHeight(self.WINDOW_HEIGHT - self.LAYOUT_HEIGHT)
-        self.controlArea.setStyleSheet("background-color: #fce4ec; border: 1px solid black;")
-        
-        layout = QVBoxLayout(self.controlArea)
-        self.tabWidget = QTabWidget()
-        
-        # Design Info tab
-        self.designInfoTab = QWidget()
-        self.designInfoText = QTextEdit()
-        self.designInfoText.setReadOnly(True)
-        designLayout = QVBoxLayout()
-        designLayout.addWidget(self.designInfoText)
-        self.designInfoTab.setLayout(designLayout)
-        self.tabWidget.addTab(self.designInfoTab, "Design Info")
-        
-        # Logs tab
-        self.logsTab = QWidget()
-        self.logTable = QTableWidget(0, 2)
-        self.logTable.setHorizontalHeaderLabels(["Date", "Log"])
-        logLayout = QVBoxLayout()
-        logLayout.addWidget(self.logTable)
-        self.logsTab.setLayout(logLayout)
-        self.tabWidget.addTab(self.logsTab, "Logs")
-        
-        layout.addWidget(self.tabWidget)
-        self.mainLayout.addWidget(self.controlArea)
-
-        self.appendSystemInfo()
-
-    def appendDesignInfo(self, info):
-        self.designInfoText.append(info)
-
-    def appendLog(self, date, log):
-        row = self.logTable.rowCount()
-        self.logTable.insertRow(row)
-        self.logTable.setItem(row, 0, QTableWidgetItem(date))
-        self.logTable.setItem(row, 1, QTableWidgetItem(log))
-
-    def appendSystemInfo(self):
-        process = psutil.Process(os.getpid())
-        mem_used = process.memory_info().rss / (1024 * 1024)  # in MB
-        mem_available = psutil.virtual_memory().available / (1024 * 1024)  # in MB
-        num_cpus = os.cpu_count()
-        num_threads = threading.active_count()
-
-        self.appendDesignInfo(f"Memory Used: {mem_used:.2f} MB")
-        self.appendDesignInfo(f"Memory Available: {mem_available:.2f} MB")
-        self.appendDesignInfo(f"CPUs Available: {num_cpus}")
-        self.appendDesignInfo(f"Threads Running: {num_threads}")
+    
 
     def create_command_area(self):
         self.commandArea = QWidget()
@@ -393,11 +376,14 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        multObj = MultiplyTwoNumbers()
+        multObj = MultiplyTwoNumbers(self.defParserImplement)
         self.all_predicates.addPredicate("multiply_2_numbers", ["a", "b"], multObj)
 
         viaObj = GetViasForLayer(self.defParserImplement)
         self.all_predicates.addPredicate("get_vias_for_layer", ["layer"], viaObj)
+
+        instObj = GetInstanceCoords(self.defParserImplement)
+        self.all_predicates.addPredicate("get_inst_and_coords", [], instObj)
 
         # Iterate
         for name, (args, obj) in self.all_predicates:

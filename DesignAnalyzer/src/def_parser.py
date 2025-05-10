@@ -198,9 +198,16 @@ class DefParser:
                     plus_data = line.split(" + ")
 
                     for item in plus_data:
+
+                        type = ''
                         if item.startswith("COVER"):
                             type = "COVER"
+                        elif item.startswith("FIXED"):
+                            type = "FIXED"
+                        elif item.startswith("PLACED"):
+                            type = "PLACED"
 
+                        if type:
                             tokens = item.split((" "))
                             location_x = tokens[2]
                             location_y = tokens[3]
@@ -303,5 +310,8 @@ class DefParser:
         except Exception as e:
             logging.error("DEF parser error in line : {line}")
             logging.error({e})
+
+    
+
 
 
