@@ -141,10 +141,10 @@ class MainUI(QMainWindow):
     WINDOW_WIDTH = 1800
     WINDOW_HEIGHT = 900
 
-    LAYOUT_WIDTH = 700
-    LAYOUT_HEIGHT = 700
+    LAYOUT_WIDTH = 600
+    LAYOUT_HEIGHT = 600
 
-    COMMAND_WIDTH = 800
+    COMMAND_WIDTH = 900
 
     def __init__(self):
         super().__init__()
@@ -214,7 +214,7 @@ class MainUI(QMainWindow):
         topLayout.addWidget(self.layoutArea)
         topLayout.addWidget(self.commandArea)
 
-        self.mainLayout.addLayout(topLayout)
+        self.mainLayout.addLayout(topLayout, stretch=2)
 
     def create_layout_area(self):
         self.layoutArea = QWidget()
