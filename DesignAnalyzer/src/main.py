@@ -172,7 +172,7 @@ class MainUI(QMainWindow):
         self.create_top_layout()
 
         self.bottomArea = BottomArea(self.mainLayout, 
-                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
+                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT, self.defParserImplement)
 
         self.setup_logging()
 

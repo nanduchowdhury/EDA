@@ -8,12 +8,18 @@ import os
 import psutil
 import threading
 
+import json
+
+from lef_parser import LefParser
+
 class BottomArea():
 
-    def __init__(self, _mainLayout, _windowHeight, _layoutHeight):
+    def __init__(self, _mainLayout, _windowHeight, _layoutHeight, _defParserImplement):
         self.mainLayout = _mainLayout
         self.windowHeight = _windowHeight
         self.layoutHeight = _layoutHeight
+        self.defParserImplement = _defParserImplement
+
         self.create_bottom_area()
 
 
@@ -28,6 +34,27 @@ class BottomArea():
 
         splitLayout = QHBoxLayout(self.bottomArea)
 
+        lefDefWidget = self.create_left_panel()
+        rightPanelWidget = self.create_right_panel()
+
+
+        # Add both panels to bottom area
+        splitLayout.addWidget(lefDefWidget, 1)
+        splitLayout.addWidget(rightPanelWidget, 2)
+
+        self.mainLayout.addWidget(self.bottomArea, stretch=1)
+
+        # Connect button actions
+        self.lefButton.clicked.connect(self.selectLefFiles)
+        self.clearLefButton.clicked.connect(self.clearLefFiles)
+        self.defButton.clicked.connect(self.selectDefFiles)
+        self.clearDefButton.clicked.connect(self.clearDefFiles)
+
+        self.appendSystemInfo()
+
+
+    def create_left_panel(self):
+        
         # Left Panel (1/3 width): LEF/DEF
         lefDefWidget = QWidget()
         lefDefLayout = QVBoxLayout(lefDefWidget)
@@ -67,6 +94,10 @@ class BottomArea():
         lefDefTabs.addTab(lefDefTab, "LEF/DEF")
         lefDefLayout.addWidget(lefDefTabs)
 
+        return lefDefWidget
+
+    def create_right_panel(self):
+        
         # Right Panel (2/3 width): Existing TabWidget
         rightPanelWidget = QWidget()
         rightPanelLayout = QVBoxLayout(rightPanelWidget)
@@ -93,19 +124,7 @@ class BottomArea():
 
         rightPanelLayout.addWidget(self.tabWidget)
 
-        # Add both panels to bottom area
-        splitLayout.addWidget(lefDefWidget, 1)
-        splitLayout.addWidget(rightPanelWidget, 2)
-
-        self.mainLayout.addWidget(self.bottomArea, stretch=1)
-
-        # Connect button actions
-        self.lefButton.clicked.connect(self.selectLefFiles)
-        self.clearLefButton.clicked.connect(self.clearLefFiles)
-        self.defButton.clicked.connect(self.selectDefFiles)
-        self.clearDefButton.clicked.connect(self.clearDefFiles)
-
-        self.appendSystemInfo()
+        return rightPanelWidget
 
     def appendDesignInfo(self, info):
         self.designInfoText.append(info)
@@ -130,17 +149,35 @@ class BottomArea():
         self.appendDesignInfo(f"Threads Running: {num_threads}")
 
     def selectLefFiles(self):
-        files, _ = QFileDialog.getOpenFileNames(None, "Select LEF Files", "", "LEF Files (*.lef *.LEF);;All Files (*)")
-        if files:
-            self.lefListWidget.addItems(files)
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a LEF file")
+
+        if file_path:
+            with open(file_path, 'r') as f:
+                lef_text = f.read()
+                lefParser = LefParser(lef_text)
+
+                # print(lefParser.get_parser_dict())
+                json_data = json.dumps(lefParser.get_macros(), indent=4)
+                print(json_data)
+
+            self.lefListWidget.addItem(file_path)
 
     def clearLefFiles(self):
         self.lefListWidget.clear()
 
     def selectDefFiles(self):
-        files, _ = QFileDialog.getOpenFileNames(None, "Select DEF Files", "", "DEF Files (*.def *.DEF);;All Files (*)")
-        if files:
-            self.defListWidget.addItems(files)
+
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a DEF file")
+
+        if file_path:
+            self.defParserImplement.setDefFile(file_path)
+            self.defParserImplement.execute()
+
+            self.defListWidget.addItem(file_path)
+
+
 
     def clearDefFiles(self):
         self.defListWidget.clear()
