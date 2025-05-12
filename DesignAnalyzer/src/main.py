@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
-    QListWidget, QTabWidget,
+    QListWidget, QTabWidget, QGraphicsView,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
     QAction, QFileDialog, QMessageBox
 )
@@ -24,6 +24,8 @@ from bottom_area import BottomArea;
 
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
+
+from layout_draw import LayoutDraw
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
@@ -131,20 +133,22 @@ class MainUI(QMainWindow):
         self.create_layout_area()
         self.create_command_area()
 
-        topLayout.addWidget(self.layoutArea)
+        topLayout.addWidget(self.layoutView)
         topLayout.addWidget(self.commandArea)
 
         self.mainLayout.addLayout(topLayout, stretch=2)
 
     def create_layout_area(self):
-        self.layoutArea = QWidget()
-        self.layoutArea.setMinimumSize(self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)
-        self.layoutArea.setStyleSheet("background-color: #e3f2fd; border: 1px solid black;")
-        self.layoutArea.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layoutView = QGraphicsView()
+        self.layoutView.setFixedSize(self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)  # Fixed size prevents growth
+        self.layoutView.setStyleSheet("background-color: #e3f2fd; border: 1px solid black;")
+        self.layoutView.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  # Prevent expanding
+
+        # Now create LayoutDraw using layoutView
+        self.layoutDraw = LayoutDraw(self.layoutView)
 
 
     
-
     def create_command_area(self):
         self.commandArea = QWidget()
         self.commandArea.setMinimumWidth(self.COMMAND_WIDTH)
@@ -243,7 +247,7 @@ class MainUI(QMainWindow):
         # Execute the predicate
         try:
             result = predicate.run()
-            print(f"Result of '{predicate_name}': {result}")
+            # print(f"Result of '{predicate_name}': {result}")
         except Exception as e:
             print(f"Error running predicate '{predicate_name}': {e}")
             raise
@@ -269,6 +273,35 @@ class MainUI(QMainWindow):
                 item = QTableWidgetItem(str(val))
                 self.commandTable.setItem(row, col, item)
 
+        # Build instance dict for LayoutDraw
+        instance_dict = {}
+        inst_list = None
+        bbox_list = None
+
+        for name, values in outputs:
+            if name == "inst":
+                inst_list = values
+                print(f"inst list len : {len(inst_list)}")
+            elif name == "coords":
+                bbox_list = values
+                print(f"bbox list len : {len(bbox_list)}")
+
+        # Check if both were found
+        if inst_list and bbox_list and len(inst_list) == len(bbox_list):
+            instance_dict = {
+                inst: {"coords": bbox}
+                for inst, bbox in zip(inst_list, bbox_list)
+            }
+
+            print(f"instance_dict len : {len(instance_dict)}")
+
+            # Set the instance dict and draw them in layout
+            if hasattr(self, "layoutDraw") and self.layoutDraw:
+                
+                print("Drawing cells now...")
+                
+                self.layoutDraw.setInstances(instance_dict)
+                self.layoutDraw.drawInstances()
 
 
     def updateParamLabels(self):

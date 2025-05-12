@@ -23,5 +23,3 @@ class MainMenu:
         action.triggered.connect(itemObj.onClick)
         self.top_menus[topItemName].addAction(action)
 
-        print("Action registered...")
-
