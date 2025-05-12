@@ -10,15 +10,20 @@ import threading
 
 import json
 
-from lef_parser import LefParser
+from lef_parser import LefParserImplement
+from def_parser import DefParserImplement
+
+from design_data import DesignData
 
 class BottomArea():
 
-    def __init__(self, _mainLayout, _windowHeight, _layoutHeight, _defParserImplement):
+    def __init__(self, _mainLayout, _windowHeight, _layoutHeight, 
+                 _defParserImplement, _lefParserImplement):
         self.mainLayout = _mainLayout
         self.windowHeight = _windowHeight
         self.layoutHeight = _layoutHeight
         self.defParserImplement = _defParserImplement
+        self.lefParserImplement = _lefParserImplement
 
         self.create_bottom_area()
 
@@ -153,13 +158,8 @@ class BottomArea():
         file_path, _ = file_dialog.getOpenFileName(None, "Select a LEF file")
 
         if file_path:
-            with open(file_path, 'r') as f:
-                lef_text = f.read()
-                lefParser = LefParser(lef_text)
-
-                # print(lefParser.get_parser_dict())
-                json_data = json.dumps(lefParser.get_macros(), indent=4)
-                print(json_data)
+            self.lefParserImplement.setLefFile(file_path)
+            self.lefParserImplement.execute()
 
             self.lefListWidget.addItem(file_path)
 
@@ -176,7 +176,6 @@ class BottomArea():
             self.defParserImplement.execute()
 
             self.defListWidget.addItem(file_path)
-
 
 
     def clearDefFiles(self):

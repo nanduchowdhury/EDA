@@ -1,8 +1,12 @@
 
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
+
 import json
 import re
 
+import threading
 import logging
+
 
 class DefParser:
     def __init__(self):
@@ -37,6 +41,8 @@ class DefParser:
                 self._parse_tracks(line)
             elif line.startswith("VIAS"):
                 current_section = "VIAS"
+            elif line.startswith("NETS"):
+                current_section = "NETS"
             elif line.startswith("REGIONS"):
                 current_section = "REGIONS"
             elif line.startswith("COMPONENTS"):
@@ -55,6 +61,9 @@ class DefParser:
                 section_content = []
             elif line == "END VIAS":
                 self._parse_vias(section_content)
+                section_content = []
+            elif line == "END NETS":
+                self._parse_nets(section_content)
                 section_content = []
             elif line == "END REGIONS":
                 self._parse_regions(section_content)
@@ -105,6 +114,41 @@ class DefParser:
         except Exception as e:
             logging.error("DEF parser error in line : {line}")
             logging.error({e})
+
+    def _parse_nets(self, section_content):
+        try:
+            nets = []
+            current_net = None
+
+            for line in section_content:
+                line = line.strip()
+                if line.startswith("- "):
+                    if current_net:
+                        nets.append(current_net)
+                    net_name = line[2:].strip()
+                    current_net = {"name": net_name, "connections": []}
+                elif line.startswith("(") and current_net is not None:
+                    matches = re.findall(r'\(\s*(\S+)\s+(\S+)\s*\)', line)
+                    for cell_pin in matches:
+                        if cell_pin[0] == "PIN":
+                            current_net["connections"].append({
+                                "pin": cell_pin[1]
+                            })
+                        else:
+                            current_net["connections"].append({
+                                "cell": cell_pin[0],
+                                "pin": cell_pin[1]
+                            })
+                elif line == ";" and current_net:
+                    pass  # End of net definition
+
+            if current_net:
+                nets.append(current_net)
+
+            self.design_data["nets"] = nets
+
+        except Exception as e:
+            logging.error(f"DEF parser error in NETS section: {e}")
 
     def _parse_tracks(self, line):
 
@@ -189,8 +233,8 @@ class DefParser:
                 if line.startswith("- "):
                     component_data = line[2:].split(" ")
 
-                    cell_name = component_data[0]
-                    inst_name = component_data[1]
+                    inst_name = component_data[0]
+                    cell_name = component_data[1]
                     type = ''
                     location_x = ''
                     location_y = ''
@@ -312,6 +356,93 @@ class DefParser:
             logging.error({e})
 
     
+class ParseWorker(QObject):
+    finished = pyqtSignal(dict)
+
+    def __init__(self, file_path):
+        super().__init__()
+        self.file_path = file_path
+
+    @pyqtSlot()
+    def run(self):
+        parser = DefParser()
+
+        with open(self.file_path, 'r') as def_file:
+            def_file_content = def_file.read()
+
+        def_dict = parser.parse(def_file_content)
+        
+        # json_data = json.dumps(def_dict, indent=4)
+        # print(json_data)
+
+        self.finished.emit(def_dict)
+
+class DefParserImplement():
+    def __init__(self):
+
+        self.def_file_path = ''
+        self.def_dict = {}
+
+    def setDefFile(self, file_path):
+        self.def_file_path = file_path
+
+    def execute(self):
+
+        if self.def_file_path:
+            self.selectedFile = self.def_file_path
+
+            self.worker = ParseWorker(self.def_file_path)
+            self.thread = QThread()
+
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+
+            self.worker.finished.connect(self.on_parse_finished)
+            self.worker.finished.connect(self.thread.quit)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+
+            logging.info("DEF parser started...")
+
+
+    def on_parse_finished(self, def_dict):
+
+        self.def_dict = def_dict
+        json_data = json.dumps(def_dict, indent=4)
+
+        # print(json_data)
+        # print(self.def_dict)
+        logging.info("DEF parser finished.")
+
+    def get_via_names(self, layer):
+
+        result = []
+        vias = self.def_dict.get("vias", [])
+        if not layer:
+            result = [via.get("name") for via in vias]
+        result = [via.get("name") for via in vias if layer in via.get("layers", [])]
+
+        return result
+    
+    def get_instances_coords(self):
+
+        components = self.def_dict.get("components", [])
+
+        inst_list = []
+        coord_list = []
+
+        for comp in components:
+            inst_name = comp.get("inst_name")
+            location = comp.get("location")
+
+            if inst_name is not None and isinstance(location, (list, tuple)) and len(location) == 2:
+                inst_list.append(inst_name)
+                coord_list.append(f"({location[0]} {location[1]})")
+
+        return {
+            "inst": inst_list,
+            "coords": coord_list
+        }
 
 
 

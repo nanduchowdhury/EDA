@@ -203,3 +203,23 @@ class LefParser:
             "vias": self.vias,
             "via_rules": self.via_rules
         }
+    
+
+class LefParserImplement:
+    def __init__(self):
+
+        self.lef_file_path = ''
+        self.lef_dict = {}
+
+    def setLefFile(self, file_path):
+        self.lef_file_path = file_path
+
+    def execute(self):
+        if self.lef_file_path:
+            with open(self.lef_file_path, 'r') as f:
+                lef_text = f.read()
+                lefParser = LefParser(lef_text)
+                self.lef_dict = lefParser.get_parser_dict()
+
+
+

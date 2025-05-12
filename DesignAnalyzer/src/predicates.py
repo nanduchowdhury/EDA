@@ -2,9 +2,12 @@ from abc import ABC, abstractmethod
 
 import json
 
+from design_data import DesignData
+
 class PredicateBase(ABC):
-    def __init__(self, _defParserImplement):
+    def __init__(self, _defParserImplement, _lefParserImplement):
         self.defParserImplement = _defParserImplement
+        self.lefParserImplement = _lefParserImplement
 
         self.args = {}            # input arguments
         self.outputs = {}         # output data
@@ -94,6 +97,7 @@ class MultiplyTwoNumbers(PredicateBase):
         print(f"Value a & b : {a} {b}")
         result = a * b
         self.setOutput("result", [result])  # Store result as a list
+
         return result
     
 class GetViasForLayer(PredicateBase):
@@ -110,10 +114,20 @@ class GetInstanceCoords(PredicateBase):
 
     def run(self):
 
-        result = self.defParserImplement.get_instances_coords()
+        # Experiment code.
+        design_data = DesignData(self.defParserImplement, self.lefParserImplement)
+        design_data.execute()
 
-        self.setOutput("inst", result["inst"])
-        self.setOutput("coords", result["coords"])
-
+        
+        # result = self.defParserImplement.get_instances_coords()
+        # self.setOutput("inst", result["inst"])
+        # self.setOutput("coords", result["coords"])
+        
+        result = design_data.instances
+        instance_names = list(result.keys())
+        bboxes = [data["bbox"] for data in result.values()]
+        self.setOutput("inst", instance_names)
+        self.setOutput("coords", bboxes)
+        
         return result
     

@@ -22,7 +22,8 @@ from main_menu import MenuItemAbstract
 
 from bottom_area import BottomArea;
 
-from def_parser import DefParser
+from def_parser import DefParserImplement
+from lef_parser import LefParserImplement
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
@@ -39,90 +40,6 @@ class UILogHandler(logging.Handler):
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.ui_log_callback(now, log_entry)
 
-class ParseWorker(QObject):
-    finished = pyqtSignal(dict)
-
-    def __init__(self, file_path):
-        super().__init__()
-        self.file_path = file_path
-
-    @pyqtSlot()
-    def run(self):
-        parser = DefParser()
-
-        with open(self.file_path, 'r') as def_file:
-            def_file_content = def_file.read()
-
-        def_dict = parser.parse(def_file_content)
-
-        self.finished.emit(def_dict)
-
-class DefParserImplement():
-    def __init__(self):
-
-        self.def_file_path = ''
-        self.def_dict = {}
-
-    def setDefFile(self, file_path):
-        self.def_file_path = file_path
-
-    def execute(self):
-
-        if self.def_file_path:
-            self.selectedFile = self.def_file_path
-
-            self.worker = ParseWorker(self.def_file_path)
-            self.thread = QThread()
-
-            self.worker.moveToThread(self.thread)
-            self.thread.started.connect(self.worker.run)
-
-            self.worker.finished.connect(self.on_parse_finished)
-            self.worker.finished.connect(self.thread.quit)
-            self.thread.finished.connect(self.thread.deleteLater)
-            self.thread.start()
-
-            logging.info("DEF parser started...")
-
-
-    def on_parse_finished(self, def_dict):
-
-        self.def_dict = def_dict
-        json_data = json.dumps(def_dict, indent=4)
-
-        # print(json_data)
-        # print(self.def_dict)
-        logging.info("DEF parser finished.")
-
-    def get_via_names(self, layer):
-
-        result = []
-        vias = self.def_dict.get("vias", [])
-        if not layer:
-            result = [via.get("name") for via in vias]
-        result = [via.get("name") for via in vias if layer in via.get("layers", [])]
-
-        return result
-    
-    def get_instances_coords(self):
-
-        components = self.def_dict.get("components", [])
-
-        inst_list = []
-        coord_list = []
-
-        for comp in components:
-            inst_name = comp.get("cell_name")
-            location = comp.get("location")
-
-            if inst_name is not None and isinstance(location, (list, tuple)) and len(location) == 2:
-                inst_list.append(inst_name)
-                coord_list.append(f"({location[0]} {location[1]})")
-
-        return {
-            "inst": inst_list,
-            "coords": coord_list
-        }
 
 class FileOpenMenuItem(MenuItemAbstract):
     def __init__(self, _defParserImplement):
@@ -158,6 +75,8 @@ class MainUI(QMainWindow):
         self.menu = MainMenu(self)
 
         self.defParserImplement = DefParserImplement()
+        self.lefParserImplement = LefParserImplement()
+
         self.fileOpenMenuObj = FileOpenMenuItem(self.defParserImplement)
         self.menu.createItem("File", "Open", self.fileOpenMenuObj)
 
@@ -172,7 +91,8 @@ class MainUI(QMainWindow):
         self.create_top_layout()
 
         self.bottomArea = BottomArea(self.mainLayout, 
-                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT, self.defParserImplement)
+                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT, 
+                                    self.defParserImplement, self.lefParserImplement)
 
         self.setup_logging()
 
@@ -376,13 +296,13 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        multObj = MultiplyTwoNumbers(self.defParserImplement)
+        multObj = MultiplyTwoNumbers(self.defParserImplement, self.lefParserImplement)
         self.all_predicates.addPredicate("multiply_2_numbers", ["a", "b"], multObj)
 
-        viaObj = GetViasForLayer(self.defParserImplement)
+        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement)
         self.all_predicates.addPredicate("get_vias_for_layer", ["layer"], viaObj)
 
-        instObj = GetInstanceCoords(self.defParserImplement)
+        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement)
         self.all_predicates.addPredicate("get_inst_and_coords", [], instObj)
 
         # Iterate
