@@ -25,7 +25,7 @@ from bottom_area import BottomArea;
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
-from layout_draw import LayoutDraw
+from layout_draw import LayoutDraw, LayoutView
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
@@ -43,17 +43,26 @@ class UILogHandler(logging.Handler):
         self.ui_log_callback(now, log_entry)
 
 
-class FileOpenMenuItem(MenuItemAbstract):
-    def __init__(self, _defParserImplement):
-        self.defParserImplement = _defParserImplement
+class ZoomOutMenuItem(MenuItemAbstract):
+    def __init__(self, _layoutDraw):
+        self.layoutDraw = _layoutDraw
 
     def onClick(self):
-        file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
+        self.layoutDraw.zoom_out()
 
-        self.defParserImplement.setDefFile(file_path)
-        self.defParserImplement.execute()
+class ZoomInMenuItem(MenuItemAbstract):
+    def __init__(self, _layoutDraw):
+        self.layoutDraw = _layoutDraw
 
+    def onClick(self):
+        self.layoutDraw.zoom_in()
+
+class ZoomFitMenuItem(MenuItemAbstract):
+    def __init__(self, _layoutDraw):
+        self.layoutDraw = _layoutDraw
+
+    def onClick(self):
+        self.layoutDraw.fit_to_view()
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -79,9 +88,6 @@ class MainUI(QMainWindow):
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
 
-        self.fileOpenMenuObj = FileOpenMenuItem(self.defParserImplement)
-        self.menu.createItem("File", "Open", self.fileOpenMenuObj)
-
         self.registerPredicates()
 
         self.centralWidget = QWidget()
@@ -91,6 +97,15 @@ class MainUI(QMainWindow):
         self.centralWidget.setLayout(self.mainLayout)
 
         self.create_top_layout()
+
+        self.zoomOutMenuObj = ZoomOutMenuItem(self.layoutDraw)
+        self.menu.createItem("View", "Zoom Out", self.zoomOutMenuObj)
+
+        self.zoomInMenuObj = ZoomInMenuItem(self.layoutDraw)
+        self.menu.createItem("View", "Zoom In", self.zoomInMenuObj)
+
+        self.zoomFitMenuObj = ZoomFitMenuItem(self.layoutDraw)
+        self.menu.createItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
         self.bottomArea = BottomArea(self.mainLayout, 
                                     self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT, 
@@ -138,16 +153,15 @@ class MainUI(QMainWindow):
 
         self.mainLayout.addLayout(topLayout, stretch=2)
 
+
+
     def create_layout_area(self):
-        self.layoutView = QGraphicsView()
-        self.layoutView.setFixedSize(self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)  # Fixed size prevents growth
+        self.layoutView = LayoutView()
+        self.layoutView.setMinimumSize(self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)
         self.layoutView.setStyleSheet("background-color: #e3f2fd; border: 1px solid black;")
-        self.layoutView.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  # Prevent expanding
+        self.layoutView.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-        # Now create LayoutDraw using layoutView
         self.layoutDraw = LayoutDraw(self.layoutView)
-
-
     
     def create_command_area(self):
         self.commandArea = QWidget()
