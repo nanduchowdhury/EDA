@@ -25,7 +25,7 @@ from bottom_area import BottomArea;
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
-from layout_draw import LayoutDraw, LayoutView
+from layout_draw import DrawManager, LayoutView, LayoutAreaWithScales
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
@@ -44,33 +44,33 @@ class UILogHandler(logging.Handler):
 
 
 class ZoomOutMenuItem(MenuItemAbstract):
-    def __init__(self, _layoutDraw):
-        self.layoutDraw = _layoutDraw
+    def __init__(self, _drawManager):
+        self.drawManager = _drawManager
 
     def onClick(self):
-        self.layoutDraw.zoom_out()
+        self.drawManager.zoom_out()
 
 class ZoomInMenuItem(MenuItemAbstract):
-    def __init__(self, _layoutDraw):
-        self.layoutDraw = _layoutDraw
+    def __init__(self, _drawManager):
+        self.drawManager = _drawManager
 
     def onClick(self):
-        self.layoutDraw.zoom_in()
+        self.drawManager.zoom_in()
 
 class ZoomFitMenuItem(MenuItemAbstract):
-    def __init__(self, _layoutDraw):
-        self.layoutDraw = _layoutDraw
+    def __init__(self, _drawManager):
+        self.drawManager = _drawManager
 
     def onClick(self):
-        self.layoutDraw.fit_to_view()
+        self.drawManager.fit_to_view()
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
     WINDOW_WIDTH = 1800
     WINDOW_HEIGHT = 900
 
-    LAYOUT_WIDTH = 600
-    LAYOUT_HEIGHT = 600
+    LAYOUT_WIDTH = 800
+    LAYOUT_HEIGHT = 800
 
     COMMAND_WIDTH = 900
 
@@ -98,13 +98,13 @@ class MainUI(QMainWindow):
 
         self.create_top_layout()
 
-        self.zoomOutMenuObj = ZoomOutMenuItem(self.layoutDraw)
+        self.zoomOutMenuObj = ZoomOutMenuItem(self.drawManager)
         self.menu.createItem("View", "Zoom Out", self.zoomOutMenuObj)
 
-        self.zoomInMenuObj = ZoomInMenuItem(self.layoutDraw)
+        self.zoomInMenuObj = ZoomInMenuItem(self.drawManager)
         self.menu.createItem("View", "Zoom In", self.zoomInMenuObj)
 
-        self.zoomFitMenuObj = ZoomFitMenuItem(self.layoutDraw)
+        self.zoomFitMenuObj = ZoomFitMenuItem(self.drawManager)
         self.menu.createItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
         self.bottomArea = BottomArea(self.mainLayout, 
@@ -145,23 +145,18 @@ class MainUI(QMainWindow):
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
-        self.create_layout_area()
+        self.drawArea = LayoutAreaWithScales(width=self.LAYOUT_WIDTH, height=self.LAYOUT_HEIGHT)
+        self.layoutView = self.drawArea.view
+        self.drawManager = self.drawArea.drawManager
+
         self.create_command_area()
 
-        topLayout.addWidget(self.layoutView)
+        topLayout.addWidget(self.drawArea)
         topLayout.addWidget(self.commandArea)
 
         self.mainLayout.addLayout(topLayout, stretch=2)
 
 
-
-    def create_layout_area(self):
-        self.layoutView = LayoutView()
-        self.layoutView.setMinimumSize(self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)
-        self.layoutView.setStyleSheet("background-color: #e3f2fd; border: 1px solid black;")
-        self.layoutView.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-        self.layoutDraw = LayoutDraw(self.layoutView)
     
     def create_command_area(self):
         self.commandArea = QWidget()
@@ -287,7 +282,7 @@ class MainUI(QMainWindow):
                 item = QTableWidgetItem(str(val))
                 self.commandTable.setItem(row, col, item)
 
-        # Build instance dict for LayoutDraw
+        # Build instance dict for drawManager
         instance_dict = {}
         inst_list = None
         bbox_list = None
@@ -310,12 +305,12 @@ class MainUI(QMainWindow):
             print(f"instance_dict len : {len(instance_dict)}")
 
             # Set the instance dict and draw them in layout
-            if hasattr(self, "layoutDraw") and self.layoutDraw:
+            if hasattr(self, "drawManager") and self.drawManager:
                 
                 print("Drawing cells now...")
                 
-                self.layoutDraw.setInstances(instance_dict)
-                self.layoutDraw.drawInstances()
+                self.drawManager.setInstances(instance_dict)
+                self.drawManager.drawInstances()
 
 
     def updateParamLabels(self):

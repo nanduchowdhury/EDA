@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem
-from PyQt5.QtCore import Qt, QRectF, QPointF
-from PyQt5.QtGui import QBrush, QColor, QCursor, QPen
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy, QFrame, QGridLayout
+from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
+from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
 
 
 class LayoutView(QGraphicsView):
@@ -10,7 +10,7 @@ class LayoutView(QGraphicsView):
         self.setCursor(Qt.CrossCursor)
         self.start_pos = None
         self.temp_rect_item = None
-        self.layout_draw = None  # will be linked from LayoutDraw
+        self.layout_draw = None
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -51,7 +51,7 @@ class LayoutView(QGraphicsView):
                 print(f"{name}: {coords}")
 
 
-class LayoutDraw:
+class DrawManager:
     def __init__(self, view):
         self.view = view
         self.view.layout_draw = self  # link back
@@ -124,3 +124,64 @@ class LayoutDraw:
         self._current_scale = 1.0
 
 
+class ScaleWidget(QLabel):
+    def __init__(self, orientation, parent=None):
+        super().__init__(parent)
+        self.orientation = orientation
+        if orientation == Qt.Horizontal:
+            self.setFixedHeight(40)
+            self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        else:
+            self.setFixedWidth(50)
+            self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.setStyleSheet("background-color: #333; color: white;")
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        painter = QPainter(self)
+        painter.setPen(Qt.white)
+        font = QFont("Arial", 5, QFont.Bold)  # Font family, size, weight
+        painter.setFont(font)
+
+        if self.orientation == Qt.Horizontal:
+            for x in range(0, self.width(), 50):
+                painter.drawLine(x, 0, x, 10)
+                painter.drawText(x + 2, self.height() - 20, str(x))
+        else:
+            for y in range(0, self.height(), 50):
+                painter.drawLine(0, y, 10, y)
+                painter.drawText(12, y + 4, str(y))
+
+
+
+class LayoutAreaWithScales(QWidget):
+    def __init__(self, width=800, height=600, parent=None):
+        super().__init__(parent)
+        self.view = LayoutView()
+        self.view.setMinimumSize(width - 100, height - 300)
+
+        self.drawManager = DrawManager(self.view)
+
+        self.rightScale = ScaleWidget(Qt.Vertical)
+        self.bottomScale = ScaleWidget(Qt.Horizontal)
+
+        self.setupLayout()
+
+    def setupLayout(self):
+        layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        layout.addWidget(self.view,        0, 0)
+        layout.addWidget(self.rightScale,  0, 1)
+        layout.addWidget(self.bottomScale, 1, 0)
+
+        spacer = QWidget()  # bottom-right corner (blank)
+        spacer.setFixedSize(30, 20)
+        # layout.addWidget(spacer, 1, 1)
+
+        self.setLayout(layout)
+
+    def showCurrentPosition(self, x, y):
+        self.bottomScale.setText(f"X: {x}")
+        self.rightScale.setText(f"Y: {y}")
