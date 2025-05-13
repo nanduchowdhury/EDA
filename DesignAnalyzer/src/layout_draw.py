@@ -54,24 +54,32 @@ class LayoutView(QGraphicsView):
 class DrawManager:
     def __init__(self, view):
         self.view = view
-        self.view.layout_draw = self  # link back
+        self.view.layout_draw = self
         self.instances = {}
 
-        self.scene = QGraphicsScene(0, 0, view.width(), view.height())
+        # Disable scrollbars completely
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.scene = QGraphicsScene()
         self.view.setScene(self.scene)
 
         self._zoom_factor = 1.25
         self._current_scale = 1.0
+        self.base_scale = 1.0
+        self.bounding_box = None
 
     def setInstances(self, instance_dict):
         self.instances = instance_dict
 
     def drawInstances(self):
+        """Initial draw: fit all instances to view by computing base_scale"""
         self.scene.clear()
 
         if not self.instances:
             return
 
+        # Get bounding box of all instances
         all_x, all_y = [], []
         for data in self.instances.values():
             x1, y1, x2, y2 = data["coords"]
@@ -80,48 +88,75 @@ class DrawManager:
 
         min_x, max_x = min(all_x), max(all_x)
         min_y, max_y = min(all_y), max(all_y)
+        self.bounding_box = (min_x, max_x, min_y, max_y)
+
+        # Compute base scale so all content fits inside view area
+        view_width = self.view.viewport().width()
+        view_height = self.view.viewport().height()
 
         width_um = max_x - min_x
         height_um = max_y - min_y
 
-        view_width = self.view.viewport().width()
-        view_height = self.view.viewport().height()
-
         scale_x = view_width / width_um if width_um else 1
         scale_y = view_height / height_um if height_um else 1
         self.base_scale = min(scale_x, scale_y)
-        self._current_scale = 1.0
 
-        for inst_name, data in self.instances.items():
+
+        self._current_scale = 1.0
+        self._drawVisibleInstances()
+
+    def _drawVisibleInstances(self):
+        """Draw instances that are within the view area (scaled)"""
+        self.scene.clear()
+
+        if not self.bounding_box:
+            return
+
+        min_x, max_x, min_y, max_y = self.bounding_box
+        view_width = self.view.viewport().width()
+        view_height = self.view.viewport().height()
+
+        print(f"Base scale : {self.base_scale}      Current scale : {self._current_scale}")
+
+        scale = self.base_scale * self._current_scale
+
+        for data in self.instances.values():
             x1, y1, x2, y2 = data["coords"]
-            x = (x1 - min_x) * self.base_scale
-            y = (max_y - y2) * self.base_scale  # Y flip
-            w = (x2 - x1) * self.base_scale
-            h = (y2 - y1) * self.base_scale
+
+            # Transform coordinates
+            sx1 = (x1 - min_x) * scale
+            sy1 = (max_y - y1) * scale  # Y-flip
+            sx2 = (x2 - min_x) * scale
+            sy2 = (max_y - y2) * scale  # Y-flip
+
+            x = min(sx1, sx2)
+            y = min(sy1, sy2)
+            w = abs(sx2 - sx1)
+            h = abs(sy2 - sy1)
+
+            # Skip if outside visible area
+            if x + w < 0 or y + h < 0 or x > view_width or y > view_height:
+                continue
 
             rect_item = QGraphicsRectItem(QRectF(x, y, w, h))
             rect_item.setBrush(QBrush(QColor(200, 100, 100, 120)))
             rect_item.setPen(QColor(0, 0, 0))
             self.scene.addItem(rect_item)
 
-            data["graphics_item"] = rect_item
-
-        self.view.resetTransform()
-        self.view.scale(self.base_scale, self.base_scale)
-
 
     def zoom_in(self):
-        self.view.scale(self._zoom_factor, self._zoom_factor)
         self._current_scale *= self._zoom_factor
+        self._drawVisibleInstances()
 
     def zoom_out(self):
-        self.view.scale(1 / self._zoom_factor, 1 / self._zoom_factor)
         self._current_scale /= self._zoom_factor
+        self._drawVisibleInstances()
 
     def fit_to_view(self):
-        self.view.resetTransform()
-        self.view.scale(self.base_scale, self.base_scale)
         self._current_scale = 1.0
+        self._drawVisibleInstances()
+
+
 
 
 class ScaleWidget(QLabel):
