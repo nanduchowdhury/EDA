@@ -17,10 +17,12 @@ import os
 import psutil
 import threading
 
-from main_menu import MainMenu
-from main_menu import MenuItemAbstract
+from main_menu import MainMenuAndTBar
+from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
-from bottom_area import BottomArea;
+from bottom_area import BottomArea
+
+from session import Session
 
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
@@ -41,6 +43,55 @@ class UILogHandler(logging.Handler):
         log_entry = self.format(record)
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.ui_log_callback(now, log_entry)
+
+
+class ReadSessionMenuItem(MenuItemAbstract):
+    def __init__(self, session, lefListWidget, defListWidget):
+        self.session = session
+        self.lefListWidget = lefListWidget
+        self.defListWidget = defListWidget
+
+
+    def onClick(self):
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a session JSON file")
+
+        if file_path:
+            self.session.readSession(file_path)
+
+            def_list = self.session.getAttr("DEF")
+            for f in def_list:
+                self.defListWidget.addItemIfNotExists(f)
+
+            lef_list = self.session.getAttr("LEF")
+            for f in lef_list:
+                self.lefListWidget.addItemIfNotExists(f)
+
+class WriteSessionMenuItem(MenuItemAbstract):
+    def __init__(self, session, lefListWidget, defListWidget):
+        self.session = session
+        self.lefListWidget = lefListWidget
+        self.defListWidget = defListWidget
+
+    def onClick(self):
+
+        items = [self.lefListWidget.item(i).text() for i in range(self.lefListWidget.count())]
+        self.session.setAttr("LEF", items)
+            
+        items = [self.defListWidget.item(i).text() for i in range(self.defListWidget.count())]
+        self.session.setAttr("DEF", items)
+
+        self.session.dump()
+
+        filename, _ = QFileDialog.getSaveFileName(
+            parent=None,
+            caption="Create new session JSON File",
+            directory=".",
+            filter="Text Files (*.json);;All Files (*)"
+        )
+
+        if filename:
+            self.session.writeSession(filename)
 
 
 class ZoomOutMenuItem(MenuItemAbstract):
@@ -64,6 +115,31 @@ class ZoomFitMenuItem(MenuItemAbstract):
     def onClick(self):
         self.drawManager.fit_to_view()
 
+class LoadDesignToolItem(ToolBarItemAbstract):
+    def __init__(self, session,
+                    defParserImplement, lefParserImplement):
+        super().__init__("Load Design")
+
+        self.session = session
+        self.lefParserImplement = lefParserImplement
+        self.defParserImplement = defParserImplement
+
+    def onClick(self):
+        
+        lef_list = self.session.getAttr("LEF")
+        def_list = self.session.getAttr("DEF")
+
+        for l in lef_list:
+            self.lefParserImplement.setLefFile(l)
+            self.lefParserImplement.execute()
+
+        for d in def_list:
+            self.defParserImplement.setDefFile(d)
+            self.defParserImplement.execute()
+
+        
+        
+
 class MainUI(QMainWindow):
     # Coordinate/size constants
     WINDOW_WIDTH = 1800
@@ -81,9 +157,11 @@ class MainUI(QMainWindow):
 
         self.apply_global_styles()
 
+        self.session = Session()
+
         self.all_predicates = Predicates()
 
-        self.menu = MainMenu(self)
+        self.menu = MainMenuAndTBar(self)
 
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
@@ -98,18 +176,30 @@ class MainUI(QMainWindow):
 
         self.create_top_layout()
 
+        self.bottomArea = BottomArea(self.mainLayout, 
+                                self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
+
+        self.readSessionMenuObj = ReadSessionMenuItem(self.session, 
+                                        self.bottomArea.lefListWidget, self.bottomArea.defListWidget)
+        self.menu.createMenuItem("File", "Read Session", self.readSessionMenuObj)
+
+        self.writeSessionMenuObj = WriteSessionMenuItem(self.session, 
+                                        self.bottomArea.lefListWidget, self.bottomArea.defListWidget)
+        self.menu.createMenuItem("File", "Write Session", self.writeSessionMenuObj)
+
         self.zoomOutMenuObj = ZoomOutMenuItem(self.drawManager)
-        self.menu.createItem("View", "Zoom Out", self.zoomOutMenuObj)
+        self.menu.createMenuItem("View", "Zoom Out", self.zoomOutMenuObj)
 
         self.zoomInMenuObj = ZoomInMenuItem(self.drawManager)
-        self.menu.createItem("View", "Zoom In", self.zoomInMenuObj)
+        self.menu.createMenuItem("View", "Zoom In", self.zoomInMenuObj)
 
         self.zoomFitMenuObj = ZoomFitMenuItem(self.drawManager)
-        self.menu.createItem("View", "Zoom Fit", self.zoomFitMenuObj)
+        self.menu.createMenuItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
-        self.bottomArea = BottomArea(self.mainLayout, 
-                                    self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT, 
-                                    self.defParserImplement, self.lefParserImplement)
+        self.loadDesignToolbarItem = LoadDesignToolItem(self.session,
+                                self.defParserImplement, self.lefParserImplement)
+        self.menu.createToolbarItem(self.loadDesignToolbarItem)
+        
 
         self.setup_logging()
 

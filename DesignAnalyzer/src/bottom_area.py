@@ -10,20 +10,16 @@ import threading
 
 import json
 
-from lef_parser import LefParserImplement
-from def_parser import DefParserImplement
+from common import CustomListWidget
 
 from design_data import DesignData
 
 class BottomArea():
 
-    def __init__(self, _mainLayout, _windowHeight, _layoutHeight, 
-                 _defParserImplement, _lefParserImplement):
+    def __init__(self, _mainLayout, _windowHeight, _layoutHeight):
         self.mainLayout = _mainLayout
         self.windowHeight = _windowHeight
         self.layoutHeight = _layoutHeight
-        self.defParserImplement = _defParserImplement
-        self.lefParserImplement = _lefParserImplement
 
         self.create_bottom_area()
 
@@ -75,7 +71,7 @@ class BottomArea():
         self.clearLefButton = QPushButton("Clear LEF")
         lefVertical.addWidget(self.lefButton)
         lefVertical.addWidget(self.clearLefButton)
-        self.lefListWidget = QListWidget()
+        self.lefListWidget = CustomListWidget()
         lefHLayout = QHBoxLayout()
         lefHLayout.addLayout(lefVertical)
         lefHLayout.addWidget(self.lefListWidget)
@@ -86,7 +82,7 @@ class BottomArea():
         self.clearDefButton = QPushButton("Clear DEF")
         defVertical.addWidget(self.defButton)
         defVertical.addWidget(self.clearDefButton)
-        self.defListWidget = QListWidget()
+        self.defListWidget = CustomListWidget()
         defHLayout = QHBoxLayout()
         defHLayout.addLayout(defVertical)
         defHLayout.addWidget(self.defListWidget)
@@ -158,10 +154,7 @@ class BottomArea():
         file_path, _ = file_dialog.getOpenFileName(None, "Select a LEF file")
 
         if file_path:
-            self.lefParserImplement.setLefFile(file_path)
-            self.lefParserImplement.execute()
-
-            self.lefListWidget.addItem(file_path)
+            self.lefListWidget.addItemIfNotExists(file_path)
 
     def clearLefFiles(self):
         self.lefListWidget.clear()
@@ -172,10 +165,7 @@ class BottomArea():
         file_path, _ = file_dialog.getOpenFileName(None, "Select a DEF file")
 
         if file_path:
-            self.defParserImplement.setDefFile(file_path)
-            self.defParserImplement.execute()
-
-            self.defListWidget.addItem(file_path)
+            self.defListWidget.addItemIfNotExists(file_path)
 
 
     def clearDefFiles(self):
