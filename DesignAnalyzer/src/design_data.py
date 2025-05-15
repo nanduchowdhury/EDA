@@ -20,8 +20,6 @@ class DesignData:
         design_units = self.defParserImplement.get_unit()
         design_units = int(design_units)
 
-        print(f"Design units : {design_units}")
-
         components = self.defParserImplement.get_components()
         if not isinstance(components, list):
             logging.error(f"'components' should be a list, got {type(components)}")
@@ -30,11 +28,13 @@ class DesignData:
         # Step 2: Get LEF macro data
         for comp in components:
 
-            print(f"{comp}")
-
             instance_name = comp.inst_name
             cell_name = comp.cell_name
+            type = comp.type
             location = comp.location
+
+            if type != 'PLACED' and type != 'FIXED':
+                continue
 
             if not instance_name or not cell_name or not location:
                 logging.warning(f"Invalid component entry: {comp}")
@@ -46,8 +46,6 @@ class DesignData:
 
             x_um = x_dbu / design_units
             y_um = y_dbu / design_units
-
-            print(f"location : {x_um}     {y_um}")
 
             macro = self.lefParserImplement.get_macro(cell_name)
             if not macro:
