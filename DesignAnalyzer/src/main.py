@@ -130,13 +130,10 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         def_list = self.session.getAttr("DEF")
 
         for l in lef_list:
-            self.lefParserImplement.setLefFile(l)
-            self.lefParserImplement.execute()
+            self.lefParserImplement.parse(l)
 
         for d in def_list:
-            self.defParserImplement.setDefFile(d)
-            self.defParserImplement.execute()
-
+            self.defParserImplement.parse(d)
         
         
 

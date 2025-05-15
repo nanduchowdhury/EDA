@@ -8,354 +8,309 @@ import threading
 import logging
 
 
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional, Dict
+import re
+
+@dataclass
+class Units:
+    distance: str
+    microns: int
+
+@dataclass
+class DieArea:
+    ll_x: int
+    ll_y: int
+    ur_x: int
+    ur_y: int
+
+@dataclass
+class Row:
+    name: str
+    type: str
+    x: int
+    y: int
+    orientation: str
+    step: Tuple[int, int, int]
+
+@dataclass
+class Track:
+    direction: str
+    step: int
+    layer: str
+
+@dataclass
+class Connection:
+    cell: Optional[str] = None
+    pin: str = ""
+
+@dataclass
+class Net:
+    name: str
+    connections: List[Connection]
+
+@dataclass
+class Via:
+    name: str
+    via_rule: Optional[str] = None
+    cut_size: Optional[Tuple[int, int]] = None
+    layers: List[str] = field(default_factory=list)
+    cut_spacing: Optional[Tuple[int, int]] = None
+    enclosure: Optional[Tuple[int, int, int, int]] = None
+    row_col: Optional[Tuple[int, int]] = None
+
+@dataclass
+class Region:
+    name: str
+    coordinates: List[Tuple[int, int]]
+
+@dataclass
+class Component:
+    inst_name: str
+    cell_name: str
+    type: str
+    location: Tuple[int, int]
+
+@dataclass
+class Pin:
+    name: str
+    net: str
+    direction: str
+    use: str
+
+@dataclass
+class Blockage:
+    ll_x: int
+    ll_y: int
+    ur_x: int
+    ur_y: int
+
+@dataclass
+class SpecialNet:
+    name: str
+    components: List[str]
+
+@dataclass
+class DefData:
+    version: Optional[str] = None
+    design_name: Optional[str] = None
+    units: Optional[Units] = None
+    diearea: Optional[DieArea] = None
+    rows: List[Row] = field(default_factory=list)
+    tracks: List[Track] = field(default_factory=list)
+    nets: List[Net] = field(default_factory=list)
+    vias: List[Via] = field(default_factory=list)
+    regions: List[Region] = field(default_factory=list)
+    components: List[Component] = field(default_factory=list)
+    pins: List[Pin] = field(default_factory=list)
+    blockages: List[Blockage] = field(default_factory=list)
+    specialnets: List[SpecialNet] = field(default_factory=list)
+    property_definitions: Dict[str, str] = field(default_factory=dict)
+
 class DefParser:
     def __init__(self):
-        self.design_data = {}
+        self.def_data = DefData()
 
-    def parse(self, def_file_content):
+    def parse_version(self, line: str):
+        if line.startswith("VERSION"):
+            self.def_data.version = line.split()[1]
+
+    def parse_design_name(self, line: str):
+        if line.startswith("DESIGN"):
+            self.def_data.design_name = line.split()[1].strip(";")
+
+    def parse_units(self, line: str):
+        line = line.rstrip(';').strip()  # Remove trailing semicolon and surrounding whitespace
+        if line.startswith("UNITS"):
+            parts = line.split()
+            if "MICRONS" in parts:
+                self.def_data.units = Units(distance="MICRONS", microns=int(parts[-1]))
+
+    def parse_diearea(self, line: str):
+        if line.startswith("DIEAREA"):
+            coords = list(map(int, re.findall(r'\d+', line)))
+            self.def_data.diearea = DieArea(*coords)
+
+    def parse_row(self, line: str):
+        parts = line.split()
+        name = parts[1]
+        type = parts[2]
+        x = int(parts[3])
+        y = int(parts[4])
+        orientation = parts[5]
+        step = tuple(map(int, re.findall(r'\d+', ' '.join(parts[6:]))))
+        self.def_data.rows.append(Row(name, type, x, y, orientation, step))
+
+    def parse_track(self, line: str):
+        parts = line.split()
+        direction = parts[1]
+        step = int(parts[6])
+        layer = parts[-1]
+        self.def_data.tracks.append(Track(direction, step, layer))
+
+    def parse_via(self, lines: List[str]):
+        name = lines[0].split()[1]
+        via = Via(name)
+        for line in lines[1:]:
+            if line.startswith("+ CUT"):
+                via.cut_size = tuple(map(int, re.findall(r'\d+', line)))
+            elif line.startswith("+ LAYER"):
+                via.layers.append(line.split()[2])
+            elif line.startswith("+ SPACING"):
+                via.cut_spacing = tuple(map(int, re.findall(r'\d+', line)))
+            elif line.startswith("+ ENCLOSURE"):
+                via.enclosure = tuple(map(int, re.findall(r'\d+', line)))
+            elif line.startswith("+ ROWCOL"):
+                via.row_col = tuple(map(int, re.findall(r'\d+', line)))
+        self.def_data.vias.append(via)
+
+
+    def parse_component(self, line: str):
+        # Remove trailing semicolon if present
+        line = line.rstrip(';')
+
+        parts = line.split()
+        inst_name = parts[1]
+        cell_name = parts[2]
+        placement_type = parts[3] if '+' not in parts[3] else parts[4]  # handle optional '+'
+
+        # Extract the coordinates from the line using regex
+        coords = re.findall(r'\(\s*(\d+)\s+(\d+)\s*\)', line)
+        if coords:
+            x, y = map(int, coords[0])
+        else:
+            x, y = 0, 0
+
+        self.def_data.components.append(Component(inst_name, cell_name, placement_type, (x, y)))
+
+
+    def parse_pin(self, line: str):
+        parts = line.split()
+        name = parts[1]
+        net = parts[-1]
+        direction = "INPUT"
+        use = "SIGNAL"
+        self.def_data.pins.append(Pin(name, net, direction, use))
+
+    def parse_blockage(self, line: str):
+        coords = list(map(int, re.findall(r'\d+', line)))
+        if len(coords) == 4:
+            self.def_data.blockages.append(Blockage(*coords))
+
+    def parse_property_definition(self, line: str):
+        match = re.match(r'PROPERTYDEFINITIONS\s+(\w+)\s+(\w+)', line)
+        if match:
+            self.def_data.property_definitions[match.group(1)] = match.group(2)
+
+    def parse_specialnet(self, lines: List[str]):
+        name = lines[0].split()[1]
+        components = []
+        for line in lines[1:]:
+            comps = re.findall(r'\( (.*?) \)', line)
+            components.extend(comps)
+        self.def_data.specialnets.append(SpecialNet(name=name, components=components))
+
+    def parse_region(self, line: str):
+        match = re.findall(r'(\S+)\s+\(\s*(\d+)\s+(\d+)\s*\)', line)
+        if match:
+            name = match[0][0]
+            coordinates = [(int(x), int(y)) for _, x, y in match]
+            self.def_data.regions.append(Region(name=name, coordinates=coordinates))
+
+    def parse_net(self, lines: List[str]):
+        name = lines[0].split()[1]
+        connections = []
+        for line in lines[1:]:
+            tokens = re.findall(r'\( (\S+) (\S+) \)', line)
+            for cell, pin in tokens:
+                connections.append(Connection(cell=cell, pin=pin))
+        self.def_data.nets.append(Net(name=name, connections=connections))
+
+    def parse(self, def_file_content: str):
         lines = def_file_content.splitlines()
-        current_section = None
-        section_content = []
-        
-        for line in lines:
-            line = line.strip()
-            
-            # Skip empty lines or comment lines
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
             if not line or line.startswith("#"):
+                i += 1
                 continue
-            
-            # Section parsing
+
             if line.startswith("VERSION"):
-                self._parse_version(line)
+                self.parse_version(line)
             elif line.startswith("DESIGN"):
-                self._parse_design(line)
+                self.parse_design_name(line)
             elif line.startswith("UNITS"):
-                self._parse_units(line)
-            elif line.startswith("PROPERTYDEFINITIONS"):
-                current_section = "PROPERTYDEFINITIONS"
+                self.parse_units(line)
             elif line.startswith("DIEAREA"):
-                self._parse_diearea(line)
+                self.parse_diearea(line)
             elif line.startswith("ROW"):
-                self._parse_row(line)
-            elif line.startswith("TRACKS"):
-                self._parse_tracks(line)
-            elif line.startswith("VIAS"):
-                current_section = "VIAS"
-            elif line.startswith("NETS"):
-                current_section = "NETS"
-            elif line.startswith("REGIONS"):
-                current_section = "REGIONS"
+                self.parse_row(line)
+            elif line.startswith("TRACK"):
+                self.parse_track(line)
+            elif line.startswith("VIA"):
+                via_lines = [line]
+                i += 1
+                while i < len(lines) and not lines[i].strip().startswith("END"):
+                    via_lines.append(lines[i].strip())
+                    i += 1
+                self.parse_via(via_lines)
             elif line.startswith("COMPONENTS"):
-                current_section = "COMPONENTS"
-            elif line.startswith("PINS"):
-                current_section = "PINS"
-            elif line.startswith("BLOCKAGES"):
-                current_section = "BLOCKAGES"
+                i += 1
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if line.startswith("END COMPONENTS"):
+                        break
+                    if line.startswith("-"):
+                        self.parse_component(line)
+                    i += 1
+            elif line.startswith("PIN"):
+                self.parse_pin(line)
+            elif line.startswith("BLOCKAGE"):
+                self.parse_blockage(line)
+            elif line.startswith("PROPERTYDEFINITIONS"):
+                self.parse_property_definition(line)
             elif line.startswith("SPECIALNETS"):
-                current_section = "SPECIALNETS"
-            elif current_section:
-                section_content.append(line)
-            
-            if line == "END PROPERTYDEFINITIONS":
-                self._parse_property_definitions(section_content)
-                section_content = []
-            elif line == "END VIAS":
-                self._parse_vias(section_content)
-                section_content = []
-            elif line == "END NETS":
-                self._parse_nets(section_content)
-                section_content = []
-            elif line == "END REGIONS":
-                self._parse_regions(section_content)
-                section_content = []
-            elif line == "END COMPONENTS":
-                self._parse_components(section_content)
-                section_content = []
-            elif line == "END PINS":
-                self._parse_pins(section_content)
-                section_content = []
-            elif line == "END BLOCKAGES":
-                self._parse_blockages(section_content)
-                section_content = []
-            elif line == "END SPECIALNETS":
-                self._parse_specialnets(section_content)
-                section_content = []
+                i += 1
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if line.startswith("END SPECIALNETS"):
+                        break
+                    if line.startswith("-"):
+                        specialnet_lines = [line]
+                        i += 1
+                        while i < len(lines) and not lines[i].strip().startswith("+"):
+                            specialnet_lines.append(lines[i].strip())
+                            i += 1
+                        self.parse_specialnet(specialnet_lines)
+                    else:
+                        i += 1
+            elif line.startswith("REGIONS"):
+                i += 1
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if line.startswith("END REGIONS"):
+                        break
+                    self.parse_region(line)
+                    i += 1
+            elif line.startswith("NETS"):
+                i += 1
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if line.startswith("END NETS"):
+                        break
+                    if line.startswith("-"):
+                        net_lines = [line]
+                        i += 1
+                        while i < len(lines) and not lines[i].strip().startswith("+"):
+                            net_lines.append(lines[i].strip())
+                            i += 1
+                        self.parse_net(net_lines)
+                    else:
+                        i += 1
 
-        return self.design_data
-
-    def _parse_version(self, line):
-        self.design_data["version"] = line.split(" ")[1]
-
-    def _parse_design(self, line):
-        self.design_data["design_name"] = line.split(" ")[1]
-
-    def _parse_units(self, line):
-        units = line.split(" ")
-        self.design_data["units"] = {"distance": units[2], "microns": int(units[3])}
-
-    def _parse_diearea(self, line):
-        diearea_coords = re.findall(r'\d+', line)
-        self.design_data["diearea"] = {"ll_x": int(diearea_coords[0]), "ll_y": int(diearea_coords[1]),
-                                       "ur_x": int(diearea_coords[2]), "ur_y": int(diearea_coords[3])}
-
-    def _parse_row(self, line):
-
-        try:
-            row_data = re.split(r'\s+', line.strip())
-            self.design_data.setdefault("rows", []).append({
-                "name": row_data[1],
-                "type": row_data[2],
-                "x": int(row_data[3]),
-                "y": int(row_data[4]),
-                "orientation": row_data[5],
-                "step": (int(row_data[7]), int(row_data[9]), int(row_data[11]))
-            })
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_nets(self, section_content):
-        try:
-            nets = []
-            current_net = None
-
-            for line in section_content:
-                line = line.strip()
-                if line.startswith("- "):
-                    if current_net:
-                        nets.append(current_net)
-                    net_name = line[2:].strip()
-                    current_net = {"name": net_name, "connections": []}
-                elif line.startswith("(") and current_net is not None:
-                    matches = re.findall(r'\(\s*(\S+)\s+(\S+)\s*\)', line)
-                    for cell_pin in matches:
-                        if cell_pin[0] == "PIN":
-                            current_net["connections"].append({
-                                "pin": cell_pin[1]
-                            })
-                        else:
-                            current_net["connections"].append({
-                                "cell": cell_pin[0],
-                                "pin": cell_pin[1]
-                            })
-                elif line == ";" and current_net:
-                    pass  # End of net definition
-
-            if current_net:
-                nets.append(current_net)
-
-            self.design_data["nets"] = nets
-
-        except Exception as e:
-            logging.error(f"DEF parser error in NETS section: {e}")
-
-    def _parse_tracks(self, line):
-
-        try:
-            track_data = re.split(r'\s+', line.strip())
-            track = {
-                "direction": track_data[1],
-                "step": int(track_data[6]),
-                "layer": track_data[8]
-            }
-            self.design_data.setdefault("tracks", []).append(track)
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_vias(self, section_content):
-
-        line = ''
-        try:
-            vias = []
-            current_via = {}
-            
-            for line in section_content:
-                line = line.strip()
-                if line.startswith("- "):
-                    if current_via:
-                        vias.append(current_via)
-                    current_via = {"name": line[2:].strip()}
-                elif line.startswith("+ "):
-                    tokens = line[2:].strip().split()
-                    if tokens[0] == "VIARULE":
-                        current_via["via_rule"] = tokens[1]
-                    elif tokens[0] == "CUTSIZE":
-                        current_via["cut_size"] = (int(tokens[1]), int(tokens[2]))
-                    elif tokens[0] == "LAYERS":
-                        current_via["layers"] = tokens[1:]
-                    elif tokens[0] == "CUTSPACING":
-                        current_via["cut_spacing"] = (int(tokens[1]), int(tokens[2]))
-                    elif tokens[0] == "ENCLOSURE":
-                        current_via["enclosure"] = (int(tokens[1]), int(tokens[2]), int(tokens[3]), int(tokens[4]))
-                    elif tokens[0] == "ROWCOL":
-                        current_via["row_col"] = (int(tokens[1]), int(tokens[2]))
-
-            if current_via:
-                vias.append(current_via)
-
-            self.design_data["vias"] = vias
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_regions(self, section_content):
-
-        line = ''
-        try:   
-            regions = []
-            
-            for line in section_content:
-                if line.startswith("- "):
-                    region_data = re.findall(r'\d+', line)
-                    region = {
-                        "name": line[2:].split(" ")[0],
-                        "coordinates": [(int(region_data[i]), int(region_data[i+1])) for i in range(0, len(region_data), 2)]
-                    }
-                    regions.append(region)
-
-            self.design_data["regions"] = regions
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_components(self, section_content):
-
-        line = ''
-        try:
-            components = []
-
-            for line in section_content:
-                if line.startswith("- "):
-                    component_data = line[2:].split(" ")
-
-                    inst_name = component_data[0]
-                    cell_name = component_data[1]
-                    type = ''
-                    location_x = ''
-                    location_y = ''
-
-                    plus_data = line.split(" + ")
-
-                    for item in plus_data:
-
-                        type = ''
-                        if item.startswith("COVER"):
-                            type = "COVER"
-                        elif item.startswith("FIXED"):
-                            type = "FIXED"
-                        elif item.startswith("PLACED"):
-                            type = "PLACED"
-
-                        if type:
-                            tokens = item.split((" "))
-                            location_x = tokens[2]
-                            location_y = tokens[3]
+            i += 1
 
 
-                    component = {
-                        "cell_name": cell_name,
-                        "inst_name": inst_name,
-                        "type": type,
-                        "location": (location_x, location_y)
-                    }
-                    components.append(component)
-
-            self.design_data["components"] = components
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_pins(self, section_content):
-
-        line = ''
-        try:
-            pins = []
-            
-            for line in section_content:
-                if line.startswith("- "):
-                    pin_data = re.split(r'\s+', line[2:].strip())
-                    pin = {
-                        "name": pin_data[0],
-                        "net": pin_data[2],
-                        "direction": pin_data[4],
-                        "use": pin_data[6]
-                    }
-                    pins.append(pin)
-
-            self.design_data["pins"] = pins
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_blockages(self, section_content):
-
-        line = ''
-        try:
-            blockages = []
-            
-            for line in section_content:
-                if line.startswith("- "):
-                    coords = re.findall(r'\d+', line)
-                    blockage = {
-                        "ll_x": int(coords[0]),
-                        "ll_y": int(coords[1]),
-                        "ur_x": int(coords[2]),
-                        "ur_y": int(coords[3])
-                    }
-                    blockages.append(blockage)
-
-            self.design_data["blockages"] = blockages
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_specialnets(self, section_content):
-
-        line = ''
-        try:
-            specialnets = []
-            
-            for line in section_content:
-                if line.startswith("- "):
-                    net_data = re.findall(r'\S+', line[2:])
-                    specialnet = {
-                        "name": net_data[0],
-                        "components": net_data[1:]
-                    }
-                    specialnets.append(specialnet)
-
-            self.design_data["specialnets"] = specialnets
-        
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    def _parse_property_definitions(self, section_content):
-
-        line = ''
-        try:
-            properties = {}
-            
-            for line in section_content:
-                if line.startswith("DESIGN"):
-                    parts = line.split(" ", 2)
-                    properties[parts[1]] = parts[2]
-
-            self.design_data["property_definitions"] = properties
-
-        except Exception as e:
-            logging.error("DEF parser error in line : {line}")
-            logging.error({e})
-
-    
 class ParseWorker(QObject):
     finished = pyqtSignal(dict)
 
@@ -365,79 +320,95 @@ class ParseWorker(QObject):
 
     @pyqtSlot()
     def run(self):
-        parser = DefParser()
-
         with open(self.file_path, 'r') as def_file:
             def_file_content = def_file.read()
 
-        def_dict = parser.parse(def_file_content)
+        parser = DefParser()
+        parser.parse(def_file_content)
         
-        # json_data = json.dumps(def_dict, indent=4)
-        # print(json_data)
+        # Emit a dictionary with keys for clarity
+        self.finished.emit({"file_path": self.file_path, "parser": parser})
 
-        self.finished.emit(def_dict)
-
-class DefParserImplement():
+    
+class DefParserImplement:
     def __init__(self):
 
-        self.def_file_path = ''
-        self.def_dict = {}
+        self.parser_dict = {}
 
-    def setDefFile(self, file_path):
-        self.def_file_path = file_path
+        self.all_workers = []
+        self.all_threads = []
 
-    def execute(self):
+    def parse(self, file_path):
+        if file_path:
+            worker = ParseWorker(file_path)
+            thread = QThread()
 
-        if self.def_file_path:
-            self.selectedFile = self.def_file_path
+            self.all_workers.append(worker)
+            self.all_threads.append(thread)
 
-            self.worker = ParseWorker(self.def_file_path)
-            self.thread = QThread()
+            worker.moveToThread(thread)
+            thread.started.connect(worker.run)
 
-            self.worker.moveToThread(self.thread)
-            self.thread.started.connect(self.worker.run)
+            worker.finished.connect(self.on_parse_finished)
+            worker.finished.connect(thread.quit)
+            thread.finished.connect(thread.deleteLater)
+            thread.start()
 
-            self.worker.finished.connect(self.on_parse_finished)
-            self.worker.finished.connect(self.thread.quit)
-            self.thread.finished.connect(self.thread.deleteLater)
-            self.thread.start()
+            logging.info(f"Parse DEF {file_path} started...")
 
-            logging.info("DEF parser started...")
+    def on_parse_finished(self, result):
+        file_path = result["file_path"]
+        parser = result["parser"]
 
+        self.parser_dict[file_path] = parser
 
-    def on_parse_finished(self, def_dict):
+        logging.info(f"Parse DEF {file_path} finished.")
 
-        self.def_dict = def_dict
-        json_data = json.dumps(def_dict, indent=4)
-
-        # print(json_data)
-        # print(self.def_dict)
-        logging.info("DEF parser finished.")
-
+    
     def get_via_names(self, layer):
-
         result = []
-        vias = self.def_dict.get("vias", [])
-        if not layer:
-            result = [via.get("name") for via in vias]
-        result = [via.get("name") for via in vias if layer in via.get("layers", [])]
+
+        for d, parser in self.parser_dict.items():
+            vias = parser.def_data.vias
+
+            for via in vias:
+                if layer is None or layer in via.layers:
+                    result.append(via.name)
 
         return result
     
-    def get_instances_coords(self):
+    def get_unit(self):
 
-        components = self.def_dict.get("components", [])
+        unit = 2000
+
+        for d, parser in self.parser_dict.items():
+            unit = parser.def_data.units.microns
+
+        return unit
+
+    def get_components(self):
+
+        all_components = []
+        for d, parser in self.parser_dict.items():
+            components = parser.def_data.components
+
+            all_components.extend(components)
+
+        return all_components
+    
+    def get_instances_coords(self):
 
         inst_list = []
         coord_list = []
 
-        for comp in components:
-            inst_name = comp.get("inst_name")
-            location = comp.get("location")
+        for d, parser in self.parser_dict.items():
+            components = parser.def_data.components
 
-            if inst_name is not None and isinstance(location, (list, tuple)) and len(location) == 2:
-                inst_list.append(inst_name)
-                coord_list.append(f"({location[0]} {location[1]})")
+            i_list = [comp.inst_name for comp in components]
+            c_list = [f"({comp.location[0]} {comp.location[1]})" for comp in components]
+
+            inst_list.extend(i_list)
+            coord_list.extend(c_list)
 
         return {
             "inst": inst_list,

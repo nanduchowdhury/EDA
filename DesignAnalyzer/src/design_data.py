@@ -17,22 +17,24 @@ class DesignData:
             return
 
         # Step 1: Get DEF component data
-        def_data = self.defParserImplement.def_dict
-        design_units = def_data.get("units", {}).get("database", 2000)
+        design_units = self.defParserImplement.get_unit()
         design_units = int(design_units)
 
-        components = def_data.get("components", [])
+        print(f"Design units : {design_units}")
+
+        components = self.defParserImplement.get_components()
         if not isinstance(components, list):
             logging.error(f"'components' should be a list, got {type(components)}")
             return
 
         # Step 2: Get LEF macro data
-        macros = self.lefParserImplement.lef_dict.get("macros", {})
-
         for comp in components:
-            instance_name = comp.get("inst_name")
-            cell_name = comp.get("cell_name")
-            location = comp.get("location")
+
+            print(f"{comp}")
+
+            instance_name = comp.inst_name
+            cell_name = comp.cell_name
+            location = comp.location
 
             if not instance_name or not cell_name or not location:
                 logging.warning(f"Invalid component entry: {comp}")
@@ -45,12 +47,14 @@ class DesignData:
             x_um = x_dbu / design_units
             y_um = y_dbu / design_units
 
-            macro = macros.get(cell_name)
+            print(f"location : {x_um}     {y_um}")
+
+            macro = self.lefParserImplement.get_macro(cell_name)
             if not macro:
                 logging.warning(f"Macro {cell_name} not found in LEF for instance {instance_name}.")
                 continue
 
-            width, height = macro.get("size", [0.0, 0.0])
+            width, height = macro.size
 
             bbox = [x_um, y_um, x_um + width, y_um + height]
 

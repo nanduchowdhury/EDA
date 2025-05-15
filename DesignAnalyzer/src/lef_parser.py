@@ -5,15 +5,61 @@ import logging
 import re
 from collections import defaultdict
 
+from collections import defaultdict
+import re
+
+# Define compact __slots__ structs
+
+class Foreign:
+    __slots__ = ('name', 'coords')
+    def __init__(self, name, coords):
+        self.name = name
+        self.coords = coords
+
+class PinPort:
+    __slots__ = ('layer_rects',)
+    def __init__(self, layer_rects):
+        self.layer_rects = layer_rects
+
+class Antenna:
+    __slots__ = ('type', 'value', 'layer')
+    def __init__(self, type, value, layer):
+        self.type = type
+        self.value = value
+        self.layer = layer
+
+class Pin:
+    __slots__ = ('direction', 'use', 'antenna', 'groundsensitivity', 'supplysensitivity', 'ports')
+    def __init__(self):
+        self.direction = None
+        self.use = None
+        self.antenna = []
+        self.groundsensitivity = None
+        self.supplysensitivity = None
+        self.ports = []
+
+class Macro:
+    __slots__ = ('name', 'raw', 'class_', 'origin', 'foreign', 'size', 'symmetry', 'site', 'pins', 'obs')
+    def __init__(self, name, raw):
+        self.name = name
+        self.raw = raw
+        self.class_ = None
+        self.origin = []
+        self.foreign = None
+        self.size = []
+        self.symmetry = []
+        self.site = None
+        self.pins = {}  # pin_name -> Pin
+        self.obs = {}  # layer -> list of rects
+
 class LefParser:
     def __init__(self, lef_text):
         self.text = lef_text
-        self.sections = defaultdict(list)
-        self.macros = {}
-        self.sites = {}
-        self.layers = {}
-        self.vias = {}
-        self.via_rules = {}
+        self.sites = {}  # site_name -> raw block
+        self.macros = {}  # macro_name -> Macro
+        self.layers = {}  # layer_name -> raw block
+        self.vias = {}  # via_name -> {raw, layers}
+        self.via_rules = {}  # rule_name -> raw block
         self.property_definitions = {}
         self._parse()
 
@@ -31,26 +77,23 @@ class LefParser:
 
     def _parse_sites(self):
         for block in self._extract_blocks("SITE"):
-            lines = block.strip().splitlines()
-            site_name = lines[0].split()[1]
-            self.sites[site_name] = {"raw": block}
+            site_name = block.strip().splitlines()[0].split()[1]
+            self.sites[site_name] = block
 
     def _parse_macros(self):
         pattern = re.compile(r'MACRO (.*?)\n(.*?)END\s+\1', re.DOTALL | re.IGNORECASE)
         for match in pattern.finditer(self.text):
-            name = match.group(1).strip()
-            content = match.group(2).strip()
-            self.macros[name] = {
-                "raw": content,
-                "class": self._extract_macro_field(content, "CLASS"),
-                "origin": self._extract_macro_coords(content, "ORIGIN"),
-                "foreign": self._extract_macro_foreign(content),
-                "size": self._extract_macro_size(content),
-                "symmetry": self._extract_macro_list_field(content, "SYMMETRY"),
-                "site": self._extract_macro_field(content, "SITE"),
-                "pins": self._parse_macro_pins(content),
-                "obs": self._parse_macro_obs(content)
-            }
+            name, content = match.group(1).strip(), match.group(2).strip()
+            macro = Macro(name, content)
+            macro.class_ = self._extract_macro_field(content, "CLASS")
+            macro.origin = self._extract_macro_coords(content, "ORIGIN")
+            macro.foreign = self._extract_macro_foreign(content)
+            macro.size = self._extract_macro_size(content)
+            macro.symmetry = self._extract_macro_list_field(content, "SYMMETRY")
+            macro.site = self._extract_macro_field(content, "SITE")
+            macro.pins = self._parse_macro_pins(content)
+            macro.obs = self._parse_macro_obs(content)
+            self.macros[name] = macro
 
     def _extract_macro_field(self, content, keyword):
         match = re.search(rf'{keyword} (.*?);', content)
@@ -63,10 +106,7 @@ class LefParser:
     def _extract_macro_foreign(self, content):
         match = re.search(r'FOREIGN (\S+) (-?\d+\.?\d*) (-?\d+\.?\d*) ;', content)
         if match:
-            return {
-                "name": match.group(1),
-                "coords": [float(match.group(2)), float(match.group(3))]
-            }
+            return Foreign(match.group(1), [float(match.group(2)), float(match.group(3))])
         return None
 
     def _extract_macro_size(self, content):
@@ -78,57 +118,42 @@ class LefParser:
         return match.group(1).strip().split() if match else []
 
     def _parse_macro_pins(self, content):
-        pin_pattern = re.compile(r'PIN (.*?)\n(.*?)END\s+\1', re.DOTALL | re.IGNORECASE)
         pins = {}
+        pin_pattern = re.compile(r'PIN (.*?)\n(.*?)END\s+\1', re.DOTALL | re.IGNORECASE)
         for match in pin_pattern.finditer(content):
-            pin_name = match.group(1).strip()
-            pin_content = match.group(2).strip()
-            pins[pin_name] = self._parse_pin_block(pin_content)
+            pin_name, pin_content = match.group(1).strip(), match.group(2).strip()
+            pin = self._parse_pin_block(pin_content)
+            pins[pin_name] = pin
         return pins
 
     def _parse_pin_block(self, content):
-        result = {
-            "direction": self._extract_macro_field(content, "DIRECTION"),
-            "use": self._extract_macro_field(content, "USE"),
-            "antenna": [],
-            "groundsensitivity": self._extract_macro_field(content, "GROUNDSENSITIVITY"),
-            "supplysensitivity": self._extract_macro_field(content, "SUPPLYSENSITIVITY"),
-            "ports": []
-        }
+        pin = Pin()
+        pin.direction = self._extract_macro_field(content, "DIRECTION")
+        pin.use = self._extract_macro_field(content, "USE")
+        pin.groundsensitivity = self._extract_macro_field(content, "GROUNDSENSITIVITY")
+        pin.supplysensitivity = self._extract_macro_field(content, "SUPPLYSENSITIVITY")
 
-        # Extract antenna fields
         for line in content.splitlines():
-            line = line.strip()
             if line.startswith("ANTENNA"):
                 tokens = line.strip(';').split()
-                result["antenna"].append({
-                    "type": tokens[0],
-                    "value": float(tokens[1]),
-                    "layer": tokens[-1]
-                })
+                if len(tokens) >= 3:
+                    pin.antenna.append(Antenna(tokens[0], float(tokens[1]), tokens[-1]))
 
-        # Extract full PORT ... END blocks
         port_pattern = re.compile(r'PORT\s*(.*?)END', re.DOTALL | re.IGNORECASE)
         for port_match in port_pattern.finditer(content):
-            port_block = port_match.group(1)
-            port_data = self._extract_layer_rects(port_block)
-            result["ports"].append(port_data)
+            port_data = self._extract_layer_rects(port_match.group(1))
+            pin.ports.append(PinPort(port_data))
 
-        return result
-
+        return pin
 
     def _parse_macro_obs(self, content):
-        obs_pattern = re.compile(r'OBS\s*(.*?)END', re.DOTALL | re.IGNORECASE)
-        match = obs_pattern.search(content)
-        if match:
-            return self._extract_layer_rects(match.group(1).strip())
-        return {}
+        match = re.search(r'OBS\s*(.*?)END', content, re.DOTALL | re.IGNORECASE)
+        return self._extract_layer_rects(match.group(1).strip()) if match else {}
 
     def _extract_layer_rects(self, content):
         layer_blocks = defaultdict(list)
         current_layer = None
         for line in content.splitlines():
-            line = line.strip()
             if line.startswith("LAYER"):
                 current_layer = line.split()[1]
             elif line.startswith("RECT") and current_layer:
@@ -138,9 +163,8 @@ class LefParser:
 
     def _parse_layers(self):
         for block in self._extract_blocks("LAYER"):
-            lines = block.strip().splitlines()
-            layer_name = lines[0].split()[1]
-            self.layers[layer_name] = {"raw": block}
+            layer_name = block.strip().splitlines()[0].split()[1]
+            self.layers[layer_name] = block
 
     def _parse_vias(self):
         for block in self._extract_blocks("VIA"):
@@ -153,73 +177,48 @@ class LefParser:
 
     def _parse_via_rules(self):
         for block in self._extract_blocks("VIARULE"):
-            lines = block.strip().splitlines()
-            rule_name = lines[0].split()[1]
-            self.via_rules[rule_name] = {"raw": block}
+            rule_name = block.strip().splitlines()[0].split()[1]
+            self.via_rules[rule_name] = block
 
     def _parse_property_definitions(self):
-        pattern = re.compile(r'PROPERTYDEFINITIONS(.*?)END PROPERTYDEFINITIONS', re.DOTALL | re.IGNORECASE)
-        match = pattern.search(self.text)
+        match = re.search(r'PROPERTYDEFINITIONS(.*?)END PROPERTYDEFINITIONS', self.text, re.DOTALL | re.IGNORECASE)
         if match:
-            block = match.group(1)
-            for line in block.strip().splitlines():
+            for line in match.group(1).strip().splitlines():
                 tokens = line.strip().split()
                 if len(tokens) >= 3:
                     key = f"{tokens[0]} {tokens[1]}"
                     value = " ".join(tokens[2:])
                     self.property_definitions[key] = value
 
-    @staticmethod
-    def from_file(file_path):
-        with open(file_path, 'r') as f:
-            lef_text = f.read()
-        return LefParser(lef_text)
+    # Accessors
+    def get_sites(self): return self.sites
+    def get_macros(self): return self.macros
+    def get_layers(self): return self.layers
+    def get_vias(self): return self.vias
+    def get_via_rules(self): return self.via_rules
+    def get_property_definitions(self): return self.property_definitions
 
-    # Accessor methods
-    def get_sites(self):
-        return self.sites
-
-    def get_macros(self):
-        return self.macros
-
-    def get_layers(self):
-        return self.layers
-
-    def get_vias(self):
-        return self.vias
-
-    def get_via_rules(self):
-        return self.via_rules
-
-    def get_property_definitions(self):
-        return self.property_definitions
-
-
-    def get_parser_dict(self):
-        return {
-            "sites": self.sites,
-            "macros": self.macros,
-            "layers": self.layers,
-            "vias": self.vias,
-            "via_rules": self.via_rules
-        }
     
 
 class LefParserImplement:
     def __init__(self):
 
-        self.lef_file_path = ''
-        self.lef_dict = {}
+        self.parser_dict = {}
 
-    def setLefFile(self, file_path):
-        self.lef_file_path = file_path
-
-    def execute(self):
-        if self.lef_file_path:
-            with open(self.lef_file_path, 'r') as f:
+    def parse(self, file_path):
+        if file_path:
+            with open(file_path, 'r') as f:
                 lef_text = f.read()
                 lefParser = LefParser(lef_text)
-                self.lef_dict = lefParser.get_parser_dict()
+                self.parser_dict[file_path] = lefParser
 
+    def get_macro(self, cell_name):
+        for l, parser in self.parser_dict.items():
+            macros = parser.get_macros()
+            if cell_name in macros:
+                return macros[cell_name]
+            
+        return None
+    
 
 
