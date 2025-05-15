@@ -12,9 +12,12 @@ from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict
 import re
 
+from global_name_index import gname_index
+
+
 @dataclass
 class Units:
-    distance: str
+    distance_id: int
     microns: int
 
 @dataclass
@@ -26,57 +29,57 @@ class DieArea:
 
 @dataclass
 class Row:
-    name: str
-    type: str
+    name_id: int
+    type_id: int
     x: int
     y: int
-    orientation: str
+    orientation_id: int
     step: Tuple[int, int, int]
 
 @dataclass
 class Track:
-    direction: str
+    direction_id: int
     step: int
-    layer: str
+    layer_id: int
 
 @dataclass
 class Connection:
-    cell: Optional[str] = None
-    pin: str = ""
+    cell_id: Optional[int] = None
+    pin_id: int = 0
 
 @dataclass
 class Net:
-    name: str
+    name_id: int
     connections: List[Connection]
 
 @dataclass
 class Via:
-    name: str
-    via_rule: Optional[str] = None
+    name_id: int
+    via_rule_id: Optional[int] = None
     cut_size: Optional[Tuple[int, int]] = None
-    layers: List[str] = field(default_factory=list)
+    layer_ids: List[int] = field(default_factory=list)
     cut_spacing: Optional[Tuple[int, int]] = None
     enclosure: Optional[Tuple[int, int, int, int]] = None
     row_col: Optional[Tuple[int, int]] = None
 
 @dataclass
 class Region:
-    name: str
+    name_id: int
     coordinates: List[Tuple[int, int]]
 
 @dataclass
 class Component:
-    inst_name: str
-    cell_name: str
-    type: str
+    inst_name_id: int
+    cell_name_id: int
+    type_id: int
     location: Tuple[int, int]
 
 @dataclass
 class Pin:
-    name: str
-    net: str
-    direction: str
-    use: str
+    name_id: int
+    net_id: int
+    direction_id: int
+    use_id: int
 
 @dataclass
 class Blockage:
@@ -87,13 +90,13 @@ class Blockage:
 
 @dataclass
 class SpecialNet:
-    name: str
-    components: List[str]
+    name_id: int
+    component_ids: List[int]
 
 @dataclass
 class DefData:
-    version: Optional[str] = None
-    design_name: Optional[str] = None
+    version_id: Optional[int] = None
+    design_name_id: Optional[int] = None
     units: Optional[Units] = None
     diearea: Optional[DieArea] = None
     rows: List[Row] = field(default_factory=list)
@@ -105,7 +108,7 @@ class DefData:
     pins: List[Pin] = field(default_factory=list)
     blockages: List[Blockage] = field(default_factory=list)
     specialnets: List[SpecialNet] = field(default_factory=list)
-    property_definitions: Dict[str, str] = field(default_factory=dict)
+    property_definitions: Dict[int, int] = field(default_factory=dict)
 
 class DefParser:
     def __init__(self):
@@ -113,49 +116,49 @@ class DefParser:
 
     def parse_version(self, line: str):
         if line.startswith("VERSION"):
-            self.def_data.version = line.split()[1]
+            version = line.split()[1]
+            self.def_data.version_id = gname_index.set(version)
 
     def parse_design_name(self, line: str):
         if line.startswith("DESIGN"):
-            self.def_data.design_name = line.split()[1].strip(";")
+            design = line.split()[1].strip(";")
+            self.def_data.design_name_id = gname_index.set(design)
 
     def parse_units(self, line: str):
-        line = line.rstrip(';').strip()  # Remove trailing semicolon and surrounding whitespace
-        if line.startswith("UNITS"):
+        line = line.rstrip(';').strip()
+        if line.startswith("UNITS") and "MICRONS" in line:
             parts = line.split()
-            if "MICRONS" in parts:
-                self.def_data.units = Units(distance="MICRONS", microns=int(parts[-1]))
+            distance_id = gname_index.set("MICRONS")
+            self.def_data.units = Units(distance_id=distance_id, microns=int(parts[-1]))
 
     def parse_diearea(self, line: str):
-        if line.startswith("DIEAREA"):
-            coords = list(map(int, re.findall(r'\d+', line)))
-            self.def_data.diearea = DieArea(*coords)
+        coords = list(map(int, re.findall(r'\d+', line)))
+        self.def_data.diearea = DieArea(*coords)
 
     def parse_row(self, line: str):
         parts = line.split()
-        name = parts[1]
-        type = parts[2]
-        x = int(parts[3])
-        y = int(parts[4])
-        orientation = parts[5]
+        name_id = gname_index.set(parts[1])
+        type_id = gname_index.set(parts[2])
+        x, y = int(parts[3]), int(parts[4])
+        orientation_id = gname_index.set(parts[5])
         step = tuple(map(int, re.findall(r'\d+', ' '.join(parts[6:]))))
-        self.def_data.rows.append(Row(name, type, x, y, orientation, step))
+        self.def_data.rows.append(Row(name_id, type_id, x, y, orientation_id, step))
 
     def parse_track(self, line: str):
         parts = line.split()
-        direction = parts[1]
+        direction_id = gname_index.set(parts[1])
         step = int(parts[6])
-        layer = parts[-1]
-        self.def_data.tracks.append(Track(direction, step, layer))
+        layer_id = gname_index.set(parts[-1])
+        self.def_data.tracks.append(Track(direction_id, step, layer_id))
 
     def parse_via(self, lines: List[str]):
-        name = lines[0].split()[1]
-        via = Via(name)
+        name_id = gname_index.set(lines[0].split()[1])
+        via = Via(name_id)
         for line in lines[1:]:
             if line.startswith("+ CUT"):
                 via.cut_size = tuple(map(int, re.findall(r'\d+', line)))
             elif line.startswith("+ LAYER"):
-                via.layers.append(line.split()[2])
+                via.layer_ids.append(gname_index.set(line.split()[2]))
             elif line.startswith("+ SPACING"):
                 via.cut_spacing = tuple(map(int, re.findall(r'\d+', line)))
             elif line.startswith("+ ENCLOSURE"):
@@ -164,33 +167,24 @@ class DefParser:
                 via.row_col = tuple(map(int, re.findall(r'\d+', line)))
         self.def_data.vias.append(via)
 
-
     def parse_component(self, line: str):
-        # Remove trailing semicolon if present
         line = line.rstrip(';')
-
         parts = line.split()
-        inst_name = parts[1]
-        cell_name = parts[2]
-        placement_type = parts[3] if '+' not in parts[3] else parts[4]  # handle optional '+'
-
-        # Extract the coordinates from the line using regex
+        inst_id = gname_index.set(parts[1])
+        cell_id = gname_index.set(parts[2])
+        type_str = parts[3] if '+' not in parts[3] else parts[4]
+        type_id = gname_index.set(type_str)
         coords = re.findall(r'\(\s*(\d+)\s+(\d+)\s*\)', line)
-        if coords:
-            x, y = map(int, coords[0])
-        else:
-            x, y = 0, 0
-
-        self.def_data.components.append(Component(inst_name, cell_name, placement_type, (x, y)))
-
+        x, y = map(int, coords[0]) if coords else (0, 0)
+        self.def_data.components.append(Component(inst_id, cell_id, type_id, (x, y)))
 
     def parse_pin(self, line: str):
         parts = line.split()
-        name = parts[1]
-        net = parts[-1]
-        direction = "INPUT"
-        use = "SIGNAL"
-        self.def_data.pins.append(Pin(name, net, direction, use))
+        name_id = gname_index.set(parts[1])
+        net_id = gname_index.set(parts[-1])
+        direction_id = gname_index.set("INPUT")
+        use_id = gname_index.set("SIGNAL")
+        self.def_data.pins.append(Pin(name_id, net_id, direction_id, use_id))
 
     def parse_blockage(self, line: str):
         coords = list(map(int, re.findall(r'\d+', line)))
@@ -200,31 +194,35 @@ class DefParser:
     def parse_property_definition(self, line: str):
         match = re.match(r'PROPERTYDEFINITIONS\s+(\w+)\s+(\w+)', line)
         if match:
-            self.def_data.property_definitions[match.group(1)] = match.group(2)
+            key_id = gname_index.set(match.group(1))
+            value_id = gname_index.set(match.group(2))
+            self.def_data.property_definitions[key_id] = value_id
 
     def parse_specialnet(self, lines: List[str]):
-        name = lines[0].split()[1]
-        components = []
+        name_id = gname_index.set(lines[0].split()[1])
+        component_ids = []
         for line in lines[1:]:
             comps = re.findall(r'\( (.*?) \)', line)
-            components.extend(comps)
-        self.def_data.specialnets.append(SpecialNet(name=name, components=components))
+            component_ids.extend(gname_index.set(c) for c in comps)
+        self.def_data.specialnets.append(SpecialNet(name_id=name_id, component_ids=component_ids))
 
     def parse_region(self, line: str):
         match = re.findall(r'(\S+)\s+\(\s*(\d+)\s+(\d+)\s*\)', line)
         if match:
-            name = match[0][0]
+            name_id = gname_index.set(match[0][0])
             coordinates = [(int(x), int(y)) for _, x, y in match]
-            self.def_data.regions.append(Region(name=name, coordinates=coordinates))
+            self.def_data.regions.append(Region(name_id=name_id, coordinates=coordinates))
 
     def parse_net(self, lines: List[str]):
-        name = lines[0].split()[1]
+        name_id = gname_index.set(lines[0].split()[1])
         connections = []
         for line in lines[1:]:
             tokens = re.findall(r'\( (\S+) (\S+) \)', line)
             for cell, pin in tokens:
-                connections.append(Connection(cell=cell, pin=pin))
-        self.def_data.nets.append(Net(name=name, connections=connections))
+                cell_id = gname_index.set(cell)
+                pin_id = gname_index.set(pin)
+                connections.append(Connection(cell_id, pin_id))
+        self.def_data.nets.append(Net(name_id=name_id, connections=connections))
 
     def parse(self, def_file_content: str):
         lines = def_file_content.splitlines()
@@ -404,7 +402,7 @@ class DefParserImplement:
         for d, parser in self.parser_dict.items():
             components = parser.def_data.components
 
-            i_list = [comp.inst_name for comp in components]
+            i_list = [gname_index.getName(comp.inst_name_id) for comp in components]
             c_list = [f"({comp.location[0]} {comp.location[1]})" for comp in components]
 
             inst_list.extend(i_list)

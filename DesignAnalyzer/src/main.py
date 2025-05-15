@@ -27,7 +27,9 @@ from session import Session
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
-from layout_draw import DrawManager, LayoutView, LayoutAreaWithScales
+from layout_draw import LayoutView, LayoutAreaWithScales
+
+from draw_manager import DrawManager
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
 
@@ -125,7 +127,10 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.defParserImplement = defParserImplement
 
     def onClick(self):
+        self.loadLefDef()
         
+        
+    def loadLefDef(self):
         lef_list = self.session.getAttr("LEF")
         def_list = self.session.getAttr("DEF")
 
@@ -134,7 +139,6 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 
         for d in def_list:
             self.defParserImplement.parse(d)
-        
         
 
 class MainUI(QMainWindow):

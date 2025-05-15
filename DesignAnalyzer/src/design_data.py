@@ -2,6 +2,8 @@
 
 import logging
 
+from global_name_index import gname_index
+
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
@@ -28,9 +30,9 @@ class DesignData:
         # Step 2: Get LEF macro data
         for comp in components:
 
-            instance_name = comp.inst_name
-            cell_name = comp.cell_name
-            type = comp.type
+            instance_name = gname_index.getName(comp.inst_name_id)
+            cell_name = gname_index.getName(comp.cell_name_id)
+            type = gname_index.getName(comp.type_id)
             location = comp.location
 
             if type != 'PLACED' and type != 'FIXED':
