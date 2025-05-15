@@ -1,114 +1,140 @@
 /* QLabel */
 QLabel {
-    background-color: qlineargradient(
-        spread: pad, 
-        x1:0, y1:1, x2:0, y2:0,
-        stop:0 #f1ecb6, 
-        stop:1 #f4f2dd
-    );
-    color: #0b0615;
+    background: transparent;
+    color: #0b3d91;
+    font-weight: bold;
     padding: 4px;
     border: none;
-    border-radius: 3px;
 }
 
-QMenuBar {
-    background: qlineargradient(
-        x1: 0, y1: 1, 
-        x2: 0, y2: 0, 
-        stop: 0 #f1ecb6, 
-        stop: 1 #f4f2dd
-    );
-    color: #2c2c2c;
-    padding: 4px;
-}
-
-QMenuBar::item {
-    background: transparent;
-    padding: 4px 10px;
-    margin: 0px;
-}
-
-QMenuBar::item:selected {
-    background: #a8a8a8;
-    border-radius: 3px;
-}
-
-QMenu {
-    background: qlineargradient(
-        x1: 0, y1: 1, 
-        x2: 0, y2: 0, 
-        stop: 0 #f1ecb6, 
-        stop: 1 #f4f2dd
-    );
-    color: #0b0615;
-    padding: 4px;
-    border: 1px solid #aaa;
-    border-radius: 3px;
-}
-
-QMenu::item {
-    padding: 4px 10px;
-    background: transparent;
-}
-
-QMenu::item:selected {
-    background: #c7c3a3;
-    color: #000;
-    border-radius: 3px;
-}
-
-
+/* QPushButton */
 QPushButton {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #e0f7ff, stop:1 #b2ebf2);
-    color: #0a0a0a;
+                                      stop:0 #d0ecff, stop:1 #a6d4f2);
+    color: #003366;
     padding: 6px 12px;
-    border: 1px solid #8ab6c9;
+    border: 1px solid #7bb3dd;
     border-radius: 5px;
     font-weight: bold;
 }
 
 QPushButton:hover {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #d0f0ff, stop:1 #a2dbe2);
+                                      stop:0 #c0e5ff, stop:1 #8ecde9);
 }
 
 QPushButton:pressed {
     background-color: qlineargradient(x1:0, y1:1, x2:0, y2:0,
-                                      stop:0 #a2dbe2, stop:1 #d0f0ff);
+                                      stop:0 #8ecde9, stop:1 #c0e5ff);
     padding-top: 8px;
     padding-left: 13px;
 }
 
+/* QMenuBar */
+QMenuBar {
+    background: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0,
+                                stop: 0 #dcefff, stop: 1 #b8daff);
+    color: #002b55;
+    padding: 4px;
+    font-weight: bold;
+}
 
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+}
+
+QMenuBar::item:selected {
+    background: #a3cfff;
+    border-radius: 3px;
+}
+
+/* QMenu */
+QMenu {
+    background: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0,
+                                stop: 0 #e6f4ff, stop: 1 #cce5ff);
+    color: #002b55;
+    padding: 4px;
+    border: 1px solid #80bfff;
+    border-radius: 4px;
+}
+
+QMenu::item {
+    padding: 4px 10px;
+}
+
+QMenu::item:selected {
+    background: #a3cfff;
+    color: #001f3f;
+    border-radius: 3px;
+}
+
+/* QTabBar::tab */
+QTabBar::tab {
+    background: #ffffff;
+    color: #003366;
+    padding: 4px 8px;
+    border: 1px solid #7bb3dd;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 1px;
+}
+
+QTabBar::tab:selected {
+    background: #3a7bd5;
+    color: white;
+    border-color: #3a7bd5;
+}
 
 /* QTextEdit */
 QTextEdit {
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #ccc;
+    background-color: #f5f7fa;
+    color: #002b55;
+    border: 1px solid #aacfe5;
     padding: 4px;
     border-radius: 3px;
 }
 
 /* QComboBox */
 QComboBox {
-    background-color: #ffffff;
+    background-color: #f5f7fa;
     padding: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #aacfe5;
     border-radius: 3px;
+    color: #002b55;
 }
 
 /* QListWidget */
 QListWidget {
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    border: 1px solid #aacfe5;
+    color: #002b55;
 }
 
 /* QTableWidget */
 QTableWidget {
     background-color: #ffffff;
-    gridline-color: #ccc;
-    border: 1px solid #ccc;
+    gridline-color: #aacfe5;
+    border: 1px solid #aacfe5;
+    color: #002b55;
+    font-size: 14px;
+}
+
+/* QHeaderView::section (Table Headers) */
+QHeaderView::section {
+    background-color: #d0eaff;
+    color: #002b55;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 4px 6px;
+    border: 1px solid #aacfe5;
+    height: 22px;
+}
+
+QTableWidget::item {
+    padding: 2px 4px;
+    height: 20px;
 }

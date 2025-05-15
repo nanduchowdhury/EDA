@@ -1,12 +1,14 @@
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
-    QFileDialog
+    QFileDialog, QLabel
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 import os
 import psutil
 import threading
+
+import time
 
 import json
 
@@ -20,6 +22,8 @@ class BottomArea():
         self.mainLayout = _mainLayout
         self.windowHeight = _windowHeight
         self.layoutHeight = _layoutHeight
+
+        self.process_start_time = psutil.Process(os.getpid()).create_time()
 
         self.create_bottom_area()
 
@@ -52,6 +56,11 @@ class BottomArea():
         self.clearDefButton.clicked.connect(self.clearDefFiles)
 
         self.appendSystemInfo()
+
+        # Start timer to update system info every 2 seconds
+        self.sysInfoTimer = QTimer()
+        self.sysInfoTimer.timeout.connect(self.appendSystemInfo)
+        self.sysInfoTimer.start(2000)  # 2000 ms = 2 seconds
 
 
     def create_left_panel(self):
@@ -97,11 +106,13 @@ class BottomArea():
 
         return lefDefWidget
 
+
     def create_right_panel(self):
-        
-        # Right Panel (2/3 width): Existing TabWidget
+        # Right 2/3 Panel: split horizontally into tabWidget and system info
         rightPanelWidget = QWidget()
-        rightPanelLayout = QVBoxLayout(rightPanelWidget)
+        rightPanelLayout = QHBoxLayout(rightPanelWidget)
+
+        # --- Left side: QTabWidget (Design Info, Logs) ---
         self.tabWidget = QTabWidget()
 
         # Design Info tab
@@ -123,9 +134,18 @@ class BottomArea():
         index = self.tabWidget.addTab(self.logsTab, "Logs")
         self.tabWidget.setCurrentIndex(index)
 
-        rightPanelLayout.addWidget(self.tabWidget)
+        # --- Right side: system info label ---
+        self.sysInfoLabel = QLabel()
+        self.sysInfoLabel.setStyleSheet("font-size: 16px; color: gray;")
+        self.sysInfoLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.sysInfoLabel.setMinimumWidth(200)
+
+        # Add both to horizontal layout
+        rightPanelLayout.addWidget(self.tabWidget, stretch=3)
+        rightPanelLayout.addWidget(self.sysInfoLabel, stretch=1)
 
         return rightPanelWidget
+
 
     def appendDesignInfo(self, info):
         self.designInfoText.append(info)
@@ -137,17 +157,49 @@ class BottomArea():
         self.logTable.setItem(row, 1, QTableWidgetItem(log))
         self.logTable.resizeColumnsToContents()
 
+
     def appendSystemInfo(self):
         process = psutil.Process(os.getpid())
+
+        # Memory
         mem_used = process.memory_info().rss / (1024 * 1024)
         mem_available = psutil.virtual_memory().available / (1024 * 1024)
-        num_cpus = os.cpu_count()
-        num_threads = threading.active_count()
 
-        self.appendDesignInfo(f"Memory Used: {mem_used:.2f} MB")
-        self.appendDesignInfo(f"Memory Available: {mem_available:.2f} MB")
-        self.appendDesignInfo(f"CPUs Available: {num_cpus}")
-        self.appendDesignInfo(f"Threads Running: {num_threads}")
+        # CPU
+        cpu_percent = process.cpu_percent(interval=0.1)  # small delay to sample
+        num_cpus = os.cpu_count()
+
+        # Threads
+        num_threads = process.num_threads()
+
+        # Uptime
+        uptime_secs = time.time() - self.process_start_time
+        hours, remainder = divmod(int(uptime_secs), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        uptime_str = f"{hours}h {minutes}m {seconds}s"
+
+        # PID
+        pid = process.pid
+
+        # (Optional) Peak memory on Unix-like systems
+        try:
+            peak_mem = process.memory_info().peak_wset / (1024 * 1024)  # Windows only
+        except AttributeError:
+            peak_mem = "N/A"
+
+        # Format the output
+        sys_info = (
+            f"PID: {pid}\n"
+            f"Uptime: {uptime_str}\n"
+            f"Memory Used: {mem_used:.2f} MB\n"
+            f"Memory Available: {mem_available:.2f} MB\n"
+            f"CPU Usage: {cpu_percent:.1f}%\n"
+            f"CPUs Available: {num_cpus}\n"
+            f"Threads Running: {num_threads}\n"
+            f"Peak Memory: {peak_mem if isinstance(peak_mem, str) else f'{peak_mem:.2f} MB'}"
+        )
+
+        self.sysInfoLabel.setText(sys_info)
 
     def selectLefFiles(self):
         file_dialog = QFileDialog()
