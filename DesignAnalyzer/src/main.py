@@ -118,11 +118,12 @@ class ZoomFitMenuItem(MenuItemAbstract):
         self.drawManager.fit_to_view()
 
 class LoadDesignToolItem(ToolBarItemAbstract):
-    def __init__(self, session,
+    def __init__(self, lefListWidget, defListWidget,
                     defParserImplement, lefParserImplement):
         super().__init__("Load Design")
 
-        self.session = session
+        self.lefListWidget = lefListWidget
+        self.defListWidget = defListWidget
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
 
@@ -131,8 +132,9 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         
         
     def loadLefDef(self):
-        lef_list = self.session.getAttr("LEF")
-        def_list = self.session.getAttr("DEF")
+
+        lef_list = [self.lefListWidget.item(i).text() for i in range(self.lefListWidget.count())]
+        def_list = [self.defListWidget.item(i).text() for i in range(self.defListWidget.count())]
 
         for l in lef_list:
             self.lefParserImplement.parse(l)
@@ -197,7 +199,8 @@ class MainUI(QMainWindow):
         self.zoomFitMenuObj = ZoomFitMenuItem(self.drawManager)
         self.menu.createMenuItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
-        self.loadDesignToolbarItem = LoadDesignToolItem(self.session,
+        self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.lefListWidget, 
+                                self.bottomArea.defListWidget,
                                 self.defParserImplement, self.lefParserImplement)
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
         

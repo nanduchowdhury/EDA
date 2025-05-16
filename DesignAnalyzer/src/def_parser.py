@@ -169,15 +169,20 @@ class DefParser:
         self.def_data.vias.append(via)
 
     def parse_component(self, line: str):
-        line = line.rstrip(';')
-        parts = line.split()
-        inst_id = gname_index.set(parts[1])
-        cell_id = gname_index.set(parts[2])
-        type_str = parts[3] if '+' not in parts[3] else parts[4]
-        type_id = gname_index.set(type_str)
-        coords = re.findall(r'\(\s*(\d+)\s+(\d+)\s*\)', line)
-        x, y = map(int, coords[0]) if coords else (0, 0)
-        self.def_data.components.append(Component(inst_id, cell_id, type_id, (x, y)))
+        try:
+
+            line = line.rstrip(';')
+            parts = line.split()
+            inst_id = gname_index.set(parts[1])
+            cell_id = gname_index.set(parts[2])
+            type_str = parts[3] if '+' not in parts[3] else parts[4]
+            type_id = gname_index.set(type_str)
+            coords = re.findall(r'\(\s*(\d+)\s+(\d+)\s*\)', line)
+            x, y = map(int, coords[0]) if coords else (0, 0)
+            self.def_data.components.append(Component(inst_id, cell_id, type_id, (x, y)))
+
+        except Exception as e:
+            print(f"Error DEF parsing : line : {line}")
 
     def parse_pin(self, line: str):
         parts = line.split()
