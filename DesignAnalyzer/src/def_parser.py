@@ -4,6 +4,7 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
 import json
 import re
 
+import os
 import threading
 import logging
 
@@ -316,16 +317,110 @@ class ParseWorker(QObject):
         super().__init__()
         self.file_path = file_path
 
+        self.num_threads = 10
+
+    def merge_def_data(self, def_data_list):
+        merged = DefData()
+
+        for data in def_data_list:
+            if merged.version_id is None and data.version_id is not None:
+                merged.version_id = data.version_id
+            if merged.design_name_id is None and data.design_name_id is not None:
+                merged.design_name_id = data.design_name_id
+            if merged.units is None and data.units is not None:
+                merged.units = data.units
+            if merged.diearea is None and data.diearea is not None:
+                merged.diearea = data.diearea
+
+            merged.rows.extend(data.rows)
+            merged.tracks.extend(data.tracks)
+            merged.nets.extend(data.nets)
+            merged.vias.extend(data.vias)
+            merged.regions.extend(data.regions)
+
+            print(f"Merging {len(data.components)} components...")
+            merged.components.extend(data.components)
+
+
+            merged.pins.extend(data.pins)
+            merged.blockages.extend(data.blockages)
+            merged.specialnets.extend(data.specialnets)
+
+            for k, v in data.property_definitions.items():
+                if k not in merged.property_definitions:
+                    merged.property_definitions[k] = v
+
+        return merged
+
+
     @pyqtSlot()
     def run(self):
         with open(self.file_path, 'r') as def_file:
             def_file_content = def_file.read()
 
-        parser = DefParser()
-        parser.parse(def_file_content)
-        
-        # Emit a dictionary with keys for clarity
-        self.finished.emit({"file_path": self.file_path, "parser": parser})
+        if os.environ.get("DEF_READ_MT"):
+            chunks = self.create_chunks(def_file_content, num_threads=self.num_threads)
+            parsers = self.parse_in_threads(chunks)
+            combined_parser = self.merge_parsers(parsers)
+        else:
+            print("Running DEF parser single thread...")
+            parser = DefParser()
+            parser.parse(def_file_content)
+            combined_parser = parser
+
+        self.finished.emit({
+            "file_path": self.file_path,
+            "parser": combined_parser
+        })
+
+    def create_chunks(self, def_file_content: str, num_threads: int) -> list:
+        lines = def_file_content.splitlines()
+        total_lines = len(lines)
+        chunk_size = (total_lines + num_threads - 1) // num_threads
+
+        section_keywords = ["COMPONENTS", "REGIONS", "SPECIALNETS", "NETS"]
+        line_chunks = [
+            lines[i * chunk_size:(i + 1) * chunk_size]
+            for i in range(num_threads)
+            if i * chunk_size < total_lines
+        ]
+
+        for i in range(1, len(line_chunks)):
+            prev_chunk = line_chunks[i - 1]
+            for line in reversed(prev_chunk):
+                for section in section_keywords:
+                    if section in line and not line.strip().startswith(f"END {section}"):
+                        line_chunks[i].insert(0, section)
+                        break
+                else:
+                    continue
+                break
+
+        return ['\n'.join(chunk) for chunk in line_chunks]
+
+    def parse_in_threads(self, chunks: list) -> list:
+        parsers = [DefParser() for _ in range(len(chunks))]
+        threads = []
+
+        def parse_chunk(index):
+            parsers[index].parse(chunks[index])
+            print(f"DEF parser {index} finished...")
+
+        for i in range(len(chunks)):
+            thread = threading.Thread(target=parse_chunk, args=(i,))
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+        return parsers
+
+    def merge_parsers(self, parsers: list):
+        combined_parser = DefParser()
+        combined_parser.def_data = self.merge_def_data([p.def_data for p in parsers])
+        return combined_parser
+
 
     
 class DefParserImplement:
