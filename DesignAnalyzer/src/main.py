@@ -29,6 +29,8 @@ from lef_parser import LefParserImplement
 
 from layout_draw import LayoutView, LayoutAreaWithScales
 
+from design_data import DesignData
+
 from draw_manager import DrawManager
 
 from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
@@ -119,13 +121,15 @@ class ZoomFitMenuItem(MenuItemAbstract):
 
 class LoadDesignToolItem(ToolBarItemAbstract):
     def __init__(self, lefListWidget, defListWidget,
-                    defParserImplement, lefParserImplement):
+                    defParserImplement, lefParserImplement,
+                    drawManager):
         super().__init__("Load Design")
 
         self.lefListWidget = lefListWidget
         self.defListWidget = defListWidget
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
+        self.drawManager = drawManager
 
     def onClick(self):
         self.loadLefDef()
@@ -141,7 +145,17 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 
         for d in def_list:
             self.defParserImplement.parse(d)
+
+        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
+
+        self.defParserImplement.def_parser_finished_signal.connect(self.slotDefParserFinished)
+
+    def slotDefParserFinished(self, message):
+        self.design_data.resolveCompToInst()
         
+        self.drawManager.set_scale(self.design_data.inst_bbox)
+        self.drawManager.draw_instances(self.design_data.inst_rtree, 
+                            self.design_data.instData)
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -179,6 +193,9 @@ class MainUI(QMainWindow):
 
         self.create_top_layout()
 
+        self.drawManager = DrawManager(self.drawArea.view, 
+                            self.drawArea.bottomScale, self.drawArea.rightScale)
+
         self.bottomArea = BottomArea(self.mainLayout, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
 
@@ -201,7 +218,9 @@ class MainUI(QMainWindow):
 
         self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.lefListWidget, 
                                 self.bottomArea.defListWidget,
-                                self.defParserImplement, self.lefParserImplement)
+                                self.defParserImplement, self.lefParserImplement,
+                                self.drawManager)
+        
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
         
 
@@ -241,7 +260,6 @@ class MainUI(QMainWindow):
 
         self.drawArea = LayoutAreaWithScales(width=self.LAYOUT_WIDTH, height=self.LAYOUT_HEIGHT)
         self.layoutView = self.drawArea.view
-        self.drawManager = self.drawArea.drawManager
 
         self.create_command_area()
 
@@ -309,7 +327,7 @@ class MainUI(QMainWindow):
 
 
         # Row 4: Execute Button
-        self.runButton = QPushButton("Run Predicate")
+        self.runButton = QPushButton("Run Analysis")
         self.runButton.clicked.connect(self.runSelectedPredicate)
         layout.addWidget(self.runButton)
 
@@ -402,9 +420,6 @@ class MainUI(QMainWindow):
             if hasattr(self, "drawManager") and self.drawManager:
                 
                 print("Drawing cells now...")
-                
-                self.drawManager.setInstances(instance_dict)
-                self.drawManager.drawInstances()
 
 
     def updateParamLabels(self):

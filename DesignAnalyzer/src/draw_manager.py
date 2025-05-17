@@ -8,12 +8,13 @@ from rtree import index
 class DrawManager:
     def __init__(self, view, rightScale, bottomScale):
         self.view = view
+
         self.rightScale = rightScale
         self.bottomScale = bottomScale
 
+        self.bounding_box = None
+
         self.view.layout_draw = self
-        self.instances = {}
-        self.rtree_index = None
 
         # Disable scrollbars completely
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -25,42 +26,16 @@ class DrawManager:
         self._zoom_factor = 1.25
         self._current_scale = 1.0
         self.base_scale = 1.0
-        self.bounding_box = None
 
-    def setInstances(self, instance_dict):
-        self.instances = instance_dict
-        self.rtree_index = index.Index()
 
-        all_x, all_y = [], []
+    def set_scale(self, bbox):
 
-        for i, (inst_name, data) in enumerate(self.instances.items()):
-            x1, y1, x2, y2 = data["coords"]
-            bbox = (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
-            self.rtree_index.insert(i, bbox)
-            data["bbox"] = bbox
-            data["id"] = i
-
-            all_x.extend([x1, x2])
-            all_y.extend([y1, y2])
-
-        if not all_x or not all_y:
-            return
-
-        min_x, max_x = min(all_x), max(all_x)
-        min_y, max_y = min(all_y), max(all_y)
-        self.bounding_box = (min_x, max_x, min_y, max_y)
+        self.bounding_box = bbox
+        (min_x, min_y, max_x, max_y) = bbox
 
         self.rightScale.setMinMax(min_y, max_y)
         self.bottomScale.setMinMax(min_x, max_x)
 
-    def drawInstances(self):
-        """Initial draw: fit all instances to view by computing base_scale"""
-        self.scene.clear()
-
-        if not self.instances or not self.bounding_box:
-            return
-
-        min_x, max_x, min_y, max_y = self.bounding_box
         view_width = self.view.viewport().width()
         view_height = self.view.viewport().height()
 
@@ -72,16 +47,9 @@ class DrawManager:
         self.base_scale = min(scale_x, scale_y)
         self._current_scale = 1.0
 
-        self._drawVisibleInstances()
+    def draw_instances(self, rtree, instData):
 
-    def _drawVisibleInstances(self):
-        """Draw instances that intersect visible view rectangle"""
-        self.scene.clear()
-
-        if not self.bounding_box or not self.rtree_index:
-            return
-
-        min_x, max_x, min_y, max_y = self.bounding_box
+        min_x, min_y, max_x, max_y = self.bounding_box
         scale = self.base_scale * self._current_scale
 
         view_width = self.view.viewport().width()
@@ -93,14 +61,14 @@ class DrawManager:
         visible_max_y = max_y
         visible_min_y = max_y - view_height / scale
 
-        visible_bbox = (visible_min_x, visible_min_y, visible_max_x, visible_max_y)
+        visible_bbox = (visible_min_x, visible_min_y, 
+                        visible_max_x, visible_max_y)
 
-        visible_ids = list(self.rtree_index.intersection(visible_bbox))
+        visible_ids = list(rtree.intersection(visible_bbox))
 
         for i in visible_ids:
-            # Retrieve instance by id
-            inst = next(inst for inst in self.instances.values() if inst["id"] == i)
-            x1, y1, x2, y2 = inst["bbox"]
+            inst = instData.instance_data[i]
+            x1, y1, x2, y2 = inst.location
 
             # Transform to screen coords
             sx1 = (x1 - min_x) * scale
@@ -117,6 +85,7 @@ class DrawManager:
             rect_item.setBrush(QBrush(QColor(200, 100, 100, 120)))
             rect_item.setPen(QColor(0, 0, 0))
             self.scene.addItem(rect_item)
+
 
     def zoom_in(self):
         self._current_scale *= self._zoom_factor

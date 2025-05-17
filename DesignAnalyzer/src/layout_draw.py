@@ -11,6 +11,10 @@ class LayoutView(QGraphicsView):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.setCursor(Qt.CrossCursor)
+
+        # Set the background color
+        self.setBackgroundBrush(QBrush(QColor(20, 20, 20)))
+
         self.start_pos = None
         self.temp_rect_item = None
         self.layout_draw = None

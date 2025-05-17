@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
 
 import json
 import re
@@ -428,9 +428,13 @@ class ParseWorker(QObject):
 
 
     
-class DefParserImplement:
-    def __init__(self):
+class DefParserImplement(QObject):
+    
+    def_parser_finished_signal = pyqtSignal(str)
 
+    def __init__(self):
+        super().__init__()
+        
         self.parser_dict = {}
 
         self.all_workers = []
@@ -461,6 +465,8 @@ class DefParserImplement:
         self.parser_dict[file_path] = parser
 
         logging.info(f"Parse DEF {file_path} finished.")
+
+        self.def_parser_finished_signal.emit("DEF parser finished.")
 
     
     def get_via_names(self, layer):

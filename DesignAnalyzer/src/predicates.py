@@ -114,20 +114,15 @@ class GetInstanceCoords(PredicateBase):
 
     def run(self):
 
-        # Experiment code.
-        design_data = DesignData(self.defParserImplement, self.lefParserImplement)
-        design_data.execute()
-
-        
         # result = self.defParserImplement.get_instances_coords()
         # self.setOutput("inst", result["inst"])
         # self.setOutput("coords", result["coords"])
         
-        result = design_data.instances
-        instance_names = list(result.keys())
-        bboxes = [data["bbox"] for data in result.values()]
-        self.setOutput("inst", instance_names)
-        self.setOutput("coords", bboxes)
+        #result = design_data.instances
+        #instance_names = list(result.keys())
+        #bboxes = [data["bbox"] for data in result.values()]
+        #self.setOutput("inst", instance_names)
+        #self.setOutput("coords", bboxes)
         
-        return result
-    
+        #return result
+        pass
