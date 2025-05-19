@@ -1,10 +1,15 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, QPushButton, QMenuBar, QToolBar, QMenu, QApplication
+
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtCore import Qt
+
 from abc import ABC, abstractmethod
 import sys
 
 class ToolBarItemAbstract(ABC):
     def __init__(self, label: str):
         self.button = QPushButton(label)
+
         self.button.clicked.connect(self.onClick)
 
     def getButton(self) -> QPushButton:

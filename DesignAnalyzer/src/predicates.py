@@ -1,13 +1,18 @@
 from abc import ABC, abstractmethod
 
 import json
+import re
 
 from design_data import DesignData
 
+from global_name_index import gname_index
+
 class PredicateBase(ABC):
-    def __init__(self, _defParserImplement, _lefParserImplement):
+    def __init__(self, _defParserImplement, _lefParserImplement, design_data):
+
         self.defParserImplement = _defParserImplement
         self.lefParserImplement = _lefParserImplement
+        self.design_data = design_data
 
         self.args = {}            # input arguments
         self.outputs = {}         # output data
@@ -18,7 +23,7 @@ class PredicateBase(ABC):
     def setArgs(self, args_dict):
         self.args.update(args_dict)
 
-    def setOutput(self, argName, valueList):
+    def setOutputObject(self, argName, valueList):
         """Sets the output values for a given argument name."""
         if not isinstance(valueList, list):
             raise ValueError("Output value must be a list.")
@@ -89,16 +94,6 @@ class Predicates:
         """
         return iter(self.predicates.items())
 
-
-class MultiplyTwoNumbers(PredicateBase):
-    def run(self):
-        a = int(self.args["a"])
-        b = int(self.args["b"])
-        print(f"Value a & b : {a} {b}")
-        result = a * b
-        self.setOutput("result", [result])  # Store result as a list
-
-        return result
     
 class GetViasForLayer(PredicateBase):
 
@@ -107,22 +102,25 @@ class GetViasForLayer(PredicateBase):
 
         result = self.defParserImplement.get_via_names(layerName)
 
-        self.setOutput("result", result)  # Store result as a list
+        self.setOutputObject("result", result)  # Store result as a list
         return result
 
 class GetInstanceCoords(PredicateBase):
 
     def run(self):
+        name_regex = self.args["name"]
 
-        # result = self.defParserImplement.get_instances_coords()
-        # self.setOutput("inst", result["inst"])
-        # self.setOutput("coords", result["coords"])
+        # all_inst = list(self.design_data.instData.instance_data)
+    
+        result = []
+        compiled_regex = re.compile(name_regex)
+        components = self.defParserImplement.get_components()
+        for comp in components:
+            instance_name = gname_index.getName(comp.inst_name_id)
+            if compiled_regex.search(instance_name):
+                result.append(comp.inst_name_id)
+
+        self.setOutputObject("inst", result)
         
-        #result = design_data.instances
-        #instance_names = list(result.keys())
-        #bboxes = [data["bbox"] for data in result.values()]
-        #self.setOutput("inst", instance_names)
-        #self.setOutput("coords", bboxes)
-        
-        #return result
-        pass
+        return result
+    

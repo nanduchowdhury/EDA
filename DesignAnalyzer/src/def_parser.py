@@ -513,6 +513,7 @@ class DefParserImplement(QObject):
 
             inst_list.extend(i_list)
             coord_list.extend(c_list)
+            
 
         return {
             "inst": inst_list,

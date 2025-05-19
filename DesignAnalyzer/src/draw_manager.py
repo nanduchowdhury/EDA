@@ -47,7 +47,9 @@ class DrawManager:
         self.base_scale = min(scale_x, scale_y)
         self._current_scale = 1.0
 
-    def draw_instances(self, rtree, instData):
+    def load_design_instances(self, rtree, designInstances):
+
+        self.designInstances = designInstances
 
         min_x, min_y, max_x, max_y = self.bounding_box
         scale = self.base_scale * self._current_scale
@@ -66,8 +68,16 @@ class DrawManager:
 
         visible_ids = list(rtree.intersection(visible_bbox))
 
-        for i in visible_ids:
-            inst = instData.instance_data[i]
+        self.draw_instances(visible_ids, QColor(0, 0, 0))
+
+
+    def draw_instances(self, instList, color):
+
+        min_x, min_y, max_x, max_y = self.bounding_box
+        scale = self.base_scale * self._current_scale
+
+        for i in instList:
+            inst = self.designInstances.instance_data[i]
             x1, y1, x2, y2 = inst.location
 
             # Transform to screen coords
@@ -83,7 +93,7 @@ class DrawManager:
 
             rect_item = QGraphicsRectItem(QRectF(x, y, w, h))
             rect_item.setBrush(QBrush(QColor(200, 100, 100, 120)))
-            rect_item.setPen(QColor(0, 0, 0))
+            rect_item.setPen(color)
             self.scene.addItem(rect_item)
 
 

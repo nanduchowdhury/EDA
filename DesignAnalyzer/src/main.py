@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import (
 
 from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
 
+from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+
 from PyQt5.QtCore import Qt
 import sys
 
@@ -33,7 +35,7 @@ from design_data import DesignData
 
 from draw_manager import DrawManager
 
-from predicates import Predicates, MultiplyTwoNumbers, GetViasForLayer, GetInstanceCoords
+from predicates import Predicates, GetViasForLayer, GetInstanceCoords
 
 import logging
 from datetime import datetime
@@ -121,7 +123,7 @@ class ZoomFitMenuItem(MenuItemAbstract):
 
 class LoadDesignToolItem(ToolBarItemAbstract):
     def __init__(self, lefListWidget, defListWidget,
-                    defParserImplement, lefParserImplement,
+                    defParserImplement, lefParserImplement, designData,
                     drawManager):
         super().__init__("Load Design")
 
@@ -129,6 +131,8 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.defListWidget = defListWidget
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
+
+        self.design_data = designData
         self.drawManager = drawManager
 
     def onClick(self):
@@ -146,15 +150,13 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         for d in def_list:
             self.defParserImplement.parse(d)
 
-        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
-
         self.defParserImplement.def_parser_finished_signal.connect(self.slotDefParserFinished)
 
     def slotDefParserFinished(self, message):
         self.design_data.resolveCompToInst()
         
         self.drawManager.set_scale(self.design_data.inst_bbox)
-        self.drawManager.draw_instances(self.design_data.inst_rtree, 
+        self.drawManager.load_design_instances(self.design_data.inst_rtree, 
                             self.design_data.instData)
 
 class MainUI(QMainWindow):
@@ -169,7 +171,7 @@ class MainUI(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Main UI")
+        self.setWindowTitle("DesignBlues")
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
@@ -183,7 +185,6 @@ class MainUI(QMainWindow):
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
 
-        self.registerPredicates()
 
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
@@ -191,10 +192,19 @@ class MainUI(QMainWindow):
         self.mainLayout = QVBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
+        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
+        
+        self.registerPredicates()
+
         self.create_top_layout()
 
         self.drawManager = DrawManager(self.drawArea.view, 
                             self.drawArea.bottomScale, self.drawArea.rightScale)
+        
+        
+
+
+        
 
         self.bottomArea = BottomArea(self.mainLayout, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
@@ -219,6 +229,7 @@ class MainUI(QMainWindow):
         self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.lefListWidget, 
                                 self.bottomArea.defListWidget,
                                 self.defParserImplement, self.lefParserImplement,
+                                self.design_data,
                                 self.drawManager)
         
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
@@ -279,7 +290,7 @@ class MainUI(QMainWindow):
         layout = QVBoxLayout()
 
         # Row 1: Label
-        layout.addWidget(QLabel("Search action to perform"))
+        layout.addWidget(QLabel("Search analysis to perform"))
 
         # Row 2: TextEdit + OK Button
         row2 = QHBoxLayout()
@@ -394,32 +405,15 @@ class MainUI(QMainWindow):
                 item = QTableWidgetItem(str(val))
                 self.commandTable.setItem(row, col, item)
 
-        # Build instance dict for drawManager
-        instance_dict = {}
         inst_list = None
-        bbox_list = None
 
         for name, values in outputs:
             if name == "inst":
                 inst_list = values
                 print(f"inst list len : {len(inst_list)}")
-            elif name == "coords":
-                bbox_list = values
-                print(f"bbox list len : {len(bbox_list)}")
 
-        # Check if both were found
-        if inst_list and bbox_list and len(inst_list) == len(bbox_list):
-            instance_dict = {
-                inst: {"coords": bbox}
-                for inst, bbox in zip(inst_list, bbox_list)
-            }
+                self.drawManager.draw_instances(inst_list, QColor("white"))
 
-            print(f"instance_dict len : {len(instance_dict)}")
-
-            # Set the instance dict and draw them in layout
-            if hasattr(self, "drawManager") and self.drawManager:
-                
-                print("Drawing cells now...")
 
 
     def updateParamLabels(self):
@@ -447,21 +441,14 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        multObj = MultiplyTwoNumbers(self.defParserImplement, self.lefParserImplement)
-        self.all_predicates.addPredicate("multiply_2_numbers", ["a", "b"], multObj)
+        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement,
+                                 self.design_data)
+        self.all_predicates.addPredicate("via - search based on layer etc", ["layer"], viaObj)
 
-        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement)
-        self.all_predicates.addPredicate("get_vias_for_layer", ["layer"], viaObj)
+        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement,
+                                    self.design_data)
+        self.all_predicates.addPredicate("instances - search by name regexp, location etc", ["name"], instObj)
 
-        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement)
-        self.all_predicates.addPredicate("get_inst_and_coords", [], instObj)
-
-        # Iterate
-        for name, (args, obj) in self.all_predicates:
-            print(f"{name} with args {args}")
-
-        # Get args for specific predicate
-        print("Args for 'multiply':", self.all_predicates.getPredicateArgs("multiply_2_numbers"))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -92,7 +92,6 @@ class DesignData:
         print(f"Resolved {len(self.instData.instance_data)} instances")
 
 
-
     def iterate_pruned_rtrees(original_rtree, numIter):
         all_objs = list(original_rtree.intersection(original_rtree.bounds, objects=True))
         total = len(all_objs)
