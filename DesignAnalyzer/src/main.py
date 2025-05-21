@@ -37,6 +37,8 @@ from draw_manager import DrawManager
 
 from predicates import Predicates, GetViasForLayer, GetInstanceCoords
 
+from llm_manager import LLMManager, global_LLM_manager
+
 import logging
 from datetime import datetime
 
@@ -158,6 +160,7 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.drawManager.set_scale(self.design_data.inst_bbox)
         self.drawManager.load_design_instances(self.design_data.inst_rtree, 
                             self.design_data.instData)
+        
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -296,9 +299,10 @@ class MainUI(QMainWindow):
         row2 = QHBoxLayout()
         self.commandInput = QTextEdit()
         self.commandInput.setFixedHeight(30)
-        okButton = QPushButton("OK")
+        self.okButton = QPushButton("Search")
+        self.okButton.clicked.connect(self.runSearchAnalysis)
         row2.addWidget(self.commandInput)
-        row2.addWidget(okButton)
+        row2.addWidget(self.okButton)
         layout.addLayout(row2)
 
         # Row 3: List + Column of Label+TextEdit
@@ -351,6 +355,19 @@ class MainUI(QMainWindow):
 
         self.commandArea.setLayout(layout)
 
+
+    def runSearchAnalysis(self):
+        command_text = self.commandInput.toPlainText()
+        print(f"Command: {command_text}")
+
+        response = global_LLM_manager.query(command_text)
+        print(f"LLM response: {response}")
+
+        matching_items = self.commandList.findItems(response, Qt.MatchExactly)
+        if matching_items:
+            self.commandList.setCurrentItem(matching_items[0])
+        else:
+            QMessageBox.warning(self, "Not Found", f"No predicate found matching: {response}")
 
     def runSelectedPredicate(self):
         selected_items = self.commandList.selectedItems()
@@ -448,6 +465,11 @@ class MainUI(QMainWindow):
         instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement,
                                     self.design_data)
         self.all_predicates.addPredicate("instances - search by name regexp, location etc", ["name"], instObj)
+
+
+        l = list(self.all_predicates.getAllPredicates().keys())
+        global_LLM_manager.set_context_lines(l)
+        print("Set context lines - done")
 
 
 if __name__ == "__main__":
