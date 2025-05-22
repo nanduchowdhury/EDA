@@ -43,6 +43,7 @@ body {
   height: 80px;
   border-bottom: 1px solid #ccc;
   z-index: 100;
+  justify-content: space-between;
 }
 
 /* Logo */
@@ -57,44 +58,86 @@ body {
 }
 
 /* Menu */
-.menu {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.menu-item {
-  position: relative;
-  padding: 10px 15px;
-  font-weight: bold;
+.burger {
+  width: 30px;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 22px;
+  margin: 10px;
+  user-select: none;
+}
+.burger div {
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  position: relative; /* for positioning menu-items */
+  padding: 10px 20px;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+/* Hidden by default */
+.menu-items {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  top: 100%; /* just below the nav */
+  right: 0;  /* aligns it under burger icon */
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  min-width: 220px;
+  padding: 10px 0;
+  z-index: 999;
+}
+
+.menu-items.active {
+  display: flex;
+}
+
+
+/* Menu item styles */
+.menu-item {
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+  border-radius: 4px;
+  background-color: #fafafa;
+  border: 1px solid transparent;
+  transition: background-color 0.2s;
+}
+.menu-item:hover,
+.menu-item:focus {
+  background-color: #f0f0f0;
+  outline: none;
+}
+
+/* Down arrow style */
+.menu-item .down-arrow {
+  font-size: 12px;
+  margin-left: 8px;
+  line-height: 1;
   user-select: none;
 }
 
-/* Vertical separator after each menu item except last */
-.menu-item:not(:last-child)::after {
-  content: "";
-  display: inline-block;
-  width: 1px;
-  height: 24px;
-  background: #ccc;
-  margin-left: 15px;
-}
-
-/* Small down arrow "V" next to menu label */
-.menu-item .down-arrow {
-  font-size: 12px;
-  margin-left: 5px;
-  line-height: 1;
-}
-
-/* Submenu container */
+/* Submenu hidden by default */
 .submenu {
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 0;
+  right: 100%; /* instead of left: 0 or left: 100% */
   background: white;
   border: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
@@ -103,13 +146,65 @@ body {
   z-index: 102;
 }
 
-/* Show submenu on hover */
-.menu-item:hover > .submenu {
+/* Show submenu when parent has 'open' */
+.menu-item.open > .submenu {
+  display: flex;
+}
+
+/* Submenu links */
+.submenu a {
+  padding: 6px 10px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  user-select: text;
+}
+
+.submenu a:last-child {
+  border-bottom: none;
+}
+
+.submenu a:hover {
+  background-color: #e8e8e8;
+}
+
+/* Accessibility focus outline for submenu links */
+.submenu a:focus {
+  outline: 2px solid #666;
+}
+
+/* Optional: smooth transition */
+.submenu {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+
+.menu-wrapper {
+  position: relative; /* anchors shared-submenu correctly */
+  display: flex;
+  justify-content: flex-end; /* aligns menu to right, if needed */
+  padding: 10px;
+}
+
+.shared-submenu {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 150%; /* places submenu to the left of the menu */
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  min-width: 220px;
+  z-index: 999;
+  padding: 10px 0;
+  
+}
+
+.shared-submenu.active {
   display: block;
 }
 
-/* Submenu items */
-.submenu a {
+.shared-submenu a {
   display: block;
   padding: 10px 15px;
   text-decoration: none;
@@ -117,15 +212,14 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* Remove border from last submenu item */
-.submenu a:last-child {
+.shared-submenu a:last-child {
   border-bottom: none;
 }
 
-/* Submenu item hover */
-.submenu a:hover {
-  background: #f0f0f0;
+.shared-submenu a:hover {
+  background-color: #f0f0f0;
 }
+
 
 /* Body padding so content not hidden behind fixed header */
 main {
