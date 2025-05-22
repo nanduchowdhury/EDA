@@ -1,0 +1,136 @@
+
+/* Reset & basics */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Social Icons Bar */
+.social-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px 20px;
+  gap: 15px;
+  background: #f4f4f4;
+  min-height: 60px;
+  z-index: 101;
+  border-bottom: 1px solid #ccc;
+}
+.social-bar a {
+  color: #333;
+  font-size: 22px;
+  text-decoration: none;
+}
+
+/* Container below social-bar for logo + menu */
+.header-main {
+  position: fixed;
+  top: 60px; /* height of social-bar */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 0 20px;
+  height: 80px;
+  border-bottom: 1px solid #ccc;
+  z-index: 100;
+}
+
+/* Logo */
+.logo img {
+  height: 60px;
+  width: auto;
+}
+.logo {
+  margin-right: 60px; /* significant gap */
+  display: flex;
+  align-items: center;
+}
+
+/* Menu */
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-item {
+  position: relative;
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+/* Vertical separator after each menu item except last */
+.menu-item:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: #ccc;
+  margin-left: 15px;
+}
+
+/* Small down arrow "V" next to menu label */
+.menu-item .down-arrow {
+  font-size: 12px;
+  margin-left: 5px;
+  line-height: 1;
+}
+
+/* Submenu container */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  display: none;
+  min-width: 200px;
+  z-index: 102;
+}
+
+/* Show submenu on hover */
+.menu-item:hover > .submenu {
+  display: block;
+}
+
+/* Submenu items */
+.submenu a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+/* Remove border from last submenu item */
+.submenu a:last-child {
+  border-bottom: none;
+}
+
+/* Submenu item hover */
+.submenu a:hover {
+  background: #f0f0f0;
+}
+
+/* Body padding so content not hidden behind fixed header */
+main {
+  padding-top: 140px; /* social bar + header main height */
+  max-width: 900px;
+  margin: auto;
+}
+

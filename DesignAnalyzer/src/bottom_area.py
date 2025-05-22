@@ -39,21 +39,15 @@ class BottomArea():
 
         splitLayout = QHBoxLayout(self.bottomArea)
 
-        lefDefWidget = self.create_left_panel()
+        leftPanelWidget = self.create_left_panel()
         rightPanelWidget = self.create_right_panel()
 
 
         # Add both panels to bottom area
-        splitLayout.addWidget(lefDefWidget, 1)
+        splitLayout.addWidget(leftPanelWidget, 1)
         splitLayout.addWidget(rightPanelWidget, 2)
 
         self.mainLayout.addWidget(self.bottomArea, stretch=1)
-
-        # Connect button actions
-        self.lefButton.clicked.connect(self.selectLefFiles)
-        self.clearLefButton.clicked.connect(self.clearLefFiles)
-        self.defButton.clicked.connect(self.selectDefFiles)
-        self.clearDefButton.clicked.connect(self.clearDefFiles)
 
         self.appendSystemInfo()
 
@@ -65,46 +59,19 @@ class BottomArea():
 
     def create_left_panel(self):
         
-        # Left Panel (1/3 width): LEF/DEF
-        lefDefWidget = QWidget()
-        lefDefLayout = QVBoxLayout(lefDefWidget)
-        lefDefTabs = QTabWidget()
+        # Left Panel (1/3 width):
+        leftPanelWidget = QWidget()
+        leftPanelLayout = QVBoxLayout(leftPanelWidget)
+        leftPanelTabs = QTabWidget()
+        
+        self.lef_tab = InputTab(parent=self, tab_widget_container=leftPanelTabs)
+        self.lef_tab.create_tab("LEF")
 
-        # LEF/DEF Tab
-        lefDefTab = QWidget()
-        lefDefTabLayout = QHBoxLayout(lefDefTab)
+        self.def_tab = InputTab(parent=self, tab_widget_container=leftPanelTabs)
+        self.def_tab.create_tab("DEF")
 
-        # === LEF section ===
-        lefVertical = QVBoxLayout()
-        self.lefButton = QPushButton("Select LEF")
-        self.clearLefButton = QPushButton("Clear LEF")
-        lefVertical.addWidget(self.lefButton)
-        lefVertical.addWidget(self.clearLefButton)
-        self.lefListWidget = CustomListWidget()
-        lefHLayout = QHBoxLayout()
-        lefHLayout.addLayout(lefVertical)
-        lefHLayout.addWidget(self.lefListWidget)
-
-        # === DEF section ===
-        defVertical = QVBoxLayout()
-        self.defButton = QPushButton("Select DEF")
-        self.clearDefButton = QPushButton("Clear DEF")
-        defVertical.addWidget(self.defButton)
-        defVertical.addWidget(self.clearDefButton)
-        self.defListWidget = CustomListWidget()
-        defHLayout = QHBoxLayout()
-        defHLayout.addLayout(defVertical)
-        defHLayout.addWidget(self.defListWidget)
-
-        # Add both LEF and DEF to main horizontal layout
-        lefDefTabLayout.addLayout(lefHLayout)
-        lefDefTabLayout.addLayout(defHLayout)
-        lefDefTab.setLayout(lefDefTabLayout)
-
-        lefDefTabs.addTab(lefDefTab, "LEF/DEF")
-        lefDefLayout.addWidget(lefDefTabs)
-
-        return lefDefWidget
+        leftPanelLayout.addWidget(leftPanelTabs)
+        return leftPanelWidget
 
 
     def create_right_panel(self):
@@ -201,24 +168,50 @@ class BottomArea():
 
         self.sysInfoLabel.setText(sys_info)
 
-    def selectLefFiles(self):
+
+
+class InputTab:
+    def __init__(self, parent, tab_widget_container: QTabWidget):
+        self.parent = parent
+
+        self.tab_widget_container = tab_widget_container
+        self.tab_widget = QWidget()
+
+        self.list_widget = None
+
+    def get_file_list_widget(self):
+        return self.list_widget
+
+    def create_tab(self, tab_name):
+        tab_layout = QHBoxLayout(self.tab_widget)
+
+        vertical = QVBoxLayout()
+        input_button = QPushButton("Select file")
+        clear_button = QPushButton("Clear files")
+        vertical.addWidget(input_button)
+        vertical.addWidget(clear_button)
+
+        self.list_widget = CustomListWidget()
+        h_layout = QHBoxLayout()
+        h_layout.addLayout(vertical)
+        h_layout.addWidget(self.list_widget)
+
+        input_button.clicked.connect(self.select_callback)
+        clear_button.clicked.connect(self.clear_callback)
+
+        tab_layout.addLayout(h_layout)
+        self.tab_widget.setLayout(tab_layout)
+
+        self.tab_widget_container.addTab(self.tab_widget, tab_name)
+
+
+    def select_callback(self):
         file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(None, "Select a LEF file")
+        file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
 
         if file_path:
-            self.lefListWidget.addItemIfNotExists(file_path)
+            self.list_widget.addItemIfNotExists(file_path)
 
-    def clearLefFiles(self):
-        self.lefListWidget.clear()
+    def clear_callback(self):
+        self.list_widget.clear()
 
-    def selectDefFiles(self):
-
-        file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(None, "Select a DEF file")
-
-        if file_path:
-            self.defListWidget.addItemIfNotExists(file_path)
-
-
-    def clearDefFiles(self):
-        self.defListWidget.clear()
