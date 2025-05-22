@@ -1,4 +1,4 @@
-
+d
 /* Reset & basics */
 * {
   box-sizing: border-box;
@@ -20,7 +20,7 @@ body {
   padding: 12px 20px;
   gap: 15px;
   background: #f4f4f4;
-  min-height: 60px;
+  min-height: 20px;
   z-index: 101;
   border-bottom: 1px solid #ccc;
 }
@@ -38,7 +38,7 @@ body {
   right: 0;
   display: flex;
   align-items: center;
-  background: white;
+  background: linear-gradient(to right, #e0f7ff, #2196f3);
   padding: 0 20px;
   height: 80px;
   border-bottom: 1px solid #ccc;
