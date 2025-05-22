@@ -79,7 +79,7 @@ body {
   justify-content: space-between;
   align-items: center;
   position: relative; /* for positioning menu-items */
-  padding: 10px 20px;
+  padding: 2px 2px;
   background-color: #fff;
   z-index: 1000;
 }
@@ -190,7 +190,7 @@ body {
   display: none;
   position: absolute;
   top: 50%;
-  right: 150%; /* places submenu to the left of the menu */
+  right: 270%; /* places submenu to the left of the menu */
   background: white;
   border: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
