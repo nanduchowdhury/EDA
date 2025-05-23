@@ -19,7 +19,7 @@ body {
   justify-content: flex-end;
   padding: 12px 20px;
   gap: 15px;
-  background: #f4f4f4;
+  background: linear-gradient(to right, #e0f7ff, #2196f3);
   min-height: 20px;
   z-index: 101;
   border-bottom: 1px solid #ccc;
@@ -38,9 +38,9 @@ body {
   right: 0;
   display: flex;
   align-items: center;
-  background: linear-gradient(to right, #e0f7ff, #2196f3);
+  background: #f4f4f4;
   padding: 0 20px;
-  height: 80px;
+  height: 70px;
   border-bottom: 1px solid #ccc;
   z-index: 100;
   justify-content: space-between;
@@ -95,7 +95,7 @@ body {
   background: white;
   border: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  min-width: 220px;
+  min-width: 100px;
   padding: 10px 0;
   z-index: 999;
 }
@@ -190,7 +190,7 @@ body {
   display: none;
   position: absolute;
   top: 50%;
-  right: 270%; /* places submenu to the left of the menu */
+  right: 180%; /* places submenu to the left of the menu */
   background: white;
   border: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -220,6 +220,31 @@ body {
   background-color: #b4c2f0;
 }
 
+.highlight-box {
+  border-radius: 12px;
+  padding: 1.5em;
+  margin: 1em 0;
+  color: white;
+  font-size: 1.1em;
+  line-height: 1.6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.highlight-box-blue {
+  background: linear-gradient(to top right, #add8e6, #00008b);
+}
+
+.highlight-box-orange {
+  background: linear-gradient(to top right, #ef9169, #f75104);
+}
+
+.highlight-box-green {
+  background: linear-gradient(to top right, #a0c770, #546a32);
+}
+
+.highlight-box-black {
+  background: linear-gradient(to top right, #878786, #0b1200);
+}
 
 /* Body padding so content not hidden behind fixed header */
 main {
