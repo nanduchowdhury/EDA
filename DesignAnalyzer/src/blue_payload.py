@@ -17,6 +17,7 @@ class BluePayload:
 
         app = QApplication(sys.argv)
         window = self.payload_class()  # create instance of the class
+        window.create_GUI()
         window.show()
         sys.exit(app.exec_())
 

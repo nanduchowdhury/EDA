@@ -26,16 +26,13 @@ from bottom_area import BottomArea
 
 from session import Session
 
-from def_parser import DefParserImplement
-from lef_parser import LefParserImplement
 
 from layout_draw import LayoutView, LayoutAreaWithScales
 
-from design_data import DesignData
 
 from draw_manager import DrawManager
 
-from predicates import Predicates, GetViasForLayer, GetInstanceCoords
+from predicates import Predicates, DummyPredicate
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -54,10 +51,9 @@ class UILogHandler(logging.Handler):
 
 
 class ReadSessionMenuItem(MenuItemAbstract):
-    def __init__(self, session, lefListWidget, defListWidget):
+    def __init__(self, session, all_input_tabs):
         self.session = session
-        self.lefListWidget = lefListWidget
-        self.defListWidget = defListWidget
+        self.all_input_tabs = all_input_tabs
 
 
     def onClick(self):
@@ -67,28 +63,29 @@ class ReadSessionMenuItem(MenuItemAbstract):
         if file_path:
             self.session.readSession(file_path)
 
-            def_list = self.session.getAttr("DEF")
-            for f in def_list:
-                self.defListWidget.addItemIfNotExists(f)
+            for tab_name, tab in self.all_input_tabs.items():
+                
+                list_widget = tab.get_file_list_widget()
 
-            lef_list = self.session.getAttr("LEF")
-            for f in lef_list:
-                self.lefListWidget.addItemIfNotExists(f)
+                list = self.session.getAttr(tab_name)
+                for f in list:
+                    list_widget.addItemIfNotExists(f)
+
+
 
 class WriteSessionMenuItem(MenuItemAbstract):
-    def __init__(self, session, lefListWidget, defListWidget):
+    def __init__(self, session, all_input_tabs):
         self.session = session
-        self.lefListWidget = lefListWidget
-        self.defListWidget = defListWidget
+        self.all_input_tabs = all_input_tabs
 
     def onClick(self):
 
-        items = [self.lefListWidget.item(i).text() for i in range(self.lefListWidget.count())]
-        self.session.setAttr("LEF", items)
-            
-        items = [self.defListWidget.item(i).text() for i in range(self.defListWidget.count())]
-        self.session.setAttr("DEF", items)
+        for tab_name, tab in self.all_input_tabs.items():
+            list_widget = tab.get_file_list_widget()
 
+            items = [list_widget.item(i).text() for i in range(list_widget.count())]
+            self.session.setAttr(tab_name, items)
+            
         self.session.dump()
 
         filename, _ = QFileDialog.getSaveFileName(
@@ -123,44 +120,13 @@ class ZoomFitMenuItem(MenuItemAbstract):
     def onClick(self):
         self.drawManager.fit_to_view()
 
-class LoadDesignToolItem(ToolBarItemAbstract):
-    def __init__(self, lefListWidget, defListWidget,
-                    defParserImplement, lefParserImplement, designData,
-                    drawManager):
-        super().__init__("Load Design")
-
-        self.lefListWidget = lefListWidget
-        self.defListWidget = defListWidget
-        self.lefParserImplement = lefParserImplement
-        self.defParserImplement = defParserImplement
-
-        self.design_data = designData
-        self.drawManager = drawManager
+class DummyToolBarItem(ToolBarItemAbstract):
+    def __init__(self):
+        super().__init__("Dummy")
 
     def onClick(self):
-        self.loadLefDef()
-        
-        
-    def loadLefDef(self):
+        logging.info("Dummy ToolBar item non-functional - implement in your application.")
 
-        lef_list = [self.lefListWidget.item(i).text() for i in range(self.lefListWidget.count())]
-        def_list = [self.defListWidget.item(i).text() for i in range(self.defListWidget.count())]
-
-        for l in lef_list:
-            self.lefParserImplement.parse(l)
-
-        for d in def_list:
-            self.defParserImplement.parse(d)
-
-        self.defParserImplement.def_parser_finished_signal.connect(self.slotDefParserFinished)
-
-    def slotDefParserFinished(self, message):
-        self.design_data.resolveCompToInst()
-        
-        self.drawManager.set_scale(self.design_data.inst_bbox)
-        self.drawManager.load_design_instances(self.design_data.inst_rtree, 
-                            self.design_data.instData)
-        
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -174,7 +140,7 @@ class MainUI(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("DesignBlues")
+        self.setWindowTitle("DataAnalyzer")
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
@@ -185,8 +151,7 @@ class MainUI(QMainWindow):
 
         self.menu = MainMenuAndTBar(self)
 
-        self.defParserImplement = DefParserImplement()
-        self.lefParserImplement = LefParserImplement()
+        
 
 
         self.centralWidget = QWidget()
@@ -195,7 +160,7 @@ class MainUI(QMainWindow):
         self.mainLayout = QVBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
-        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
+        
         
         self.registerPredicates()
 
@@ -206,18 +171,22 @@ class MainUI(QMainWindow):
         
         
 
-
-        
-
         self.bottomArea = BottomArea(self.mainLayout, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
+        
+        self.setup_logging()
+
+
+    def create_GUI(self):
 
         self.readSessionMenuObj = ReadSessionMenuItem(self.session, 
-                                        self.bottomArea.lef_tab.get_file_list_widget(), self.bottomArea.def_tab.get_file_list_widget())
+                                        self.bottomArea.all_input_tabs)
+        
         self.menu.createMenuItem("File", "Read Session", self.readSessionMenuObj)
 
         self.writeSessionMenuObj = WriteSessionMenuItem(self.session, 
-                                        self.bottomArea.lef_tab.get_file_list_widget(), self.bottomArea.def_tab.get_file_list_widget())
+                                        self.bottomArea.all_input_tabs)
+        
         self.menu.createMenuItem("File", "Write Session", self.writeSessionMenuObj)
 
         self.zoomOutMenuObj = ZoomOutMenuItem(self.drawManager)
@@ -229,19 +198,20 @@ class MainUI(QMainWindow):
         self.zoomFitMenuObj = ZoomFitMenuItem(self.drawManager)
         self.menu.createMenuItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
-        self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.lef_tab.get_file_list_widget(), 
-                                self.bottomArea.def_tab.get_file_list_widget(),
-                                self.defParserImplement, self.lefParserImplement,
-                                self.design_data,
-                                self.drawManager)
         
-        self.menu.createToolbarItem(self.loadDesignToolbarItem)
+        toolBarItem = DummyToolBarItem()
+        self.menu.createToolbarItem(toolBarItem)
+
+        self.push_predicates_to_command_area()
+
         
 
-        self.setup_logging()
+        
 
     def apply_global_styles(self):
-        with open("main.qss", "r") as f:
+        qss_path = os.path.join(os.path.dirname(__file__), "main.qss")
+
+        with open(qss_path, "r") as f:
             self.setStyleSheet(f.read())
 
     def setup_logging(self):
@@ -282,6 +252,10 @@ class MainUI(QMainWindow):
 
         self.mainLayout.addLayout(topLayout, stretch=2)
 
+    def push_predicates_to_command_area(self):
+        self.commandList.addItems(list(self.all_predicates.getAllPredicates().keys()))
+        self.commandList.setMaximumWidth(300)
+        self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
 
     
     def create_command_area(self):
@@ -312,10 +286,6 @@ class MainUI(QMainWindow):
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
 
-        # Add only predicate names
-        self.commandList.addItems(list(self.all_predicates.getAllPredicates().keys()))
-        self.commandList.setMaximumWidth(300)
-        self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
 
         row3.addWidget(self.commandList)
 
@@ -458,18 +428,10 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement,
-                                 self.design_data)
-        self.all_predicates.addPredicate("via - search based on layer etc", ["layer"], viaObj)
+        p = DummyPredicate()
+        self.all_predicates.addPredicate("dummy predicate - for demo purpose", ["arg1", "arg2"], p)
+        
 
-        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement,
-                                    self.design_data)
-        self.all_predicates.addPredicate("instances - search by name regexp, location etc", ["name"], instObj)
-
-
-        l = list(self.all_predicates.getAllPredicates().keys())
-        global_LLM_manager.set_context_lines(l)
-        print("Set context lines - done")
 
 
 

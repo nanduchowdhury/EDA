@@ -14,9 +14,10 @@ import json
 
 from common import CustomListWidget
 
-from design_data import DesignData
 
 class BottomArea():
+
+    DUMMY_INPUT_TAB = "input_tab"
 
     def __init__(self, _mainLayout, _windowHeight, _layoutHeight):
         self.mainLayout = _mainLayout
@@ -27,6 +28,24 @@ class BottomArea():
 
         self.create_bottom_area()
 
+
+    def get_tab_by_name(self, tab_name):
+        if tab_name in self.all_input_tabs:
+            return self.all_input_tabs[tab_name]
+        else:
+            raise ValueError(f"No tab found by name {tab_name}")
+
+    def create_input_tab(self, tab_name):
+        
+        if self.DUMMY_INPUT_TAB in self.all_input_tabs:
+            dummy_tab_index = self.all_input_tabs[self.DUMMY_INPUT_TAB].tab_index
+            self.leftPanelTabs.setTabText(dummy_tab_index, tab_name)
+            self.all_input_tabs[tab_name] = self.all_input_tabs[self.DUMMY_INPUT_TAB]
+            del self.all_input_tabs[self.DUMMY_INPUT_TAB]
+        else:
+            tab = InputTab(parent=self, tab_widget_container=self.leftPanelTabs)
+            tab.create_tab(tab_name)
+            self.all_input_tabs[tab_name] = tab
 
     def create_bottom_area(self):
 
@@ -41,6 +60,8 @@ class BottomArea():
 
         leftPanelWidget = self.create_left_panel()
         rightPanelWidget = self.create_right_panel()
+
+        
 
 
         # Add both panels to bottom area
@@ -62,15 +83,13 @@ class BottomArea():
         # Left Panel (1/3 width):
         leftPanelWidget = QWidget()
         leftPanelLayout = QVBoxLayout(leftPanelWidget)
-        leftPanelTabs = QTabWidget()
+        self.leftPanelTabs = QTabWidget()
         
-        self.lef_tab = InputTab(parent=self, tab_widget_container=leftPanelTabs)
-        self.lef_tab.create_tab("LEF")
+        tab = InputTab(parent=self, tab_widget_container=self.leftPanelTabs)
+        tab.create_tab(self.DUMMY_INPUT_TAB)
+        self.all_input_tabs = {self.DUMMY_INPUT_TAB: tab}
 
-        self.def_tab = InputTab(parent=self, tab_widget_container=leftPanelTabs)
-        self.def_tab.create_tab("DEF")
-
-        leftPanelLayout.addWidget(leftPanelTabs)
+        leftPanelLayout.addWidget(self.leftPanelTabs)
         return leftPanelWidget
 
 
@@ -178,6 +197,7 @@ class InputTab:
         self.tab_widget = QWidget()
 
         self.list_widget = None
+        self.tab_index = None
 
     def get_file_list_widget(self):
         return self.list_widget
@@ -202,7 +222,7 @@ class InputTab:
         tab_layout.addLayout(h_layout)
         self.tab_widget.setLayout(tab_layout)
 
-        self.tab_widget_container.addTab(self.tab_widget, tab_name)
+        self.tab_index = self.tab_widget_container.addTab(self.tab_widget, tab_name)
 
 
     def select_callback(self):

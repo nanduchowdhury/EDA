@@ -11,6 +11,10 @@ class LLMManager:
         """Set the list of lines for RAG-like context retrieval."""
         self.context_lines = lines
 
+    def set_context_line(self, line: str):
+        """Add a single line to the context lines."""
+        self.context_lines.append(line)
+
     def query(self, input_text: str) -> Optional[str]:
         """Query the model and return the best matching context line."""
         if not self.context_lines:

@@ -3,16 +3,13 @@ from abc import ABC, abstractmethod
 import json
 import re
 
-from design_data import DesignData
+import logging
 
 from global_name_index import gname_index
+from llm_manager import LLMManager, global_LLM_manager
 
 class PredicateBase(ABC):
-    def __init__(self, _defParserImplement, _lefParserImplement, design_data):
-
-        self.defParserImplement = _defParserImplement
-        self.lefParserImplement = _lefParserImplement
-        self.design_data = design_data
+    def __init__(self):
 
         self.args = {}            # input arguments
         self.outputs = {}         # output data
@@ -60,6 +57,8 @@ class Predicates:
         """
         self.predicates[name] = (list_of_args, predicateObj)
 
+        global_LLM_manager.set_context_line(name)
+
     def executePredicate(self, name, *args):
         if name not in self.predicates:
             raise ValueError(f"Predicate '{name}' not found.")
@@ -94,33 +93,11 @@ class Predicates:
         """
         return iter(self.predicates.items())
 
-    
-class GetViasForLayer(PredicateBase):
+
+class DummyPredicate(PredicateBase):
 
     def run(self):
-        layerName = self.args['layer']
+        # Dummy implementation
+        logging.info("Dummy predicate cannot be run - implement predicates and register from your application.")
+        return True
 
-        result = self.defParserImplement.get_via_names(layerName)
-
-        self.setOutputObject("result", result)  # Store result as a list
-        return result
-
-class GetInstanceCoords(PredicateBase):
-
-    def run(self):
-        name_regex = self.args["name"]
-
-        # all_inst = list(self.design_data.instData.instance_data)
-    
-        result = []
-        compiled_regex = re.compile(name_regex)
-        components = self.defParserImplement.get_components()
-        for comp in components:
-            instance_name = gname_index.getName(comp.inst_name_id)
-            if compiled_regex.search(instance_name):
-                result.append(comp.inst_name_id)
-
-        self.setOutputObject("inst", result)
-        
-        return result
-    
