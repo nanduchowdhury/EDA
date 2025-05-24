@@ -27,7 +27,7 @@ from bottom_area import BottomArea
 from session import Session
 
 
-from layout_draw import LayoutView, LayoutAreaWithScales
+from layout_draw import PyQtGraphLayoutWithScales
 
 
 from draw_manager import DrawManager
@@ -134,7 +134,7 @@ class MainUI(QMainWindow):
     WINDOW_HEIGHT = 900
 
     LAYOUT_WIDTH = 800
-    LAYOUT_HEIGHT = 800
+    LAYOUT_HEIGHT = 550
 
     COMMAND_WIDTH = 900
 
@@ -166,8 +166,7 @@ class MainUI(QMainWindow):
 
         self.create_top_layout()
 
-        self.drawManager = DrawManager(self.drawArea.view, 
-                            self.drawArea.bottomScale, self.drawArea.rightScale)
+        self.drawManager = DrawManager(self.drawArea)
         
         
 
@@ -242,7 +241,8 @@ class MainUI(QMainWindow):
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
-        self.drawArea = LayoutAreaWithScales(width=self.LAYOUT_WIDTH, height=self.LAYOUT_HEIGHT)
+        self.drawArea = PyQtGraphLayoutWithScales(width=self.LAYOUT_WIDTH, 
+                                                  height=self.LAYOUT_HEIGHT)
         self.layoutView = self.drawArea.view
 
         self.create_command_area()

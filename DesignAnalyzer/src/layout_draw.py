@@ -1,160 +1,155 @@
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy, QFrame, QGridLayout
-from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
-from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPainter, QColor, QPen, QFont
 
-from rtree import index
+import pyqtgraph as pg
 
-from draw_manager import DrawManager
+########################################################################
+#
+# Following are options of providing layout drawing capabilities
+#
+#   1. PyQtGraph
+#   2. Matplotlib with FigureCanvasQTAgg
+#   3. VisPy
+#   4. Plotly + QWebEngineView
+#   5. Leafmap / Folium + QWebEngineView
+#   6. Mayavi or VTK with PyQt
+#
+########################################################################
 
-class LayoutView(QGraphicsView):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setMouseTracking(True)
-        self.setCursor(Qt.CrossCursor)
-
-        # Set the background color
-        self.setBackgroundBrush(QBrush(QColor(20, 20, 20)))
-
-        self.start_pos = None
-        self.temp_rect_item = None
-        self.layout_draw = None
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.start_pos = self.mapToScene(event.pos())
-            if self.temp_rect_item:
-                self.scene().removeItem(self.temp_rect_item)
-                self.temp_rect_item = None
-
-    def mouseMoveEvent(self, event):
-        if self.start_pos:
-            end_pos = self.mapToScene(event.pos())
-            rect = QRectF(self.start_pos, end_pos).normalized()
-
-            if self.temp_rect_item:
-                self.temp_rect_item.setRect(rect)
-            else:
-                pen = QPen(QColor(0, 0, 255), 1, Qt.DashLine)
-                self.temp_rect_item = QGraphicsRectItem(rect)
-                self.temp_rect_item.setPen(pen)
-                self.temp_rect_item.setBrush(QColor(0, 0, 255, 40))
-                self.scene().addItem(self.temp_rect_item)
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton and self.temp_rect_item:
-            selection_rect = self.temp_rect_item.rect()
-            self.find_instances_in_rect(selection_rect)
-            self.start_pos = None
-
-    def find_instances_in_rect(self, rect: QRectF):
-        if self.layout_draw:
-            selected = []
-            for name, data in self.layout_draw.instances.items():
-                item = data.get("graphics_item")
-                if item and rect.contains(item.rect().center()):
-                    selected.append((name, data["coords"]))
-            print("\n[Selected Instances in Region]")
-            for name, coords in selected:
-                print(f"{name}: {coords}")
-
-
-
-class ScaleWidget(QLabel):
-    def __init__(self, orientation, parent=None):
+class RulerWidget(QWidget):
+    def __init__(self, orientation=Qt.Horizontal, color_bg="#222222", color_tick="#ffffff", parent=None):
         super().__init__(parent)
         self.orientation = orientation
         self.min_val = 0
         self.max_val = 100
-
-        if orientation == Qt.Horizontal:
-            self.setFixedHeight(40)
-            self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        else:
-            self.setFixedWidth(50)
-            self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
-
-        self.setStyleSheet("background-color: #333; color: white;")
-        self.markers = []  # (pos_px, label_str)
-
-    def setMinMax(self, min_val, max_val):
-        self.min_val = min_val
-        self.max_val = max_val
-        self.update()  # trigger repaint
-
-    def updateMarker(self):
-        self.markers.clear()
-
-        range_val = self.max_val - self.min_val
-        if range_val <= 0:
-            return
-
-        step = range_val / 10  # 10 steps approx
-        width = self.width()
-        height = self.height()
-
-        val = self.min_val
-        while val <= self.max_val + 1e-6:  # small epsilon for float precision
-            ratio = (val - self.min_val) / range_val
-            if self.orientation == Qt.Horizontal:
-                x = int(ratio * width)
-                self.markers.append((x, f"{val:.1f}"))  # round to 1 decimal
-            else:
-                y = int(ratio * height)
-                self.markers.append((y, f"{val:.1f}"))
-            val += step
-
-
-    def paintEvent(self, event):
-        super().paintEvent(event)
-
-        self.updateMarker()
-
-        painter = QPainter(self)
-        painter.setPen(Qt.white)
-        font = QFont("Arial", 6, QFont.Bold)
-        painter.setFont(font)
+        self.color_bg = color_bg
+        self.color_tick = color_tick
 
         if self.orientation == Qt.Horizontal:
-            for x, label in self.markers:
-                painter.drawLine(x, 0, x, 10)
-                painter.drawText(x + 2, self.height() - 20, label)
+            self.setFixedHeight(30)
         else:
-            for y, label in self.markers:
-                painter.drawLine(0, y, 10, y)
-                painter.drawText(12, y + 4, label)
+            self.setFixedWidth(40)
+
+        self.setAutoFillBackground(True)
+
+    def setRange(self, min_val, max_val):
+        self.min_val = min_val
+        self.max_val = max_val
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        try:
+            painter.fillRect(self.rect(), QColor(self.color_bg))
+            painter.setPen(QPen(QColor(self.color_tick)))
+            painter.setFont(QFont("Arial", 6))
+
+            range_val = self.max_val - self.min_val
+            if range_val <= 0:
+                return
+
+            if self.orientation == Qt.Horizontal:
+                width = self.width()
+                step_px = 50
+                step_val = range_val * step_px / width
+                val = self.min_val
+                while val <= self.max_val:
+                    x = int((val - self.min_val) / range_val * width)
+                    painter.drawLine(x, 0, x, self.height() // 3)
+                    painter.drawText(x + 2, self.height() - 5, f"{val:.0f}")
+                    val += step_val
+            else:
+                height = self.height()
+                step_px = 50
+                step_val = range_val * step_px / height
+                val = self.min_val
+                while val <= self.max_val:
+                    y = int((val - self.min_val) / range_val * height)
+                    painter.drawLine(0, y, self.width() // 3, y)
+                    painter.drawText(5, y + 6, f"{val:.0f}")
+                    val += step_val
+        finally:
+            painter.end()
 
 
-
-
-class LayoutAreaWithScales(QWidget):
-    def __init__(self, width=800, height=600, parent=None):
+class PyQtGraphLayoutWithScales(QWidget):
+    def __init__(self, width=600, height=400, parent=None):
         super().__init__(parent)
-        self.view = LayoutView()
-        self.view.setMinimumSize(width - 100, height - 300)
 
-        self.rightScale = ScaleWidget(Qt.Vertical)
-        self.bottomScale = ScaleWidget(Qt.Horizontal)
+        self.total_width = width
+        self.total_height = height
+        self.setFixedSize(self.total_width, self.total_height)
 
-        self.drawManager = DrawManager(self.view, 
-                        self.rightScale, self.bottomScale)
+        self.initUI()
 
-        self.setupLayout()
+    def initUI(self):
+        self.mainLayout = QVBoxLayout(self)
+        self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.setSpacing(0)
 
-    def setupLayout(self):
-        layout = QGridLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        # Ruler height and width
+        rulerHeight = 30
+        rulerWidth = 40
 
-        layout.addWidget(self.view,        0, 0)
-        layout.addWidget(self.rightScale,  0, 1)
-        layout.addWidget(self.bottomScale, 1, 0)
+        # Create rulers with debug colors
+        self.ruler_x = RulerWidget(Qt.Horizontal, color_bg="#552222", color_tick="#ffff00")
+        self.ruler_y = RulerWidget(Qt.Vertical, color_bg="#225522", color_tick="#ffff00")
 
-        spacer = QWidget()  # bottom-right corner (blank)
-        spacer.setFixedSize(30, 20)
-        # layout.addWidget(spacer, 1, 1)
+        # Create graphics view
+        self.graphWidget = pg.GraphicsLayoutWidget()
+        self.view = self.graphWidget.addViewBox(lockAspect=False, enableMenu=False)
+        self.view.setMouseEnabled(x=True, y=True)
 
-        self.setLayout(layout)
+        # Add test rectangles (auto scaled)
+        # self.populateGraphics()
 
-    def showCurrentPosition(self, x, y):
-        self.bottomScale.setText(f"X: {x}")
-        self.rightScale.setText(f"Y: {y}")
+        # Setup zoom/scroll signals
+        self.view.sigRangeChanged.connect(self.updateRulers)
+
+        # Layout setup
+        centerLayout = QHBoxLayout()
+        centerLayout.setContentsMargins(0, 0, 0, 0)
+        centerLayout.setSpacing(0)
+        centerLayout.addWidget(self.ruler_y)
+        centerLayout.addWidget(self.graphWidget)
+
+        self.mainLayout.addWidget(self.ruler_x)
+        self.mainLayout.addLayout(centerLayout)
+
+        # Set initial range
+        self.view.autoRange()
+
+    def populateGraphics(self):
+        self.view.clear()
+        for i in range(10):
+            x, y, w, h = i * 50, i * 30, 40, 20
+            rect = pg.QtWidgets.QGraphicsRectItem(x, y, w, h)
+            rect.setPen(pg.mkPen('w'))
+            rect.setBrush(pg.mkBrush(100, 100, 250, 120))
+            self.view.addItem(rect)
+
+    def updateRulers(self):
+        rect = self.view.viewRect()
+        self.ruler_x.setRange(rect.left(), rect.right())
+        self.ruler_y.setRange(rect.top(), rect.bottom())
+
+    def drawRects(self, rect_list):
+        """
+        Draw a list of rectangles on the view.
+        Each item in rect_list should be a tuple: (x, y, width, height)
+        """
+        self.view.clear()  # Clear any existing items
+
+        for rect in rect_list:
+            x, y, w, h = rect
+            item = pg.QtWidgets.QGraphicsRectItem(x, y, w, h)
+            item.setPen(pg.mkPen('w'))
+            item.setBrush(pg.mkBrush(150, 100, 200, 100))
+            self.view.addItem(item)
+
+        # Auto scale to fit the new rectangles
+        self.view.autoRange()
+
+        # Update rulers
+        self.updateRulers()

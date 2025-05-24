@@ -6,22 +6,12 @@ from rtree import index
 
 
 class DrawManager:
-    def __init__(self, view, rightScale, bottomScale):
-        self.view = view
+    def __init__(self, drawArea):
+        self.drawArea = drawArea
 
-        self.rightScale = rightScale
-        self.bottomScale = bottomScale
+        self.view = self.drawArea.view
 
         self.bounding_box = None
-
-        self.view.layout_draw = self
-
-        # Disable scrollbars completely
-        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        self.scene = QGraphicsScene()
-        self.view.setScene(self.scene)
 
         self._zoom_factor = 1.25
         self._current_scale = 1.0
@@ -33,8 +23,8 @@ class DrawManager:
         self.bounding_box = bbox
         (min_x, min_y, max_x, max_y) = bbox
 
-        self.rightScale.setMinMax(min_y, max_y)
-        self.bottomScale.setMinMax(min_x, max_x)
+        # self.rightScale.setMinMax(min_y, max_y)
+        # self.bottomScale.setMinMax(min_x, max_x)
 
         view_width = self.view.viewport().width()
         view_height = self.view.viewport().height()
@@ -47,24 +37,13 @@ class DrawManager:
         self.base_scale = min(scale_x, scale_y)
         self._current_scale = 1.0
 
+
     def load_design_instances(self, rtree, designInstances):
 
         self.designInstances = designInstances
 
-        min_x, min_y, max_x, max_y = self.bounding_box
-        scale = self.base_scale * self._current_scale
 
-        view_width = self.view.viewport().width()
-        view_height = self.view.viewport().height()
-
-        # Get visible area in layout coords
-        visible_min_x = min_x
-        visible_max_x = min_x + view_width / scale
-        visible_max_y = max_y
-        visible_min_y = max_y - view_height / scale
-
-        visible_bbox = (visible_min_x, visible_min_y, 
-                        visible_max_x, visible_max_y)
+        visible_bbox = rtree.get_bounds()
 
         visible_ids = list(rtree.intersection(visible_bbox))
 
@@ -72,6 +51,23 @@ class DrawManager:
 
 
     def draw_instances(self, instList, color):
+
+        rect_list = []
+
+        for i in instList:
+            inst = self.designInstances.instance_data[i]
+            x1, y1, x2, y2 = inst.location
+
+            x = min(x1, x2)
+            y = min(y1, y2)
+            w = abs(x2 - x1)
+            h = abs(y2 - y1)
+
+            rect_list.append((x, y, w, h))
+
+        self.drawArea.drawRects(rect_list)
+
+    def draw_instances_1(self, instList, color):
 
         min_x, min_y, max_x, max_y = self.bounding_box
         scale = self.base_scale * self._current_scale
@@ -94,7 +90,7 @@ class DrawManager:
             rect_item = QGraphicsRectItem(QRectF(x, y, w, h))
             rect_item.setBrush(QBrush(QColor(200, 100, 100, 120)))
             rect_item.setPen(color)
-            self.scene.addItem(rect_item)
+            # self.scene.addItem(rect_item)
 
 
     def zoom_in(self):

@@ -112,7 +112,6 @@ class LoadDesignToolItem(ToolBarItemAbstract):
     def slotDefParserFinished(self, message):
         self.design_data.resolveCompToInst()
         
-        self.drawManager.set_scale(self.design_data.inst_bbox)
         self.drawManager.load_design_instances(self.design_data.inst_rtree, 
                             self.design_data.instData)
         
