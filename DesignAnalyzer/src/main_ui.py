@@ -30,8 +30,6 @@ from session import Session
 from layout_draw import PyQtGraphLayoutWithScales
 
 
-from draw_manager import DrawManager
-
 from predicates import Predicates, DummyPredicate
 
 from llm_manager import LLMManager, global_LLM_manager
@@ -100,25 +98,25 @@ class WriteSessionMenuItem(MenuItemAbstract):
 
 
 class ZoomOutMenuItem(MenuItemAbstract):
-    def __init__(self, _drawManager):
-        self.drawManager = _drawManager
+    def __init__(self, _drawArea):
+        self.drawArea = _drawArea
 
     def onClick(self):
-        self.drawManager.zoom_out()
+        self.drawArea.zoomOut()
 
 class ZoomInMenuItem(MenuItemAbstract):
-    def __init__(self, _drawManager):
-        self.drawManager = _drawManager
+    def __init__(self, _drawArea):
+        self.drawArea = _drawArea
 
     def onClick(self):
-        self.drawManager.zoom_in()
+        self.drawArea.zoomIn()
 
 class ZoomFitMenuItem(MenuItemAbstract):
-    def __init__(self, _drawManager):
-        self.drawManager = _drawManager
+    def __init__(self, _drawArea):
+        self.drawArea = _drawArea
 
     def onClick(self):
-        self.drawManager.fit_to_view()
+        self.drawArea.zoomFit()
 
 class DummyToolBarItem(ToolBarItemAbstract):
     def __init__(self):
@@ -165,9 +163,6 @@ class MainUI(QMainWindow):
         self.registerPredicates()
 
         self.create_top_layout()
-
-        self.drawManager = DrawManager(self.drawArea)
-        
         
 
         self.bottomArea = BottomArea(self.mainLayout, 
@@ -188,13 +183,13 @@ class MainUI(QMainWindow):
         
         self.menu.createMenuItem("File", "Write Session", self.writeSessionMenuObj)
 
-        self.zoomOutMenuObj = ZoomOutMenuItem(self.drawManager)
+        self.zoomOutMenuObj = ZoomOutMenuItem(self.drawArea)
         self.menu.createMenuItem("View", "Zoom Out", self.zoomOutMenuObj)
 
-        self.zoomInMenuObj = ZoomInMenuItem(self.drawManager)
+        self.zoomInMenuObj = ZoomInMenuItem(self.drawArea)
         self.menu.createMenuItem("View", "Zoom In", self.zoomInMenuObj)
 
-        self.zoomFitMenuObj = ZoomFitMenuItem(self.drawManager)
+        self.zoomFitMenuObj = ZoomFitMenuItem(self.drawArea)
         self.menu.createMenuItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
         

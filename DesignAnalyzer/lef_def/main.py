@@ -16,6 +16,8 @@ from global_name_index import gname_index
 
 from design_data import DesignData
 
+from draw_manager import DrawManager
+
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
@@ -121,6 +123,7 @@ class LefDefUI(MainUI):
         super().__init__()
         self.setWindowTitle("LefDef UI")
 
+        self.drawManager = DrawManager(self.drawArea)
 
         self.bottomArea.create_input_tab("LEF")
         self.bottomArea.create_input_tab("DEF")

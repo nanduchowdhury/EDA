@@ -155,6 +155,35 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.view.autoRange()
         self.updateRulers()
 
+    def plotWaveform(self, x_data, y_data, color='cyan'):
+        """
+        Plot a waveform given x and y data lists.
+        
+        Parameters:
+            x_data (list or ndarray): Time or sample index values.
+            y_data (list or ndarray): Amplitude values.
+            color (str): Color of the waveform line.
+        """
+        self.view.clear()  # Clear previous graphics
+
+        # Create waveform plot
+        waveform = pg.PlotDataItem(
+            x=x_data,
+            y=y_data,
+            pen=pg.mkPen(color=color, width=1.5),
+            antialias=True
+        )
+
+        # Add waveform to the view
+        self.view.addItem(waveform)
+
+        # Adjust view to fit the data
+        self.view.enableAutoRange()
+        
+        # Update rulers
+        self.updateRulers()
+
+
     def updateRulers(self):
         rect = self.view.viewRect()
         self.ruler_x.setRange(rect.left(), rect.right())
