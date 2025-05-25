@@ -118,13 +118,30 @@ class ZoomFitMenuItem(MenuItemAbstract):
     def onClick(self):
         self.drawArea.zoomFit()
 
-class DummyToolBarItem(ToolBarItemAbstract):
-    def __init__(self):
-        super().__init__("Dummy")
+
+class ZoomInToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Zoom In")
+        self.drawArea = _drawArea
 
     def onClick(self):
-        logging.info("Dummy ToolBar item non-functional - implement in your application.")
+        self.drawArea.zoomIn()
 
+class ZoomOutToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Zoom Out")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.zoomOut()
+
+class ZoomFitToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Zoom Fit")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.zoomFit()
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -192,9 +209,14 @@ class MainUI(QMainWindow):
         self.zoomFitMenuObj = ZoomFitMenuItem(self.drawArea)
         self.menu.createMenuItem("View", "Zoom Fit", self.zoomFitMenuObj)
 
-        
-        toolBarItem = DummyToolBarItem()
-        self.menu.createToolbarItem(toolBarItem)
+
+        # Create toolbar items        
+        zoomInToolBarItem = ZoomInToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(zoomInToolBarItem)
+        zoomOutToolBarItem = ZoomOutToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(zoomOutToolBarItem)
+        zoomFitToolBarItem = ZoomFitToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(zoomFitToolBarItem)
 
         self.push_predicates_to_command_area()
 

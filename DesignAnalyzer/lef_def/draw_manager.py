@@ -92,16 +92,3 @@ class DrawManager:
             rect_item.setPen(color)
             # self.scene.addItem(rect_item)
 
-
-    def zoom_in(self):
-        self._current_scale *= self._zoom_factor
-        self._drawVisibleInstances()
-
-    def zoom_out(self):
-        self._current_scale /= self._zoom_factor
-        self._drawVisibleInstances()
-
-    def fit_to_view(self):
-        self._current_scale = 1.0
-        self._drawVisibleInstances()
-
