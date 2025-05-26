@@ -1,20 +1,27 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BluePayload</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BluePayload</title>
 
-<!-- FontAwesome CSS for icons -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  rel="stylesheet"
-/>
+  <!-- SEO essentials -->
+  <meta name="description" content="BluePayload provides a powerful software framework for data analysis. The framework already provides visualization and reporting capabilities.">
+  <meta name="keywords" content="BluePayload, DataAnalyzer, Visualization, Reporting, Software Framework">
+  <meta name="author" content="BluePayload">
 
-<!-- Link to external CSS -->
-<link rel="stylesheet" href="styles.css" />
+  <!-- FontAwesome CSS for icons -->
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="styles.css" />
+
+
 </head>
+
 <body>
 
 <!-- Social Icons Bar -->
@@ -26,34 +33,28 @@
 <!-- Header: Logo + Menu -->
 <header class="header-main">
   <div class="logo">
-  <a href="index.html">
-    <img src="assets/blue_payload_logo.png" alt="BluePayload Logo" />
-  </a>
+    <a href="index.html">
+      <img src="assets/blue_payload_logo.png" alt="BluePayload Logo" />
+    </a>
   </div>
 
-<div class="menu-wrapper">
+  <div class="menu-wrapper">
     <nav class="menu" id="navMenu">
       <div class="menu-items" id="menuItems">
         <div class="menu-item" data-menu="solution">Solution</div>
         <div class="menu-item" data-menu="products">Products</div>
         <div class="menu-item" data-menu="company">Company</div>
       </div>
-    
       <div class="burger" id="burger" aria-label="Toggle menu" role="button" tabindex="0">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div></div><div></div><div></div>
       </div>
     </nav>
-    
-    <!-- Shared submenu container -->
     <div class="shared-submenu" id="sharedSubmenu"></div>
-</div>
+  </div>
 </header>
 
 <script src="script.js"></script>
 
-<!-- Main content placeholder -->
 <main>
 
   <div class="highlight-box highlight-box-black">
@@ -70,21 +71,11 @@
 
   <!-- Left side: Text content -->
   <div class="highlight-box highlight-box-green">
-
-    <h2 style="font-size: 1em; font-weight: bold; color: red; text-indent: 1em; margin-top: 1em;">
-      Software Framework
-    </h2>
-    <h2 style="font-size: 1em; font-weight: bold; color: black; text-indent: 2em;">
-      Instant Start
-    </h2>
-    <h2 style="font-size: 1em; font-weight: bold; color: rgb(212, 239, 36); text-indent: 3em;">
-      Visualization
-    </h2>
-    <h2 style="font-size: 1em; font-weight: bold; color: orange; text-indent: 2em;">
-      Reporting
-    </h2>
+    <h2 style="font-size: 1em; font-weight: bold; color: red; text-indent: 1em; margin-top: 1em;">Software Framework</h2>
+    <h2 style="font-size: 1em; font-weight: bold; color: black; text-indent: 2em;">Instant Start</h2>
+    <h2 style="font-size: 1em; font-weight: bold; color: rgb(212, 239, 36); text-indent: 3em;">Visualization</h2>
+    <h2 style="font-size: 1em; font-weight: bold; color: orange; text-indent: 2em;">Reporting</h2>
   </div>
-
 
   <div class="highlight-box highlight-box-blue">
     <p>
@@ -118,8 +109,29 @@
     </p>
   </div>
 
+  <!-- Target sections for footer links -->
+  <section id="contact" style="padding: 2em;">
+    <h2>Contact Us</h2>
+    <p><!-- Fill in contact details here later --></p>
+  </section>
+
+  <section id="about" style="padding: 2em;">
+    <h2>About</h2>
+    <p><!-- Fill in about section here later --></p>
+  </section>
+
 </main>
 
+<!-- Footer -->
+<footer>
+  <a href="#contact">Contact Us</a>
+  <a href="#about">About</a>
+
+  <div class="separator"></div>
+
+  <a href="mailto:contact@bluepayload.com" title="Email"><i class="fas fa-envelope"></i></a>
+  <a href="https://www.linkedin.com/company/bluepayload" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+</footer>
 
 </body>
 </html>

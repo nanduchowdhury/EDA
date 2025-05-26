@@ -264,13 +264,32 @@ main {
 
 .video-box video {
   width: 100%;
-  height: 100%;
-  object-fit: contain; /* Show full video without cropping */
+  height: auto;
+  display: block;
+  background: white;
 }
 
+
 .separator {
-  border-top: 4px solid #ccc;
+  border-top: 1px solid #ccc;
   width: 100%;
+  margin: 2em 0;
+}
+
+footer {
+  background-color: #2f2b2b;
+  padding: 1em;
+  text-align: center;
+}
+footer a {
+  color: white;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 0.5em;
+}
+footer a:hover {
+  color: blue;
 }
 
 
