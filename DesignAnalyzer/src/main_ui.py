@@ -143,6 +143,40 @@ class ZoomFitToolBarItem(ToolBarItemAbstract):
     def onClick(self):
         self.drawArea.zoomFit()
 
+class PanLeftToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Pan left")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.panLeft()
+
+class PanRightToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Pan right")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.panRight()
+
+class PanUpToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Pan up")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.panUp()
+
+class PanDownToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Pan down")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.panDown()
+
+
+
 class MainUI(QMainWindow):
     # Coordinate/size constants
     WINDOW_WIDTH = 1800
@@ -211,12 +245,22 @@ class MainUI(QMainWindow):
 
 
         # Create toolbar items        
-        zoomInToolBarItem = ZoomInToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(zoomInToolBarItem)
-        zoomOutToolBarItem = ZoomOutToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(zoomOutToolBarItem)
-        zoomFitToolBarItem = ZoomFitToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(zoomFitToolBarItem)
+        self.zoomInToolBarItem = ZoomInToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.zoomInToolBarItem)
+        self.zoomOutToolBarItem = ZoomOutToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.zoomOutToolBarItem)
+        self.zoomFitToolBarItem = ZoomFitToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.zoomFitToolBarItem)
+        
+        self.panLeftToolBarItem = PanLeftToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.panLeftToolBarItem)
+        self.panRightToolBarItem = PanRightToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.panRightToolBarItem)
+        self.panUpToolBarItem = PanUpToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.panUpToolBarItem)
+        self.panDownToolBarItem = PanDownToolBarItem(self.drawArea)
+        self.menu.createToolbarItem(self.panDownToolBarItem)
+
 
         self.push_predicates_to_command_area()
 

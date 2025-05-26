@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem
-from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
 
@@ -36,6 +36,7 @@ class RulerWidget(QWidget):
         self.update()
 
     def paintEvent(self, event):
+
         painter = QPainter(self)
         try:
             painter.fillRect(self.rect(), QColor(self.color_bg))
@@ -43,6 +44,7 @@ class RulerWidget(QWidget):
             painter.setFont(QFont("Arial", 6))
 
             range_val = self.max_val - self.min_val
+
             if range_val <= 0:
                 return
 
@@ -207,3 +209,42 @@ class PyQtGraphLayoutWithScales(QWidget):
     def zoomFit(self):
         self.view.autoRange()
         self.updateRulers()
+
+# --------- Pan Methods ----------
+    def panLeft(self, factor=0.1):  # 10% of visible width
+        rect = self.view.viewRect()
+        dx = -factor * rect.width()
+        self.view.translateBy(x=dx, y=0)
+        self.updateRulers()
+
+        self.view.update()
+        self.graphWidget.update()
+
+    def panRight(self, factor=0.1):
+        rect = self.view.viewRect()
+        dx = factor * rect.width()
+        self.view.translateBy(x=dx, y=0)
+        self.updateRulers()
+
+        self.view.update()
+        self.graphWidget.update()
+
+    def panUp(self, factor=0.1):
+        rect = self.view.viewRect()
+        dy = -factor * rect.height()
+        self.view.translateBy(x=0, y=dy)
+        self.updateRulers()
+
+        self.view.update()
+        self.graphWidget.update()
+
+    def panDown(self, factor=0.1):
+        rect = self.view.viewRect()
+        dy = factor * rect.height()
+        self.view.translateBy(x=0, y=dy)
+        self.updateRulers()
+
+        self.view.update()
+        self.graphWidget.update()
+
+

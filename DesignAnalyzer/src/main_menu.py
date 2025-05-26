@@ -17,10 +17,11 @@ class ToolBarItemAbstract(ABC):
         'zoom out': QStyle.SP_FileDialogDetailedView,
         'zoom fit': QStyle.SP_FileDialogListView,        # another magnifier style
         
-        # Load: use double arrow up - closest is just SP_ArrowUp or SP_ArrowBack
-        'load': QStyle.SP_ArrowUp,
-        'open': QStyle.SP_ArrowUp,
-        
+        "up": QStyle.SP_ArrowUp,  # generic up arrow
+        "down": QStyle.SP_ArrowDown,  # generic down arrow
+        'left': QStyle.SP_ArrowBack,  # generic left arrow
+        'right': QStyle.SP_ArrowForward,  # generic right arrow
+
         # Others as before
         'save': QStyle.SP_DialogSaveButton,
         'clear': QStyle.SP_TrashIcon,
@@ -42,6 +43,8 @@ class ToolBarItemAbstract(ABC):
         icon = self.get_icon_for_label(label)
         if icon is not None:
             self.button.setIcon(QApplication.style().standardIcon(icon))
+        elif "load" in label.lower():
+            self.button.setText("⏫")
         else:
             self.button.setText(label)  # fallback to text if no icon found
 
