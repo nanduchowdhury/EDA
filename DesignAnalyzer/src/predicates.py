@@ -73,6 +73,12 @@ class Predicates:
 
         return predicate_obj.run()
 
+    def removePredicate(self, name):
+        if name in self.predicates:
+            del self.predicates[name]
+        else:
+            raise ValueError(f"Remove predicate : '{name}' not found.")
+
     def getNumPredicates(self):
         return len(self.predicates)
 

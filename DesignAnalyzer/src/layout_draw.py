@@ -66,7 +66,7 @@ class RulerWidget(QWidget):
                 while val <= self.max_val:
                     y = int((val - self.min_val) / range_val * height)
                     painter.drawLine(0, height - y, self.width() // 2, height - y)
-                    painter.drawText(25, height - y + 6, f"{val:.0f}")
+                    painter.drawText(15, height - y + 12, f"{val:.0f}")
                     val += step_val
         finally:
             painter.end()
@@ -139,13 +139,14 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.zoomFactor = 1.2
         self.view.autoRange()
 
-    def drawRects(self, rect_list):
-        self.view.clear()
-        self.rect_items.clear()
+    def drawRects(self, rect_list, color='red'):
+        
+        # self.view.clear()
+        # self.rect_items.clear()
 
         for x, y, w, h in rect_list:
             item = FixedRectItem(x, y, w, h)
-            item.setPen(pg.mkPen('black'))
+            item.setPen(pg.mkPen(color=color, width=1.5))
             item.setBrush(pg.mkBrush(150, 100, 200, 100))
             self.view.addItem(item)
             self.rect_items.append(item)
@@ -179,12 +180,16 @@ class PyQtGraphLayoutWithScales(QWidget):
         # Add waveform to the view
         self.view.addItem(waveform)
 
-        # Adjust view to fit the data
-        self.view.enableAutoRange()
-        
-        # Update rulers
+        # Add back grid and crosshairs
+        self.view.addItem(self.grid)
+        self.view.addItem(self.vLine)
+        self.view.addItem(self.hLine)
+        self.view.autoRange()
         self.updateRulers()
 
+        # Adjust view to fit the data
+        # self.view.enableAutoRange()
+        
 
     def updateRulers(self):
         rect = self.view.viewRect()

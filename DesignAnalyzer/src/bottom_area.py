@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
-    QFileDialog, QLabel
+    QFileDialog, QLabel, QListWidgetItem
 )
 from PyQt5.QtCore import Qt, QTimer
 import os
@@ -17,7 +17,7 @@ from common import CustomListWidget
 
 class BottomArea():
 
-    DUMMY_INPUT_TAB = "input_tab"
+    DUMMY_INPUT_TAB = "input file"
 
     def __init__(self, _mainLayout, _windowHeight, _layoutHeight):
         self.mainLayout = _mainLayout
@@ -199,9 +199,6 @@ class InputTab:
         self.list_widget = None
         self.tab_index = None
 
-    def get_file_list_widget(self):
-        return self.list_widget
-
     def create_tab(self, tab_name):
         tab_layout = QHBoxLayout(self.tab_widget)
 
@@ -230,7 +227,25 @@ class InputTab:
         file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
 
         if file_path:
-            self.list_widget.addItemIfNotExists(file_path)
+            self._addItem(file_path)
+
+    def _addItem(self, file_path):
+        base_name = os.path.basename(file_path)
+        existing_items = [self.list_widget.item(i).text() for i in range(self.list_widget.count())]
+        if base_name not in existing_items:
+            item = QListWidgetItem(base_name)
+            item.setToolTip(file_path)
+            self.list_widget.addItem(item)
+
+    def addItems(self, file_paths):
+        for file_path in file_paths:
+            self._addItem(file_path)
+
+    def getAllItemsInList(self):
+        return [
+            self.list_widget.item(i).toolTip()
+            for i in range(self.list_widget.count())
+        ]
 
     def clear_callback(self):
         self.list_widget.clear()

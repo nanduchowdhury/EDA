@@ -85,9 +85,6 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 
         self.all_input_tabs = all_input_tabs
 
-        self.lefListWidget = self.all_input_tabs["LEF"].get_file_list_widget()
-        self.defListWidget = self.all_input_tabs["DEF"].get_file_list_widget()
-
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
 
@@ -100,13 +97,15 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         
     def loadLefDef(self):
 
-        lef_list = [self.lefListWidget.item(i).text() for i in range(self.lefListWidget.count())]
-        def_list = [self.defListWidget.item(i).text() for i in range(self.defListWidget.count())]
+        lefList = self.all_input_tabs["LEF"].getAllItemsInList()
+        defList = self.all_input_tabs["DEF"].getAllItemsInList()
 
-        for l in lef_list:
+        for l in lefList:
+            print(f"Loading LEF file: {l}")
             self.lefParserImplement.parse(l)
 
-        for d in def_list:
+        for d in defList:
+            print(f"Loading DEF file: {d}")
             self.defParserImplement.parse(d)
 
         self.defParserImplement.def_parser_finished_signal.connect(self.slotDefParserFinished)
@@ -121,7 +120,7 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 class LefDefUI(MainUI):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("LefDef UI")
+        self.setWindowTitle("Post-layout UI")
 
         self.drawManager = DrawManager(self.drawArea)
 
@@ -140,6 +139,7 @@ class LefDefUI(MainUI):
         
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
         
+        self.removeGenericPredicate()
         self.registerLefDefPredicates()
         
 

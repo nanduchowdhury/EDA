@@ -63,11 +63,10 @@ class ReadSessionMenuItem(MenuItemAbstract):
 
             for tab_name, tab in self.all_input_tabs.items():
                 
-                list_widget = tab.get_file_list_widget()
-
                 list = self.session.getAttr(tab_name)
-                for f in list:
-                    list_widget.addItemIfNotExists(f)
+                tab.addItems(list)
+                
+                        
 
 
 
@@ -79,9 +78,8 @@ class WriteSessionMenuItem(MenuItemAbstract):
     def onClick(self):
 
         for tab_name, tab in self.all_input_tabs.items():
-            list_widget = tab.get_file_list_widget()
+            items = tab.getAllItemsInList()
 
-            items = [list_widget.item(i).text() for i in range(list_widget.count())]
             self.session.setAttr(tab_name, items)
             
         self.session.dump()
@@ -490,10 +488,14 @@ class MainUI(QMainWindow):
     def registerPredicates(self):
         
         p = DummyPredicate()
-        self.all_predicates.addPredicate("dummy predicate - for demo purpose", ["arg1", "arg2"], p)
+        self.all_predicates.addPredicate("generic analysis - for demo purpose", ["arg1", "arg2"], p)
         
 
-
+    def removeGenericPredicate(self):
+        try:
+            self.all_predicates.removePredicate("generic analysis - for demo purpose")
+        except ValueError as e:
+            print(f"Error removing predicate: {e}") 
 
 
 

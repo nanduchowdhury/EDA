@@ -47,7 +47,7 @@ class DrawManager:
 
         visible_ids = list(rtree.intersection(visible_bbox))
 
-        self.draw_instances(visible_ids, QColor(0, 0, 0))
+        self.draw_instances(visible_ids, QColor("red"))
 
 
     def draw_instances(self, instList, color):
@@ -65,7 +65,7 @@ class DrawManager:
 
             rect_list.append((x, y, w, h))
 
-        self.drawArea.drawRects(rect_list)
+        self.drawArea.drawRects(rect_list, color)
 
     def draw_instances_1(self, instList, color):
 
