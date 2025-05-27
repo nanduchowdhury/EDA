@@ -119,8 +119,9 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 
 class LefDefUI(MainUI):
     def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Post-layout UI")
+        super().__init__(PLOT_OR_DRAW="DRAW")
+        
+        self.setWindowTitle("Post-layout Analyzerr")
 
         self.drawManager = DrawManager(self.drawArea)
 

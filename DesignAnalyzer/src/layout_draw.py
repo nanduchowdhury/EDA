@@ -1,7 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem
 from PyQt5.QtCore import Qt, QRectF, QPointF
-from PyQt5.QtGui import QPainter, QColor, QPen, QFont
+from PyQt5.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
 import pyqtgraph as pg
+
+import math
+
+import numpy as np
 
 ########################################################################
 #
@@ -158,38 +162,8 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.view.autoRange()
         self.updateRulers()
 
-    def plotWaveform(self, x_data, y_data, color='cyan'):
-        """
-        Plot a waveform given x and y data lists.
-        
-        Parameters:
-            x_data (list or ndarray): Time or sample index values.
-            y_data (list or ndarray): Amplitude values.
-            color (str): Color of the waveform line.
-        """
-        self.view.clear()  # Clear previous graphics
 
-        # Create waveform plot
-        waveform = pg.PlotDataItem(
-            x=x_data,
-            y=y_data,
-            pen=pg.mkPen(color=color, width=1.5),
-            antialias=True
-        )
 
-        # Add waveform to the view
-        self.view.addItem(waveform)
-
-        # Add back grid and crosshairs
-        self.view.addItem(self.grid)
-        self.view.addItem(self.vLine)
-        self.view.addItem(self.hLine)
-        self.view.autoRange()
-        self.updateRulers()
-
-        # Adjust view to fit the data
-        # self.view.enableAutoRange()
-        
 
     def updateRulers(self):
         rect = self.view.viewRect()

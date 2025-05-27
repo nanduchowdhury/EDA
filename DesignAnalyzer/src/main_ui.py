@@ -28,6 +28,7 @@ from session import Session
 
 
 from layout_draw import PyQtGraphLayoutWithScales
+from layout_plot import PlotWithScales
 
 
 from predicates import Predicates, DummyPredicate
@@ -185,9 +186,13 @@ class MainUI(QMainWindow):
 
     COMMAND_WIDTH = 900
 
-    def __init__(self):
+    def __init__(self, PLOT_OR_DRAW="PLOT"):
+        
         super().__init__()
-        self.setWindowTitle("DataAnalyzer")
+
+        self.PLOT_OR_DRAW = PLOT_OR_DRAW
+
+        self.setWindowTitle("Analyzerr")
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
@@ -300,8 +305,13 @@ class MainUI(QMainWindow):
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
-        self.drawArea = PyQtGraphLayoutWithScales(width=self.LAYOUT_WIDTH, 
-                                                  height=self.LAYOUT_HEIGHT)
+        if self.PLOT_OR_DRAW == "DRAW":
+            self.drawArea = PyQtGraphLayoutWithScales(width=self.LAYOUT_WIDTH, 
+                                               height=self.LAYOUT_HEIGHT)
+        else:
+            self.drawArea = PlotWithScales(width=self.LAYOUT_WIDTH,
+                                              height=self.LAYOUT_HEIGHT)
+
         self.layoutView = self.drawArea.view
 
         self.create_command_area()

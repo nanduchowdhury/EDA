@@ -26,7 +26,12 @@ class LoadPdfToolItem(ToolBarItemAbstract):
         # self.read_pdf()
 
         logging.info("Loading waveform data started.")
-        self.plotDummyData()
+
+        data = [(30, "Jan"), (45, "Feb"), (25, "Mar"), (50, "Apr"), (40, "May")]
+        self.drawArea.plotBar(data, "Months", "Expenses")
+        # self.drawArea.plotPie(data)
+        # self.drawArea.plotWaveform([1, 2, 3, 4], [10, 30, 20, 25], "Iterations", "Estimate")
+
         logging.info("Loading waveform data done.")
 
 
@@ -80,7 +85,7 @@ class FindOutlier(PredicateBase):
 class FinanceUI(MainUI):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Financials UI")
+        self.setWindowTitle("Financials Analyzerr")
 
         self.loadPdfToolbarItem = LoadPdfToolItem(self.drawArea)
         
