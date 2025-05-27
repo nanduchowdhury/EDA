@@ -292,4 +292,26 @@ footer a:hover {
   color: blue;
 }
 
+.about-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.about-box {
+  flex: 1;
+  min-width: 250px;
+  padding: 1em;
+  background-color: #559ef2;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-box h3 {
+  margin-top: 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
 
