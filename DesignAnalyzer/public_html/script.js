@@ -60,16 +60,16 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
 
     const submenuMap = {
       solution: [
-        { text: "Data Analyzer Framework", href: "solution.html#data-analyzer-framework" },
-        { text: "Visualization", href: "solution.html#visualization" },
-        { text: "High Performance", href: "solution.html#high-performance" }
+        { text: "Integrated AI", href: "index.html#Integrated-AI" },
+        { text: "Visualization", href: "index.html#Visualization" },
+        { text: "Performance & Capacity", href: "index.html#Performance" }
       ],
       products: [
-        { text: "DataAnalyzer", href: "dataanalyzer.html" }
+        { text: "DataAnalyzer", href: "index.html#Analyzerr" }
       ],
       company: [
-        { text: "About", href: "about.html" },
-        { text: "Contact", href: "contact.html" }
+        { text: "About", href: "index.html#About" },
+        { text: "Contact", href: "index.html#Contact" }
       ]
     };
 

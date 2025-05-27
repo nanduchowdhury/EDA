@@ -253,23 +253,6 @@ main {
   margin: auto;
 }
 
-.video-box {
-  width: 100%;
-  height: 100vh;
-  background-color: #fff; /* Changed to white */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.video-box video {
-  width: 100%;
-  height: auto;
-  display: block;
-  background: white;
-}
-
-
 .separator {
   border-top: 1px solid #ccc;
   width: 100%;
@@ -292,14 +275,14 @@ footer a:hover {
   color: blue;
 }
 
-.about-container {
+.boxes-conrtainer {
   display: flex;
   justify-content: space-between;
   gap: 1em;
   flex-wrap: wrap;
 }
 
-.about-box {
+.containing-box {
   flex: 1;
   min-width: 250px;
   padding: 1em;
@@ -308,10 +291,23 @@ footer a:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.about-box h3 {
+.containing-box h3 {
   margin-top: 0;
   font-size: 1em;
   font-weight: bold;
 }
 
+.responsive-video {
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+  .responsive-video {
+    max-width: 100%;
+    height: auto;
+  }
+}
 
