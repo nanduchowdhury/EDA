@@ -65,7 +65,7 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
         { text: "Performance & Capacity", href: "index.html#Performance" }
       ],
       products: [
-        { text: "DataAnalyzer", href: "index.html#Analyzerr" }
+        { text: "Analyzerr", href: "index.html#Analyzerr" }
       ],
       company: [
         { text: "About", href: "index.html#About" },
