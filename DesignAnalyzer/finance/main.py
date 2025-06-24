@@ -9,6 +9,8 @@ import logging
 
 import csv
 
+from sklearn.linear_model import LinearRegression
+
 # Append the absolute path of ../src to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
@@ -81,6 +83,61 @@ class LoadDataToolItem(ToolBarItemAbstract):
                     for row in table:
                         print(row)
 
+
+class PredictNextMonths(PredicateBase):
+    def __init__(self, loadDataObj):
+        super().__init__()
+        self.loadDataObj = loadDataObj
+
+        self.args = {
+            'num-months': 2,
+        }
+
+    def run(self):
+        result = []
+        num_months = self.args['num-months']
+        if num_months:
+            result = self.predict_next_months(self.loadDataObj.data, int(num_months))
+            if not result:
+                result = ["Prediction not found"]
+        else:
+            result = ["Num months not specified for prediction"]
+
+        self.setOutputObject("result", result)  # Store result as a list
+        logging.info(f"Prediction search done.")
+
+        return result
+
+    def predict_next_months(self, data, num_months):
+        """
+        Predicts values for the next `num_months` based on input time-series data.
+
+        Args:
+            data: List of (value, label) tuples, e.g., [(30, "Jan"), (45, "Feb"), ...]
+            num_months: Number of future months to predict
+
+        Returns:
+            List of predicted float values, one for each future month.
+        """
+        if len(data) < 2:
+            raise ValueError("Need at least 2 data points to make a prediction")
+
+        # Prepare X as [[0], [1], ...] and y as [val1, val2, ...]
+        X = np.array([[i] for i in range(len(data))])
+        y = np.array([val for val, _ in data])
+
+        # Fit linear regression model
+        model = LinearRegression()
+        model.fit(X, y)
+
+        # Predict next months
+        future_indices = np.array([[len(data) + i] for i in range(num_months)])
+        predicted_values = model.predict(future_indices)
+
+        return predicted_values.tolist()
+
+
+
 class FindOutlier(PredicateBase):
     def __init__(self, loadDataObj):
         super().__init__()
@@ -145,6 +202,9 @@ class FinanceUI(MainUI):
 
         findOutlier = FindOutlier(self.loadDataToolbarItem)
         self.all_predicates.addPredicate("outlier - based on mean/std-dev", ["z-value"], findOutlier)
+
+        predict = PredictNextMonths(self.loadDataToolbarItem)
+        self.all_predicates.addPredicate("predict next months - linear regression", ["num-months"], predict)
 
 
 

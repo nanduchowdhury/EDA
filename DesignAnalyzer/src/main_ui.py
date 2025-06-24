@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
-    QListWidget, QTabWidget, QGraphicsView,
+    QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
     QAction, QFileDialog, QMessageBox
 )
@@ -322,9 +322,14 @@ class MainUI(QMainWindow):
         self.mainLayout.addLayout(topLayout, stretch=2)
 
     def push_predicates_to_command_area(self):
-        self.commandList.addItems(list(self.all_predicates.getAllPredicates().keys()))
+        self.commandList.clear()  # Optional: clear existing items
         self.commandList.setMaximumWidth(300)
         self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
+
+        for predicate in self.all_predicates.getAllPredicates().keys():
+            item = QListWidgetItem(predicate)
+            item.setToolTip(f"<b>{predicate}</b>")
+            self.commandList.addItem(item)
 
     
     def create_command_area(self):
@@ -348,13 +353,16 @@ class MainUI(QMainWindow):
         row2.addWidget(self.okButton)
         layout.addLayout(row2)
 
+        layout.addWidget(QLabel("List of analyses"))
+
         # Row 3: List + Column of Label+TextEdit
         row3 = QHBoxLayout()
 
         # Command List
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
-
+        self.commandList.setMinimumWidth(400)
+        # self.commandList.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         row3.addWidget(self.commandList)
 
