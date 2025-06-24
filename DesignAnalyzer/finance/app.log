@@ -1826,3 +1826,63 @@
 2025-06-23 14:06:20,636 - INFO - Loading waveform data done.
 2025-06-23 14:06:22,930 - INFO - Loading waveform data started.
 2025-06-23 14:06:22,930 - INFO - Loading waveform data done.
+2025-06-23 14:49:32,101 - INFO - Loading waveform data started.
+2025-06-23 14:49:32,145 - INFO - Loading waveform data done.
+2025-06-23 15:11:25,743 - INFO - Loading waveform data started.
+2025-06-23 15:11:25,968 - INFO - Loading waveform data done.
+2025-06-23 15:11:29,651 - INFO - Outlier search done.
+2025-06-23 15:11:36,785 - INFO - Outlier search done.
+2025-06-23 15:12:47,720 - INFO - Loading waveform data started.
+2025-06-23 15:12:47,743 - INFO - Loading waveform data done.
+2025-06-23 15:12:54,942 - INFO - Outlier search done.
+2025-06-23 15:14:48,655 - INFO - Loading waveform data started.
+2025-06-23 15:14:48,668 - INFO - Loading waveform data done.
+2025-06-23 15:14:57,602 - INFO - Outlier search done.
+2025-06-23 15:16:30,485 - INFO - Loading waveform data started.
+2025-06-23 15:16:30,498 - INFO - Loading waveform data done.
+2025-06-23 15:16:36,811 - INFO - Outlier search done.
+2025-06-23 15:17:41,078 - INFO - Loading waveform data started.
+2025-06-23 15:17:41,084 - INFO - Loading waveform data done.
+2025-06-23 15:17:46,638 - INFO - Outlier search done.
+2025-06-23 15:25:58,217 - INFO - Outlier search done.
+2025-06-23 15:29:50,964 - INFO - Loading waveform data started.
+2025-06-23 15:29:50,984 - INFO - Loading waveform data done.
+2025-06-23 15:33:13,501 - INFO - Outlier search done.
+2025-06-23 15:33:21,140 - INFO - Outlier search done.
+2025-06-23 18:03:06,776 - INFO - Outlier search done.
+2025-06-23 18:03:11,044 - INFO - Loading waveform data started.
+2025-06-23 18:03:11,044 - INFO - Loading waveform data done.
+2025-06-23 18:12:19,698 - INFO - Loading waveform data started.
+2025-06-23 18:12:19,755 - INFO - Loading waveform data done.
+2025-06-23 18:12:31,065 - INFO - Outlier search done.
+2025-06-23 18:22:14,464 - INFO - Loading waveform data started.
+2025-06-23 18:22:14,464 - INFO - Loading waveform data done.
+2025-06-23 18:22:17,164 - INFO - Loading waveform data started.
+2025-06-23 18:22:17,179 - INFO - Loading waveform data done.
+2025-06-23 18:22:17,797 - INFO - Loading waveform data started.
+2025-06-23 18:22:17,797 - INFO - Loading waveform data done.
+2025-06-23 18:22:18,832 - INFO - Loading waveform data started.
+2025-06-23 18:22:18,836 - INFO - Loading waveform data done.
+2025-06-23 18:22:20,485 - INFO - Loading waveform data started.
+2025-06-23 18:22:20,488 - INFO - Loading waveform data done.
+2025-06-23 18:22:23,814 - INFO - Loading waveform data started.
+2025-06-23 18:22:23,827 - INFO - Loading waveform data done.
+2025-06-23 18:22:26,545 - INFO - Loading waveform data started.
+2025-06-23 18:22:26,559 - INFO - Loading waveform data done.
+2025-06-23 18:42:39,886 - INFO - Loading CSV data started.
+2025-06-23 18:42:39,901 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-06-23 18:42:39,901 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
+2025-06-23 18:42:39,935 - INFO - Loading waveform data done.
+2025-06-23 18:58:56,684 - INFO - Outlier search done.
+2025-06-23 18:59:08,663 - INFO - Outlier search done.
+2025-06-23 18:59:14,121 - INFO - Outlier search done.
+2025-06-23 19:07:24,424 - INFO - Loading CSV data started.
+2025-06-23 19:07:24,424 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-06-23 19:07:24,424 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
+2025-06-23 19:07:24,448 - INFO - Loading waveform data done.
+2025-06-23 19:07:32,333 - INFO - Outlier search done.
+2025-06-23 19:10:07,984 - INFO - Loading CSV data started.
+2025-06-23 19:10:08,000 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-06-23 19:10:08,000 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
+2025-06-23 19:10:08,005 - INFO - Loading waveform data done.
+2025-06-23 19:10:14,953 - INFO - Outlier search done.

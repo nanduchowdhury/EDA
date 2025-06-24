@@ -7,6 +7,7 @@ import numpy as np
 
 import logging
 
+import csv
 
 # Append the absolute path of ../src to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
@@ -17,23 +18,44 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
 from predicates import Predicates, PredicateBase
 
-class LoadPdfToolItem(ToolBarItemAbstract):
-    def __init__(self, drawArea):
-        super().__init__("Load Pdf")
+class LoadDataToolItem(ToolBarItemAbstract):
+    def __init__(self, all_input_tabs, drawArea):
+        super().__init__("Load data")
+
+        self.all_input_tabs = all_input_tabs
         self.drawArea = drawArea
 
+        self.data = []  # Initialize data as an empty list
+
     def onClick(self):
-        # self.read_pdf()
 
-        logging.info("Loading waveform data started.")
+        logging.info("Loading CSV data started.")
 
-        data = [(30, "Jan"), (45, "Feb"), (25, "Mar"), (50, "Apr"), (40, "May")]
-        self.drawArea.plotBar(data, "Months", "Expenses")
+        csvList = self.all_input_tabs["CSV"].getAllItemsInList()
+
+        for csv_file in csvList:
+            logging.info(f"Reading CSV file: {csv_file}")
+            self.data = self.read_csv(csv_file)
+            logging.info(f"Data read from {csv_file}: {self.data}")
+
+        self.drawArea.plotBar(self.data, "Months", "Expenses")
         # self.drawArea.plotPie(data)
         # self.drawArea.plotWaveform([1, 2, 3, 4], [10, 30, 20, 25], "Iterations", "Estimate")
 
         logging.info("Loading waveform data done.")
 
+
+    def read_csv(self, csv_file):
+        data = []
+        with open(csv_file, mode="r") as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header
+            for row in reader:
+                if len(row) >= 2:
+                    amount = int(row[0])
+                    month = row[1]
+                    data.append((amount, month))
+        return data
 
 
     def plotDummyData(self):
@@ -60,41 +82,69 @@ class LoadPdfToolItem(ToolBarItemAbstract):
                         print(row)
 
 class FindOutlier(PredicateBase):
-    def __init__(self):
+    def __init__(self, loadDataObj):
         super().__init__()
+        self.loadDataObj = loadDataObj
 
         self.args = {
-            'component': None,  # Component name to search for outliers
+            'z-value': 0.9,
         }
 
     def run(self):
         result = []
-        component = self.args['component']
-        if component:
-            # Simulate finding outliers in the component data
-            # In a real scenario, you would analyze the component data to find outliers
-            result = [f"Outlier found in {component}"]
+        z_val = self.args['z-value']
+        if z_val:
+            result = self.find_outlier_months()
+            if not result:
+                result = ["No outliers found"]
         else:
-            result = ["No component specified for outlier search"]
+            result = ["No z-value specified for outlier search"]
 
         self.setOutputObject("result", result)  # Store result as a list
         logging.info(f"Outlier search done.")
 
         return result
     
+    def find_outlier_months(self, threshold=0.9):
+        """
+        data: List of tuples (value, label)
+        threshold: Z-score threshold to detect outliers (default=2.0)
+        Returns: List of (label, value, z_score) for outliers
+        """
+        data = self.loadDataObj.data
+
+        values = np.array([value for value, _ in data])
+        labels = [label for _, label in data]
+
+        mean = np.mean(values)
+        std_dev = np.std(values)
+
+        outliers = []
+
+        for i, value in enumerate(values):
+            z_score = (value - mean) / std_dev if std_dev > 0 else 0
+            if abs(z_score) > threshold:
+                # outliers.append((labels[i], value, z_score))
+                outliers.append((labels[i]))
+
+        return outliers
+    
 class FinanceUI(MainUI):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Financials Analyzerr")
 
-        self.loadPdfToolbarItem = LoadPdfToolItem(self.drawArea)
+        self.bottomArea.create_input_tab("CSV")
+
+        self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.all_input_tabs, 
+                                                    self.drawArea)
         
-        self.menu.createToolbarItem(self.loadPdfToolbarItem)
+        self.menu.createToolbarItem(self.loadDataToolbarItem)
 
         self.removeGenericPredicate()
 
-        findOutlier = FindOutlier()
-        self.all_predicates.addPredicate("outlier - find AI based", ["component"], findOutlier)
+        findOutlier = FindOutlier(self.loadDataToolbarItem)
+        self.all_predicates.addPredicate("outlier - based on mean/std-dev", ["z-value"], findOutlier)
 
 
 
