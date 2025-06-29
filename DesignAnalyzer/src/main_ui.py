@@ -30,6 +30,7 @@ from session import Session
 from layout_draw import PyQtGraphLayoutWithScales
 from layout_plot import PlotWithScales
 
+from vtk_draw import VTKWidgetWrapper
 
 from predicates import Predicates, DummyPredicate
 
@@ -308,9 +309,13 @@ class MainUI(QMainWindow):
         if self.PLOT_OR_DRAW == "DRAW":
             self.drawArea = PyQtGraphLayoutWithScales(width=self.LAYOUT_WIDTH, 
                                                height=self.LAYOUT_HEIGHT)
-        else:
+        elif self.PLOT_OR_DRAW == "PLOT":
             self.drawArea = PlotWithScales(width=self.LAYOUT_WIDTH,
                                               height=self.LAYOUT_HEIGHT)
+        elif self.PLOT_OR_DRAW == "VTK":
+            self.drawArea = VTKWidgetWrapper(width=self.LAYOUT_WIDTH,
+                                         height=self.LAYOUT_HEIGHT)
+
 
         self.layoutView = self.drawArea.view
 

@@ -1912,3 +1912,21 @@
 2025-06-24 10:30:57,812 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-06-24 10:30:57,813 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
 2025-06-24 10:30:57,814 - INFO - Loading waveform data done.
+2025-06-24 10:50:30,956 - INFO - Loading CSV data started.
+2025-06-24 10:50:30,972 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-06-24 10:50:30,972 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
+2025-06-24 10:50:31,005 - INFO - Loading waveform data done.
+2025-06-24 10:51:15,634 - INFO - Prediction search done.
+2025-06-24 10:51:21,523 - INFO - Prediction search done.
+2025-06-24 22:23:18,085 - INFO - Loading CSV data started.
+2025-06-24 22:23:18,117 - INFO - Reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-06-24 22:23:18,130 - INFO - Data read from C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv: [(30, 'Jan'), (45, 'Feb'), (25, 'Mar'), (50, 'Apr'), (40, 'May')]
+2025-06-24 22:23:18,136 - INFO - Loading waveform data done.
+2025-06-24 22:24:04,116 - INFO - Prediction search done.
+2025-06-26 12:15:47,519 - INFO - Outlier search done.
+2025-06-26 12:15:54,888 - INFO - Outlier search done.
+2025-06-26 12:15:56,005 - INFO - Outlier search done.
+2025-06-26 12:16:02,888 - INFO - Outlier search done.
+2025-06-26 12:16:23,090 - INFO - Outlier search done.
+2025-06-26 12:16:38,233 - INFO - Outlier search done.
+2025-06-26 12:19:26,384 - INFO - Outlier search done.
