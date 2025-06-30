@@ -151,6 +151,7 @@ class PanLeftToolBarItem(ToolBarItemAbstract):
     def onClick(self):
         self.drawArea.panLeft()
 
+
 class PanRightToolBarItem(ToolBarItemAbstract):
     def __init__(self, _drawArea):
         super().__init__("Pan right")
@@ -175,6 +176,21 @@ class PanDownToolBarItem(ToolBarItemAbstract):
     def onClick(self):
         self.drawArea.panDown()
 
+class ShowMeshToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Show mesh")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.show_mesh()
+
+class HideMeshToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _drawArea):
+        super().__init__("Hide mesh")
+        self.drawArea = _drawArea
+
+    def onClick(self):
+        self.drawArea.hide_mesh()
 
 
 class MainUI(QMainWindow):
@@ -249,28 +265,43 @@ class MainUI(QMainWindow):
 
 
         # Create toolbar items        
-        self.zoomInToolBarItem = ZoomInToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.zoomInToolBarItem)
-        self.zoomOutToolBarItem = ZoomOutToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.zoomOutToolBarItem)
-        self.zoomFitToolBarItem = ZoomFitToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.zoomFitToolBarItem)
-        
-        self.panLeftToolBarItem = PanLeftToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.panLeftToolBarItem)
-        self.panRightToolBarItem = PanRightToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.panRightToolBarItem)
-        self.panUpToolBarItem = PanUpToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.panUpToolBarItem)
-        self.panDownToolBarItem = PanDownToolBarItem(self.drawArea)
-        self.menu.createToolbarItem(self.panDownToolBarItem)
-
+        self.create_toolbar_items()
 
         self.push_predicates_to_command_area()
 
         
 
+    def create_toolbar_items(self):
+
+        self.zoomInToolBarItem = ZoomInToolBarItem(self.drawArea)
+        self.zoomOutToolBarItem = ZoomOutToolBarItem(self.drawArea)
+        self.zoomFitToolBarItem = ZoomFitToolBarItem(self.drawArea)
+
+        self.menu.createToolbarGroupItems("zoom_items", 
+                                          [self.zoomInToolBarItem,
+                                          self.zoomOutToolBarItem,
+                                          self.zoomFitToolBarItem])
         
+        self.panLeftToolBarItem = PanLeftToolBarItem(self.drawArea)
+        self.panRightToolBarItem = PanRightToolBarItem(self.drawArea)
+        self.panUpToolBarItem = PanUpToolBarItem(self.drawArea)
+        self.panDownToolBarItem = PanDownToolBarItem(self.drawArea)
+
+        self.menu.createToolbarGroupItems("pan_items", 
+                                          [self.panLeftToolBarItem,
+                                           self.panRightToolBarItem,
+                                           self.panUpToolBarItem,
+                                           self.panDownToolBarItem])
+
+
+        if self.PLOT_OR_DRAW == "VTK":
+            self.showMeshToolBarItem = ShowMeshToolBarItem(self.drawArea)
+            self.hideMeshToolBarItem = HideMeshToolBarItem(self.drawArea)
+            self.menu.createToolbarGroupItems("mesh_items",
+                                              [self.showMeshToolBarItem,
+                                               self.hideMeshToolBarItem])
+
+
 
     def apply_global_styles(self):
         qss_path = os.path.join(os.path.dirname(__file__), "main.qss")

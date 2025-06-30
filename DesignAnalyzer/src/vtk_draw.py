@@ -18,25 +18,22 @@ class VTKWidgetWrapper(QWidget):
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
+        self.actor = None
+
 
     def init_vtk_scene(self, source):
-        
-        # Mapper and Actor
         mapper = vtk.vtkPolyDataMapper()
         mapper.SetInputConnection(source.GetOutputPort())
 
-        actor = vtk.vtkActor()
-        actor.SetMapper(mapper)
-        # actor.GetProperty().SetColor(0.1, 0.6, 0.8)  # light blue
-        actor.GetProperty().SetColor(0.59, 0.29, 0.0)  # brown
+        self.actor = vtk.vtkActor()
+        self.actor.SetMapper(mapper)
+        self.actor.GetProperty().SetColor(0.59, 0.29, 0.0)  # brown
 
-        # Add actor to renderer
-        self.ren.AddActor(actor)
+        self.ren.AddActor(self.actor)
         self.ren.SetBackground(0.1, 0.1, 0.1)
         self.ren.ResetCamera()
 
         self.iren.Initialize()
-
         self.add_axes()
 
     def add_axes(self):
@@ -44,6 +41,23 @@ class VTKWidgetWrapper(QWidget):
         axes.SetTotalLength(5, 5, 5)
         axes.AxisLabelsOn()
         self.ren.AddActor(axes)
+
+    def show_mesh(self):
+        if self.actor is not None:
+            self.actor.GetProperty().EdgeVisibilityOn()
+            self.actor.GetProperty().SetEdgeColor(1.0, 1.0, 1.0)
+            self.actor.GetProperty().SetLineWidth(1.0)
+            self.vtkWidget.GetRenderWindow().Render()
+        else:
+            print("No mesh to show.")
+
+    def hide_mesh(self):
+        if self.actor is not None:
+            self.actor.GetProperty().EdgeVisibilityOff()
+            self.vtkWidget.GetRenderWindow().Render()
+        else:
+            print("No mesh to hide.")
+
 
     def write_stl_ascii(self, filename, source):
         stl_writer = vtk.vtkSTLWriter()
@@ -104,4 +118,4 @@ class VTKWidgetWrapper(QWidget):
     
     @property
     def view(self):
-        return self.vtkWidget  # for compatibility with .view
+        return self.vtkWidget  # for compatibility with .view        

@@ -2,7 +2,7 @@
 import re
 from PyQt5.QtWidgets import (
     QMainWindow, QAction, QPushButton, QMenuBar, QToolBar,
-    QMenu, QApplication, QStyle
+    QMenu, QApplication, QStyle, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 )
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
@@ -45,6 +45,10 @@ class ToolBarItemAbstract(ABC):
             self.button.setIcon(QApplication.style().standardIcon(icon))
         elif "load" in label.lower():
             self.button.setText("⏫")
+        elif "show mesh" in label.lower():
+            self.button.setText("🔳")
+        elif "hide mesh" in label.lower():
+            self.button.setText("⬛")
         else:
             self.button.setText(label)  # fallback to text if no icon found
 
@@ -106,7 +110,7 @@ class MainMenuAndTBar:
 
         self.top_menus = {}
 
-    def createMenuItem(self, topItemName, childItemName, itemObj: MenuItemAbstract):
+    def createMenuItem(self, topItemName, childItemName, itemObj):
         if topItemName not in self.top_menus:
             self.top_menus[topItemName] = QMenu(topItemName, self.window)
             self.menu_bar.addMenu(self.top_menus[topItemName])
@@ -115,5 +119,38 @@ class MainMenuAndTBar:
         action.triggered.connect(itemObj.onClick)
         self.top_menus[topItemName].addAction(action)
 
-    def createToolbarItem(self, itemObj: ToolBarItemAbstract):
+    def createToolbarItem(self, itemObj):
         self.toolbar.addWidget(itemObj.getButton())
+
+    def createToolbarGroupItems(self, group_name: str, item_objs: list):
+        group_widget = QWidget()
+        layout = QHBoxLayout(group_widget)
+        layout.setContentsMargins(4, 2, 4, 2)  # margin inside the group box
+        layout.setSpacing(4)
+
+        for item_obj in item_objs:
+            btn = item_obj.getButton()
+            btn.setCheckable(True)
+            layout.addWidget(btn)
+
+        # Style: Add border to the group
+        group_widget.setStyleSheet("""
+            QWidget {
+                border: 1px solid gray;
+                border-radius: 6px;
+                background-color: #f9f9f9;
+            }
+
+            QWidget:hover {
+                background-color: #e0e0ff;
+                border: 1px solid #6666cc;
+            }
+        """)
+
+        # Add the group with spacing
+        self.toolbar.addWidget(group_widget)
+
+        # Optional: add spacer after group to separate from next group
+        spacer = QWidget()
+        spacer.setFixedWidth(6)
+        self.toolbar.addWidget(spacer)

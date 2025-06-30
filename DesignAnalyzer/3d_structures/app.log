@@ -34,3 +34,58 @@
 2025-06-29 15:07:36,561 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
 2025-06-29 15:07:36,626 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
 2025-06-29 15:07:36,626 - INFO - Loading STL data done.
+2025-06-29 15:09:04,629 - INFO - Loading STL data started.
+2025-06-29 15:09:04,645 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-29 15:09:04,727 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-29 15:09:04,727 - INFO - Loading STL data done.
+2025-06-29 15:09:10,400 - INFO - PCA computation done : result = [{'center': [0.0, 0.0, 0.0], 'axis': [0.0, -1.0, 1.1102230246251565e-16], 'radius': np.float64(2.9999994411675233), 'height': np.float64(10.0)}]
+2025-06-29 15:10:29,439 - INFO - Volume computation done.
+2025-06-29 15:12:35,694 - INFO - PCA computation done : result = [{'center': [0.0, 0.0, 0.0], 'axis': [0.0, -1.0, 1.1102230246251565e-16], 'radius': np.float64(2.9999994411675233), 'height': np.float64(10.0)}]
+2025-06-29 15:15:38,374 - INFO - Volume computation done.
+2025-06-29 15:23:28,384 - INFO - Loading STL data started.
+2025-06-29 15:23:28,384 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-29 15:23:29,075 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-29 15:23:29,091 - INFO - Loading STL data done.
+2025-06-29 15:24:10,394 - INFO - PCA computation done : result = [{'center': [0.0, 0.0, 0.0], 'axis': [0.0, -1.0, 1.1102230246251565e-16], 'radius': np.float64(2.9999994411675233), 'height': np.float64(10.0)}]
+2025-06-29 20:38:02,151 - INFO - Loading STL data started.
+2025-06-29 20:38:02,173 - INFO - Reading STL file: C:/Users/nandu/Downloads/Maxillary_teeth_w_base_NIH3D.stl
+2025-06-29 20:38:06,508 - INFO - STL file C:/Users/nandu/Downloads/Maxillary_teeth_w_base_NIH3D.stl read successfully.
+2025-06-29 20:38:06,514 - INFO - Loading STL data done.
+2025-06-30 11:37:40,524 - INFO - Loading STL data started.
+2025-06-30 11:37:40,546 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 11:37:41,815 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 11:37:41,815 - INFO - Loading STL data done.
+2025-06-30 11:38:53,344 - INFO - Loading STL data started.
+2025-06-30 11:38:53,344 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 11:38:53,367 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 11:38:53,367 - INFO - Loading STL data done.
+2025-06-30 13:32:48,308 - INFO - Loading STL data started.
+2025-06-30 13:32:48,318 - INFO - Loading STL data done.
+2025-06-30 13:47:44,547 - INFO - Loading STL data started.
+2025-06-30 13:47:44,556 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 13:47:44,648 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 13:47:44,648 - INFO - Loading STL data done.
+2025-06-30 13:51:31,321 - INFO - Loading STL data started.
+2025-06-30 13:51:31,328 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 13:51:31,414 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 13:51:31,414 - INFO - Loading STL data done.
+2025-06-30 17:43:35,436 - INFO - Loading STL data started.
+2025-06-30 17:43:35,436 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 17:43:35,570 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 17:43:35,570 - INFO - Loading STL data done.
+2025-06-30 17:48:31,577 - INFO - Loading STL data started.
+2025-06-30 17:48:31,594 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 17:48:31,684 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 17:48:31,691 - INFO - Loading STL data done.
+2025-06-30 17:55:04,782 - INFO - Loading STL data started.
+2025-06-30 17:55:04,782 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 17:55:04,863 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 17:55:04,863 - INFO - Loading STL data done.
+2025-06-30 18:01:09,845 - INFO - Loading STL data started.
+2025-06-30 18:01:09,853 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 18:01:09,916 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 18:01:09,917 - INFO - Loading STL data done.
+2025-06-30 18:02:39,026 - INFO - Loading STL data started.
+2025-06-30 18:02:39,026 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-06-30 18:02:39,084 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-06-30 18:02:39,084 - INFO - Loading STL data done.
