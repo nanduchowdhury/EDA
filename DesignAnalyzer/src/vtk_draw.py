@@ -36,6 +36,61 @@ class VTKWidgetWrapper(QWidget):
         self.iren.Initialize()
         self.add_axes()
 
+    def zoomOut(self, factor=1.2):
+        camera = self.ren.GetActiveCamera()
+        camera.Dolly(1 / factor)  # Zoom out
+        self.ren.ResetCameraClippingRange()
+        self.vtkWidget.GetRenderWindow().Render()
+
+    def zoomIn(self, factor=1.2):
+        camera = self.ren.GetActiveCamera()
+        camera.Dolly(factor)  # Zoom in
+        self.ren.ResetCameraClippingRange()
+        self.vtkWidget.GetRenderWindow().Render()
+
+    def zoomFit(self):
+        self.ren.ResetCamera()
+        self.ren.ResetCameraClippingRange()
+        self.vtkWidget.GetRenderWindow().Render()
+
+    def panLeft(self, factor=0.1):
+        self._panCamera(dx=-factor, dy=0)
+
+    def panRight(self, factor=0.1):
+        self._panCamera(dx=factor, dy=0)
+
+    def panUp(self, factor=0.1):
+        self._panCamera(dx=0, dy=factor)
+
+    def panDown(self, factor=0.1):
+        self._panCamera(dx=0, dy=-factor)
+
+
+    def _panCamera(self, dx=0.1, dy=0.0):
+        camera = self.ren.GetActiveCamera()
+        bounds = self.ren.ComputeVisiblePropBounds()
+
+        center_x = (bounds[0] + bounds[1]) / 2.0
+        center_y = (bounds[2] + bounds[3]) / 2.0
+        range_x = bounds[1] - bounds[0]
+        range_y = bounds[3] - bounds[2]
+
+        # Compute pan deltas
+        delta_x = dx * range_x
+        delta_y = dy * range_y
+
+        # Get camera position and focal point
+        pos = list(camera.GetPosition())
+        focal = list(camera.GetFocalPoint())
+
+        # Move both by the deltas
+        camera.SetFocalPoint(focal[0] + delta_x, focal[1] + delta_y, focal[2])
+        camera.SetPosition(pos[0] + delta_x, pos[1] + delta_y, pos[2])
+
+        self.ren.ResetCameraClippingRange()
+        self.vtkWidget.GetRenderWindow().Render()
+
+
     def add_axes(self):
         axes = vtk.vtkAxesActor()
         axes.SetTotalLength(5, 5, 5)
