@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import (
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
-    QAction, QFileDialog, QMessageBox
+    QAction, QFileDialog, QMessageBox, QFrame
 )
+
 
 from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
 
@@ -368,18 +369,21 @@ class MainUI(QMainWindow):
             self.commandList.addItem(item)
 
     
+
     def create_command_area(self):
         self.commandArea = QWidget()
         self.commandArea.setMinimumWidth(self.COMMAND_WIDTH)
-        
-        # self.commandArea.setStyleSheet("background-color: #f1f8e9; border: 1px solid black;")
 
-        layout = QVBoxLayout()
+        outerLayout = QHBoxLayout()
 
-        # Row 1: Label
-        layout.addWidget(QLabel("Search analysis to perform"))
+        # ----------------- LEFT HALF -----------------
+        leftWidget = QWidget()
+        leftLayout = QVBoxLayout()
 
-        # Row 2: TextEdit + OK Button
+        # Label: Search
+        leftLayout.addWidget(QLabel("Search analysis to perform"))
+
+        # TextEdit + OK Button
         row2 = QHBoxLayout()
         self.commandInput = QTextEdit()
         self.commandInput.setFixedHeight(30)
@@ -387,27 +391,27 @@ class MainUI(QMainWindow):
         self.okButton.clicked.connect(self.runSearchAnalysis)
         row2.addWidget(self.commandInput)
         row2.addWidget(self.okButton)
-        layout.addLayout(row2)
+        leftLayout.addLayout(row2)
 
-        layout.addWidget(QLabel("List of analyses"))
+        # Horizontal separator
+        leftLayout.addWidget(self._hline())
 
-        # Row 3: List + Column of Label+TextEdit
-        row3 = QHBoxLayout()
+        # Label: List of analyses
+        leftLayout.addWidget(QLabel("List of analyses"))
 
-        # Command List
+        # Command list
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.commandList.setMinimumWidth(400)
-        # self.commandList.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.commandList.setMinimumWidth(300)
+        leftLayout.addWidget(self.commandList)
 
-        row3.addWidget(self.commandList)
+        # Horizontal separator
+        leftLayout.addWidget(self._hline())
 
-        # Parameter Area
-        paramWidget = QWidget()
+        # Param area
         self.paramLayout = QVBoxLayout()
-        self.paramEdits = []  # List of (label, lineEdit) tuples
+        self.paramEdits = []
 
-        # Create enough editable rows (you can change the count as needed)
         for _ in range(5):
             hbox = QHBoxLayout()
             label = QLabel("Param")
@@ -418,25 +422,66 @@ class MainUI(QMainWindow):
             self.paramLayout.addLayout(hbox)
             self.paramEdits.append((label, edit))
 
+        paramWidget = QWidget()
         paramWidget.setLayout(self.paramLayout)
-        row3.addWidget(paramWidget)
+        leftLayout.addWidget(paramWidget)
 
-        layout.addLayout(row3)
+        # Horizontal separator
+        leftLayout.addWidget(self._hline())
 
-
-        # Row 4: Execute Button
+        # Run + Stop buttons
+        buttonRow = QHBoxLayout()
         self.runButton = QPushButton("Run Analysis")
         self.runButton.clicked.connect(self.runSelectedPredicate)
-        layout.addWidget(self.runButton)
+        self.stopButton = QPushButton("Stop Analysis")
+        # self.stopButton.clicked.connect(self.stopSelectedPredicate)  # Optional
+        buttonRow.addWidget(self.runButton)
+        buttonRow.addWidget(self.stopButton)
+        leftLayout.addLayout(buttonRow)
 
-        # Row 5: Results Label + Table
-        layout.addWidget(QLabel("Results"))
+        leftWidget.setLayout(leftLayout)
 
-        self.commandTable = QTableWidget(0, 2)  # Start with 0 rows
-        self.commandTable.setHorizontalHeaderLabels(["Arg Name", "Values"])
-        layout.addWidget(self.commandTable)
+        # ----------------- RIGHT HALF -----------------
+        rightWidget = QWidget()
+        rightLayout = QVBoxLayout()
 
-        self.commandArea.setLayout(layout)
+        rightLayout.addWidget(QLabel("Results"))
+
+        self.resultTabs = QTabWidget()
+        resultTab = QWidget()
+        resultLayout = QVBoxLayout()
+
+        self.commandTable = QTableWidget(0, 2)
+        self.commandTable.setHorizontalHeaderLabels(["column-1", "column-2"])
+        resultLayout.addWidget(self.commandTable)
+
+        resultTab.setLayout(resultLayout)
+        self.resultTabs.addTab(resultTab, "Result")
+
+        rightLayout.addWidget(self.resultTabs)
+        rightWidget.setLayout(rightLayout)
+
+        # ----------------- Combine with Separator -----------------
+        outerLayout.addWidget(leftWidget, 4)
+
+        # Vertical separator
+        vline = QFrame()
+        vline.setFrameShape(QFrame.VLine)
+        vline.setFrameShadow(QFrame.Sunken)
+        outerLayout.addWidget(vline)
+
+        outerLayout.addWidget(rightWidget, 6)
+
+        self.commandArea.setLayout(outerLayout)
+
+    def _hline(self):
+        """Returns a horizontal separator line."""
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
+        return line
+
+
 
 
     def runSearchAnalysis(self):
