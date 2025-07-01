@@ -9,6 +9,8 @@ import logging
 
 import csv
 
+import pandas as pd
+
 from sklearn.linear_model import LinearRegression
 
 # Append the absolute path of ../src to sys.path
@@ -27,7 +29,7 @@ class LoadDataToolItem(ToolBarItemAbstract):
         self.all_input_tabs = all_input_tabs
         self.drawArea = drawArea
 
-        self.data = []  # Initialize data as an empty list
+        self.data = None
 
     def onClick(self):
 
@@ -37,27 +39,19 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
         for csv_file in csvList:
             logging.info(f"Reading CSV file: {csv_file}")
-            self.data = self.read_csv(csv_file)
-            logging.info(f"Data read from {csv_file}: {self.data}")
+            self.read_csv(csv_file)
 
-        self.drawArea.plotBar(self.data, "Months", "Expenses")
+        # self.drawArea.plotBar(self.data, "Months", "Expenses")
         # self.drawArea.plotPie(data)
         # self.drawArea.plotWaveform([1, 2, 3, 4], [10, 30, 20, 25], "Iterations", "Estimate")
 
-        logging.info("Loading waveform data done.")
-
+        # logging.info("Loading waveform data done.")
 
     def read_csv(self, csv_file):
-        data = []
-        with open(csv_file, mode="r") as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip header
-            for row in reader:
-                if len(row) >= 2:
-                    amount = int(row[0])
-                    month = row[1]
-                    data.append((amount, month))
-        return data
+
+        print(f"Reading CSV file: {csv_file}")
+        self.data = pd.read_csv(csv_file, low_memory=False)
+        print(f"DataFrame shape: {self.data.shape}")
 
 
     def plotDummyData(self):
@@ -136,7 +130,35 @@ class PredictNextMonths(PredicateBase):
 
         return predicted_values.tolist()
 
+class ExtractColumnsRows(PredicateBase):
+    def __init__(self, loadDataObj):
+        super().__init__()
+        self.loadDataObj = loadDataObj
 
+        self.args = {
+            'column_name': "",
+            'containing_string': "",
+        }
+
+    def run(self):
+        df = self.loadDataObj.data
+        result = []
+
+        column_name = self.args['column_name']
+        containing_string = self.args['containing_string']
+
+        if column_name and containing_string:
+            result = df[df[column_name].str.contains(containing_string, case=False, na=False)]
+            if not result.empty:
+                for col_name in result.columns:
+                    col_data = result[col_name].tolist()  # Get list of values for this column
+                    self.setOutputObject(col_name, col_data)
+            else:
+                result = ["No matching rows found for the specified column and row name"]
+        else:
+            result = ["No column or row name specified for extraction"]
+
+        return result
 
 class FindOutlier(PredicateBase):
     def __init__(self, loadDataObj):
@@ -205,6 +227,9 @@ class FinanceUI(MainUI):
 
         predict = PredictNextMonths(self.loadDataToolbarItem)
         self.all_predicates.addPredicate("predict next months - linear regression", ["num-months"], predict)
+
+        extract = ExtractColumnsRows(self.loadDataToolbarItem)
+        self.all_predicates.addPredicate("extract data where specified column contains a string or name.", ["column_name", "containing_string"], extract)
 
 
 
