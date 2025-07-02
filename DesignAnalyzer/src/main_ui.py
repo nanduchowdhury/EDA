@@ -528,25 +528,9 @@ class MainUI(QMainWindow):
 
         self.resultsManager.addNewTab(predicate.getShortName(), 
                                     predicate.getCompleteNameWithArgs())
-        resultsTable = self.resultsManager.getResultsTable(predicate.getShortName())
+        model = self.resultsManager.getResultsModel(predicate.getShortName())
+        model.setDataFromOutputs(outputs)
 
-        # Set the number of columns based on output args
-        num_columns = len(outputs)
-        resultsTable.setColumnCount(num_columns)
-
-        # Set column headers as the output arg names
-        column_headers = [arg_name for arg_name, _ in outputs]
-        resultsTable.setHorizontalHeaderLabels(column_headers)
-
-        # Determine the maximum number of values in any column to set row count
-        max_rows = max((len(values) for _, values in outputs), default=0)
-        resultsTable.setRowCount(max_rows)
-
-        # Populate the table: each column corresponds to one output arg
-        for col, (arg_name, values) in enumerate(outputs):
-            for row, val in enumerate(values):
-                item = QTableWidgetItem(str(val))
-                resultsTable.setItem(row, col, item)
 
         inst_list = None
 
@@ -596,10 +580,15 @@ class MainUI(QMainWindow):
 
 
 
+from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout, QTableView
+from PyQt5.QtCore import Qt
+
+
 class ManageResultsTabs:
     def __init__(self):
         self.tabWidget = QTabWidget()
-        self.tables = {}           # tabName -> QTableWidget
+        self.tables = {}           # tabName -> QTableView
+        self.models = {}           # tabName -> ResultsTableModel
         self.commands = {}         # tabName -> analysisCommand
 
         self.addNewTab("Result", "Default analysis command")
@@ -611,19 +600,28 @@ class ManageResultsTabs:
         tab = QWidget()
         layout = QVBoxLayout()
 
-        table = QTableWidget(0, 2)
-        table.setHorizontalHeaderLabels(["column-1", "column-2"])
-        layout.addWidget(table)
+        # Create TableView and its model
+        tableView = QTableView()
+        model = ResultsTableModel()  # initially empty
+        tableView.setModel(model)
 
+        layout.addWidget(tableView)
         tab.setLayout(layout)
+
         index = self.tabWidget.addTab(tab, tabName)
         self.tabWidget.setTabToolTip(index, analysisCommand)
 
-        self.tables[tabName] = table
+        self.tables[tabName] = tableView
+        self.models[tabName] = model
         self.commands[tabName] = analysisCommand
 
     def getResultsTable(self, tabName):
+        """Returns the QTableView for a given tab."""
         return self.tables.get(tabName, None)
+
+    def getResultsModel(self, tabName):
+        """Returns the ResultsTableModel for a given tab."""
+        return self.models.get(tabName, None)
 
     def getCommandLine(self, tabName):
         return self.commands.get(tabName, "")
@@ -631,6 +629,7 @@ class ManageResultsTabs:
     def deleteAllTabs(self):
         self.tabWidget.clear()
         self.tables.clear()
+        self.models.clear()
         self.commands.clear()
 
     def isTabExist(self, tabName):
@@ -640,6 +639,77 @@ class ManageResultsTabs:
         return self.tabWidget
 
 
+
+from PyQt5.QtCore import Qt, QAbstractTableModel
+from PyQt5.QtWidgets import QTableView, QTableWidgetItem
+
+class ResultsTableModel(QAbstractTableModel):
+    def __init__(self, outputs=None, parent=None):
+        super().__init__(parent)
+        self.headers = []
+        self.data_matrix = []  # List of lists (2D)
+
+        if outputs:
+            self.setDataFromOutputs(outputs)
+
+    def setDataFromOutputs(self, outputs):
+        """
+        Takes outputs in form: [(col_name, [val1, val2, ...]), ...]
+        and stores them in self.data_matrix and self.headers
+        """
+        self.beginResetModel()
+        self.headers = [arg_name for arg_name, _ in outputs]
+        max_rows = max((len(vals) for _, vals in outputs), default=0)
+        self.data_matrix = []
+
+        for row in range(max_rows):
+            row_data = []
+            for _, values in outputs:
+                row_data.append(str(values[row]) if row < len(values) else "")
+            self.data_matrix.append(row_data)
+        self.endResetModel()
+
+    def rowCount(self, parent=None):
+        return len(self.data_matrix)
+
+    def columnCount(self, parent=None):
+        return len(self.headers)
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid():
+            return None
+        if role == Qt.DisplayRole:
+            return self.data_matrix[index.row()][index.column()]
+        return None
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if role != Qt.DisplayRole:
+            return None
+        if orientation == Qt.Horizontal:
+            return self.headers[section]
+        else:
+            return str(section + 1)
+
+    def addRow(self, row_data):
+        """Appends a new row (as a list of strings)."""
+        if len(row_data) != len(self.headers):
+            raise ValueError("Row length must match number of columns.")
+        self.beginInsertRows(self.createIndex(0, 0), self.rowCount(), self.rowCount())
+        self.data_matrix.append(row_data)
+        self.endInsertRows()
+
+    def deleteRow(self, row):
+        """Deletes row at index `row`."""
+        if 0 <= row < self.rowCount():
+            self.beginRemoveRows(self.createIndex(0, 0), row, row)
+            self.data_matrix.pop(row)
+            self.endRemoveRows()
+
+    def clear(self):
+        self.beginResetModel()
+        self.headers = []
+        self.data_matrix = []
+        self.endResetModel()
 
 
 
