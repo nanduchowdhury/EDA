@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import (
     QAction, QFileDialog, QMessageBox, QFrame
 )
 
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot
 
-from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot
 
 from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
 
@@ -447,18 +447,12 @@ class MainUI(QMainWindow):
 
         rightLayout.addWidget(QLabel("Results"))
 
-        self.resultTabs = QTabWidget()
-        resultTab = QWidget()
-        resultLayout = QVBoxLayout()
+        # Create instance of ManageResultsTabs
+        self.resultsManager = ManageResultsTabs()
 
-        self.commandTable = QTableWidget(0, 2)
-        self.commandTable.setHorizontalHeaderLabels(["column-1", "column-2"])
-        resultLayout.addWidget(self.commandTable)
+        # Add the tab widget to right layout
+        rightLayout.addWidget(self.resultsManager.getTabWidget())
 
-        resultTab.setLayout(resultLayout)
-        self.resultTabs.addTab(resultTab, "Result")
-
-        rightLayout.addWidget(self.resultTabs)
         rightWidget.setLayout(rightLayout)
 
         # ----------------- Combine with Separator -----------------
@@ -532,23 +526,27 @@ class MainUI(QMainWindow):
         # Fetch all output argument names and their corresponding values
         outputs = list(predicate.iterateOutputs())
 
+        self.resultsManager.addNewTab(predicate.getShortName(), 
+                                    predicate.getCompleteNameWithArgs())
+        resultsTable = self.resultsManager.getResultsTable(predicate.getShortName())
+
         # Set the number of columns based on output args
         num_columns = len(outputs)
-        self.commandTable.setColumnCount(num_columns)
+        resultsTable.setColumnCount(num_columns)
 
         # Set column headers as the output arg names
         column_headers = [arg_name for arg_name, _ in outputs]
-        self.commandTable.setHorizontalHeaderLabels(column_headers)
+        resultsTable.setHorizontalHeaderLabels(column_headers)
 
         # Determine the maximum number of values in any column to set row count
         max_rows = max((len(values) for _, values in outputs), default=0)
-        self.commandTable.setRowCount(max_rows)
+        resultsTable.setRowCount(max_rows)
 
         # Populate the table: each column corresponds to one output arg
         for col, (arg_name, values) in enumerate(outputs):
             for row, val in enumerate(values):
                 item = QTableWidgetItem(str(val))
-                self.commandTable.setItem(row, col, item)
+                resultsTable.setItem(row, col, item)
 
         inst_list = None
 
@@ -595,6 +593,52 @@ class MainUI(QMainWindow):
             self.all_predicates.removePredicate("generic analysis - for demo purpose")
         except ValueError as e:
             print(f"Error removing predicate: {e}") 
+
+
+
+class ManageResultsTabs:
+    def __init__(self):
+        self.tabWidget = QTabWidget()
+        self.tables = {}           # tabName -> QTableWidget
+        self.commands = {}         # tabName -> analysisCommand
+
+        self.addNewTab("Result", "Default analysis command")
+
+    def addNewTab(self, tabName, analysisCommand):
+        if tabName in self.tables:
+            return  # Do not duplicate
+
+        tab = QWidget()
+        layout = QVBoxLayout()
+
+        table = QTableWidget(0, 2)
+        table.setHorizontalHeaderLabels(["column-1", "column-2"])
+        layout.addWidget(table)
+
+        tab.setLayout(layout)
+        index = self.tabWidget.addTab(tab, tabName)
+        self.tabWidget.setTabToolTip(index, analysisCommand)
+
+        self.tables[tabName] = table
+        self.commands[tabName] = analysisCommand
+
+    def getResultsTable(self, tabName):
+        return self.tables.get(tabName, None)
+
+    def getCommandLine(self, tabName):
+        return self.commands.get(tabName, "")
+
+    def deleteAllTabs(self):
+        self.tabWidget.clear()
+        self.tables.clear()
+        self.commands.clear()
+
+    def isTabExist(self, tabName):
+        return tabName in self.tables
+
+    def getTabWidget(self):
+        return self.tabWidget
+
 
 
 

@@ -8,11 +8,16 @@ import logging
 from global_name_index import gname_index
 from llm_manager import LLMManager, global_LLM_manager
 
+from abc import ABC, abstractmethod
+
 class PredicateBase(ABC):
     def __init__(self):
-
+        self.predicate_name = ""  # Name of the predicate
         self.args = {}            # input arguments
         self.outputs = {}         # output data
+
+    def setPredicateName(self, name):
+        self.predicate_name = name
 
     def setArg(self, name, value):
         self.args[name] = value
@@ -38,10 +43,36 @@ class PredicateBase(ABC):
         for name, values in self.outputs.items():
             yield name, values
 
+    def getCompleteNameWithArgs(self):
+        """
+        Returns the full command string like:
+        predicate_name arg1 val1 arg2 val2 ...
+        """
+        parts = [self.predicate_name]
+        for k, v in self.args.items():
+            parts.append(f"{k} {v}")
+        return " ".join(parts)
+
+    def getShortName(self, max_pred_len=6, max_val_len=10):
+        """
+        Returns a short string like:
+        pred_val1_val2...
+        Truncates predicate name and values if needed.
+        """
+        short_pred = self.predicate_name[:max_pred_len]
+        val_parts = []
+        for val in self.args.values():
+            val_str = str(val)
+            if len(val_str) > max_val_len:
+                val_str = val_str[:max_val_len]
+            val_parts.append(val_str)
+        return f"{short_pred}_{'_'.join(val_parts)}..."
+
     @abstractmethod
     def run(self):
         """Override this method in subclasses."""
         pass
+
 
 
 class Predicates:
@@ -55,6 +86,7 @@ class Predicates:
         list_of_args: list like ['arg1', 'arg2']
         predicateObj: instance of a class derived from PredicateBase
         """
+        predicateObj.setPredicateName(name)
         self.predicates[name] = (list_of_args, predicateObj)
 
         global_LLM_manager.set_context_line(name)
