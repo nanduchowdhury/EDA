@@ -338,25 +338,23 @@ class MainUI(QMainWindow):
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
-        if self.PLOT_OR_DRAW == "DRAW":
-            self.drawArea = PyQtGraphLayoutWithScales(width=self.LAYOUT_WIDTH, 
-                                               height=self.LAYOUT_HEIGHT)
-        elif self.PLOT_OR_DRAW == "PLOT":
-            self.drawArea = PlotWithScales(width=self.LAYOUT_WIDTH,
-                                              height=self.LAYOUT_HEIGHT)
-        elif self.PLOT_OR_DRAW == "VTK":
-            self.drawArea = VTKWidgetWrapper(width=self.LAYOUT_WIDTH,
-                                         height=self.LAYOUT_HEIGHT)
+        self.viewerTabs = ManageViewerTabs(viewer_type=self.PLOT_OR_DRAW,
+                                        width=self.LAYOUT_WIDTH,
+                                        height=self.LAYOUT_HEIGHT)
+        
+        # Access default view
+        self.drawArea = self.viewerTabs.currentWidget()
 
-
-        self.layoutView = self.drawArea.view
+        # Access the `.view` attribute only if exists
+        self.layoutView = getattr(self.drawArea, "view", None)
 
         self.create_command_area()
 
-        topLayout.addWidget(self.drawArea)
-        topLayout.addWidget(self.commandArea)
+        topLayout.addWidget(self.viewerTabs, stretch=4)
+        topLayout.addWidget(self.commandArea, stretch=3)
 
         self.mainLayout.addLayout(topLayout, stretch=2)
+
 
     def push_predicates_to_command_area(self):
         self.commandList.clear()  # Optional: clear existing items
@@ -712,4 +710,145 @@ class ResultsTableModel(QAbstractTableModel):
         self.endResetModel()
 
 
+
+from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout, QTableView
+import pandas as pd
+
+class ManageViewerTabs(QTabWidget):
+    def __init__(self, viewer_type="DRAW", width=600, height=400, parent=None):
+        super().__init__(parent)
+        self.width = width
+        self.height = height
+        self.tab_counter = 1
+        self.viewer_map = {}  # tabName -> widget
+
+        self.inputTabName = 'Input Data'
+
+        self.addTabByType(viewer_type, self.inputTabName)
+
+    def addTabByType(self, viewer_type, tab_name=None):
+        tab_widget = None
+        if viewer_type == "VTK":
+            tab_widget = VTKWidgetWrapper(width=self.width, height=self.height)
+        elif viewer_type == "DRAW":
+            tab_widget = PyQtGraphLayoutWithScales(width=self.width, height=self.height)
+        elif viewer_type == "PLOT":
+            tab_widget = PlotWithScales(width=self.width, height=self.height)
+        elif viewer_type == "TABLE":
+            tab_widget = self._createTableWidget()
+
+        if tab_widget:
+            if not tab_name:
+                tab_name = f"{viewer_type}-{self.tab_counter}"
+                self.tab_counter += 1
+            self.addTab(tab_widget, tab_name)
+            self.viewer_map[tab_name] = tab_widget
+            return tab_widget
+        return None
+
+    def _createTableWidget(self):
+        view = TableView()
+        return view
+    
+    def setTableDataFrameInputTab(self, df):
+        input_tab = self.getInputTabWidget()
+        if isinstance(input_tab, QTableView):
+            input_tab.loadFromDataFrame(df)
+        else:
+            print("Input tab is not a QTableView instance.")
+
+
+    def getSelectedTabWidget(self):
+        """Returns the widget of the currently selected tab."""
+        return self.tabWidget.currentWidget()
+
+
+    def getTabWidgetByTabName(self, tabName):
+        """Returns the widget corresponding to the given tab name, or None if not found."""
+        for index in range(self.tabWidget.count()):
+            if self.tabWidget.tabText(index) == tabName:
+                return self.tabWidget.widget(index)
+        return None
+    
+    def getInputTabWidget(self):
+        return self.getTabWidgetByTabName(self.inputTabName)
+
+
+
+from PyQt5.QtWidgets import QTableView, QHeaderView
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtCore import Qt
+import pandas as pd
+
+class TableView(QTableView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.model = PandasTableModel()
+        self.setModel(self.model)
+
+        # Stretch columns to fill the view
+        # self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.setAlternatingRowColors(True)
+        # self.setSortingEnabled(True)
+
+    def loadFromDataFrame(self, df: pd.DataFrame):
+        """Load data from a pandas DataFrame."""
+        self.model.setDataFrame(df)
+        self.setModel(self.model)
+
+        # Optionally, set column widths based on content
+        for i in range(self.model.columnCount()):
+            self.resizeColumnToContents(i)
+
+    def clearTable(self):
+        """Remove all data from the table."""
+        self.model.removeRows(0, self.model.rowCount())
+
+    def addRow(self, rowData):
+        """Add a new row. Accepts a list of strings or values."""
+        items = [QStandardItem(str(val)) for val in rowData]
+        self.model.appendRow(items)
+
+    def deleteRow(self, rowIndex):
+        """Delete a specific row by index."""
+        if 0 <= rowIndex < self.model.rowCount():
+            self.model.removeRow(rowIndex)
+
+
+from PyQt5.QtCore import QAbstractTableModel, Qt, QVariant
+
+class PandasTableModel(QAbstractTableModel):
+    def __init__(self, df=None):
+        super().__init__()
+        self._df = df if df is not None else pd.DataFrame()
+
+    def setDataFrame(self, df):
+        try:
+            self._df = df
+            self.layoutChanged.emit()
+        except Exception as e:
+            print(f"Failed to set DF: {e}")
+
+    def rowCount(self, parent=None):
+        return 0 if self._df is None else len(self._df)
+
+    def columnCount(self, parent=None):
+        return 0 if self._df is None else len(self._df.columns)
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid() or self._df is None:
+            return QVariant()
+        if role == Qt.DisplayRole:
+            return str(self._df.iat[index.row(), index.column()])
+        return QVariant()
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if self._df is None or role != Qt.DisplayRole:
+            return QVariant()
+
+        if orientation == Qt.Horizontal:
+            return str(self._df.columns[section])
+        else:
+            return str(section)
 

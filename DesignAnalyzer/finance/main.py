@@ -38,8 +38,9 @@ class LoadDataToolItem(ToolBarItemAbstract):
         csvList = self.all_input_tabs["CSV"].getAllItemsInList()
 
         for csv_file in csvList:
-            logging.info(f"Reading CSV file: {csv_file}")
+            logging.info(f"Start reading CSV file: {csv_file}")
             self.read_csv(csv_file)
+            logging.info(f"End reading CSV file: {csv_file}")
 
         # self.drawArea.plotBar(self.data, "Months", "Expenses")
         # self.drawArea.plotPie(data)
@@ -49,9 +50,11 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
     def read_csv(self, csv_file):
 
-        print(f"Reading CSV file: {csv_file}")
         self.data = pd.read_csv(csv_file, low_memory=False)
-        print(f"DataFrame shape: {self.data.shape}")
+        logging.info(f"DataFrame shape: {self.data.shape}")
+
+        self.drawArea.loadFromDataFrame(self.data)
+        logging.info("Data loaded into input area.")
 
 
     def plotDummyData(self):
@@ -210,7 +213,7 @@ class FindOutlier(PredicateBase):
     
 class FinanceUI(MainUI):
     def __init__(self):
-        super().__init__()
+        super().__init__(PLOT_OR_DRAW="TABLE")
         self.setWindowTitle("Financials Analyzerr")
 
         self.bottomArea.create_input_tab("CSV")
