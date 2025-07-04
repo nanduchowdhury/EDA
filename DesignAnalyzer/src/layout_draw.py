@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem, QSizePolicy
 from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
 import pyqtgraph as pg
@@ -92,7 +92,14 @@ class FixedRectItem(QGraphicsRectItem):
 class PyQtGraphLayoutWithScales(QWidget):
     def __init__(self, width=600, height=400, parent=None):
         super().__init__(parent)
-        self.setFixedSize(width, height)
+        
+        ##############################################
+        # Do NOT use any of the following - else widgets will be clipped insde 
+        # the tab-wdget where this widget is added.
+        ##############################################
+        # self.setFixedSize(width, height)
+        # self.setMinimumSize(width, height)
+        # self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.rect_items = []
         self.initUI()
@@ -138,6 +145,8 @@ class PyQtGraphLayoutWithScales(QWidget):
 
         self.mainLayout.addLayout(centerLayout)
         self.mainLayout.addWidget(self.ruler_x)
+
+        self.setLayout(self.mainLayout)
 
         # Zoom factor
         self.zoomFactor = 1.2

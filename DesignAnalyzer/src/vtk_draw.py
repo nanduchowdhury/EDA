@@ -6,7 +6,14 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout
 class VTKWidgetWrapper(QWidget):
     def __init__(self, width=600, height=400, parent=None):
         super().__init__(parent)
-        self.setFixedSize(width, height)
+        
+        ##############################################
+        # Do NOT use any of the following - else widgets will be clipped insde 
+        # the tab-wdget where this widget is added.
+        ##############################################
+        # self.setFixedSize(width, height)
+        # self.setMinimumSize(width, height)
+        # self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
