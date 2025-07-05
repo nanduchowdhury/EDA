@@ -523,8 +523,7 @@ class MainUI(QMainWindow):
 
         self.resultsManager.addNewTab(predicate.getShortName(), 
                                     predicate.getCompleteNameWithArgs())
-        model = self.resultsManager.getResultsModel(predicate.getShortName())
-        model.setDataFromOutputs(outputs)
+        model = self.resultsManager.setOutputsForTab(predicate.getShortName(), outputs)
 
 
         inst_list = None

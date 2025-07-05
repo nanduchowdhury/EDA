@@ -15,27 +15,23 @@ from layout_plot import PlotWithScales
 from vtk_draw import VTKWidgetWrapper
 
 
+
 class ManageResultsTabs:
     def __init__(self):
         self.tabWidget = QTabWidget()
-        self.tables = {}           # tabName -> QTableView
-        self.models = {}           # tabName -> ResultsTableModel
+        self.tables = {}           # tabName -> ResultsTableView
         self.commands = {}         # tabName -> analysisCommand
 
         self.addNewTab("Result", "Default analysis command")
 
     def addNewTab(self, tabName, analysisCommand):
         if tabName in self.tables:
-            return  # Do not duplicate
+            return  # avoid duplicates
 
         tab = QWidget()
         layout = QVBoxLayout()
 
-        # Create TableView and its model
-        tableView = QTableView()
-        model = ResultsTableModel()  # initially empty
-        tableView.setModel(model)
-
+        tableView = ResultsTableView()
         layout.addWidget(tableView)
         tab.setLayout(layout)
 
@@ -43,32 +39,54 @@ class ManageResultsTabs:
         self.tabWidget.setTabToolTip(index, analysisCommand)
 
         self.tables[tabName] = tableView
-        self.models[tabName] = model
         self.commands[tabName] = analysisCommand
 
     def getResultsTable(self, tabName):
-        """Returns the QTableView for a given tab."""
         return self.tables.get(tabName, None)
-
-    def getResultsModel(self, tabName):
-        """Returns the ResultsTableModel for a given tab."""
-        return self.models.get(tabName, None)
 
     def getCommandLine(self, tabName):
         return self.commands.get(tabName, "")
 
+    def getTabWidget(self):
+        return self.tabWidget
+
     def deleteAllTabs(self):
         self.tabWidget.clear()
         self.tables.clear()
-        self.models.clear()
         self.commands.clear()
 
     def isTabExist(self, tabName):
         return tabName in self.tables
 
-    def getTabWidget(self):
-        return self.tabWidget
+    def setOutputsForTab(self, tabName, outputs):
+        tableView = self.tables.get(tabName)
+        if tableView:
+            tableView.setOutputs(outputs)
 
+    def getDataFrameForTab(self, tabName):
+        tableView = self.tables.get(tabName)
+        if tableView:
+            return tableView.getDataFrame()
+        return None
+
+
+
+class ResultsTableView(QTableView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.model_ = ResultsTableModel()
+        self.setModel(self.model_)
+
+    def setOutputs(self, outputs):
+        self.model_.setDataFromOutputs(outputs)
+
+    def getDataFrame(self):
+        headers = self.model_.headers
+        rows = self.model_.data_matrix
+        return pd.DataFrame(rows, columns=headers)
+
+    def clear(self):
+        self.model_.clear()
 
 
 class ResultsTableModel(QAbstractTableModel):
