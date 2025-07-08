@@ -140,7 +140,6 @@ class LefDefUI(MainUI):
         
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
         
-        self.removeGenericPredicate()
         self.registerLefDefPredicates()
         
 

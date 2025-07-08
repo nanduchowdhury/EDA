@@ -1988,3 +1988,181 @@
 2025-07-04 18:11:07,144 - INFO - DataFrame shape: (5, 2)
 2025-07-04 18:11:07,146 - INFO - Data loaded into input area.
 2025-07-04 18:11:07,146 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-04 20:45:03,143 - INFO - Loading CSV data started.
+2025-07-04 20:45:03,157 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-04 20:45:03,382 - INFO - DataFrame shape: (10288, 106)
+2025-07-04 20:45:06,395 - INFO - Data loaded into input area.
+2025-07-04 20:45:06,395 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-05 21:45:36,707 - INFO - Loading CSV data started.
+2025-07-05 21:45:36,715 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-05 21:45:36,931 - INFO - DataFrame shape: (10288, 106)
+2025-07-05 21:59:44,228 - INFO - Loading CSV data started.
+2025-07-05 21:59:44,240 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-05 21:59:44,426 - INFO - DataFrame shape: (10288, 106)
+2025-07-05 21:59:47,121 - INFO - Data loaded into input area.
+2025-07-05 21:59:47,135 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 19:57:41,580 - INFO - Loading CSV data started.
+2025-07-06 19:57:41,580 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 19:57:41,800 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:29:01,317 - INFO - Loading CSV data started.
+2025-07-06 20:29:01,334 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:29:01,556 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:29:57,615 - INFO - Loading CSV data started.
+2025-07-06 20:29:57,630 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:29:57,849 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:33:07,545 - INFO - Loading CSV data started.
+2025-07-06 20:33:07,545 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:33:07,751 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:39:17,869 - INFO - Loading CSV data started.
+2025-07-06 20:39:17,885 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:39:18,090 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:40:55,074 - INFO - Loading CSV data started.
+2025-07-06 20:40:55,090 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:40:55,305 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:44:26,278 - INFO - Loading CSV data started.
+2025-07-06 20:44:26,278 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:44:26,500 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:48:18,486 - INFO - Loading CSV data started.
+2025-07-06 20:48:18,498 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 20:48:18,700 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 20:48:21,818 - INFO - Data loaded into input area.
+2025-07-06 20:48:21,821 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 21:35:06,634 - INFO - Loading CSV data started.
+2025-07-06 21:35:06,650 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 21:35:06,876 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 21:38:48,607 - INFO - Loading CSV data started.
+2025-07-06 21:38:48,607 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 21:38:48,828 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 21:40:29,945 - INFO - Loading CSV data started.
+2025-07-06 21:40:29,950 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-06 21:40:30,145 - INFO - DataFrame shape: (10288, 106)
+2025-07-06 21:40:30,145 - INFO - Data loaded into input area.
+2025-07-06 21:40:30,145 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 08:31:23,058 - INFO - Loading CSV data started.
+2025-07-07 08:31:23,070 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 08:31:23,289 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 08:32:30,088 - INFO - Loading CSV data started.
+2025-07-07 08:32:30,095 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 08:32:30,286 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 08:32:30,287 - INFO - Data loaded into input area.
+2025-07-07 08:32:30,287 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:16:00,820 - INFO - Loading CSV data started.
+2025-07-07 09:16:00,820 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:16:01,043 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:16:01,043 - INFO - Data loaded into input area.
+2025-07-07 09:16:01,043 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:20:53,204 - INFO - Loading CSV data started.
+2025-07-07 09:20:53,204 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:20:53,405 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:20:53,405 - INFO - Data loaded into input area.
+2025-07-07 09:20:53,405 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:23:36,916 - INFO - Loading CSV data started.
+2025-07-07 09:23:36,931 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:23:37,127 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:23:37,127 - INFO - Data loaded into input area.
+2025-07-07 09:23:37,127 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:25:21,225 - INFO - Loading CSV data started.
+2025-07-07 09:25:21,225 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:25:21,410 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:25:21,410 - INFO - Data loaded into input area.
+2025-07-07 09:25:21,410 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:30:10,438 - INFO - Loading CSV data started.
+2025-07-07 09:30:10,443 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:30:10,626 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:30:10,626 - INFO - Data loaded into input area.
+2025-07-07 09:30:10,626 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:36:39,837 - INFO - Loading CSV data started.
+2025-07-07 09:36:39,853 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:36:40,029 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 09:36:40,029 - INFO - Data loaded into input area.
+2025-07-07 09:36:40,029 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 09:36:55,788 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 11:45:42,313 - INFO - Loading CSV data started.
+2025-07-07 11:45:42,313 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 11:45:42,559 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 11:45:42,559 - INFO - Data loaded into input area.
+2025-07-07 11:45:42,559 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 11:46:28,798 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 11:51:19,612 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 11:51:44,044 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 11:53:13,342 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 12:03:41,854 - INFO - Loading CSV data started.
+2025-07-07 12:03:41,870 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 12:03:42,104 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 12:03:42,120 - INFO - Data loaded into input area.
+2025-07-07 12:03:42,120 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 12:06:45,830 - INFO - Loading CSV data started.
+2025-07-07 12:06:45,834 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 12:06:45,851 - INFO - DataFrame shape: (5, 2)
+2025-07-07 12:06:45,851 - INFO - Data loaded into input area.
+2025-07-07 12:06:45,851 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 12:07:32,457 - INFO - Dummy predicate cannot be run - implement predicates and register from your application.
+2025-07-07 13:49:43,175 - INFO - Loading CSV data started.
+2025-07-07 13:49:43,203 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 13:49:43,211 - INFO - DataFrame shape: (5, 2)
+2025-07-07 13:49:43,211 - INFO - Data loaded into input area.
+2025-07-07 13:49:43,211 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 13:52:02,028 - INFO - Loading CSV data started.
+2025-07-07 13:52:02,028 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 13:52:02,039 - INFO - DataFrame shape: (5, 2)
+2025-07-07 13:52:02,039 - INFO - Data loaded into input area.
+2025-07-07 13:52:02,040 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:04:00,885 - INFO - Loading CSV data started.
+2025-07-07 17:04:00,902 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:04:00,918 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:04:00,918 - INFO - Data loaded into input area.
+2025-07-07 17:04:00,925 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:36:24,298 - INFO - Loading CSV data started.
+2025-07-07 17:36:24,313 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:36:24,334 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:36:24,334 - INFO - Data loaded into input area.
+2025-07-07 17:36:24,338 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:37:58,466 - INFO - Loading CSV data started.
+2025-07-07 17:37:58,466 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:37:58,477 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:37:58,477 - INFO - Data loaded into input area.
+2025-07-07 17:37:58,477 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:40:42,171 - INFO - Loading CSV data started.
+2025-07-07 17:40:42,171 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:40:42,188 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:40:42,188 - INFO - Data loaded into input area.
+2025-07-07 17:40:42,193 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:42:28,505 - INFO - Loading CSV data started.
+2025-07-07 17:42:28,505 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:42:28,521 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:42:28,526 - INFO - Data loaded into input area.
+2025-07-07 17:42:28,527 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:51:22,262 - INFO - Loading CSV data started.
+2025-07-07 17:51:22,262 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:51:22,273 - INFO - DataFrame shape: (5, 2)
+2025-07-07 17:51:22,274 - INFO - Data loaded into input area.
+2025-07-07 17:51:22,275 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 17:51:35,231 - INFO - Prediction search done.
+2025-07-07 17:53:09,231 - INFO - Loading CSV data started.
+2025-07-07 17:53:09,231 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 17:53:09,429 - INFO - DataFrame shape: (10288, 106)
+2025-07-07 17:53:09,429 - INFO - Data loaded into input area.
+2025-07-07 17:53:09,429 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-07 18:22:00,043 - INFO - Loading CSV data started.
+2025-07-07 18:22:00,057 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:22:00,060 - INFO - DataFrame shape: (5, 2)
+2025-07-07 18:22:00,060 - INFO - Data loaded into input area.
+2025-07-07 18:22:00,060 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:24:55,186 - INFO - Loading CSV data started.
+2025-07-07 18:24:55,202 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:24:55,214 - INFO - DataFrame shape: (5, 2)
+2025-07-07 18:24:55,216 - INFO - Data loaded into input area.
+2025-07-07 18:24:55,216 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:27:46,197 - INFO - Loading CSV data started.
+2025-07-07 18:27:46,197 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:27:46,197 - INFO - DataFrame shape: (5, 2)
+2025-07-07 18:27:46,197 - INFO - Data loaded into input area.
+2025-07-07 18:27:46,212 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:28:02,084 - INFO - Outlier search done.
+2025-07-07 18:33:14,763 - INFO - Loading CSV data started.
+2025-07-07 18:33:14,765 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:33:14,765 - INFO - DataFrame shape: (5, 2)
+2025-07-07 18:33:14,765 - INFO - Data loaded into input area.
+2025-07-07 18:33:14,765 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-07 18:33:29,169 - INFO - Outlier search done.
+2025-07-07 18:35:38,913 - INFO - Prediction search done.

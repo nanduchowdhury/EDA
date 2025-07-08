@@ -17,19 +17,17 @@ from sklearn.linear_model import LinearRegression
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from blue_payload import run_BluePayload
-from main_ui import MainUI
+from main_ui import MainUI, SourceDropDown, ManageViewerTabs
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
 from predicates import Predicates, PredicateBase
 
 class LoadDataToolItem(ToolBarItemAbstract):
-    def __init__(self, all_input_tabs, drawArea):
+    def __init__(self, all_input_tabs, sentralControl):
         super().__init__("Load data")
 
         self.all_input_tabs = all_input_tabs
-        self.drawArea = drawArea
-
-        self.data = None
+        self.sentralControl = sentralControl
 
     def onClick(self):
 
@@ -42,7 +40,9 @@ class LoadDataToolItem(ToolBarItemAbstract):
             self.read_csv(csv_file)
             logging.info(f"End reading CSV file: {csv_file}")
 
-        # self.drawArea.plotBar(self.data, "Months", "Expenses")
+        self.sentralControl.showFileInTab(csvList[0])
+
+        # self.drawArea.plotBar(data, "Months", "Expenses")
         # self.drawArea.plotPie(data)
         # self.drawArea.plotWaveform([1, 2, 3, 4], [10, 30, 20, 25], "Iterations", "Estimate")
 
@@ -50,10 +50,11 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
     def read_csv(self, csv_file):
 
-        self.data = pd.read_csv(csv_file, low_memory=False)
-        logging.info(f"DataFrame shape: {self.data.shape}")
+        data = pd.read_csv(csv_file, low_memory=False)
+        logging.info(f"DataFrame shape: {data.shape}")
 
-        self.drawArea.loadFromDataFrame(self.data)
+        self.sentralControl.addDataForFileEntity(csv_file, data)
+
         logging.info("Data loaded into input area.")
 
 
@@ -65,7 +66,7 @@ class LoadDataToolItem(ToolBarItemAbstract):
         x = np.linspace(0, 100, 100)         # 1000 points from 0 to 100
         y = np.random.uniform(0, 100, 100)   # 1000 random values in [0, 100)
 
-        self.drawArea.plotWaveform(x, y)
+        # self.drawArea.plotWaveform(x, y)
 
 
     def read_pdf(self):
@@ -82,35 +83,47 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
 
 class PredictNextMonths(PredicateBase):
-    def __init__(self, loadDataObj):
+    def __init__(self, sentralControl):
         super().__init__()
-        self.loadDataObj = loadDataObj
+        self.sentralControl = sentralControl
 
         self.args = {
+            'column_name': '',
             'num-months': 2,
         }
 
     def run(self):
         result = []
+        column_name = self.args['column_name']
         num_months = self.args['num-months']
-        if num_months:
-            result = self.predict_next_months(self.loadDataObj.data, int(num_months))
+
+        if num_months and column_name:
+
+            df_list = self.sentralControl.getDataForSelectedEntity()
+            df = df_list[0]
+
+            if column_name not in df.columns:
+                raise ValueError(f"Column '{column_name}' not found in DataFrame.")
+            
+            new_df = df[[column_name]].copy()
+            result = self.predict_next_months(new_df, 
+                                              int(num_months))
             if not result:
                 result = ["Prediction not found"]
         else:
             result = ["Num months not specified for prediction"]
 
-        self.setOutputObject("result", result)  # Store result as a list
+        self.setOutputObject("Amount next few months", result)  # Store result as a list
         logging.info(f"Prediction search done.")
 
         return result
 
-    def predict_next_months(self, data, num_months):
+    def predict_next_months(self, data: list[float], num_months: int) -> list[float]:
         """
         Predicts values for the next `num_months` based on input time-series data.
 
         Args:
-            data: List of (value, label) tuples, e.g., [(30, "Jan"), (45, "Feb"), ...]
+            data: List of numeric values, e.g., [30, 45, 60, ...]
             num_months: Number of future months to predict
 
         Returns:
@@ -120,23 +133,23 @@ class PredictNextMonths(PredicateBase):
             raise ValueError("Need at least 2 data points to make a prediction")
 
         # Prepare X as [[0], [1], ...] and y as [val1, val2, ...]
-        X = np.array([[i] for i in range(len(data))])
-        y = np.array([val for val, _ in data])
+        X = np.arange(len(data)).reshape(-1, 1)
+        y = np.array(data)
 
         # Fit linear regression model
         model = LinearRegression()
         model.fit(X, y)
 
-        # Predict next months
-        future_indices = np.array([[len(data) + i] for i in range(num_months)])
+        # Predict for future months
+        future_indices = np.arange(len(data), len(data) + num_months).reshape(-1, 1)
         predicted_values = model.predict(future_indices)
 
         return predicted_values.tolist()
 
 class ExtractColumnsRows(PredicateBase):
-    def __init__(self, loadDataObj):
+    def __init__(self, sentralControl):
         super().__init__()
-        self.loadDataObj = loadDataObj
+        self.sentralControl = sentralControl
 
         self.args = {
             'column_name': "",
@@ -144,7 +157,10 @@ class ExtractColumnsRows(PredicateBase):
         }
 
     def run(self):
-        df = self.loadDataObj.data
+        
+        df_list = self.sentralControl.getDataForSelectedEntity()
+        df = df_list[0]
+        
         result = []
 
         column_name = self.args['column_name']
@@ -164,52 +180,72 @@ class ExtractColumnsRows(PredicateBase):
         return result
 
 class FindOutlier(PredicateBase):
-    def __init__(self, loadDataObj):
+    def __init__(self, sentralControl):
         super().__init__()
-        self.loadDataObj = loadDataObj
+        self.sentralControl = sentralControl
 
         self.args = {
-            'z-value': 0.9,
+            'column_name': '',
+            'z-value': 0.9
         }
 
     def run(self):
         result = []
+        column_name = self.args['column_name']
         z_val = self.args['z-value']
-        if z_val:
-            result = self.find_outlier_months()
-            if not result:
-                result = ["No outliers found"]
-        else:
-            result = ["No z-value specified for outlier search"]
 
-        self.setOutputObject("result", result)  # Store result as a list
+        if z_val and column_name:
+
+            df_list = self.sentralControl.getDataForSelectedEntity()
+            df = df_list[0]
+
+            if column_name not in df.columns:
+                raise ValueError(f"Column '{column_name}' not found in DataFrame.")
+            
+            new_df = df[[column_name]].copy()
+            results = self.find_outlier_months(new_df, float(z_val))
+            if not results:
+                result = ["Outlier not found"]
+        else:
+            result = ["Num months not specified for Outlier search"]
+
+        self.setOutputObject(column_name, results[0])
+        self.setOutputObject("outlier", results[1])
+
         logging.info(f"Outlier search done.")
 
         return result
+
+
     
-    def find_outlier_months(self, threshold=0.9):
+    def find_outlier_months(self, data: list[float], threshold: float = 0.9) -> list[str]:
         """
-        data: List of tuples (value, label)
-        threshold: Z-score threshold to detect outliers (default=2.0)
-        Returns: List of (label, value, z_score) for outliers
+        Identifies outlier values in a numeric time-series based on z-score.
+
+        Args:
+            data: List of numeric values, e.g., [30, 45, 60, 10, 200]
+            threshold: Z-score threshold for detecting outliers
+
+        Returns:
+            List of 'yes' or 'no' for each data point indicating if it's an outlier.
         """
-        data = self.loadDataObj.data
+        if len(data) < 2:
+            return ['no'] * len(data)
 
-        values = np.array([value for value, _ in data])
-        labels = [label for _, label in data]
-
+        values = np.array(data)
         mean = np.mean(values)
         std_dev = np.std(values)
 
-        outliers = []
-
-        for i, value in enumerate(values):
+        result1 = []
+        result2 = []
+        for value in values:
             z_score = (value - mean) / std_dev if std_dev > 0 else 0
-            if abs(z_score) > threshold:
-                # outliers.append((labels[i], value, z_score))
-                outliers.append((labels[i]))
 
-        return outliers
+            result1.append(value)
+            result2.append('yes' if abs(z_score) > threshold else 'no')
+
+        return (result1, result2)
+
     
 class FinanceUI(MainUI):
     def __init__(self):
@@ -219,19 +255,17 @@ class FinanceUI(MainUI):
         self.bottomArea.create_input_tab("CSV")
 
         self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.all_input_tabs, 
-                                                    self.drawArea)
+                                                    self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
-        self.removeGenericPredicate()
+        findOutlier = FindOutlier(self.sentralControl)
+        self.all_predicates.addPredicate("outlier - based on mean/std-dev", ["column_name", "z-value"], findOutlier)
 
-        findOutlier = FindOutlier(self.loadDataToolbarItem)
-        self.all_predicates.addPredicate("outlier - based on mean/std-dev", ["z-value"], findOutlier)
+        predict = PredictNextMonths(self.sentralControl)
+        self.all_predicates.addPredicate("predict next months - linear regression", ["column_name", "num-months"], predict)
 
-        predict = PredictNextMonths(self.loadDataToolbarItem)
-        self.all_predicates.addPredicate("predict next months - linear regression", ["num-months"], predict)
-
-        extract = ExtractColumnsRows(self.loadDataToolbarItem)
+        extract = ExtractColumnsRows(self.sentralControl)
         self.all_predicates.addPredicate("extract data where specified column contains a string or name.", ["column_name", "containing_string"], extract)
 
 

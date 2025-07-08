@@ -21,13 +21,12 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 from predicates import Predicates, PredicateBase
 
 class LoadDataToolItem(ToolBarItemAbstract):
-    def __init__(self, all_input_tabs, drawArea):
+    def __init__(self, all_input_tabs, sentralControl):
         super().__init__("Load data")
 
         self.all_input_tabs = all_input_tabs
-        self.drawArea = drawArea
+        self.sentralControl = sentralControl
 
-        self.source = None
 
     def onClick(self):
 
@@ -37,18 +36,21 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
         for stl_file in stlList:
             logging.info(f"Reading STL file: {stl_file}")
-            self.source = self.drawArea.read_stl_ascii(stl_file)
-            self.drawArea.init_vtk_scene(self.source)
+
+            drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
+            data = drawArea.read_stl_ascii(stl_file)
+            drawArea.init_vtk_scene(data)
+            self.sentralControl.addDataForFileEntity(stl_file, data)
+
             logging.info(f"STL file {stl_file} read successfully.")
         logging.info("Loading STL data done.")
 
 
 class ComputePCA(PredicateBase):
-    def __init__(self, loadDataObj, drawArea):
+    def __init__(self, sentralControl):
         super().__init__()
 
-        self.loadDataObj = loadDataObj
-        self.drawArea = drawArea
+        self.sentralControl = sentralControl
 
         self.args = {
         }
@@ -56,7 +58,10 @@ class ComputePCA(PredicateBase):
     def run(self):
         result = []
 
-        r = self.drawArea.estimate_cylinder_parameters(self.loadDataObj.source)
+        data_list = self.sentralControl.getDataForSelectedEntity()
+        data = data_list[0]
+        drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
+        r = drawArea.estimate_cylinder_parameters(data)
 
         result.append(r)
 
@@ -66,9 +71,9 @@ class ComputePCA(PredicateBase):
         return result
 
 class FindVolume(PredicateBase):
-    def __init__(self, loadDataObj):
+    def __init__(self, sentralControl):
         super().__init__()
-        self.loadDataObj = loadDataObj
+        self.sentralControl = sentralControl
 
         self.args = {
             'radius': 0.9,
@@ -96,16 +101,14 @@ class StructuresUI(MainUI):
         self.bottomArea.create_input_tab("STL")
 
         self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.all_input_tabs, 
-                                                    self.drawArea)
+                                                    self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
-        self.removeGenericPredicate()
-
-        pca = ComputePCA(self.loadDataToolbarItem, self.drawArea)
+        pca = ComputePCA(self.sentralControl)
         self.all_predicates.addPredicate("compute PCA - standard parameters", [], pca)
 
-        findVolume = FindVolume(self.loadDataToolbarItem)
+        findVolume = FindVolume(self.sentralControl)
         self.all_predicates.addPredicate("volume - based on radius & height", ["radius", "height"], findVolume)
 
 

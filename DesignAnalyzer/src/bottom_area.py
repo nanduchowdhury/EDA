@@ -19,8 +19,11 @@ class BottomArea():
 
     DUMMY_INPUT_TAB = "input file"
 
-    def __init__(self, _mainLayout, _windowHeight, _layoutHeight):
+    def __init__(self, _mainLayout, _sentralControl, 
+                 _windowHeight, _layoutHeight):
+        
         self.mainLayout = _mainLayout
+        self.sentralControl = _sentralControl
         self.windowHeight = _windowHeight
         self.layoutHeight = _layoutHeight
 
@@ -43,7 +46,7 @@ class BottomArea():
             self.all_input_tabs[tab_name] = self.all_input_tabs[self.DUMMY_INPUT_TAB]
             del self.all_input_tabs[self.DUMMY_INPUT_TAB]
         else:
-            tab = InputTab(parent=self, tab_widget_container=self.leftPanelTabs)
+            tab = InputTab(parent=self, sentralControl=self.sentralControl, tab_widget_container=self.leftPanelTabs)
             tab.create_tab(tab_name)
             self.all_input_tabs[tab_name] = tab
 
@@ -85,7 +88,7 @@ class BottomArea():
         leftPanelLayout = QVBoxLayout(leftPanelWidget)
         self.leftPanelTabs = QTabWidget()
         
-        tab = InputTab(parent=self, tab_widget_container=self.leftPanelTabs)
+        tab = InputTab(parent=self, sentralControl=self.sentralControl, tab_widget_container=self.leftPanelTabs)
         tab.create_tab(self.DUMMY_INPUT_TAB)
         self.all_input_tabs = {self.DUMMY_INPUT_TAB: tab}
 
@@ -190,8 +193,11 @@ class BottomArea():
 
 
 class InputTab:
-    def __init__(self, parent, tab_widget_container: QTabWidget):
+    def __init__(self, parent, sentralControl, 
+                 tab_widget_container: QTabWidget):
+        
         self.parent = parent
+        self.sentralControl = sentralControl
 
         self.tab_widget_container = tab_widget_container
         self.tab_widget = QWidget()
@@ -236,6 +242,9 @@ class InputTab:
             item = QListWidgetItem(base_name)
             item.setToolTip(file_path)
             self.list_widget.addItem(item)
+
+            self.sentralControl.addEntryForFile(base_name)
+
 
     def addItems(self, file_paths):
         for file_path in file_paths:

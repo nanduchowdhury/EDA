@@ -105,3 +105,13 @@
 2025-06-30 18:23:32,852 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
 2025-06-30 18:23:32,870 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
 2025-06-30 18:23:32,870 - INFO - Loading STL data done.
+2025-07-07 20:49:48,691 - INFO - Loading STL data started.
+2025-07-07 20:49:48,691 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-07-07 20:49:50,119 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-07-07 20:49:50,119 - INFO - Loading STL data done.
+2025-07-07 20:57:39,473 - INFO - Loading STL data started.
+2025-07-07 20:57:39,489 - INFO - Reading STL file: C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl
+2025-07-07 20:57:40,603 - INFO - STL file C:/Users/nandu/EDA/DesignAnalyzer/test/3d_structures/cylinder.stl read successfully.
+2025-07-07 20:57:40,603 - INFO - Loading STL data done.
+2025-07-07 20:57:49,868 - INFO - PCA computation done : result = [{'center': [0.0, 0.0, 0.0], 'axis': [0.0, -1.0, 1.1102230246251565e-16], 'radius': np.float64(2.9999994411675233), 'height': np.float64(10.0)}]
+2025-07-07 20:58:11,806 - INFO - Volume computation done.

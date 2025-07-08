@@ -20,6 +20,9 @@ import os
 import psutil
 import threading
 
+from typing import Any, Dict
+import pandas as pd
+
 from main_menu import MainMenuAndTBar
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
@@ -27,8 +30,9 @@ from bottom_area import BottomArea
 
 from session import Session
 
+from common import PlaceholderTextEdit
 
-from predicates import Predicates, DummyPredicate
+from predicates import Predicates, CreateBarChart
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -228,15 +232,18 @@ class MainUI(QMainWindow):
         self.centralWidget.setLayout(self.mainLayout)
 
         
-        
-        self.registerPredicates()
-
         self.create_top_layout()
         
+        self.sentralControl = SentralControl(self.viewerTabs, self.sourceDropDown)
 
-        self.bottomArea = BottomArea(self.mainLayout, 
+        self.bottomArea = BottomArea(self.mainLayout, self.sentralControl, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
         
+
+        
+
+        self.registerPredicates()
+
         self.setup_logging()
 
 
@@ -375,12 +382,12 @@ class MainUI(QMainWindow):
         leftWidget = QWidget()
         leftLayout = QVBoxLayout()
 
-        # Label: Search
-        leftLayout.addWidget(QLabel("Search analysis to perform"))
+        self.sourceDropDown = SourceDropDown()
+        leftLayout.addWidget(self.sourceDropDown)
 
         # TextEdit + OK Button
         row2 = QHBoxLayout()
-        self.commandInput = QTextEdit()
+        self.commandInput = PlaceholderTextEdit("Enter command to search for analysis...")
         self.commandInput.setFixedHeight(30)
         self.okButton = QPushButton("Search")
         self.okButton.clicked.connect(self.runSearchAnalysis)
@@ -521,19 +528,23 @@ class MainUI(QMainWindow):
         # Fetch all output argument names and their corresponding values
         outputs = list(predicate.iterateOutputs())
 
-        self.resultsManager.addNewTab(predicate.getShortName(), 
-                                    predicate.getCompleteNameWithArgs())
-        model = self.resultsManager.setOutputsForTab(predicate.getShortName(), outputs)
+        if outputs:
+            self.resultsManager.addNewTab(predicate.getShortName(), 
+                                        predicate.getCompleteNameWithArgs())
+            model = self.resultsManager.setOutputsForTab(predicate.getShortName(), outputs)
 
+            self.sentralControl.addEntryForResults(predicate.getCompleteNameWithArgs())
+            self.sentralControl.addDataForResultsEntity(predicate.getCompleteNameWithArgs(), 
+                                                        predicate.getDataFrame())
 
-        inst_list = None
+            inst_list = None
 
-        for name, values in outputs:
-            if name == "inst":
-                inst_list = values
-                print(f"inst list len : {len(inst_list)}")
+            for name, values in outputs:
+                if name == "inst":
+                    inst_list = values
+                    print(f"inst list len : {len(inst_list)}")
 
-                self.drawManager.draw_instances(inst_list, QColor("white"))
+                    self.drawManager.draw_instances(inst_list, QColor("white"))
 
 
 
@@ -562,17 +573,182 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        p = DummyPredicate()
-        self.all_predicates.addPredicate("generic analysis - for demo purpose", ["arg1", "arg2"], p)
+        p = CreateBarChart(self.sentralControl)
+        self.all_predicates.addPredicate("create bar chart", ["x_axis", "y_axis"], p)
         
 
-    def removeGenericPredicate(self):
-        try:
-            self.all_predicates.removePredicate("generic analysis - for demo purpose")
-        except ValueError as e:
-            print(f"Error removing predicate: {e}") 
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+
+class SourceDropDown(QComboBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setModel(QStandardItemModel(self))
+        self.header_to_index = {}  # header -> index
+        self.item_to_header = {}   # row index -> header
+
+        self.setToolTip("Select a data source")  # Default tooltip for collapsed combo
+
+        self.currentIndexChanged.connect(self._updateSelectedItemBold)
+
+    def addHeader(self, header):
+
+        if header not in self.header_to_index:
+            model = self.model()
+            item = QStandardItem(header)
+            item.setFlags(Qt.ItemIsEnabled)  # Non-selectable
+            font = item.font()
+            font.setBold(True)
+            item.setFont(font)
+            model.appendRow(item)
+
+            self.header_to_index[header] = model.indexFromItem(item).row()
+
+    def addItem(self, header, name):
+        if header not in self.header_to_index:
+            raise ValueError(f"Header '{header}' not found. Add it first with addHeader().")
+
+        model = self.model()
+        item = QStandardItem(f"  {name}")  # Indent for readability
+        item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+
+        item.setToolTip(name)  # Tooltip on hover for full name
+        model.appendRow(item)
+
+        index = model.indexFromItem(item).row()
+        self.item_to_header[index] = header
+
+        # Initial font not bold for non-selected
+        font = item.font()
+        font.setBold(False)
+        item.setFont(font)
+
+    def getSelected(self):
+        index = self.currentIndex()
+        model = self.model()
+        item = model.item(index)
+
+        if not item or not (item.flags() & Qt.ItemIsSelectable):
+            return None, None  # If a header or invalid is selected
+
+        name = item.text().strip()
+        header = self.item_to_header.get(index, None)
+        return header, name
+
+    def _updateSelectedItemBold(self):
+        """Make selected item bold, reset others."""
+        model = self.model()
+        for i in range(model.rowCount()):
+            item = model.item(i)
+            if item.flags() & Qt.ItemIsSelectable:
+                font = item.font()
+                font.setBold(i == self.currentIndex())
+                item.setFont(font)
 
 
 
+class SentralControl:
+    def __init__(self, viewerTabs: ManageViewerTabs, sourceDropDown: SourceDropDown):
+        self.viewerTabs = viewerTabs
+        self.sourceDropDown = sourceDropDown
+        self.fileNameToData: Dict[str, Any] = {}
+
+    def _detectFileTypeHeader(self, fileName: str) -> str:
+        lower = fileName.lower()
+        if lower.endswith('.csv'):
+            return "CSV files"
+        elif lower.endswith('.stl'):
+            return "STL files"
+        elif lower.endswith('.lef'):
+            return "LEF files"
+        elif lower.endswith('.def'):
+            return "DEF files"
+        else:
+            return "UNKNOWN files"
 
 
+    def addEntryForFile(self, fileName: str) -> None:
+        fileName = os.path.basename(fileName)
+        header = self._detectFileTypeHeader(fileName)
+
+        self._setEntity(header, fileName)
+
+    def addEntryForResults(self, resultsTabName: str) -> None:
+        header = "RESULTS"
+
+        self._setEntity(header, resultsTabName)
+
+    def _setEntity(self, header: str, name: str) -> None:
+        if not header:
+            raise ValueError("Header cannot be empty")
+
+        if header:
+            self.sourceDropDown.addHeader(header)
+            self.sourceDropDown.addItem(header, name)
+
+            if header != 'RESULTS':
+                self.sourceDropDown.addItem(header, f'all {header.lower()}')
+
+            self.fileNameToData[name] = None
+        
+
+    def addDataForFileEntity(self, fileName: str, data) -> None:
+        fileName = os.path.basename(fileName)
+
+        self._addDataForEntity(fileName, data)
+
+    def addDataForResultsEntity(self, resultsTabName: str, data) -> None:
+
+        self._addDataForEntity(resultsTabName, data)
+
+
+    def _addDataForEntity(self, name: str, data) -> None:
+
+        if name not in self.fileNameToData:
+            raise ValueError(f"No entry found for file: {name}")
+
+        self.fileNameToData[name] = data
+
+
+    def getDataForSelectedEntity(self) -> list:
+        """
+        Returns a list of data corresponding to the selected entity.
+        Handles single entities, 'all <header>' groups, and results grouping.
+        """
+        header, name = self.sourceDropDown.getSelected()
+        if not header or not name:
+            raise ValueError("No valid entity selected in the dropdown")
+
+        if name.startswith('all ') and header != 'RESULTS':
+            # Example: 'all CSV files'
+            file_type_prefix = header  # e.g., "CSV files"
+            matching_data = [
+                data for fname, data in self.fileNameToData.items()
+                if self._detectFileTypeHeader(fname) == file_type_prefix and data is not None
+            ]
+            return matching_data
+
+        elif name == 'all results' or (header == 'RESULTS' and name.startswith('all ')):
+            matching_data = [
+                data for fname, data in self.fileNameToData.items()
+                if self._detectFileTypeHeader(fname) != fname and  # crude way to filter non-file types
+                fname in self.fileNameToData and data is not None and
+                self._detectFileTypeHeader(fname) == 'UNKNOWN files'
+            ]
+            return matching_data
+
+        else:
+            # Single item selected
+            if name not in self.fileNameToData:
+                raise ValueError(f"No data found for entity: {name}")
+
+            data = self.fileNameToData[name]
+            return [data] if data is not None else []
+
+
+    def showFileInTab(self, fileName: str,) -> None:
+        fileName = os.path.basename(fileName)
+
+        if fileName in self.fileNameToData:
+            self.viewerTabs.setTableDataFrameInputTab(self.fileNameToData[fileName])

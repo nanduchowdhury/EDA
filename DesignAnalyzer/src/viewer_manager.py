@@ -168,7 +168,6 @@ class ManageViewerTabs(QTabWidget):
         self.viewer_map = {}  # tabName -> widget
 
         self.inputTabName = 'Input Data'
-
         self.addTabByType(viewer_type, self.inputTabName)
 
     def addTabByType(self, viewer_type, tab_name=None):
@@ -192,9 +191,8 @@ class ManageViewerTabs(QTabWidget):
         return None
 
     def _createTableWidget(self):
-        view = TableView()
-        return view
-    
+        return TableView()
+
     def setTableDataFrameInputTab(self, df):
         input_tab = self.getInputTabWidget()
         if isinstance(input_tab, QTableView):
@@ -202,19 +200,17 @@ class ManageViewerTabs(QTabWidget):
         else:
             print("Input tab is not a QTableView instance.")
 
-
     def getSelectedTabWidget(self):
         """Returns the widget of the currently selected tab."""
-        return self.tabWidget.currentWidget()
-
+        return self.currentWidget()  # self IS a QTabWidget
 
     def getTabWidgetByTabName(self, tabName):
         """Returns the widget corresponding to the given tab name, or None if not found."""
-        for index in range(self.tabWidget.count()):
-            if self.tabWidget.tabText(index) == tabName:
-                return self.tabWidget.widget(index)
+        for index in range(self.count()):
+            if self.tabText(index) == tabName:
+                return self.widget(index)
         return None
-    
+
     def getInputTabWidget(self):
         return self.getTabWidgetByTabName(self.inputTabName)
 

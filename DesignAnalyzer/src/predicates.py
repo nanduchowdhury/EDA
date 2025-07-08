@@ -10,6 +10,8 @@ from llm_manager import LLMManager, global_LLM_manager
 
 from abc import ABC, abstractmethod
 
+import pandas as pd
+
 class PredicateBase(ABC):
     def __init__(self):
         self.predicate_name = ""  # Name of the predicate
@@ -42,6 +44,18 @@ class PredicateBase(ABC):
     def iterateOutputs(self):
         for name, values in self.outputs.items():
             yield name, values
+
+    def getDataFrame(self) -> pd.DataFrame:
+        """
+        Returns the outputs as a pandas DataFrame.
+        Each key in outputs becomes a column.
+        """
+        # Ensure all output lists are of the same length
+        lengths = [len(v) for v in self.outputs.values()]
+        if len(set(lengths)) > 1:
+            raise ValueError("All output lists must be of the same length to form a DataFrame.")
+        return pd.DataFrame(self.outputs)
+
 
     def getCompleteNameWithArgs(self):
         """
@@ -132,10 +146,36 @@ class Predicates:
         return iter(self.predicates.items())
 
 
-class DummyPredicate(PredicateBase):
+class CreateBarChart(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'x_axis': "",
+            'y_axis': "",
+        }
 
     def run(self):
-        # Dummy implementation
-        logging.info("Dummy predicate cannot be run - implement predicates and register from your application.")
+
+        x_axis = self.args['x_axis']
+        y_axis = self.args['y_axis']
+
+        drawArea = self.sentralControl.viewerTabs.addTabByType("PLOT", "sample_plot")
+
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        df = df_list[0]
+
+        print(f"y_axis: {y_axis}, x_axis: {x_axis}")
+        print(f"df shape: {df.shape}")
+        print(f"y-axis shape: {df[y_axis].shape}, x-axis shape: {df[x_axis].shape}")
+
+        dataList = list(zip(df[y_axis], df[x_axis]))
+
+        drawArea.plotBar(dataList, x_axis, y_axis)
+        # drawArea.plotBar(dataList, "COUNTRY", "2026")
+        # drawArea.plotPie(dataList)
+
         return True
 
