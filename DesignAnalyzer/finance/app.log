@@ -2166,3 +2166,23 @@
 2025-07-07 18:33:14,765 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-07-07 18:33:29,169 - INFO - Outlier search done.
 2025-07-07 18:35:38,913 - INFO - Prediction search done.
+2025-07-08 12:38:24,886 - INFO - Loading CSV data started.
+2025-07-08 12:38:24,897 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:38:25,123 - INFO - DataFrame shape: (10288, 106)
+2025-07-08 12:38:25,130 - INFO - Data loaded into input area.
+2025-07-08 12:38:25,130 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:46:11,729 - INFO - Loading CSV data started.
+2025-07-08 12:46:11,738 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:46:11,954 - INFO - DataFrame shape: (10288, 106)
+2025-07-08 12:46:11,954 - INFO - Data loaded into input area.
+2025-07-08 12:46:11,954 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:48:02,312 - INFO - Loading CSV data started.
+2025-07-08 12:48:02,312 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:48:02,534 - INFO - DataFrame shape: (10288, 106)
+2025-07-08 12:48:02,536 - INFO - Data loaded into input area.
+2025-07-08 12:48:02,537 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:49:41,147 - INFO - Loading CSV data started.
+2025-07-08 12:49:41,147 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 12:49:41,362 - INFO - DataFrame shape: (10288, 106)
+2025-07-08 12:49:41,362 - INFO - Data loaded into input area.
+2025-07-08 12:49:41,362 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv

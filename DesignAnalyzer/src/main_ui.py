@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import (
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
-    QAction, QFileDialog, QMessageBox, QFrame, QTableView
+    QAction, QFileDialog, QMessageBox, QFrame, QTableView, QGridLayout, 
+    QStyleOptionComboBox, QStyle, QStylePainter
 )
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
@@ -30,7 +31,7 @@ from bottom_area import BottomArea
 
 from session import Session
 
-from common import PlaceholderTextEdit
+from common import PlaceholderTextEdit, ScrollingLabel
 
 from predicates import Predicates, CreateBarChart
 
@@ -382,54 +383,76 @@ class MainUI(QMainWindow):
         leftWidget = QWidget()
         leftLayout = QVBoxLayout()
 
-        self.sourceDropDown = SourceDropDown()
-        leftLayout.addWidget(self.sourceDropDown)
+        max_width = 400  # Unified width for left-side components
 
-        # TextEdit + OK Button
+        # Inner container to enforce fixed max width
+        leftInnerWidget = QWidget()
+        leftInnerLayout = QVBoxLayout()
+        leftInnerWidget.setLayout(leftInnerLayout)
+        leftInnerWidget.setMaximumWidth(max_width)
+        leftInnerWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+
+        # Source DropDown
+        self.sourceDropDown = SourceDropDown()
+        self.sourceDropDown.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        leftInnerLayout.addWidget(self.sourceDropDown)
+
+        # TextEdit + OK Button row
         row2 = QHBoxLayout()
         self.commandInput = PlaceholderTextEdit("Enter command to search for analysis...")
         self.commandInput.setFixedHeight(30)
         self.okButton = QPushButton("Search")
         self.okButton.clicked.connect(self.runSearchAnalysis)
+        self.okButton.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         row2.addWidget(self.commandInput)
         row2.addWidget(self.okButton)
-        leftLayout.addLayout(row2)
+        leftInnerLayout.addLayout(row2)
 
         # Horizontal separator
-        leftLayout.addWidget(self._hline())
+        leftInnerLayout.addWidget(self._hline())
 
         # Label: List of analyses
-        leftLayout.addWidget(QLabel("List of analyses"))
+        leftInnerLayout.addWidget(QLabel("Analyses & Actions"))
 
         # Command list
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.commandList.setMinimumWidth(300)
-        leftLayout.addWidget(self.commandList)
+        self.commandList.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.commandList.setMinimumHeight(120)
+        leftInnerLayout.addWidget(self.commandList)
 
         # Horizontal separator
-        leftLayout.addWidget(self._hline())
+        leftInnerLayout.addWidget(self._hline())
 
         # Param area
-        self.paramLayout = QVBoxLayout()
         self.paramEdits = []
+        paramGrid = QGridLayout()
+        label_width = 80
+        font = QFont()
+        font.setPointSize(7)
 
-        for _ in range(5):
-            hbox = QHBoxLayout()
-            label = QLabel("Param")
-            label.setMinimumWidth(80)
+        for row in range(5):
+            label = QLabel(f"Param {row+1}")
+            label.setFont(font)
+            label.setFixedWidth(label_width)
+            label.setToolTip(label.text())
+
             edit = QLineEdit()
-            hbox.addWidget(label)
-            hbox.addWidget(edit)
-            self.paramLayout.addLayout(hbox)
+            edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+            label.hide()
+            edit.hide()
+
+            paramGrid.addWidget(label, row, 0)
+            paramGrid.addWidget(edit, row, 1)
             self.paramEdits.append((label, edit))
 
         paramWidget = QWidget()
-        paramWidget.setLayout(self.paramLayout)
-        leftLayout.addWidget(paramWidget)
+        paramWidget.setLayout(paramGrid)
+        leftInnerLayout.addWidget(paramWidget)
 
         # Horizontal separator
-        leftLayout.addWidget(self._hline())
+        leftInnerLayout.addWidget(self._hline())
 
         # Run + Stop buttons
         buttonRow = QHBoxLayout()
@@ -439,8 +462,10 @@ class MainUI(QMainWindow):
         # self.stopButton.clicked.connect(self.stopSelectedPredicate)  # Optional
         buttonRow.addWidget(self.runButton)
         buttonRow.addWidget(self.stopButton)
-        leftLayout.addLayout(buttonRow)
+        leftInnerLayout.addLayout(buttonRow)
 
+        # Add innerWidget into leftLayout
+        leftLayout.addWidget(leftInnerWidget)
         leftWidget.setLayout(leftLayout)
 
         # ----------------- RIGHT HALF -----------------
@@ -451,8 +476,6 @@ class MainUI(QMainWindow):
 
         # Create instance of ManageResultsTabs
         self.resultsManager = ManageResultsTabs()
-
-        # Add the tab widget to right layout
         rightLayout.addWidget(self.resultsManager.getTabWidget())
 
         rightWidget.setLayout(rightLayout)
@@ -470,15 +493,13 @@ class MainUI(QMainWindow):
 
         self.commandArea.setLayout(outerLayout)
 
+
     def _hline(self):
         """Returns a horizontal separator line."""
         line = QFrame()
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Sunken)
         return line
-
-
-
 
     def runSearchAnalysis(self):
         command_text = self.commandInput.toPlainText()
@@ -565,7 +586,9 @@ class MainUI(QMainWindow):
             if i < len(arg_names):
                 label.setText(arg_names[i])
                 label.show()
+                label.setToolTip(arg_names[i])
                 edit.show()
+                
             else:
                 label.hide()
                 edit.hide()
@@ -589,6 +612,15 @@ class SourceDropDown(QComboBox):
         self.item_to_header = {}   # row index -> header
 
         self.setToolTip("Select a data source")  # Default tooltip for collapsed combo
+
+        # Make border bold
+        self.setStyleSheet("""
+            QComboBox {
+                border: 2px solid blue;
+                padding: 4px;
+                font-size: 16px;
+            }
+        """)
 
         self.currentIndexChanged.connect(self._updateSelectedItemBold)
 
@@ -646,6 +678,25 @@ class SourceDropDown(QComboBox):
                 font.setBold(i == self.currentIndex())
                 item.setFont(font)
 
+        self.update()
+
+    
+    def paintEvent(self, event):
+        # Custom painter to draw selected item in bold in collapsed state
+        opt = QStyleOptionComboBox()
+        self.initStyleOption(opt)
+
+        painter = QStylePainter(self)
+        painter.drawComplexControl(QStyle.CC_ComboBox, opt)
+
+        # Draw bold current text manually
+        font = self.font()
+        font.setBold(True)
+        painter.setFont(font)
+
+        text = self.currentText()
+        alignment = Qt.AlignVCenter | Qt.TextSingleLine
+        painter.drawItemText(opt.rect, alignment, self.palette(), self.isEnabled(), text)
 
 
 class SentralControl:

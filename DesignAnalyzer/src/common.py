@@ -1,8 +1,8 @@
 
-from PyQt5.QtWidgets import QListWidget, QTextEdit
+from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel
 
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor, QPainter
+from PyQt5.QtCore import Qt, QTimer
 
 
 class CustomListWidget(QListWidget):
@@ -67,3 +67,57 @@ class PlaceholderTextEdit(QTextEdit):
             return ""
         return super().toPlainText()
 
+
+class ScrollingLabel(QLabel):
+    def __init__(self, text="", parent=None, speed=60, step=2):
+        super().__init__(parent)
+        self._text = text
+        self._offset = 0
+        self._step = step
+        self._scrolling_enabled = False
+
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._on_timer)
+        self._timer.start(speed)
+
+        self.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.setMinimumHeight(20)
+
+    def setText(self, text):
+        self._text = text
+        self._offset = 0
+        self._updateScrolling()
+        self.update()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._updateScrolling()
+
+    def _updateScrolling(self):
+        """Enable scrolling only if text width exceeds label width."""
+        text_width = self.fontMetrics().width(self._text)
+        self._scrolling_enabled = text_width > self.width()
+
+    def _on_timer(self):
+        if self._scrolling_enabled:
+            self._offset += self._step
+            if self._offset > self.fontMetrics().width(self._text):
+                self._offset = -self.width()
+            self.update()
+
+    def paintEvent(self, event):
+        if not self._scrolling_enabled:
+            super().paintEvent(event)
+            return
+
+        painter = QPainter(self)
+        painter.setPen(self.palette().color(self.foregroundRole()))
+        painter.setFont(self.font())
+
+        x = -self._offset
+        y = int(self.height() / 2 + self.fontMetrics().ascent() / 2)
+
+        text_width = self.fontMetrics().width(self._text)
+        while x < self.width():
+            painter.drawText(x, y, self._text)
+            x += text_width + 50  # space between repetitions

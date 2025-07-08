@@ -32,13 +32,19 @@ class LLMManager:
 
         prompt += "\nRespond with the number of the most relevant snippet only."
 
+        print(f"Prompt sent to model:\n{prompt}\n")
+
         # Call the model
         with self.llm.chat_session():
             response = self.llm.generate(prompt, max_tokens=10).strip()
 
+
+        print(f"Model response: {response}")
+
+
         # Extract and return the matched line
         try:
-            best_index = int(response) - 1
+            best_index = int(response[0]) - 1
             if 0 <= best_index < len(self.context_lines):
                 return self.context_lines[best_index]
         except ValueError:
