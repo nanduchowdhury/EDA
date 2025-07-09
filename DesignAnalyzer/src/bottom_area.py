@@ -13,6 +13,7 @@ import time
 import json
 
 from common import CustomListWidget
+from llm_manager import global_LLM_manager
 
 
 class BottomArea():
@@ -101,10 +102,10 @@ class BottomArea():
         rightPanelWidget = QWidget()
         rightPanelLayout = QHBoxLayout(rightPanelWidget)
 
-        # --- Left side: QTabWidget (Design Info, Logs) ---
+        # --- Left side: QTabWidget (Data Info, Logs, Assistant) ---
         self.tabWidget = QTabWidget()
 
-        # Design Info tab
+        # Data Info tab
         self.designInfoTab = QWidget()
         self.designInfoText = QTextEdit()
         self.designInfoText.setReadOnly(True)
@@ -120,8 +121,36 @@ class BottomArea():
         logLayout = QVBoxLayout()
         logLayout.addWidget(self.logTable)
         self.logsTab.setLayout(logLayout)
-        index = self.tabWidget.addTab(self.logsTab, "Logs")
-        self.tabWidget.setCurrentIndex(index)
+        self.tabWidget.addTab(self.logsTab, "Logs")
+
+        # Assistant tab
+        self.assistantTab = QWidget()
+        assistantLayout = QVBoxLayout(self.assistantTab)
+
+        self.assistantOutput = QTextEdit()
+        self.assistantOutput.setReadOnly(True)
+        self.assistantOutput.setPlaceholderText("Assistant Output")
+        self.assistantOutput.setStyleSheet("background-color: #f9f9f9;")
+        # self.assistantOutput.setMinimumHeight(150)
+        self.assistantOutput.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
+        # Input + Send Button
+        inputRow = QHBoxLayout()
+        self.assistantInput = QTextEdit()
+        self.assistantInput.setPlaceholderText("Ask about what analysis or action you want to perform on your data...")
+        self.assistantInput.setFixedHeight(60)
+
+        self.sendButton = QPushButton("Send")
+        self.sendButton.setFixedWidth(80)
+        self.sendButton.clicked.connect(self._handleAssistantQuery)
+
+        inputRow.addWidget(self.assistantInput)
+        inputRow.addWidget(self.sendButton)
+
+        assistantLayout.addWidget(self.assistantOutput)
+        assistantLayout.addLayout(inputRow)
+
+        self.tabWidget.addTab(self.assistantTab, "Assistant")
 
         # --- Right side: system info label ---
         self.sysInfoLabel = QLabel()
@@ -134,6 +163,36 @@ class BottomArea():
         rightPanelLayout.addWidget(self.sysInfoLabel, stretch=1)
 
         return rightPanelWidget
+
+    def _handleAssistantQuery(self):
+        query = self.assistantInput.toPlainText().strip()
+        if not query:
+            return
+
+        # Append user input
+        self.assistantOutput.append(f"<b>You:</b> {query}")
+
+        # Generate assistant reply (mock or real logic)
+        reply = self._generateMockAssistantReply(query)
+
+        # Append assistant response
+        self.assistantOutput.append(f"<b>Assistant:</b> {reply}")
+        self.assistantOutput.append("")  # spacing
+
+        # Auto-scroll to bottom
+        self.assistantOutput.verticalScrollBar().setValue(
+            self.assistantOutput.verticalScrollBar().maximum()
+        )
+
+        self.assistantInput.clear()
+
+
+
+    def _generateMockAssistantReply(self, query: str) -> str:
+        
+        cmd, args = global_LLM_manager.query(query)
+
+        return f"Command : {cmd} and Args : {args}"
 
 
     def appendDesignInfo(self, info):

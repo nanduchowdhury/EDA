@@ -2186,3 +2186,117 @@
 2025-07-08 12:49:41,362 - INFO - DataFrame shape: (10288, 106)
 2025-07-08 12:49:41,362 - INFO - Data loaded into input area.
 2025-07-08 12:49:41,362 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 17:27:26,876 - INFO - Loading CSV data started.
+2025-07-08 17:27:26,888 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-08 17:27:27,147 - INFO - DataFrame shape: (10288, 106)
+2025-07-08 17:27:27,147 - INFO - Data loaded into input area.
+2025-07-08 17:27:27,147 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-09 18:07:13,856 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-f3cf80f9-6d7b-47ac-bf17-045112bdf9df', 'json_data': {'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': 'You are a helpful assistant. Given a list of commands and a user query:\n- Select the best matching command from the list.\n- Extract argument values from the query if any.\n- Respond only in this strict JSON format:\n{\n  "command": "<command>",\n  "args": {\n    "arg1": "value1",\n    "arg2": "value2"\n  }\n}\n\nUser Query:\nbar-chart with x months and y dollars\n\nAvailable Commands:\n1. create bar chart (Args: x_axis, y_axis)\n2. outlier - based on mean/std-dev (Args: column_name, z-value)\n3. predict next months - linear regression (Args: column_name, num-months)\n4. extract data where specified column contains a string or name. (Args: column_name, containing_string)\n'}], 'model': 'gpt-4', 'max_tokens': 300, 'temperature': 0.2}}
+2025-07-09 18:07:13,883 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-07-09 18:07:13,885 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2025-07-09 18:07:13,911 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000022082347F90>
+2025-07-09 18:07:13,911 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x00000220F99A2180> server_hostname='api.openai.com' timeout=5.0
+2025-07-09 18:07:14,009 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000220FDE612D0>
+2025-07-09 18:07:14,010 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-07-09 18:07:14,010 - DEBUG - send_request_headers.complete
+2025-07-09 18:07:14,010 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-07-09 18:07:14,018 - DEBUG - send_request_body.complete
+2025-07-09 18:07:14,018 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-07-09 18:07:15,212 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 404, b'Not Found', [(b'Date', b'Wed, 09 Jul 2025 12:37:15 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'vary', b'Origin'), (b'x-request-id', b'req_1a17a404a508ab059a34ed60505f5445'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=hSCCa8VQpYC8880K1WQmKpHnI1S5asEfp8h1DTPPKp8-1752064635-1.0.1.1-hc3uyXL.NXEXkJqnYdnt4NOKGVn8J4qVNFV1CXreoPd8wlX3mcdgpgBxauc6g1qNODMQE4JlYcKGeY_ldayViLJ5gcLIqP4z0.hlU3ut3nA; path=/; expires=Wed, 09-Jul-25 13:07:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=UNXSGNP6D9ZbUxCEr4Mk8ftghcdcTQcp3DS0t73w8lc-1752064635216-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'95c7df1aee0f1b69-DEL'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-07-09 18:07:15,212 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-07-09 18:07:15,225 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-07-09 18:07:15,229 - DEBUG - receive_response_body.complete
+2025-07-09 18:07:15,229 - DEBUG - response_closed.started
+2025-07-09 18:07:15,234 - DEBUG - response_closed.complete
+2025-07-09 18:07:15,234 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "404 Not Found" Headers([('date', 'Wed, 09 Jul 2025 12:37:15 GMT'), ('content-type', 'application/json; charset=utf-8'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('vary', 'Origin'), ('x-request-id', 'req_1a17a404a508ab059a34ed60505f5445'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=hSCCa8VQpYC8880K1WQmKpHnI1S5asEfp8h1DTPPKp8-1752064635-1.0.1.1-hc3uyXL.NXEXkJqnYdnt4NOKGVn8J4qVNFV1CXreoPd8wlX3mcdgpgBxauc6g1qNODMQE4JlYcKGeY_ldayViLJ5gcLIqP4z0.hlU3ut3nA; path=/; expires=Wed, 09-Jul-25 13:07:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=UNXSGNP6D9ZbUxCEr4Mk8ftghcdcTQcp3DS0t73w8lc-1752064635216-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '95c7df1aee0f1b69-DEL'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-07-09 18:07:15,234 - DEBUG - request_id: req_1a17a404a508ab059a34ed60505f5445
+2025-07-09 18:07:15,234 - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1017, in request
+    response.raise_for_status()
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-07-09 18:07:15,242 - DEBUG - Not retrying
+2025-07-09 18:07:15,245 - DEBUG - Re-raising status error
+2025-07-09 18:10:08,431 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-b0c06ebd-895d-4626-ba34-9d95ce3ac270', 'json_data': {'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': 'You are a helpful assistant. Given a list of commands and a user query:\n- Select the best matching command from the list.\n- Extract argument values from the query if any.\n- Respond only in this strict JSON format:\n{\n  "command": "<command>",\n  "args": {\n    "arg1": "value1",\n    "arg2": "value2"\n  }\n}\n\nUser Query:\nbar-chart with x months and y dollars\n\nAvailable Commands:\n1. create bar chart (Args: x_axis, y_axis)\n2. outlier - based on mean/std-dev (Args: column_name, z-value)\n3. predict next months - linear regression (Args: column_name, num-months)\n4. extract data where specified column contains a string or name. (Args: column_name, containing_string)\n'}], 'model': 'gpt-3.5-turbo', 'max_tokens': 300, 'temperature': 0.2}}
+2025-07-09 18:10:08,455 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-07-09 18:10:08,455 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2025-07-09 18:10:08,487 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000015CC3E26A90>
+2025-07-09 18:10:08,487 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015CC1D32180> server_hostname='api.openai.com' timeout=5.0
+2025-07-09 18:10:08,508 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000015CCA2369D0>
+2025-07-09 18:10:08,511 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:08,511 - DEBUG - send_request_headers.complete
+2025-07-09 18:10:08,511 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-07-09 18:10:08,511 - DEBUG - send_request_body.complete
+2025-07-09 18:10:08,511 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:12,037 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 429, b'Too Many Requests', [(b'Date', b'Wed, 09 Jul 2025 12:40:12 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'337'), (b'Connection', b'keep-alive'), (b'vary', b'Origin'), (b'x-request-id', b'req_55770b2ff16f0a9e7fb06936c8842b05'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=bdiLqhKae4JKYQlsmfm7jYjMhUQgDfFv8cdvc2nFOus-1752064812-1.0.1.1-dPa1YKWvQL3Ke5OfuOeq5zJc9DZa2TP8gLWV3lgSBKnNPCs7_NBJWxegtLpDULxbrYFIPBkiCEWyklnLjBMQJhpK4fNk30IryRkinP45Q_w; path=/; expires=Wed, 09-Jul-25 13:10:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=bdeGnn6FvryKwwSOeLm.vDzy452NeFSebBajvckAN1Y-1752064812063-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'95c7e35d88d325cd-DEL'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-07-09 18:10:12,037 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-07-09 18:10:12,037 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-07-09 18:10:12,043 - DEBUG - receive_response_body.complete
+2025-07-09 18:10:12,045 - DEBUG - response_closed.started
+2025-07-09 18:10:12,046 - DEBUG - response_closed.complete
+2025-07-09 18:10:12,046 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "429 Too Many Requests" Headers([('date', 'Wed, 09 Jul 2025 12:40:12 GMT'), ('content-type', 'application/json; charset=utf-8'), ('content-length', '337'), ('connection', 'keep-alive'), ('vary', 'Origin'), ('x-request-id', 'req_55770b2ff16f0a9e7fb06936c8842b05'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=bdiLqhKae4JKYQlsmfm7jYjMhUQgDfFv8cdvc2nFOus-1752064812-1.0.1.1-dPa1YKWvQL3Ke5OfuOeq5zJc9DZa2TP8gLWV3lgSBKnNPCs7_NBJWxegtLpDULxbrYFIPBkiCEWyklnLjBMQJhpK4fNk30IryRkinP45Q_w; path=/; expires=Wed, 09-Jul-25 13:10:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=bdeGnn6FvryKwwSOeLm.vDzy452NeFSebBajvckAN1Y-1752064812063-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '95c7e35d88d325cd-DEL'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-07-09 18:10:12,046 - DEBUG - request_id: req_55770b2ff16f0a9e7fb06936c8842b05
+2025-07-09 18:10:12,051 - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1017, in request
+    response.raise_for_status()
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2025-07-09 18:10:12,053 - DEBUG - Retrying due to status code 429
+2025-07-09 18:10:12,053 - DEBUG - 2 retries left
+2025-07-09 18:10:12,053 - INFO - Retrying request to /chat/completions in 0.458956 seconds
+2025-07-09 18:10:12,520 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-b0c06ebd-895d-4626-ba34-9d95ce3ac270', 'json_data': {'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': 'You are a helpful assistant. Given a list of commands and a user query:\n- Select the best matching command from the list.\n- Extract argument values from the query if any.\n- Respond only in this strict JSON format:\n{\n  "command": "<command>",\n  "args": {\n    "arg1": "value1",\n    "arg2": "value2"\n  }\n}\n\nUser Query:\nbar-chart with x months and y dollars\n\nAvailable Commands:\n1. create bar chart (Args: x_axis, y_axis)\n2. outlier - based on mean/std-dev (Args: column_name, z-value)\n3. predict next months - linear regression (Args: column_name, num-months)\n4. extract data where specified column contains a string or name. (Args: column_name, containing_string)\n'}], 'model': 'gpt-3.5-turbo', 'max_tokens': 300, 'temperature': 0.2}}
+2025-07-09 18:10:12,520 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-07-09 18:10:12,530 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:12,531 - DEBUG - send_request_headers.complete
+2025-07-09 18:10:12,537 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-07-09 18:10:12,540 - DEBUG - send_request_body.complete
+2025-07-09 18:10:12,544 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:13,352 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 429, b'Too Many Requests', [(b'Date', b'Wed, 09 Jul 2025 12:40:13 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'337'), (b'Connection', b'keep-alive'), (b'vary', b'Origin'), (b'x-request-id', b'req_fe7b723fdc1f79d602ec6ead13746be2'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'X-Content-Type-Options', b'nosniff'), (b'Server', b'cloudflare'), (b'CF-RAY', b'95c7e376a8c225cd-DEL'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-07-09 18:10:13,368 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-07-09 18:10:13,381 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-07-09 18:10:13,385 - DEBUG - receive_response_body.complete
+2025-07-09 18:10:13,393 - DEBUG - response_closed.started
+2025-07-09 18:10:13,396 - DEBUG - response_closed.complete
+2025-07-09 18:10:13,400 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "429 Too Many Requests" Headers({'date': 'Wed, 09 Jul 2025 12:40:13 GMT', 'content-type': 'application/json; charset=utf-8', 'content-length': '337', 'connection': 'keep-alive', 'vary': 'Origin', 'x-request-id': 'req_fe7b723fdc1f79d602ec6ead13746be2', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '95c7e376a8c225cd-DEL', 'alt-svc': 'h3=":443"; ma=86400'})
+2025-07-09 18:10:13,401 - DEBUG - request_id: req_fe7b723fdc1f79d602ec6ead13746be2
+2025-07-09 18:10:13,405 - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1017, in request
+    response.raise_for_status()
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2025-07-09 18:10:13,410 - DEBUG - Retrying due to status code 429
+2025-07-09 18:10:13,414 - DEBUG - 1 retry left
+2025-07-09 18:10:13,415 - INFO - Retrying request to /chat/completions in 0.929161 seconds
+2025-07-09 18:10:14,349 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-b0c06ebd-895d-4626-ba34-9d95ce3ac270', 'json_data': {'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': 'You are a helpful assistant. Given a list of commands and a user query:\n- Select the best matching command from the list.\n- Extract argument values from the query if any.\n- Respond only in this strict JSON format:\n{\n  "command": "<command>",\n  "args": {\n    "arg1": "value1",\n    "arg2": "value2"\n  }\n}\n\nUser Query:\nbar-chart with x months and y dollars\n\nAvailable Commands:\n1. create bar chart (Args: x_axis, y_axis)\n2. outlier - based on mean/std-dev (Args: column_name, z-value)\n3. predict next months - linear regression (Args: column_name, num-months)\n4. extract data where specified column contains a string or name. (Args: column_name, containing_string)\n'}], 'model': 'gpt-3.5-turbo', 'max_tokens': 300, 'temperature': 0.2}}
+2025-07-09 18:10:14,349 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-07-09 18:10:14,361 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:14,362 - DEBUG - send_request_headers.complete
+2025-07-09 18:10:14,369 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-07-09 18:10:14,373 - DEBUG - send_request_body.complete
+2025-07-09 18:10:14,376 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-07-09 18:10:14,707 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 429, b'Too Many Requests', [(b'Date', b'Wed, 09 Jul 2025 12:40:14 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'337'), (b'Connection', b'keep-alive'), (b'vary', b'Origin'), (b'x-request-id', b'req_13207e4b7376a59e91e339cb7a366c77'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'X-Content-Type-Options', b'nosniff'), (b'Server', b'cloudflare'), (b'CF-RAY', b'95c7e3821a0725cd-DEL'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-07-09 18:10:14,716 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-07-09 18:10:14,724 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-07-09 18:10:14,732 - DEBUG - receive_response_body.complete
+2025-07-09 18:10:14,732 - DEBUG - response_closed.started
+2025-07-09 18:10:14,740 - DEBUG - response_closed.complete
+2025-07-09 18:10:14,740 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "429 Too Many Requests" Headers({'date': 'Wed, 09 Jul 2025 12:40:14 GMT', 'content-type': 'application/json; charset=utf-8', 'content-length': '337', 'connection': 'keep-alive', 'vary': 'Origin', 'x-request-id': 'req_13207e4b7376a59e91e339cb7a366c77', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '95c7e3821a0725cd-DEL', 'alt-svc': 'h3=":443"; ma=86400'})
+2025-07-09 18:10:14,749 - DEBUG - request_id: req_13207e4b7376a59e91e339cb7a366c77
+2025-07-09 18:10:14,749 - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1017, in request
+    response.raise_for_status()
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+2025-07-09 18:10:14,756 - DEBUG - Re-raising status error

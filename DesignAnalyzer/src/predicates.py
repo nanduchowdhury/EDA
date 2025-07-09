@@ -103,7 +103,7 @@ class Predicates:
         predicateObj.setPredicateName(name)
         self.predicates[name] = (list_of_args, predicateObj)
 
-        global_LLM_manager.set_context_line(name)
+        global_LLM_manager.addCommandAndArgs(name, list_of_args)
 
     def executePredicate(self, name, *args):
         if name not in self.predicates:
