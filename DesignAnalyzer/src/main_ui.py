@@ -377,7 +377,6 @@ class MainUI(QMainWindow):
 
     def push_predicates_to_command_area(self):
         self.commandList.clear()  # Optional: clear existing items
-        self.commandList.setMaximumWidth(300)
         self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
 
         for predicate in self.all_predicates.getAllPredicates().keys():
@@ -392,98 +391,92 @@ class MainUI(QMainWindow):
         self.commandArea.setMinimumWidth(self.COMMAND_WIDTH)
 
         outerLayout = QHBoxLayout()
+        outerLayout.setContentsMargins(0, 0, 0, 0)
+        outerLayout.setSpacing(8)  # Small spacing between left and right
 
         # ----------------- LEFT HALF -----------------
         leftWidget = QWidget()
         leftLayout = QVBoxLayout()
-
-        max_width = 400  # Unified width for left-side components
-
-        # Inner container to enforce fixed max width
-        leftInnerWidget = QWidget()
-        leftInnerLayout = QVBoxLayout()
-        leftInnerWidget.setLayout(leftInnerLayout)
-        leftInnerWidget.setMaximumWidth(max_width)
-        leftInnerWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        leftLayout.setContentsMargins(0, 0, 0, 0)
 
         # Source DropDown
         self.sourceDropDown = SourceDropDown()
         self.sourceDropDown.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        leftInnerLayout.addWidget(self.sourceDropDown)
+        leftLayout.addWidget(self.sourceDropDown)
 
         # TextEdit + OK Button row
         row2 = QHBoxLayout()
         self.commandInput = PlaceholderTextEdit("Enter command to search for analysis...")
         self.commandInput.setFixedHeight(30)
+        self.commandInput.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
         self.okButton = QPushButton("Search")
         self.okButton.clicked.connect(self.runSearchAnalysis)
         self.okButton.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+
         row2.addWidget(self.commandInput)
         row2.addWidget(self.okButton)
-        leftInnerLayout.addLayout(row2)
+        leftLayout.addLayout(row2)
 
-        # Horizontal separator
-        leftInnerLayout.addWidget(self._hline())
-
-        # Label: List of analyses
-        leftInnerLayout.addWidget(QLabel("Analyses & Actions"))
+        leftLayout.addWidget(self._hline())
+        leftLayout.addWidget(QLabel("Analyses & Actions"))
 
         # Command list
         self.commandList = QListWidget()
         self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
         self.commandList.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.commandList.setMinimumHeight(120)
-        leftInnerLayout.addWidget(self.commandList)
+        leftLayout.addWidget(self.commandList)
 
-        # Horizontal separator
-        leftInnerLayout.addWidget(self._hline())
+        leftLayout.addWidget(self._hline())
 
         # Param area
         self.manageArgs = ManageArgs()
+        self.manageArgs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        leftLayout.addWidget(self.manageArgs)
 
-        leftInnerLayout.addWidget(self.manageArgs)
-
-        # Horizontal separator
-        leftInnerLayout.addWidget(self._hline())
+        leftLayout.addWidget(self._hline())
 
         # Run + Stop buttons
         buttonRow = QHBoxLayout()
         self.runButton = QPushButton("Run Analysis")
         self.runButton.clicked.connect(self.runSelectedPredicate)
+
         self.stopButton = QPushButton("Stop Analysis")
-        # self.stopButton.clicked.connect(self.stopSelectedPredicate)  # Optional
         buttonRow.addWidget(self.runButton)
         buttonRow.addWidget(self.stopButton)
-        leftInnerLayout.addLayout(buttonRow)
+        leftLayout.addLayout(buttonRow)
 
-        # Add innerWidget into leftLayout
-        leftLayout.addWidget(leftInnerWidget)
+        # Push everything upward
+        leftLayout.addStretch()
         leftWidget.setLayout(leftLayout)
 
         # ----------------- RIGHT HALF -----------------
         rightWidget = QWidget()
         rightLayout = QVBoxLayout()
+        rightLayout.setContentsMargins(0, 0, 0, 0)
 
         rightLayout.addWidget(QLabel("Results"))
 
-        # Create instance of ManageResultsTabs
         self.resultsManager = ManageResultsTabs()
-        rightLayout.addWidget(self.resultsManager.getTabWidget())
+        resultsTabs = self.resultsManager.getTabWidget()
+        resultsTabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        rightLayout.addWidget(resultsTabs, stretch=1)
 
         rightWidget.setLayout(rightLayout)
 
         # ----------------- Combine with Separator -----------------
-        outerLayout.addWidget(leftWidget, 4)
+        outerLayout.addWidget(leftWidget, stretch=1)
 
-        # Vertical separator
         vline = QFrame()
         vline.setFrameShape(QFrame.VLine)
         vline.setFrameShadow(QFrame.Sunken)
         outerLayout.addWidget(vline)
 
-        outerLayout.addWidget(rightWidget, 6)
+        outerLayout.addWidget(rightWidget, stretch=1)
 
         self.commandArea.setLayout(outerLayout)
+
+
 
 
     def _hline(self):
