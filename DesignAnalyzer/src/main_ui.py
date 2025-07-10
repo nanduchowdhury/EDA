@@ -4,8 +4,9 @@ from PyQt5.QtWidgets import (
     QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
     QAction, QFileDialog, QMessageBox, QFrame, QTableView, QGridLayout, 
-    QStyleOptionComboBox, QStyle, QStylePainter
+    QStyleOptionComboBox, QStyle, QStylePainter, QScrollArea
 )
+
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
 
@@ -214,6 +215,7 @@ class MainUI(QMainWindow):
         matching_items = self.commandList.findItems(command, Qt.MatchExactly)
         if matching_items:
             self.commandList.setCurrentItem(matching_items[0])
+            self.manageArgs.setArgValues(args)
         else:
             QMessageBox.warning(self, "Not Found", f"No predicate found matching: {command}")
 
@@ -437,31 +439,9 @@ class MainUI(QMainWindow):
         leftInnerLayout.addWidget(self._hline())
 
         # Param area
-        self.paramEdits = []
-        paramGrid = QGridLayout()
-        label_width = 80
-        font = QFont()
-        font.setPointSize(7)
+        self.manageArgs = ManageArgs()
 
-        for row in range(5):
-            label = QLabel(f"Param {row+1}")
-            label.setFont(font)
-            label.setFixedWidth(label_width)
-            label.setToolTip(label.text())
-
-            edit = QLineEdit()
-            edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-            label.hide()
-            edit.hide()
-
-            paramGrid.addWidget(label, row, 0)
-            paramGrid.addWidget(edit, row, 1)
-            self.paramEdits.append((label, edit))
-
-        paramWidget = QWidget()
-        paramWidget.setLayout(paramGrid)
-        leftInnerLayout.addWidget(paramWidget)
+        leftInnerLayout.addWidget(self.manageArgs)
 
         # Horizontal separator
         leftInnerLayout.addWidget(self._hline())
@@ -540,12 +520,9 @@ class MainUI(QMainWindow):
             print(f"Predicate '{predicate_name}' not found.")
             return
 
-         # Build a dict of argument values from the paramEdits
-        arg_values = {}
-        for label, edit in self.paramEdits:
-            if label.isVisible():
-                arg_name = label.text()
-                arg_values[arg_name] = edit.text()
+
+        arg_values = self.manageArgs.getArgValues()
+
 
         # Set arguments and run the predicate
         predicate.setArgs(arg_values)
@@ -594,16 +571,11 @@ class MainUI(QMainWindow):
             arg_names = []
 
         # Update labels and visibility
-        for i, (label, edit) in enumerate(self.paramEdits):
-            if i < len(arg_names):
-                label.setText(arg_names[i])
-                label.show()
-                label.setToolTip(arg_names[i])
-                edit.show()
-                
-            else:
-                label.hide()
-                edit.hide()
+        
+        # Convert to dict with empty string values
+        args_dict = {name: "" for name in arg_names}
+        
+        self.manageArgs.setArgValues(args_dict)
 
 
     def registerPredicates(self):
@@ -815,3 +787,83 @@ class SentralControl:
 
         if fileName in self.fileNameToData:
             self.viewerTabs.setTableDataFrameInputTab(self.fileNameToData[fileName])
+
+
+
+
+class ManageArgs(QWidget):
+    def __init__(self, parent=None, max_args=10):
+        super().__init__(parent)
+
+        self.max_args = max_args
+        self.paramEdits = []
+
+        # Main layout
+        mainLayout = QVBoxLayout(self)
+
+        # Scroll area
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        mainLayout.addWidget(self.scrollArea)
+
+        # Container inside the scroll area
+        self.scrollContent = QFrame()
+        self.scrollArea.setWidget(self.scrollContent)
+
+        # Grid layout inside scroll content
+        self.paramGrid = QGridLayout(self.scrollContent)
+        self.scrollContent.setLayout(self.paramGrid)
+
+        font = QFont()
+        font.setPointSize(7)
+        label_width = 80
+
+        for row in range(self.max_args):
+            label = QLabel(f"Param {row + 1}")
+            label.setFont(font)
+            label.setFixedWidth(label_width)
+            label.setToolTip(label.text())
+
+            edit = QLineEdit()
+            edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+            label.hide()
+            edit.hide()
+
+            self.paramGrid.addWidget(label, row, 0)
+            self.paramGrid.addWidget(edit, row, 1)
+
+            self.paramEdits.append((label, edit))
+
+    def setArgValues(self, args: dict):
+        """
+        Show arg-name + value as label-edit pairs.
+        """
+        for i, (key, value) in enumerate(args.items()):
+            if i >= self.max_args:
+                break  # ignore excess
+            label, edit = self.paramEdits[i]
+            label.setText(key)
+            label.setToolTip(key)
+            edit.setText(str(value))
+
+            label.show()
+            edit.show()
+
+        # Hide any remaining unused rows
+        for j in range(i + 1, self.max_args):
+            label, edit = self.paramEdits[j]
+            label.hide()
+            edit.hide()
+
+    def getArgValues(self) -> dict:
+        """
+        Return dict of {arg_name: value} from visible rows.
+        """
+        result = {}
+        for label, edit in self.paramEdits:
+            if label.isVisible() and edit.isVisible():
+                key = label.text()
+                value = edit.text().strip()
+                result[key] = value
+        return result
