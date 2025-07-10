@@ -2300,3 +2300,23 @@ Traceback (most recent call last):
 httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.openai.com/v1/chat/completions'
 For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
 2025-07-09 18:10:14,756 - DEBUG - Re-raising status error
+2025-07-10 11:17:53,685 - INFO - Loading CSV data started.
+2025-07-10 11:17:53,715 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-10 11:17:53,949 - INFO - DataFrame shape: (10288, 106)
+2025-07-10 11:17:53,949 - INFO - Data loaded into input area.
+2025-07-10 11:17:53,949 - INFO - End reading CSV file: C:/Users/nandu/Downloads/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-10 13:53:11,504 - INFO - Loading CSV data started.
+2025-07-10 13:53:11,511 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-10 13:53:11,522 - INFO - DataFrame shape: (5, 2)
+2025-07-10 13:53:11,522 - INFO - Data loaded into input area.
+2025-07-10 13:53:11,525 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-10 13:59:15,396 - INFO - Loading CSV data started.
+2025-07-10 13:59:15,401 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-10 13:59:15,416 - INFO - DataFrame shape: (5, 2)
+2025-07-10 13:59:15,416 - INFO - Data loaded into input area.
+2025-07-10 13:59:15,416 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-10 15:04:04,652 - INFO - Loading CSV data started.
+2025-07-10 15:04:04,676 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-10 15:04:04,703 - INFO - DataFrame shape: (5, 2)
+2025-07-10 15:04:04,703 - INFO - Data loaded into input area.
+2025-07-10 15:04:04,712 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv

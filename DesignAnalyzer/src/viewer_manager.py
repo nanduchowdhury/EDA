@@ -4,9 +4,10 @@ from PyQt5.QtWidgets import QTableView, QHeaderView
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import Qt
 
+
 import pandas as pd
 
-from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
 from PyQt5.QtCore import QAbstractTableModel, QVariant
 
 from layout_draw import PyQtGraphLayoutWithScales
@@ -159,16 +160,99 @@ class ResultsTableModel(QAbstractTableModel):
 
 
 
-class ManageViewerTabs(QTabWidget):
+
+
+
+class ManageViewerTabs(QWidget):
     def __init__(self, viewer_type="DRAW", width=600, height=400, parent=None):
         super().__init__(parent)
         self.width = width
         self.height = height
         self.tab_counter = 1
-        self.viewer_map = {}  # tabName -> widget
-
+        self.viewer_map = {}
         self.inputTabName = 'Input Data'
+
+        self.stackLayout = QStackedLayout(self)
+        self.tabWidget = QTabWidget()
+        self.stackLayout.addWidget(self.tabWidget)
+
+        self._createTileView()
+        self.stackLayout.addWidget(self.tileScrollArea)
+        self.stackLayout.setCurrentIndex(0)  # Start in regular tab view
+
         self.addTabByType(viewer_type, self.inputTabName)
+
+    def currentWidget(self):
+        return self.tabWidget.currentWidget()
+
+    def _createTileView(self):
+        self.tileContainer = QWidget()
+        self.tileLayout = QGridLayout(self.tileContainer)
+
+        self.tileScrollArea = QScrollArea()
+        self.tileScrollArea.setWidgetResizable(True)
+        self.tileScrollArea.setWidget(self.tileContainer)
+
+    def showTileFormat(self):
+        while self.tileLayout.count():
+            item = self.tileLayout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.setParent(None)
+
+        for index in range(self.tabWidget.count()):
+            tab_widget = self.tabWidget.widget(index)
+            tab_name = self.tabWidget.tabText(index)
+
+            # Create a tile frame
+            frame = QFrame()
+            frame.setFrameShape(QFrame.Box)
+            frame.setStyleSheet("QFrame { background-color: #f5f5f5; }")
+            frame.setFixedSize(300, 200)
+            frame_layout = QVBoxLayout(frame)
+
+            # Add a title label
+            label = QLabel(tab_name)
+            label.setAlignment(Qt.AlignCenter)
+            label.setStyleSheet("font-weight: bold;")
+            frame_layout.addWidget(label)
+
+            # Create a visual preview (readonly clone or label saying "Preview Unavailable")
+            preview = self._createWidgetPreview(tab_widget)
+            frame_layout.addWidget(preview)
+
+            # Allow click to select
+            def make_handler(i=index):
+                def handler(event):
+                    self._selectTabFromTile(i)
+                return handler
+
+            frame.mousePressEvent = make_handler()
+            self.tileLayout.addWidget(frame, index // 2, index % 2)
+
+        self.stackLayout.setCurrentWidget(self.tileScrollArea)
+
+    def showRegularFormat(self):
+        self.stackLayout.setCurrentWidget(self.tabWidget)
+
+    def _selectTabFromTile(self, index):
+        self.tabWidget.setCurrentIndex(index)
+        self.showRegularFormat()
+
+    def _createWidgetPreview(self, widget):
+        # Take a snapshot (works even if not visible, but better if visible)
+        pixmap = widget.grab()
+
+        # Resize to a smaller thumbnail size
+        thumbnail = pixmap.scaled(280, 140, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        # Set into QLabel
+        label = QLabel()
+        label.setPixmap(thumbnail)
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("background-color: white; border: 1px solid #ccc;")
+        return label
+
 
     def addTabByType(self, viewer_type, tab_name=None):
         tab_widget = None
@@ -185,7 +269,7 @@ class ManageViewerTabs(QTabWidget):
             if not tab_name:
                 tab_name = f"{viewer_type}-{self.tab_counter}"
                 self.tab_counter += 1
-            self.addTab(tab_widget, tab_name)
+            self.tabWidget.addTab(tab_widget, tab_name)
             self.viewer_map[tab_name] = tab_widget
             return tab_widget
         return None
@@ -197,22 +281,19 @@ class ManageViewerTabs(QTabWidget):
         input_tab = self.getInputTabWidget()
         if isinstance(input_tab, QTableView):
             input_tab.loadFromDataFrame(df)
-        else:
-            print("Input tab is not a QTableView instance.")
 
     def getSelectedTabWidget(self):
-        """Returns the widget of the currently selected tab."""
-        return self.currentWidget()  # self IS a QTabWidget
+        return self.tabWidget.currentWidget()
 
     def getTabWidgetByTabName(self, tabName):
-        """Returns the widget corresponding to the given tab name, or None if not found."""
-        for index in range(self.count()):
-            if self.tabText(index) == tabName:
-                return self.widget(index)
+        for index in range(self.tabWidget.count()):
+            if self.tabWidget.tabText(index) == tabName:
+                return self.tabWidget.widget(index)
         return None
 
     def getInputTabWidget(self):
         return self.getTabWidgetByTabName(self.inputTabName)
+
 
 
 

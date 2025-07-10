@@ -15,8 +15,8 @@ class ToolBarItemAbstract(ABC):
         # Zoom in/out: small lens / large lens approximations
         'zoom in': QStyle.SP_FileDialogContentsView,     # looks like magnifier
         'zoom out': QStyle.SP_FileDialogDetailedView,
-        'zoom fit': QStyle.SP_FileDialogListView,        # another magnifier style
-        
+        'zoom fit': QStyle.SP_DialogResetButton,        # another magnifier style
+
         "up": QStyle.SP_ArrowUp,  # generic up arrow
         "down": QStyle.SP_ArrowDown,  # generic down arrow
         'left': QStyle.SP_ArrowBack,  # generic left arrow
@@ -49,6 +49,10 @@ class ToolBarItemAbstract(ABC):
             self.button.setText("🔳")
         elif "hide mesh" in label.lower():
             self.button.setText("⬛")
+        elif "tile tabs" in label.lower():
+            self.button.setText("🔲")
+        elif "regular tabs" in label.lower():
+            self.button.setText("📑")
         else:
             self.button.setText(label)  # fallback to text if no icon found
 

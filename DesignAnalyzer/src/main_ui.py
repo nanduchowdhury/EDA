@@ -196,6 +196,23 @@ class HideMeshToolBarItem(ToolBarItemAbstract):
     def onClick(self):
         self.drawArea.hide_mesh()
 
+class RegularTabsToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _viewerTabs):
+        super().__init__("Regular tabs")
+        self.viewerTabs = _viewerTabs
+
+    def onClick(self):
+        self.viewerTabs.showRegularFormat()
+
+class TileTabsToolBarItem(ToolBarItemAbstract):
+    def __init__(self, _viewerTabs):
+        super().__init__("Tile tabs")
+        self.viewerTabs = _viewerTabs
+
+    def onClick(self):
+        self.viewerTabs.showTileFormat()
+
+
 
 class MainUI(QMainWindow):
     # Coordinate/size constants
@@ -313,6 +330,12 @@ class MainUI(QMainWindow):
                                            self.panUpToolBarItem,
                                            self.panDownToolBarItem])
 
+        self.regularTabsToolBarItem = RegularTabsToolBarItem(self.viewerTabs)
+        self.tileTabsToolBarItem = TileTabsToolBarItem(self.viewerTabs)
+
+        self.menu.createToolbarGroupItems("tab_items", 
+                                          [self.regularTabsToolBarItem,
+                                          self.tileTabsToolBarItem])
 
         if self.PLOT_OR_DRAW == "VTK":
             self.showMeshToolBarItem = ShowMeshToolBarItem(self.drawArea)
