@@ -25,8 +25,8 @@ from huggingface_hub import login, hf_hub_download  # ✅ make sure 'login' is i
 ############################################################
 
 
-# Step 1: Login with your token
-login("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")  # Replace with your actual token
+# Step 1: Login with your token - uncomment below code-line.
+# login("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")  # Replace with your actual token
 
 # Step 2: Download the model file
 local_path = hf_hub_download(
