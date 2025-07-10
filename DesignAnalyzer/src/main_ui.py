@@ -12,7 +12,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTa
 
 from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 import sys
 
 import json
@@ -206,6 +206,17 @@ class MainUI(QMainWindow):
 
     COMMAND_WIDTH = 900
 
+    @pyqtSlot(str, dict)
+    def on_signal_update_command(self, command, args):
+
+        print(f"Received command: {command}, args: {args}")
+
+        matching_items = self.commandList.findItems(command, Qt.MatchExactly)
+        if matching_items:
+            self.commandList.setCurrentItem(matching_items[0])
+        else:
+            QMessageBox.warning(self, "Not Found", f"No predicate found matching: {command}")
+
     def __init__(self, PLOT_OR_DRAW="PLOT"):
         
         super().__init__()
@@ -240,6 +251,7 @@ class MainUI(QMainWindow):
         self.bottomArea = BottomArea(self.mainLayout, self.sentralControl, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
         
+        self.bottomArea.signal_update_command.connect(self.on_signal_update_command)
 
         
 

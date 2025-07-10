@@ -3,7 +3,9 @@ from PyQt5.QtWidgets import (
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
     QFileDialog, QLabel, QListWidgetItem
 )
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
+
+
 import os
 import psutil
 import threading
@@ -16,13 +18,18 @@ from common import CustomListWidget
 from llm_manager import global_LLM_manager
 
 
-class BottomArea():
+class BottomArea(QObject):
 
+    signal_update_command = pyqtSignal(str, dict)
+    
     DUMMY_INPUT_TAB = "input file"
+
 
     def __init__(self, _mainLayout, _sentralControl, 
                  _windowHeight, _layoutHeight):
         
+        super().__init__()
+
         self.mainLayout = _mainLayout
         self.sentralControl = _sentralControl
         self.windowHeight = _windowHeight
@@ -173,10 +180,14 @@ class BottomArea():
         self.assistantOutput.append(f"<b>You:</b> {query}")
 
         # Generate assistant reply (mock or real logic)
-        reply = self._generateMockAssistantReply(query)
+        command, args = self._generateMockAssistantReply(query)
 
         # Append assistant response
-        self.assistantOutput.append(f"<b>Assistant:</b> {reply}")
+        resp = f"<b>Assistant:</b> Use following command:\n \
+                \t\t <b>{command}</b> \n\
+            \t with arguments: \n\
+                \t\t <b>{args}</b>"
+        self.assistantOutput.append(resp)
         self.assistantOutput.append("")  # spacing
 
         # Auto-scroll to bottom
@@ -190,9 +201,11 @@ class BottomArea():
 
     def _generateMockAssistantReply(self, query: str) -> str:
         
-        cmd, args = global_LLM_manager.query(query)
+        command, args = global_LLM_manager.query(query)
 
-        return f"Command : {cmd} and Args : {args}"
+        self.signal_update_command.emit(command, args)
+
+        return command, args
 
 
     def appendDesignInfo(self, info):
