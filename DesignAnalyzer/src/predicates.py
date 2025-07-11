@@ -12,6 +12,8 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
+from layout_plot import BarChartView
+
 class PredicateBase(ABC):
     def __init__(self):
         self.predicate_name = ""  # Name of the predicate
@@ -167,13 +169,10 @@ class CreateBarChart(PredicateBase):
 
         df = df_list[0]
 
-        print(f"y_axis: {y_axis}, x_axis: {x_axis}")
-        print(f"df shape: {df.shape}")
-        print(f"y-axis shape: {df[y_axis].shape}, x-axis shape: {df[x_axis].shape}")
+        drawArea.setXYColumn(x_axis, y_axis)
+        drawArea.setDataFrame(df)
 
-        dataList = list(zip(df[y_axis], df[x_axis]))
-
-        drawArea.plotBar(dataList, x_axis, y_axis)
+        # drawArea.plotBar(dataList, x_axis, y_axis)
         # drawArea.plotBar(dataList, "COUNTRY", "2026")
         # drawArea.plotPie(dataList)
 

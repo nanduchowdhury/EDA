@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButto
 from PyQt5.QtCore import QAbstractTableModel, QVariant
 
 from layout_draw import PyQtGraphLayoutWithScales
-from layout_plot import PlotWithScales
+from layout_plot import BasePlotView, BarChartView
 
 from vtk_draw import VTKWidgetWrapper
 
@@ -261,7 +261,7 @@ class ManageViewerTabs(QWidget):
         elif viewer_type == "DRAW":
             tab_widget = PyQtGraphLayoutWithScales(width=self.width, height=self.height)
         elif viewer_type == "PLOT":
-            tab_widget = PlotWithScales(width=self.width, height=self.height)
+            tab_widget = BarChartView()
         elif viewer_type == "TABLE":
             tab_widget = self._createTableWidget()
 
