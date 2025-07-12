@@ -1,6 +1,6 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction
 from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont
 
@@ -13,8 +13,8 @@ import logging
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
 
+# ---------------- Base Plot ----------------
 
-# ---------------- Abstract Base Class ----------------
 
 class BasePlotView(QWidget):
     def __init__(self, parent=None):
@@ -24,44 +24,24 @@ class BasePlotView(QWidget):
 
     def initUI(self):
         self.mainLayout = QVBoxLayout(self)
-        self.mainLayout.setContentsMargins(0, 0, 0, 0)
-        self.mainLayout.setSpacing(0)
-
         self.graphWidget = pg.GraphicsLayoutWidget()
         self.plotItem = self.graphWidget.addPlot()
         self.plotItem.showGrid(x=True, y=True)
         self.plotItem.setLabel('bottom', 'X-Axis')
         self.plotItem.setLabel('left', 'Y-Axis')
         self.view = self.plotItem.getViewBox()
-        self.view.setMouseMode(pg.ViewBox.PanMode)
-        self.view.setMouseEnabled(x=True, y=True)
-        self.view.invertY(False)
+
         self.vLine = pg.InfiniteLine(angle=90, movable=True, pen=pg.mkPen('y'))
         self.hLine = pg.InfiniteLine(angle=0, movable=True, pen=pg.mkPen('y'))
         self.view.addItem(self.vLine)
         self.view.addItem(self.hLine)
 
-        self.proxy = pg.SignalProxy(self.view.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
-        centerLayout = QHBoxLayout()
-        centerLayout.setContentsMargins(0, 0, 0, 0)
-        centerLayout.setSpacing(0)
-        centerLayout.addWidget(self.graphWidget)
-        self.mainLayout.addLayout(centerLayout)
+        layout = QHBoxLayout()
+        layout.addWidget(self.graphWidget)
+        self.mainLayout.addLayout(layout)
+
         self.zoomFactor = 1.2
         self.view.autoRange()
-
-    def mouseMoved(self, evt):
-        pos = evt[0]
-        if self.view.sceneBoundingRect().contains(pos):
-            mousePoint = self.view.mapSceneToView(pos)
-            self.vLine.setPos(mousePoint.x())
-            self.hLine.setPos(mousePoint.y())
-
-    def zoomIn(self):
-        self.view.scaleBy((1 / self.zoomFactor, 1 / self.zoomFactor))
-
-    def zoomOut(self):
-        self.view.scaleBy((self.zoomFactor, self.zoomFactor))
 
     def zoomFit(self):
         self.view.autoRange()
@@ -73,24 +53,65 @@ class BasePlotView(QWidget):
     def updatePlot(self):
         raise NotImplementedError("Subclasses must implement updatePlot()")
 
-
 # ---------------- Bar Chart ----------------
 
-class BarChartView(BasePlotView):
-    barClicked = pyqtSignal(str)  # emits label of bar clicked
 
-    def __init__(self, parent=None, x_col='X', y_col='Y'):
+
+class BarChartView(BasePlotView):
+    def __init__(self, x_col="X", y_col="Y", parent=None):
+        super().__init__(parent)
         self.x_col = x_col
         self.y_col = y_col
-        super().__init__(parent)
+        self.bar_items = []
+        self._lastClickedBar = None
+
+        # ✅ Create action once
+        self.showInTableAction = QAction("Show in table", self)
+        self.showInTableAction.triggered.connect(self.onShowInTable)
+
+        # ✅ Add once to ViewBox menu
+        self.plotItem.getViewBox().menu.addSeparator()
+        self.plotItem.getViewBox().menu.addAction(self.showInTableAction)
+
+
+    def contextMenuEvent(self, event):
+        """Handle right-click: detect which bar was clicked"""
+        pos = event.pos()
+        scene_pos = self.view.mapToScene(pos)
+        self._lastClickedBar = None
+
+        for bar in self.bar_items:
+            local_pos = bar.mapFromScene(scene_pos)
+            if bar.contains(local_pos):
+                self._lastClickedBar = bar
+                break
+
+        # Let default menu popup happen
+        super().contextMenuEvent(event)
+
+
+    def onShowInTable(self):
+        """Triggered when 'Show in table' is clicked in RMB"""
+        if self._lastClickedBar is None:
+            print("No bar selected.")
+            return
+
+        tooltip = self._lastClickedBar.toolTip()
+        print(f"🟦 Show in Table: {tooltip}")
+        # You can emit signal or call another slot to reflect in a table
 
     def setXYColumn(self, x_col, y_col):
         self.x_col = x_col
         self.y_col = y_col
 
-    def updatePlot(self):
+    def setDataFrame(self, df):
+        self.dataFrame = df.copy()
+        self.updatePlot()
 
+    def updatePlot(self):
         self.plotItem.clear()
+        self.bar_items.clear()
+
         if self.dataFrame.empty or self.x_col not in self.dataFrame or self.y_col not in self.dataFrame:
             return
 
@@ -99,24 +120,23 @@ class BarChartView(BasePlotView):
             x_val = i + 1
             label = str(row[self.x_col])
             value = float(row[self.y_col])
+
             bar = QGraphicsRectItem(x_val - bar_width / 2, 0, bar_width, value)
             bar.setBrush(QColor(*[random.randint(50, 255) for _ in range(3)]))
             bar.setPen(pg.mkPen('w'))
             bar.setToolTip(f"{label}: {value}")
             bar.setData(0, label)
-            bar.setFlag(QGraphicsRectItem.ItemIsSelectable, True)
-            bar.setAcceptHoverEvents(True)
-            bar.mousePressEvent = self.makeBarClickedHandler(label)
-            self.view.addItem(bar)
 
+            self.view.addItem(bar)
+            self.bar_items.append(bar)
+
+        # Set axis ticks
         ticks = [(i + 1, str(row[self.x_col])) for i, row in self.dataFrame.iterrows()]
         self.plotItem.getAxis('bottom').setTicks([ticks])
         self.zoomFit()
 
-    def makeBarClickedHandler(self, label):
-        def handler(event):
-            self.barClicked.emit(label)
-        return handler
+    def zoomFit(self):
+        self.view.autoRange()
 
 
 # ---------------- Pie Chart ----------------

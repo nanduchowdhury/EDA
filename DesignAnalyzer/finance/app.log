@@ -2380,3 +2380,53 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-11 08:53:34,285 - INFO - DataFrame shape: (5, 2)
 2025-07-11 08:53:34,285 - INFO - Data loaded into input area.
 2025-07-11 08:53:34,288 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 11:34:46,955 - INFO - Loading CSV data started.
+2025-07-11 11:34:46,955 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 11:34:46,966 - INFO - DataFrame shape: (5, 2)
+2025-07-11 11:34:46,966 - INFO - Data loaded into input area.
+2025-07-11 11:34:46,969 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:01:05,001 - INFO - Loading CSV data started.
+2025-07-11 13:01:05,001 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:01:05,014 - INFO - DataFrame shape: (5, 2)
+2025-07-11 13:01:05,014 - INFO - Data loaded into input area.
+2025-07-11 13:01:05,014 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:11:27,009 - INFO - Loading CSV data started.
+2025-07-11 13:11:27,009 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:11:27,025 - INFO - DataFrame shape: (5, 2)
+2025-07-11 13:11:27,027 - INFO - Data loaded into input area.
+2025-07-11 13:11:27,028 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:26:34,063 - INFO - Loading CSV data started.
+2025-07-11 13:26:34,078 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:26:34,082 - INFO - DataFrame shape: (5, 2)
+2025-07-11 13:26:34,083 - INFO - Data loaded into input area.
+2025-07-11 13:26:34,084 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:31:09,145 - INFO - Loading CSV data started.
+2025-07-11 13:31:09,161 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:31:09,170 - INFO - DataFrame shape: (5, 2)
+2025-07-11 13:31:09,170 - INFO - Data loaded into input area.
+2025-07-11 13:31:09,170 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:37:52,497 - INFO - Loading CSV data started.
+2025-07-11 13:37:52,497 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 13:37:52,497 - INFO - DataFrame shape: (5, 2)
+2025-07-11 13:37:52,497 - INFO - Data loaded into input area.
+2025-07-11 13:37:52,497 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:42:10,614 - INFO - Loading CSV data started.
+2025-07-11 15:42:10,629 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:42:10,634 - INFO - DataFrame shape: (5, 2)
+2025-07-11 15:42:10,634 - INFO - Data loaded into input area.
+2025-07-11 15:42:10,637 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:56:50,858 - INFO - Loading CSV data started.
+2025-07-11 15:56:50,858 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:56:50,858 - INFO - DataFrame shape: (5, 2)
+2025-07-11 15:56:50,858 - INFO - Data loaded into input area.
+2025-07-11 15:56:50,858 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:59:24,008 - INFO - Loading CSV data started.
+2025-07-11 15:59:24,008 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 15:59:24,019 - INFO - DataFrame shape: (5, 2)
+2025-07-11 15:59:24,019 - INFO - Data loaded into input area.
+2025-07-11 15:59:24,023 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 16:03:29,015 - INFO - Loading CSV data started.
+2025-07-11 16:03:29,015 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 16:03:29,015 - INFO - DataFrame shape: (5, 2)
+2025-07-11 16:03:29,015 - INFO - Data loaded into input area.
+2025-07-11 16:03:29,015 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
