@@ -2430,3 +2430,8 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-11 16:03:29,015 - INFO - DataFrame shape: (5, 2)
 2025-07-11 16:03:29,015 - INFO - Data loaded into input area.
 2025-07-11 16:03:29,015 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 22:34:24,877 - INFO - Loading CSV data started.
+2025-07-11 22:34:24,886 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-11 22:34:24,894 - INFO - DataFrame shape: (5, 2)
+2025-07-11 22:34:24,894 - INFO - Data loaded into input area.
+2025-07-11 22:34:24,894 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv

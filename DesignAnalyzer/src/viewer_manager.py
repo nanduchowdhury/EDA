@@ -75,92 +75,34 @@ class ManageResultsTabs:
 class ResultsTableView(QTableView):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.model_ = ResultsTableModel()
-        self.setModel(self.model_)
+        self.model = PandasTableModel()
+        self.setModel(self.model)
 
     def setOutputs(self, outputs):
-        self.model_.setDataFromOutputs(outputs)
+        """
+        Converts: [(col_name, [val1, val2, ...]), ...]
+        To: pandas DataFrame and loads it.
+        """
+        try:
+            data = {}
+            max_len = max((len(values) for _, values in outputs), default=0)
+            for col_name, values in outputs:
+                padded = values + [''] * (max_len - len(values))
+                data[col_name] = padded
+            df = pd.DataFrame(data)
+            self.model.setDataFrame(df)
+            self.setModel(self.model)
+
+            for i in range(self.model.columnCount()):
+                self.resizeColumnToContents(i)
+        except Exception as e:
+            print(f"Failed to load outputs: {e}")
 
     def getDataFrame(self):
-        headers = self.model_.headers
-        rows = self.model_.data_matrix
-        return pd.DataFrame(rows, columns=headers)
+        return self.model._df.copy()
 
     def clear(self):
-        self.model_.clear()
-
-
-class ResultsTableModel(QAbstractTableModel):
-    def __init__(self, outputs=None, parent=None):
-        super().__init__(parent)
-        self.headers = []
-        self.data_matrix = []  # List of lists (2D)
-
-        if outputs:
-            self.setDataFromOutputs(outputs)
-
-    def setDataFromOutputs(self, outputs):
-        """
-        Takes outputs in form: [(col_name, [val1, val2, ...]), ...]
-        and stores them in self.data_matrix and self.headers
-        """
-        self.beginResetModel()
-        self.headers = [arg_name for arg_name, _ in outputs]
-        max_rows = max((len(vals) for _, vals in outputs), default=0)
-        self.data_matrix = []
-
-        for row in range(max_rows):
-            row_data = []
-            for _, values in outputs:
-                row_data.append(str(values[row]) if row < len(values) else "")
-            self.data_matrix.append(row_data)
-        self.endResetModel()
-
-    def rowCount(self, parent=None):
-        return len(self.data_matrix)
-
-    def columnCount(self, parent=None):
-        return len(self.headers)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid():
-            return None
-        if role == Qt.DisplayRole:
-            return self.data_matrix[index.row()][index.column()]
-        return None
-
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role != Qt.DisplayRole:
-            return None
-        if orientation == Qt.Horizontal:
-            return self.headers[section]
-        else:
-            return str(section + 1)
-
-    def addRow(self, row_data):
-        """Appends a new row (as a list of strings)."""
-        if len(row_data) != len(self.headers):
-            raise ValueError("Row length must match number of columns.")
-        self.beginInsertRows(self.createIndex(0, 0), self.rowCount(), self.rowCount())
-        self.data_matrix.append(row_data)
-        self.endInsertRows()
-
-    def deleteRow(self, row):
-        """Deletes row at index `row`."""
-        if 0 <= row < self.rowCount():
-            self.beginRemoveRows(self.createIndex(0, 0), row, row)
-            self.data_matrix.pop(row)
-            self.endRemoveRows()
-
-    def clear(self):
-        self.beginResetModel()
-        self.headers = []
-        self.data_matrix = []
-        self.endResetModel()
-
-
-
-
+        self.model.setDataFrame(pd.DataFrame())
 
 
 class ManageViewerTabs(QWidget):
