@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 import pandas as pd
 
 from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
-from PyQt5.QtCore import QAbstractTableModel, QVariant
+from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex
 
 from layout_draw import PyQtGraphLayoutWithScales
 from layout_plot import BasePlotView, BarChartView
@@ -76,12 +76,34 @@ class TableView(QTableView):
         super().__init__(parent)
         self.model = PandasTableModel()
         self.setModel(self.model)
+        self._onClickCallback = None
+
+        # Connect signal for cell click
+        self.clicked.connect(self._handleItemClick)
 
     def loadFromDataFrame(self, df: pd.DataFrame):
-        """Load data from a pandas DataFrame."""
         self.model.setDataFrame(df)
         self.setModel(self.model)
-        self.resizeAllColumns()
+        for i in range(self.model.columnCount()):
+            self.resizeColumnToContents(i)
+
+    def clearTable(self):
+        self.model.setDataFrame(pd.DataFrame())
+
+    def registerOnItemClickCallback(self, callback_fn):
+        """Register a callback: receives 'col_name : value' string when item is clicked."""
+        self._onClickCallback = callback_fn
+
+    def _handleItemClick(self, index: QModelIndex):
+        if not index.isValid() or self.model._df is None:
+            return
+
+        col_name = self.model._df.columns[index.column()]
+        value = self.model._df.iat[index.row(), index.column()]
+        message = f"{col_name} : {value}"
+
+        if self._onClickCallback:
+            self._onClickCallback(message)
 
     def clearTable(self):
         """Remove all data from the table."""

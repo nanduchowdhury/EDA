@@ -1,3 +1,6 @@
+
+from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+
 import sys
 import os
 
@@ -23,17 +26,18 @@ from lef_parser import LefParserImplement
 
 
 class LefDefPredicate(PredicateBase):
-    def __init__(self, _defParserImplement, _lefParserImplement, design_data):
+    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
         super().__init__()
 
         self.defParserImplement = _defParserImplement
         self.lefParserImplement = _lefParserImplement
-        self.design_data = design_data
+        self.drawManager = _drawManager
+        self.sentralControl = _sentralControl
 
 
 class GetViasForLayer(LefDefPredicate):
-    def __init__(self, _defParserImplement, _lefParserImplement, design_data):
-        super().__init__(_defParserImplement, _lefParserImplement, design_data)
+    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
         self.args = {
             'layer': None,  # Layer name to search for vias
@@ -48,38 +52,44 @@ class GetViasForLayer(LefDefPredicate):
         return result
 
 class GetInstanceCoords(LefDefPredicate):
-    def __init__(self, _defParserImplement, _lefParserImplement, design_data):
-        super().__init__(_defParserImplement, _lefParserImplement, design_data)
+    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
         self.args = {
             'name': None,  # Regular expression to match instance names
         }
 
-        # Ensure the design data is resolved before running this predicate
-        self.design_data.resolveCompToInst()
 
     def run(self):
         name_regex = self.args["name"]
 
-        # all_inst = list(self.design_data.instData.instance_data)
+        # all_inst = list(design_data.instData.instance_data)
     
-        result = []
-        compiled_regex = re.compile(name_regex)
-        components = self.defParserImplement.get_components()
-        for comp in components:
-            instance_name = gname_index.getName(comp.inst_name_id)
-            if compiled_regex.search(instance_name):
-                result.append(comp.inst_name_id)
+        result = self.defParserImplement.get_components_by_name(name_regex)
 
-        self.setOutputObject("inst", result)
+        self.setOutputObject("name", result)
         
         return result
     
+    def onPostRun(self):
+
+        table = self.sentralControl.resultsManager.getResultsTable(self.getShortName())
+        table.registerOnItemClickCallback(self.onCellClicked)
+
+    def onCellClicked(self, info_str):
+        print("🟢 Cell clicked:", info_str)
+
+        column, inst = info_str.split(":")
+        inst = inst.strip()
+
+        list = []
+        list.append(inst)
+        self.drawManager.draw_instances(list, QColor("white"))
 
 
 class LoadDesignToolItem(ToolBarItemAbstract):
     def __init__(self, all_input_tabs,
-                    defParserImplement, lefParserImplement, designData,
+                    defParserImplement, lefParserImplement, _sentralControl,
                     drawManager):
         super().__init__("Load Design")
 
@@ -88,7 +98,7 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
 
-        self.design_data = designData
+        self.sentralControl = _sentralControl
         self.drawManager = drawManager
 
     def onClick(self):
@@ -103,6 +113,7 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         for l in lefList:
             print(f"Loading LEF file: {l}")
             self.lefParserImplement.parse(l)
+            self.sentralControl.addEntryForFile(l)
 
         for d in defList:
             print(f"Loading DEF file: {d}")
@@ -111,10 +122,13 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.defParserImplement.def_parser_finished_signal.connect(self.slotDefParserFinished)
 
     def slotDefParserFinished(self, message):
-        self.design_data.resolveCompToInst()
+
+        design_data = DesignData(self.lefParserImplement, self.defParserImplement)
+
+        design_data.resolveCompToInst()
         
-        self.drawManager.load_design_instances(self.design_data.inst_rtree, 
-                            self.design_data.instData)
+        self.drawManager.load_design_instances(design_data.inst_rtree, 
+                            design_data.instData)
         
 
 class LefDefUI(MainUI):
@@ -131,11 +145,9 @@ class LefDefUI(MainUI):
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
 
-        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
-
         self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.all_input_tabs,
                                 self.defParserImplement, self.lefParserImplement,
-                                self.design_data,
+                                self.sentralControl,
                                 self.drawManager)
         
         self.menu.createToolbarItem(self.loadDesignToolbarItem)
@@ -145,12 +157,12 @@ class LefDefUI(MainUI):
 
     def registerLefDefPredicates(self):
 
-        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement,
-                                 self.design_data)
+        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                 self.sentralControl)
         self.all_predicates.addPredicate("search vias based on layer etc", ["layer"], viaObj)
 
-        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement,
-                                    self.design_data)
+        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                    self.sentralControl)
         self.all_predicates.addPredicate("search instances by name regexp, location etc", ["name"], instObj)
 
 

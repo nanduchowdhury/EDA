@@ -84,6 +84,9 @@ class PredicateBase(ABC):
             val_parts.append(val_str)
         return f"{short_pred}_{'_'.join(val_parts)}..."
 
+    def onPostRun(self):
+        pass
+
     @abstractmethod
     def run(self):
         """Override this method in subclasses."""

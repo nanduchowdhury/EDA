@@ -263,10 +263,13 @@ class MainUI(QMainWindow):
         self.mainLayout = QVBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
-        
+        self.resultsManager = ManageResultsTabs()
+
         self.create_top_layout()
         
-        self.sentralControl = SentralControl(self.viewerTabs, self.sourceDropDown)
+
+        self.sentralControl = SentralControl(self.viewerTabs, self.resultsManager,
+                                             self.sourceDropDown)
 
         self.bottomArea = BottomArea(self.mainLayout, self.sentralControl, 
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
@@ -481,7 +484,7 @@ class MainUI(QMainWindow):
 
         rightLayout.addWidget(QLabel("Results"))
 
-        self.resultsManager = ManageResultsTabs()
+        
         resultsTabs = self.resultsManager.getTabWidget()
         resultsTabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         rightLayout.addWidget(resultsTabs, stretch=1)
@@ -563,6 +566,9 @@ class MainUI(QMainWindow):
             self.sentralControl.addEntryForResults(predicate.getCompleteNameWithArgs())
             self.sentralControl.addDataForResultsEntity(predicate.getCompleteNameWithArgs(), 
                                                         predicate.getDataFrame())
+
+
+            predicate.onPostRun()
 
             inst_list = None
 
@@ -701,10 +707,16 @@ class SourceDropDown(QComboBox):
 
 
 class SentralControl:
-    def __init__(self, viewerTabs: ManageViewerTabs, sourceDropDown: SourceDropDown):
+    def __init__(self, viewerTabs: ManageViewerTabs, 
+                 resultsManager: ManageResultsTabs,
+                 sourceDropDown: SourceDropDown):
+        
         self.viewerTabs = viewerTabs
+        self.resultsManager = resultsManager
         self.sourceDropDown = sourceDropDown
         self.fileNameToData: Dict[str, Any] = {}
+
+        self.DEF_RESOLVED_DESIGN = "DEF resolved design"
 
     def _detectFileTypeHeader(self, fileName: str) -> str:
         lower = fileName.lower()
@@ -715,7 +727,7 @@ class SentralControl:
         elif lower.endswith('.lef'):
             return "LEF files"
         elif lower.endswith('.def'):
-            return "DEF files"
+            return self.DEF_RESOLVED_DESIGN
         else:
             return "UNKNOWN files"
 
@@ -724,7 +736,10 @@ class SentralControl:
         fileName = os.path.basename(fileName)
         header = self._detectFileTypeHeader(fileName)
 
-        self._setEntity(header, fileName)
+        if header == self.DEF_RESOLVED_DESIGN:
+            self._setEntity(self.DEF_RESOLVED_DESIGN, self.DEF_RESOLVED_DESIGN)
+        else:
+            self._setEntity(header, fileName)
 
     def addEntryForResults(self, resultsTabName: str) -> None:
         header = "RESULTS"
@@ -735,11 +750,15 @@ class SentralControl:
         if not header:
             raise ValueError("Header cannot be empty")
 
+        if name in self.fileNameToData:
+            return
+
         if header:
             self.sourceDropDown.addHeader(header)
+
             self.sourceDropDown.addItem(header, name)
 
-            if header != 'RESULTS':
+            if header != 'RESULTS' and header != self.DEF_RESOLVED_DESIGN:
                 self.sourceDropDown.addItem(header, f'all {header.lower()}')
 
             self.fileNameToData[name] = None

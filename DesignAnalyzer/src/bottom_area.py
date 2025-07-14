@@ -147,7 +147,7 @@ class BottomArea(QObject):
         self.assistantInput.setPlaceholderText("Ask about what analysis or action you want to perform on your data...")
         self.assistantInput.setFixedHeight(60)
 
-        self.sendButton = QPushButton("Send")
+        self.sendButton = QPushButton("▶")
         self.sendButton.setFixedWidth(80)
         self.sendButton.clicked.connect(self._handleAssistantQuery)
 
@@ -183,15 +183,11 @@ class BottomArea(QObject):
         command, args = self._generateMockAssistantReply(query)
 
         # Append assistant response
-        resp = f"""
-                <b>Assistant:</b>
-                <pre style="color: darkblue;">
-                Use following command:
-                    <b>{command}</b>
-                with arguments:
-                    {args}
-                </pre>
-                """
+        resp = f"<b>Assistant:</b> Use following command:\n \
+                \t\t <b>{command}</b> \n\
+            \t with arguments: \n\
+                \t\t <b>{args}</b>"
+        
         self.assistantOutput.append(resp)
 
         self.assistantOutput.append("")  # spacing

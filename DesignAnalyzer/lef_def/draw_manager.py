@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem, QW
 from PyQt5.QtCore import Qt, QRectF, QPointF, QTimer
 from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
 
+from global_name_index import gname_index
+
 from rtree import index
 
 
@@ -50,12 +52,18 @@ class DrawManager:
         self.draw_instances(visible_ids, QColor("red"))
 
 
+    # instList can have name or id
     def draw_instances(self, instList, color):
 
         rect_list = []
 
         for i in instList:
-            inst = self.designInstances.instance_data[i]
+
+            id = i
+            if isinstance(id, str):
+                id = gname_index.get_id(i)
+
+            inst = self.designInstances.instance_data[id]
             x1, y1, x2, y2 = inst.location
 
             x = min(x1, x2)

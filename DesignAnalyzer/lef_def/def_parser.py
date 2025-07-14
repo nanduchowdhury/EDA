@@ -500,6 +500,18 @@ class DefParserImplement(QObject):
 
         return all_components
     
+    def get_components_by_name(self, name_regex):
+        result = []
+        compiled_regex = re.compile(name_regex)
+        components = self.get_components()
+        for comp in components:
+            instance_name = gname_index.getName(comp.inst_name_id)
+            if compiled_regex.search(instance_name):
+                result.append(instance_name)
+
+        return result
+
+
     def get_instances_coords(self):
 
         inst_list = []
