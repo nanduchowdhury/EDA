@@ -233,6 +233,7 @@ class MainUI(QMainWindow):
         if matching_items:
             self.commandList.setCurrentItem(matching_items[0])
             self.manageArgs.setArgValues(args)
+            self.runButton.click()
         else:
             QMessageBox.warning(self, "Not Found", f"No predicate found matching: {command}")
 

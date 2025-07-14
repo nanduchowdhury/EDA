@@ -66,6 +66,7 @@ class BarChartView(BasePlotView):
         self._lastClickedBar = None
 
         # ✅ Create action once
+        self._showInTableCallback = None
         self.showInTableAction = QAction("Show in table", self)
         self.showInTableAction.triggered.connect(self.onShowInTable)
 
@@ -90,15 +91,20 @@ class BarChartView(BasePlotView):
         super().contextMenuEvent(event)
 
 
+    def registerActionOnShowInTable(self, actionMethod):
+        """Register a user-defined callback for 'Show in table'."""
+        self._showInTableCallback = actionMethod
+
     def onShowInTable(self):
         """Triggered when 'Show in table' is clicked in RMB"""
         if self._lastClickedBar is None:
             print("No bar selected.")
             return
-
-        tooltip = self._lastClickedBar.toolTip()
-        print(f"🟦 Show in Table: {tooltip}")
-        # You can emit signal or call another slot to reflect in a table
+        
+        if self._lastClickedBar and self._showInTableCallback:
+            # label = self._lastClickedBar.data(0)
+            label = self._lastClickedBar.toolTip()
+            self._showInTableCallback(label)
 
     def setXYColumn(self, x_col, y_col):
         self.x_col = x_col
@@ -119,12 +125,13 @@ class BarChartView(BasePlotView):
         for i, row in self.dataFrame.iterrows():
             x_val = i + 1
             label = str(row[self.x_col])
-            value = float(row[self.y_col])
+            value_str = row[self.y_col]
+            value = float(value_str)
 
             bar = QGraphicsRectItem(x_val - bar_width / 2, 0, bar_width, value)
             bar.setBrush(QColor(*[random.randint(50, 255) for _ in range(3)]))
             bar.setPen(pg.mkPen('w'))
-            bar.setToolTip(f"{label}: {value}")
+            bar.setToolTip(f"{label} : {value_str}")
             bar.setData(0, label)
 
             self.view.addItem(bar)

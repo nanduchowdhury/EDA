@@ -12,6 +12,7 @@ from gpt4all import GPT4All
 
 import os
 
+
 import json
 import google.generativeai as genai
 
@@ -23,7 +24,7 @@ import google.generativeai as genai
 ###############################################################################
 
 class GeminiLLMManager:
-    def __init__(self, api_key: str = 'AIzaSyAQCZ2bJHOI6yapnei35Eyrd2IL19ts9GM', model_name: str = "gemini-1.5-flash"):
+    def __init__(self, api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', model_name: str = "gemini-1.5-flash"):
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(model_name)
         self.commands: List[Dict] = []  # List of {"command": str, "args": List[str]}
@@ -32,21 +33,23 @@ class GeminiLLMManager:
         """Add a command and its argument names."""
         self.commands.append({"command": command, "args": args})
 
+
     def query(self, input_text: str) -> Optional[Tuple[str, Dict[str, str]]]:
         """Identify best command and extract argument values using Gemini."""
         if not self.commands:
             raise ValueError("No commands have been added.")
 
-        # Construct the list of commands
+        # Construct the list of commands.
         command_list = ""
         for i, cmd in enumerate(self.commands):
             args_str = ", ".join(cmd["args"]) if cmd["args"] else "none"
             command_list += f"{i+1}. {cmd['command']} (Args: {args_str})\n"
 
-        # Compose the prompt
+        # Compose the prompt.
         prompt = (
             "You are a helpful assistant. Your task is to identify the best matching command from the list, "
-            "based on the user's query. Also extract argument values if they are mentioned.\n\n"
+            "based on the user's query given below. Available commands with args are given below. "
+            "Also extract argument values from user's query if they are mentioned.\n\n"
             "Return ONLY a JSON object in this format:\n"
             '{\n  "command": "<command>",\n  "args": { "arg1": "value1", "arg2": "value2" }\n}\n\n'
             f"User Query: {input_text.strip()}\n\n"
@@ -59,9 +62,17 @@ class GeminiLLMManager:
             response = self.model.generate_content(prompt)
             reply = response.text.strip()
             print("\n🔸 Gemini Response:\n", reply)
+            
+            # Clean the reply: if it is wrapped in markdown code block formatting, extract the JSON part.
+            # For example, if reply starts with "```json" and ends with "```".
+            match = re.search(r'```json\s*(\{.*\})\s*```', reply, re.DOTALL)
+            if match:
+                json_str = match.group(1)
+            else:
+                json_str = reply
 
-            # Parse JSON from the model's response
-            parsed = json.loads(reply)
+            # Parse JSON from the cleaned string.
+            parsed = json.loads(json_str)
             command = parsed["command"]
             args = parsed.get("args", {})
             return command, args
@@ -69,6 +80,7 @@ class GeminiLLMManager:
         except Exception as e:
             print("❌ Failed to parse Gemini response:", e)
             return None
+
 
 
 ###############################################################################
@@ -132,7 +144,7 @@ class LLMManager:
             
 
 
-global_LLM_manager = LLMManager()
+# global_LLM_manager = LLMManager()
 
-# global_LLM_manager = GeminiLLMManager()
+global_LLM_manager = GeminiLLMManager()
 

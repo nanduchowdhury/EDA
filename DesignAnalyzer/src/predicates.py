@@ -153,6 +153,9 @@ class CreateBarChart(PredicateBase):
         super().__init__()
         self.sentralControl = sentralControl
 
+        self.x_axis = None
+        self.y_axis = None
+
         self.args = {
             'x_axis': "",
             'y_axis': "",
@@ -160,8 +163,8 @@ class CreateBarChart(PredicateBase):
 
     def run(self):
 
-        x_axis = self.args['x_axis']
-        y_axis = self.args['y_axis']
+        self.x_axis = self.args['x_axis']
+        self.y_axis = self.args['y_axis']
 
         drawArea = self.sentralControl.viewerTabs.addTabByType("PLOT", "sample_plot")
 
@@ -169,12 +172,31 @@ class CreateBarChart(PredicateBase):
 
         df = df_list[0]
 
-        drawArea.setXYColumn(x_axis, y_axis)
+        drawArea.setXYColumn(self.x_axis, self.y_axis)
         drawArea.setDataFrame(df)
+
+        drawArea.registerActionOnShowInTable(self.highlightInTable)
+        # self.highlightInTable()
 
         # drawArea.plotBar(dataList, x_axis, y_axis)
         # drawArea.plotBar(dataList, "COUNTRY", "2026")
         # drawArea.plotPie(dataList)
 
         return True
+    
+    def highlightInTable(self, label):
+
+        x, y = label.split(":")
+        x = x.strip()
+        y = y.strip()
+
+        highlight_dict = {
+            self.x_axis: [x],
+            self.y_axis: [y]
+        }
+
+        input_table = self.sentralControl.viewerTabs.getInputTabWidget()
+        input_table.highlightData(highlight_dict)
+
+
 

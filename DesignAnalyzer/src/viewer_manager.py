@@ -1,7 +1,7 @@
 
 
 from PyQt5.QtWidgets import QTableView, QHeaderView
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QColor
 from PyQt5.QtCore import Qt
 
 
@@ -71,12 +71,45 @@ class ManageResultsTabs:
         return None
 
 
-
-class ResultsTableView(QTableView):
+class TableView(QTableView):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.model = PandasTableModel()
         self.setModel(self.model)
+
+    def loadFromDataFrame(self, df: pd.DataFrame):
+        """Load data from a pandas DataFrame."""
+        self.model.setDataFrame(df)
+        self.setModel(self.model)
+        self.resizeAllColumns()
+
+    def clearTable(self):
+        """Remove all data from the table."""
+        self.model.setDataFrame(pd.DataFrame())
+
+    def addRow(self, rowData):
+        """Add a new row. Accepts a list of strings or values."""
+        self.model.appendRow(rowData)
+
+    def deleteRow(self, rowIndex):
+        """Delete a specific row by index."""
+        self.model.removeRow(rowIndex)
+
+    def getDataFrame(self):
+        return self.model._df.copy()
+
+    def highlightData(self, data_dict):
+        """Highlight matching cells based on {column_name: [list_of_values]}."""
+        self.model.highlightCells(data_dict)
+
+    def resizeAllColumns(self):
+        for i in range(self.model.columnCount()):
+            self.resizeColumnToContents(i)
+
+
+class ResultsTableView(TableView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
     def setOutputs(self, outputs):
         """
@@ -90,19 +123,10 @@ class ResultsTableView(QTableView):
                 padded = values + [''] * (max_len - len(values))
                 data[col_name] = padded
             df = pd.DataFrame(data)
-            self.model.setDataFrame(df)
-            self.setModel(self.model)
-
-            for i in range(self.model.columnCount()):
-                self.resizeColumnToContents(i)
+            self.loadFromDataFrame(df)
         except Exception as e:
             print(f"Failed to load outputs: {e}")
 
-    def getDataFrame(self):
-        return self.model._df.copy()
-
-    def clear(self):
-        self.model.setDataFrame(pd.DataFrame())
 
 
 class ManageViewerTabs(QWidget):
@@ -238,55 +262,33 @@ class ManageViewerTabs(QWidget):
 
 
 
-
-class TableView(QTableView):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-        self.model = PandasTableModel()
-        self.setModel(self.model)
-
-        # Stretch columns to fill the view
-        # self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        # self.setAlternatingRowColors(True)
-        # self.setSortingEnabled(True)
-
-    def loadFromDataFrame(self, df: pd.DataFrame):
-        """Load data from a pandas DataFrame."""
-        self.model.setDataFrame(df)
-        self.setModel(self.model)
-
-        # Optionally, set column widths based on content
-        for i in range(self.model.columnCount()):
-            self.resizeColumnToContents(i)
-
-    def clearTable(self):
-        """Remove all data from the table."""
-        self.model.removeRows(0, self.model.rowCount())
-
-    def addRow(self, rowData):
-        """Add a new row. Accepts a list of strings or values."""
-        items = [QStandardItem(str(val)) for val in rowData]
-        self.model.appendRow(items)
-
-    def deleteRow(self, rowIndex):
-        """Delete a specific row by index."""
-        if 0 <= rowIndex < self.model.rowCount():
-            self.model.removeRow(rowIndex)
-
-
-
 class PandasTableModel(QAbstractTableModel):
     def __init__(self, df=None):
         super().__init__()
         self._df = df if df is not None else pd.DataFrame()
+        self._highlight = {}  # {(row, col): QColor}
 
     def setDataFrame(self, df):
-        try:
-            self._df = df
-            self.layoutChanged.emit()
-        except Exception as e:
-            print(f"Failed to set DF: {e}")
+        self._df = df
+        self._highlight = {}
+        self.layoutChanged.emit()
+
+    def highlightCells(self, highlight_dict):
+        """Highlight all cells where column value matches one of the listed values."""
+        self._highlight.clear()
+
+        if self._df is None or self._df.empty:
+            return
+
+        for col_name, values in highlight_dict.items():
+            if col_name not in self._df.columns:
+                continue
+            col_index = self._df.columns.get_loc(col_name)
+            for row in range(len(self._df)):
+                if str(self._df.iat[row, col_index]) in values:
+                    self._highlight[(row, col_index)] = QColor('yellow')
+
+        self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount(), self.columnCount()))
 
     def rowCount(self, parent=None):
         return 0 if self._df is None else len(self._df)
@@ -297,16 +299,18 @@ class PandasTableModel(QAbstractTableModel):
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
+
         if role == Qt.DisplayRole:
             return str(self._df.iat[index.row(), index.column()])
+        elif role == Qt.BackgroundRole:
+            return self._highlight.get((index.row(), index.column()), QVariant())
+
         return QVariant()
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if self._df is None or role != Qt.DisplayRole:
+        if role != Qt.DisplayRole or self._df is None:
             return QVariant()
-
         if orientation == Qt.Horizontal:
             return str(self._df.columns[section])
         else:
-            return str(section)
-        
+            return str(section + 1)

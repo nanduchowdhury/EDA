@@ -183,11 +183,17 @@ class BottomArea(QObject):
         command, args = self._generateMockAssistantReply(query)
 
         # Append assistant response
-        resp = f"<b>Assistant:</b> Use following command:\n \
-                \t\t <b>{command}</b> \n\
-            \t with arguments: \n\
-                \t\t <b>{args}</b>"
+        resp = f"""
+                <b>Assistant:</b>
+                <pre style="color: darkblue;">
+                Use following command:
+                    <b>{command}</b>
+                with arguments:
+                    {args}
+                </pre>
+                """
         self.assistantOutput.append(resp)
+
         self.assistantOutput.append("")  # spacing
 
         # Auto-scroll to bottom
