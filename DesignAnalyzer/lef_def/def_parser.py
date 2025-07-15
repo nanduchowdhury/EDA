@@ -470,16 +470,23 @@ class DefParserImplement(QObject):
 
     
     def get_via_names(self, layer):
-        result = []
+
+        vnames = []
+        venclosures = []
 
         for d, parser in self.parser_dict.items():
             vias = parser.def_data.vias
 
             for via in vias:
-                if layer is None or layer in via.layers:
-                    result.append(via.name)
 
-        return result
+                if layer is None or layer in via.layer_ids:
+                    vnames.append(via.name)
+                    venclosures.append(via.enclosure)
+
+        return {
+            "name": vnames,
+            "enclosure": venclosures
+        }
     
     def get_unit(self):
 

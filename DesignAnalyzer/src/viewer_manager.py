@@ -74,47 +74,68 @@ class ManageResultsTabs:
 class TableView(QTableView):
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.model = PandasTableModel()
         self.setModel(self.model)
-        self._onClickCallback = None
 
-        # Connect signal for cell click
-        self.clicked.connect(self._handleItemClick)
+        self._onItemClickCallback = None
+        self._onItemSelectedCallback = None
+
+        self.clicked.connect(self._handleClick)
+        self.selectionModel().selectionChanged.connect(self._handleSelection)
+
+        self.horizontalHeader().sectionClicked.connect(self._handleHeaderClick)
 
     def loadFromDataFrame(self, df: pd.DataFrame):
         self.model.setDataFrame(df)
         self.setModel(self.model)
-        for i in range(self.model.columnCount()):
-            self.resizeColumnToContents(i)
+        self.resizeAllColumns()
 
-    def clearTable(self):
-        self.model.setDataFrame(pd.DataFrame())
+    def registerOnItemClickCallback(self, callback):
+        self._onItemClickCallback = callback
 
-    def registerOnItemClickCallback(self, callback_fn):
-        """Register a callback: receives 'col_name : value' string when item is clicked."""
-        self._onClickCallback = callback_fn
+    def registerOnItemSelectedCallback(self, callback):
+        self._onItemSelectedCallback = callback
 
-    def _handleItemClick(self, index: QModelIndex):
-        if not index.isValid() or self.model._df is None:
+    def _handleClick(self, index):
+        """Called when a cell is clicked."""
+        if self._onItemClickCallback and index.isValid():
+            col_name = self.model.headerData(index.column(), Qt.Horizontal)
+            value = self.model.data(index, Qt.DisplayRole)
+            self._onItemClickCallback({col_name: [value]})
+
+    def _handleSelection(self, selected, deselected):
+        """Called when one or more cells are selected."""
+        if not self._onItemSelectedCallback:
             return
 
-        col_name = self.model._df.columns[index.column()]
-        value = self.model._df.iat[index.row(), index.column()]
-        message = f"{col_name} : {value}"
+        result = {}
+        for index in selected.indexes():
+            if not index.isValid():
+                continue
+            col_name = self.model.headerData(index.column(), Qt.Horizontal)
+            value = self.model.data(index, Qt.DisplayRole)
+            result.setdefault(col_name, []).append(value)
 
-        if self._onClickCallback:
-            self._onClickCallback(message)
+        if result:
+            self._onItemSelectedCallback(result)
+
+    def _handleHeaderClick(self, logicalIndex):
+        """Called when a column header is clicked."""
+        if not self._onItemSelectedCallback:
+            return
+
+        col_name = self.model.headerData(logicalIndex, Qt.Horizontal)
+        column_data = self.model._df.iloc[:, logicalIndex].astype(str).tolist()
+        self._onItemSelectedCallback({col_name: column_data})
 
     def clearTable(self):
-        """Remove all data from the table."""
         self.model.setDataFrame(pd.DataFrame())
 
     def addRow(self, rowData):
-        """Add a new row. Accepts a list of strings or values."""
         self.model.appendRow(rowData)
 
     def deleteRow(self, rowIndex):
-        """Delete a specific row by index."""
         self.model.removeRow(rowIndex)
 
     def getDataFrame(self):
@@ -127,6 +148,7 @@ class TableView(QTableView):
     def resizeAllColumns(self):
         for i in range(self.model.columnCount()):
             self.resizeColumnToContents(i)
+
 
 
 class ResultsTableView(TableView):

@@ -48,7 +48,9 @@ class GetViasForLayer(LefDefPredicate):
 
         result = self.defParserImplement.get_via_names(layerName)
 
-        self.setOutputObject("result", result)  # Store result as a list
+        for key, values in result.items():
+            self.setOutputObject(key, values)
+
         return result
 
 class GetInstanceCoords(LefDefPredicate):
@@ -75,16 +77,15 @@ class GetInstanceCoords(LefDefPredicate):
 
         table = self.sentralControl.resultsManager.getResultsTable(self.getShortName())
         table.registerOnItemClickCallback(self.onCellClicked)
+        table.registerOnItemSelectedCallback(self.onCellClicked)
 
-    def onCellClicked(self, info_str):
-        print("🟢 Cell clicked:", info_str)
+    def onCellClicked(self, data_dict):
 
-        column, inst = info_str.split(":")
-        inst = inst.strip()
+        print("🟢 Cell clicked:")
 
-        list = []
-        list.append(inst)
-        self.drawManager.draw_instances(list, QColor("white"))
+        for column, values in data_dict.items():
+            self.drawManager.draw_instances(values, QColor("white"))
+
 
 
 class LoadDesignToolItem(ToolBarItemAbstract):
