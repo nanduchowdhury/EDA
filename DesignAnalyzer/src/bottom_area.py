@@ -157,7 +157,9 @@ class BottomArea(QObject):
         assistantLayout.addWidget(self.assistantOutput)
         assistantLayout.addLayout(inputRow)
 
-        self.tabWidget.addTab(self.assistantTab, "Assistant")
+        index = self.tabWidget.addTab(self.assistantTab, "Assistant")
+
+        self.tabWidget.setCurrentIndex(index)
 
         # --- Right side: system info label ---
         self.sysInfoLabel = QLabel()
@@ -183,7 +185,7 @@ class BottomArea(QObject):
         command, args = self._generateMockAssistantReply(query)
 
         # Append assistant response
-        resp = f"<b>Assistant:</b> Use following command:\n \
+        resp = f"<b>Assistant:</b> Use following action or analysis:\n \
                 \t\t <b>{command}</b> \n\
             \t with arguments: \n\
                 \t\t <b>{args}</b>"

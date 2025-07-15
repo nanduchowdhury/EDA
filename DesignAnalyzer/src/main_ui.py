@@ -663,6 +663,10 @@ class SourceDropDown(QComboBox):
         font.setBold(False)
         item.setFont(font)
 
+        # ✅ Make the newly added item selected
+        self.setCurrentIndex(index)
+
+
     def getSelected(self):
         index = self.currentIndex()
         model = self.model()
@@ -852,7 +856,7 @@ class ManageArgs(QWidget):
 
         font = QFont()
         font.setPointSize(7)
-        label_width = 80
+        label_width = 160
 
         for row in range(self.max_args):
             label = QLabel(f"Param {row + 1}")

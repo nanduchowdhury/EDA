@@ -62,12 +62,16 @@ class PredicateBase(ABC):
     def getCompleteNameWithArgs(self):
         """
         Returns the full command string like:
-        predicate_name arg1 val1 arg2 val2 ...
+        predicate_name
+        <i><u>arg1</u></i>     <b>val1</b>
+        <i><u>arg2</u></i>     <b>val2</b>
+        ...
         """
-        parts = [self.predicate_name]
+        lines = [self.predicate_name]
         for k, v in self.args.items():
-            parts.append(f"{k} {v}")
-        return " ".join(parts)
+            lines.append(f"<i><u>{k}</u></i>&emsp;<b>{v}</b>")
+        return "<br>".join(lines)
+
 
     def getShortName(self, max_pred_len=6, max_val_len=10):
         """
@@ -169,7 +173,9 @@ class CreateBarChart(PredicateBase):
         self.x_axis = self.args['x_axis']
         self.y_axis = self.args['y_axis']
 
-        drawArea = self.sentralControl.viewerTabs.addTabByType("PLOT", "sample_plot")
+        drawArea = self.sentralControl.viewerTabs.addTabByType("PLOT", 
+                                    self.getShortName(),
+                                    self.getCompleteNameWithArgs())
 
         df_list = self.sentralControl.getDataForSelectedEntity()
 

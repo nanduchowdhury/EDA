@@ -260,13 +260,13 @@ class FinanceUI(MainUI):
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
         findOutlier = FindOutlier(self.sentralControl)
-        self.all_predicates.addPredicate("outlier - based on mean/std-dev", ["column_name", "z-value"], findOutlier)
+        self.all_predicates.addPredicate("find outlier based on mean/std-dev", ["column_name", "z-value"], findOutlier)
 
         predict = PredictNextMonths(self.sentralControl)
-        self.all_predicates.addPredicate("predict next months - linear regression", ["column_name", "num-months"], predict)
+        self.all_predicates.addPredicate("predict next months based on linear regression", ["column_name", "num-months"], predict)
 
         extract = ExtractColumnsRows(self.sentralControl)
-        self.all_predicates.addPredicate("extract data where specified column contains a string or name.", ["column_name", "containing_string"], extract)
+        self.all_predicates.addPredicate("extract data where specified column contains a string or name", ["column_name", "containing_string"], extract)
 
 
 

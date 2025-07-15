@@ -23,11 +23,15 @@ class ManageResultsTabs:
         self.tables = {}           # tabName -> ResultsTableView
         self.commands = {}         # tabName -> analysisCommand
 
-        self.addNewTab("Result", "Default analysis command")
+        self.defaultResultsTabName = "Result"
+
+        self.addNewTab(self.defaultResultsTabName, "Default analysis command")
 
     def addNewTab(self, tabName, analysisCommand):
         if tabName in self.tables:
             return  # avoid duplicates
+
+        self.removeTabByTitle(self.defaultResultsTabName)
 
         tab = QWidget()
         layout = QVBoxLayout()
@@ -38,9 +42,18 @@ class ManageResultsTabs:
 
         index = self.tabWidget.addTab(tab, tabName)
         self.tabWidget.setTabToolTip(index, analysisCommand)
+        self.tabWidget.setCurrentIndex(index)
 
         self.tables[tabName] = tableView
         self.commands[tabName] = analysisCommand
+
+    def removeTabByTitle(self, tabName: str):
+        for i in range(self.tabWidget.count()):
+            if self.tabWidget.tabText(i) == tabName:
+                self.tabWidget.removeTab(i)
+                return True
+        return False
+
 
     def getResultsTable(self, tabName):
         return self.tables.get(tabName, None)
@@ -180,7 +193,9 @@ class ManageViewerTabs(QWidget):
         self.height = height
         self.tab_counter = 1
         self.viewer_map = {}
+        
         self.inputTabName = 'Input Data'
+        self.inputTabToolTip = "Shows data from input"
 
         self.stackLayout = QStackedLayout(self)
         self.tabWidget = QTabWidget()
@@ -190,7 +205,7 @@ class ManageViewerTabs(QWidget):
         self.stackLayout.addWidget(self.tileScrollArea)
         self.stackLayout.setCurrentIndex(0)  # Start in regular tab view
 
-        self.addTabByType(viewer_type, self.inputTabName)
+        self.addTabByType(viewer_type, self.inputTabName, self.inputTabToolTip)
 
     def currentWidget(self):
         return self.tabWidget.currentWidget()
@@ -264,7 +279,7 @@ class ManageViewerTabs(QWidget):
         return label
 
 
-    def addTabByType(self, viewer_type, tab_name=None):
+    def addTabByType(self, viewer_type, tab_name='', tool_tip=''):
         tab_widget = None
         if viewer_type == "VTK":
             tab_widget = VTKWidgetWrapper(width=self.width, height=self.height)
@@ -279,7 +294,10 @@ class ManageViewerTabs(QWidget):
             if not tab_name:
                 tab_name = f"{viewer_type}-{self.tab_counter}"
                 self.tab_counter += 1
-            self.tabWidget.addTab(tab_widget, tab_name)
+            index = self.tabWidget.addTab(tab_widget, tab_name)
+            self.tabWidget.setCurrentIndex(index)
+            self.tabWidget.setTabToolTip(index, tool_tip)
+            
             self.viewer_map[tab_name] = tab_widget
             return tab_widget
         return None
