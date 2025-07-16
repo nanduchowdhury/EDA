@@ -603,8 +603,8 @@ class MainUI(QMainWindow):
 
     def registerPredicates(self):
         
-        p = CreateBarChart(self.sentralControl)
-        self.all_predicates.addPredicate("create bar chart", ["x_axis", "y_axis"], p)
+        barChartObj = CreateBarChart(self.sentralControl)
+        self.all_predicates.addPredicate("create bar chart", ["x_axis", "y_axis"], barChartObj)
         
 
 

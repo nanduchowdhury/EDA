@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButto
 from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex
 
 from layout_draw import PyQtGraphLayoutWithScales
-from layout_plot import BasePlotView, BarChartView
+from layout_plot import BasePlotView, BarChartView, WorldMapWidget
 
 from vtk_draw import VTKWidgetWrapper
 
@@ -289,6 +289,8 @@ class ManageViewerTabs(QWidget):
             tab_widget = BarChartView()
         elif viewer_type == "TABLE":
             tab_widget = self._createTableWidget()
+        elif viewer_type == "WORLD_MAP":
+            tab_widget = WorldMapWidget()
 
         if tab_widget:
             if not tab_name:

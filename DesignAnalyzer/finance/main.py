@@ -82,6 +82,37 @@ class LoadDataToolItem(ToolBarItemAbstract):
                         print(row)
 
 
+class CreateWorldMap(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.cities = None
+
+        self.args = {
+            'column_name': ""
+        }
+
+    def run(self):
+
+        column_name = self.args['column_name']
+
+        drawArea = self.sentralControl.viewerTabs.addTabByType("WORLD_MAP", 
+                                    self.getShortName(),
+                                    self.getCompleteNameWithArgs())
+
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        df = df_list[0]
+
+        drawArea.setDataFrame(df)
+        drawArea.setColumnName(column_name)
+        drawArea.validateCities()
+        drawArea.showCities()
+
+        return True
+    
+
 class PredictNextMonths(PredicateBase):
     def __init__(self, sentralControl):
         super().__init__()
@@ -268,6 +299,8 @@ class FinanceUI(MainUI):
         extract = ExtractColumnsRows(self.sentralControl)
         self.all_predicates.addPredicate("extract data where specified column contains a string or name", ["column_name", "containing_string"], extract)
 
+        worldMapObj = CreateWorldMap(self.sentralControl)
+        self.all_predicates.addPredicate("create world map", ["column_name"], worldMapObj)
 
 
 if __name__ == "__main__":

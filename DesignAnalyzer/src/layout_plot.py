@@ -1,8 +1,18 @@
+
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont
+
+
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
+
+
+import os
+import folium
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -174,3 +184,70 @@ class PieChartView(BasePlotView):
         self.view.addItem(proxy)
         proxy.setPos(0, 0)
         self.zoomFit()
+
+
+
+class WorldMapWidget(BasePlotView):
+    def __init__(self, colName="", parent=None):
+        super().__init__(parent)
+        self.cityColumn = colName
+        self.geolocator = Nominatim(user_agent="map_viewer")
+        self.web_view = QWebEngineView()
+        self._map_file = os.path.abspath("temp_map.html")
+
+        # Replace graphWidget layout with map view
+        self.mainLayout.removeWidget(self.graphWidget)
+        self.graphWidget.setParent(None)
+        self.mainLayout.addWidget(self.web_view)
+
+    def setColumnName(self, colName):
+        """Set the column name from which cities will be read."""
+        self.cityColumn = colName
+
+    def validateCities(self):
+        """Validate that all cities in the column exist (can be geocoded)."""
+        if self.dataFrame.empty or self.cityColumn not in self.dataFrame:
+            raise ValueError(f"DataFrame is empty or column '{self.cityColumn}' not found.")
+
+        invalid_cities = []
+        for city in self.dataFrame[self.cityColumn].dropna().unique():
+            try:
+                location = self.geolocator.geocode(city)
+                if not location:
+                    invalid_cities.append(city)
+            except (GeocoderTimedOut, GeocoderUnavailable):
+                continue  # optionally retry or skip
+        if invalid_cities:
+            raise ValueError(f"These cities could not be located: {invalid_cities}")
+
+    def showCities(self):
+        """Show all valid cities from the specified column on the map."""
+        if self.dataFrame.empty or self.cityColumn not in self.dataFrame:
+            raise ValueError(f"No data or column '{self.cityColumn}' missing.")
+
+        city_names = self.dataFrame[self.cityColumn].dropna().unique()
+
+        # Start map with default view
+        fmap = folium.Map(location=[20, 0], zoom_start=2)
+
+        for city in city_names:
+            try:
+                location = self.geolocator.geocode(city)
+                if location:
+                    folium.Marker(
+                        location=(location.latitude, location.longitude),
+                        popup=city,
+                        tooltip=city,
+                        icon=folium.Icon(color="blue", icon="info-sign")
+                    ).add_to(fmap)
+            except (GeocoderTimedOut, GeocoderUnavailable):
+                print(f"⏱ Timeout or unavailable while geocoding: {city}")
+
+        fmap.save(self._map_file)
+        self.web_view.load(QUrl.fromLocalFile(self._map_file))
+
+    def updatePlot(self):
+        # Not applicable here, since we show map in webview instead
+        pass
+
+
