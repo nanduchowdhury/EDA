@@ -2981,3 +2981,18 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-18 12:40:55,088 - INFO - DataFrame shape: (200, 6)
 2025-07-18 12:40:55,088 - INFO - Data loaded into input area.
 2025-07-18 12:40:55,088 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-18 15:46:22,977 - INFO - Loading CSV data started.
+2025-07-18 15:46:22,977 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-18 15:46:23,225 - INFO - DataFrame shape: (10288, 106)
+2025-07-18 15:46:23,225 - INFO - Data loaded into input area.
+2025-07-18 15:46:23,232 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-18 15:49:42,806 - INFO - Loading CSV data started.
+2025-07-18 15:49:42,806 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-18 15:49:43,008 - INFO - DataFrame shape: (10288, 106)
+2025-07-18 15:49:43,008 - INFO - Data loaded into input area.
+2025-07-18 15:49:43,008 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/dataset_2025-06-30T14_46_31.332969317Z_DEFAULT_INTEGRATION_IMF.RES_WEO_6.0.0.csv
+2025-07-18 16:58:18,851 - INFO - Loading CSV data started.
+2025-07-18 16:58:18,858 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-18 16:58:18,867 - INFO - DataFrame shape: (200, 6)
+2025-07-18 16:58:18,867 - INFO - Data loaded into input area.
+2025-07-18 16:58:18,867 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv

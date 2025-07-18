@@ -29,6 +29,9 @@ class PredicateBase(ABC):
     def setArgs(self, args_dict):
         self.args.update(args_dict)
 
+    def getArgs(self):
+        return self.args
+
     def setOutputObject(self, argName, valueList):
         """Sets the output values for a given argument name."""
         if not isinstance(valueList, list):
@@ -102,31 +105,13 @@ class Predicates:
     def __init__(self):
         self.predicates = {}  # name -> (arg_list, predicate_object)
 
-    def addPredicate(self, name, list_of_args, predicateObj):
-        """
-        Adds a predicate.
-        name: str
-        list_of_args: list like ['arg1', 'arg2']
-        predicateObj: instance of a class derived from PredicateBase
-        """
+    def addPredicate(self, name, predicateObj):
+
         predicateObj.setPredicateName(name)
-        self.predicates[name] = (list_of_args, predicateObj)
+        self.predicates[name] = predicateObj
 
-        global_LLM_manager.addCommandAndArgs(name, list_of_args)
+        global_LLM_manager.addCommandAndArgs(name, predicateObj.getArgs())
 
-    def executePredicate(self, name, *args):
-        if name not in self.predicates:
-            raise ValueError(f"Predicate '{name}' not found.")
-
-        arg_names, predicate_obj = self.predicates[name]
-
-        if len(args) != len(arg_names):
-            raise ValueError(f"Expected {len(arg_names)} arguments, got {len(args)}")
-
-        arg_dict = dict(zip(arg_names, args))
-        predicate_obj.setArgs(arg_dict)
-
-        return predicate_obj.run()
 
     def removePredicate(self, name):
         if name in self.predicates:
@@ -140,7 +125,7 @@ class Predicates:
     def getPredicateArgs(self, name):
         if name not in self.predicates:
             raise ValueError(f"Predicate '{name}' not found.")
-        return self.predicates[name][0]
+        return self.predicates[name].getArgs()
 
     def getAllPredicates(self):
         """

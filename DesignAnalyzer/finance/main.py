@@ -291,16 +291,16 @@ class FinanceUI(MainUI):
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
         findOutlier = FindOutlier(self.sentralControl)
-        self.all_predicates.addPredicate("find outlier based on mean/std-dev", ["column_name", "z-value"], findOutlier)
+        self.all_predicates.addPredicate("find outlier based on mean/std-dev", findOutlier)
 
         predict = PredictNextMonths(self.sentralControl)
-        self.all_predicates.addPredicate("predict next months based on linear regression", ["column_name", "num-months"], predict)
+        self.all_predicates.addPredicate("predict next months based on linear regression", predict)
 
         extract = ExtractColumnsRows(self.sentralControl)
-        self.all_predicates.addPredicate("extract data where specified column contains a string or name", ["column_name", "containing_string"], extract)
+        self.all_predicates.addPredicate("extract data where specified column contains a string or name", extract)
 
         worldMapObj = CreateWorldMap(self.sentralControl)
-        self.all_predicates.addPredicate("create world map", ["column_name"], worldMapObj)
+        self.all_predicates.addPredicate("create world map", worldMapObj)
 
 
 if __name__ == "__main__":

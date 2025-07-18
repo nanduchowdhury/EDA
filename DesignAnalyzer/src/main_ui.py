@@ -535,7 +535,7 @@ class MainUI(QMainWindow):
         predicate_name = selected_items[0].text()
         try:
             # Get the expected argument names and the predicate object
-            arg_names, predicate = self.all_predicates.getAllPredicates()[predicate_name]
+            predicate = self.all_predicates.getAllPredicates()[predicate_name]
         except KeyError:
             print(f"Predicate '{predicate_name}' not found.")
             return
@@ -604,7 +604,7 @@ class MainUI(QMainWindow):
     def registerPredicates(self):
         
         barChartObj = CreateBarChart(self.sentralControl)
-        self.all_predicates.addPredicate("create bar chart", ["x_axis", "y_axis"], barChartObj)
+        self.all_predicates.addPredicate("create bar chart", barChartObj)
         
 
 

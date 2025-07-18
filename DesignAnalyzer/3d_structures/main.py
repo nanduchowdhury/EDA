@@ -106,10 +106,10 @@ class StructuresUI(MainUI):
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
         pca = ComputePCA(self.sentralControl)
-        self.all_predicates.addPredicate("compute PCA - standard parameters", [], pca)
+        self.all_predicates.addPredicate("compute PCA - standard parameters", pca)
 
         findVolume = FindVolume(self.sentralControl)
-        self.all_predicates.addPredicate("volume - based on radius & height", ["radius", "height"], findVolume)
+        self.all_predicates.addPredicate("volume - based on radius & height", findVolume)
 
 
 

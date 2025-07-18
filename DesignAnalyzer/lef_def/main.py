@@ -160,11 +160,11 @@ class LefDefUI(MainUI):
 
         viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement, self.drawManager,
                                  self.sentralControl)
-        self.all_predicates.addPredicate("search vias based on layer etc", ["layer"], viaObj)
+        self.all_predicates.addPredicate("search vias based on layer etc", viaObj)
 
         instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement, self.drawManager,
                                     self.sentralControl)
-        self.all_predicates.addPredicate("search instances by name regexp, location etc", ["name"], instObj)
+        self.all_predicates.addPredicate("search instances by name regexp, location etc", instObj)
 
 
 
