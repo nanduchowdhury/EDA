@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 import pandas as pd
 
 from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
-from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex
+from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex, QSortFilterProxyModel
 
 from layout_draw import PyQtGraphLayoutWithScales
 from layout_plot import BasePlotView, BarChartView, WorldMapWidget
@@ -89,7 +89,9 @@ class TableView(QTableView):
         super().__init__(parent)
 
         self.model = PandasTableModel()
-        self.setModel(self.model)
+        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model.setSourceModel(self.model)
+        self.setModel(self.proxy_model)
 
         self._onItemClickCallback = None
         self._onItemSelectedCallback = None
@@ -101,8 +103,57 @@ class TableView(QTableView):
 
     def loadFromDataFrame(self, df: pd.DataFrame):
         self.model.setDataFrame(df)
-        self.setModel(self.model)
+        self.proxy_model.invalidateFilter()
+        self.setModel(self.proxy_model)
         self.resizeAllColumns()
+
+    def sortColumn(self, column: int, ascending: bool = True):
+        """Sorts the table based on column index."""
+        order = Qt.AscendingOrder if ascending else Qt.DescendingOrder
+        self.sortByColumn(column, order)
+
+    def filterColumn(self, column: int, regExp: str):
+        """Applies regex-based filtering to a specific column."""
+        self.proxy_model.setFilterKeyColumn(column)
+        self.proxy_model.setFilterRegularExpression(regExp)
+
+    def getColumnIndexByName(self, column_name):
+        """Return column index given column name, or -1 if not found."""
+        if column_name in self.model._df.columns:
+            return self.model._df.columns.get_loc(column_name)
+        return -1
+
+    def hilightColumnData(self, col_name: str, expression: str):
+        """Highlights data in column where expression is true, like '>90 and <150'."""
+        try:
+            df = self.model._df
+            # Prepare mask based on expression
+            series = df[col_name]
+            mask = series.apply(lambda x: self._eval_expression(x, expression))
+            # Highlight using your existing method
+            highlight_values = series[mask].tolist()
+            self.highlightData({col_name: highlight_values})
+
+            return highlight_values
+        
+        except Exception as e:
+            print(f"Highlight error: {e}")
+
+    def _eval_expression(self, value, expression):
+        try:
+            value = float(value)  # cast to number if needed
+            # Inject value again after 'and'/'or'
+            tokens = expression.strip().split()
+            rebuilt = []
+            for i, token in enumerate(tokens):
+                rebuilt.append(token)
+                if token in ['and', 'or']:
+                    rebuilt.append(str(value))  # insert value after and/or
+            full_expr = f"{value} {' '.join(rebuilt)}"
+            return eval(full_expr)
+        except Exception as e:
+            print(f"Error evaluating expression: {e}")
+            return False
 
     def registerOnItemClickCallback(self, callback):
         self._onItemClickCallback = callback
@@ -161,6 +212,7 @@ class TableView(QTableView):
     def resizeAllColumns(self):
         for i in range(self.model.columnCount()):
             self.resizeColumnToContents(i)
+
 
 
 
@@ -331,14 +383,17 @@ class PandasTableModel(QAbstractTableModel):
         super().__init__()
         self._df = df if df is not None else pd.DataFrame()
         self._highlight = {}  # {(row, col): QColor}
+        self._sort_column = None
+        self._sort_order = Qt.AscendingOrder
 
-    def setDataFrame(self, df):
-        self._df = df
-        self._highlight = {}
-        self.layoutChanged.emit()
+    def setDataFrame(self, df: pd.DataFrame):
+        self.beginResetModel()
+        self._df = df.copy()
+        self._highlight.clear()
+        self.endResetModel()
 
     def highlightCells(self, highlight_dict):
-        """Highlight all cells where column value matches one of the listed values."""
+        """Highlight cells where column matches values in list."""
         self._highlight.clear()
 
         if self._df is None or self._df.empty:
@@ -349,32 +404,54 @@ class PandasTableModel(QAbstractTableModel):
                 continue
             col_index = self._df.columns.get_loc(col_name)
             for row in range(len(self._df)):
-                if str(self._df.iat[row, col_index]) in values:
+                cell_val = str(self._df.iat[row, col_index])
+                if cell_val in map(str, values):
                     self._highlight[(row, col_index)] = QColor('yellow')
 
-        self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount(), self.columnCount()))
+        self.dataChanged.emit(
+            self.index(0, 0),
+            self.index(self.rowCount() - 1, self.columnCount() - 1),
+            [Qt.BackgroundRole]
+        )
 
-    def rowCount(self, parent=None):
+    def rowCount(self, parent=QModelIndex()):
         return 0 if self._df is None else len(self._df)
 
-    def columnCount(self, parent=None):
+    def columnCount(self, parent=QModelIndex()):
         return 0 if self._df is None else len(self._df.columns)
 
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
 
+        row, col = index.row(), index.column()
+
         if role == Qt.DisplayRole:
-            return str(self._df.iat[index.row(), index.column()])
+            return str(self._df.iat[row, col])
+
         elif role == Qt.BackgroundRole:
-            return self._highlight.get((index.row(), index.column()), QVariant())
+            return self._highlight.get((row, col), QVariant())
 
         return QVariant()
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         if role != Qt.DisplayRole or self._df is None:
             return QVariant()
+
         if orientation == Qt.Horizontal:
             return str(self._df.columns[section])
         else:
             return str(section + 1)
+
+    def sort(self, column, order):
+        """Sort the dataframe based on the column index."""
+        if self._df is None or column >= self.columnCount():
+            return
+
+        col_name = self._df.columns[column]
+        ascending = order == Qt.AscendingOrder
+
+        self.layoutAboutToBeChanged.emit()
+        self._df.sort_values(by=col_name, ascending=ascending, inplace=True, kind='mergesort')
+        self._df.reset_index(drop=True, inplace=True)
+        self.layoutChanged.emit()

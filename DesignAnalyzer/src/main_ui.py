@@ -828,6 +828,10 @@ class SentralControl:
         if fileName in self.fileNameToData:
             self.viewerTabs.setTableDataFrameInputTab(self.fileNameToData[fileName])
 
+            #table = self.viewerTabs.getInputTabWidget()
+            #if table:
+            #    # h_vals = table.hilightColumnData("Units Sold", "> 500 and < 1000")
+            #    h_vals = table.hilightColumnData("Units Sold", "equal to 934 or 413")
 
 
 
