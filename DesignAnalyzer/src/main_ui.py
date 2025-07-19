@@ -40,18 +40,11 @@ from llm_manager import LLMManager, global_LLM_manager
 
 from viewer_manager import ManageViewerTabs, ManageResultsTabs
 
+from error_log_manager import ErrorManager, UILogHandler
+
 import logging
 from datetime import datetime
 
-class UILogHandler(logging.Handler):
-    def __init__(self, ui_log_callback):
-        super().__init__()
-        self.ui_log_callback = ui_log_callback
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.ui_log_callback(now, log_entry)
 
 
 class ReadSessionMenuItem(MenuItemAbstract):
@@ -268,12 +261,16 @@ class MainUI(QMainWindow):
         self.create_top_layout()
         
 
-        self.sentralControl = SentralControl(self.viewerTabs, self.resultsManager,
-                                             self.sourceDropDown)
+        self.sentralControl = SentralControl(parent=self,
+                                                window_width=self.WINDOW_WIDTH,
+                                                window_height=self.WINDOW_HEIGHT,
+                                                viewerTabs=self.viewerTabs,
+                                                resultsManager=self.resultsManager,
+                                                sourceDropDown=self.sourceDropDown)
 
-        self.bottomArea = BottomArea(self.mainLayout, self.sentralControl, 
+        self.bottomArea = BottomArea(self.mainLayout, self.sentralControl,
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
-        
+
         self.bottomArea.signal_update_command.connect(self.on_signal_update_command)
 
         
@@ -711,16 +708,27 @@ class SourceDropDown(QComboBox):
 
 
 class SentralControl:
-    def __init__(self, viewerTabs: ManageViewerTabs, 
+    def __init__(self, parent, window_width, 
+                 window_height, viewerTabs: ManageViewerTabs, 
                  resultsManager: ManageResultsTabs,
                  sourceDropDown: SourceDropDown):
         
+        self.parent = parent
+        self.window_width = window_width
+        self.window_height = window_height
         self.viewerTabs = viewerTabs
         self.resultsManager = resultsManager
         self.sourceDropDown = sourceDropDown
         self.fileNameToData: Dict[str, Any] = {}
 
+        self.global_error_manager = ErrorManager(self.parent, 
+                                                 self.window_width,
+                                                 self.window_height)
+
         self.DEF_RESOLVED_DESIGN = "DEF resolved design"
+
+    def showMessage(self, msg: str) -> None:
+        self.global_error_manager.showMessage(msg)
 
     def _detectFileTypeHeader(self, fileName: str) -> str:
         lower = fileName.lower()

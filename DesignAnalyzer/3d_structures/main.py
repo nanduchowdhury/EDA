@@ -30,7 +30,7 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
     def onClick(self):
 
-        logging.info("Loading STL data started.")
+        self.sentralControl.showMessage("Loading STL data started.")
 
         stlList = self.all_input_tabs["STL"].getAllItemsInList()
 
@@ -43,7 +43,7 @@ class LoadDataToolItem(ToolBarItemAbstract):
             self.sentralControl.addDataForFileEntity(stl_file, data)
 
             logging.info(f"STL file {stl_file} read successfully.")
-        logging.info("Loading STL data done.")
+        self.sentralControl.showMessage("Loading STL data done.")
 
 
 class ComputePCA(PredicateBase):

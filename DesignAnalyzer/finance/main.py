@@ -7,6 +7,7 @@ import numpy as np
 
 import logging
 
+
 import csv
 
 import pandas as pd
@@ -19,7 +20,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src'
 from blue_payload import run_BluePayload
 from main_ui import MainUI, SourceDropDown, ManageViewerTabs
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
-
 from predicates import Predicates, PredicateBase
 
 class LoadDataToolItem(ToolBarItemAbstract):
@@ -31,14 +31,12 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
     def onClick(self):
 
-        logging.info("Loading CSV data started.")
-
         csvList = self.all_input_tabs["CSV"].getAllItemsInList()
 
         for csv_file in csvList:
-            logging.info(f"Start reading CSV file: {csv_file}")
+            self.sentralControl.showMessage(f"Start reading CSV file: {csv_file}")
             self.read_csv(csv_file)
-            logging.info(f"End reading CSV file: {csv_file}")
+            self.sentralControl.showMessage(f"End reading CSV file: {csv_file}")
 
         self.sentralControl.showFileInTab(csvList[0])
 
@@ -46,16 +44,12 @@ class LoadDataToolItem(ToolBarItemAbstract):
         # self.drawArea.plotPie(data)
         # self.drawArea.plotWaveform([1, 2, 3, 4], [10, 30, 20, 25], "Iterations", "Estimate")
 
-        # logging.info("Loading waveform data done.")
 
     def read_csv(self, csv_file):
 
         data = pd.read_csv(csv_file, low_memory=False)
-        logging.info(f"DataFrame shape: {data.shape}")
 
         self.sentralControl.addDataForFileEntity(csv_file, data)
-
-        logging.info("Data loaded into input area.")
 
 
     def plotDummyData(self):
@@ -145,7 +139,7 @@ class PredictNextMonths(PredicateBase):
             result = ["Num months not specified for prediction"]
 
         self.setOutputObject("Amount next few months", result)  # Store result as a list
-        logging.info(f"Prediction search done.")
+        self.sentralControl.showMessage(f"Prediction search done.")
 
         return result
 
@@ -243,7 +237,7 @@ class FindOutlier(PredicateBase):
         self.setOutputObject(column_name, results[0])
         self.setOutputObject("outlier", results[1])
 
-        logging.info(f"Outlier search done.")
+        self.sentralControl.showMessage(f"Outlier search done.")
 
         return result
 

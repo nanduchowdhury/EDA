@@ -2996,3 +2996,93 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-18 16:58:18,867 - INFO - DataFrame shape: (200, 6)
 2025-07-18 16:58:18,867 - INFO - Data loaded into input area.
 2025-07-18 16:58:18,867 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 08:51:34,486 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 08:51:34,517 - INFO - DataFrame shape: (200, 6)
+2025-07-19 08:51:34,518 - INFO - Data loaded into input area.
+2025-07-19 08:51:34,520 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 08:55:29,302 - INFO - DataFrame shape: (200, 6)
+2025-07-19 08:55:29,302 - INFO - Data loaded into input area.
+2025-07-19 08:56:29,991 - INFO - DataFrame shape: (200, 6)
+2025-07-19 08:56:29,991 - INFO - Data loaded into input area.
+2025-07-19 09:02:45,829 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:02:45,829 - INFO - Data loaded into input area.
+2025-07-19 09:12:45,610 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:12:45,626 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:12:45,630 - INFO - Data loaded into input area.
+2025-07-19 09:12:45,631 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:14:08,206 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:14:08,230 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:14:08,235 - INFO - Data loaded into input area.
+2025-07-19 09:14:08,235 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:14:57,371 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:14:57,390 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:14:57,391 - INFO - Data loaded into input area.
+2025-07-19 09:14:57,391 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:17:51,985 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:17:51,994 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:17:51,994 - INFO - Data loaded into input area.
+2025-07-19 09:17:51,998 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:30:15,319 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:30:15,339 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:30:15,342 - INFO - Data loaded into input area.
+2025-07-19 09:30:15,343 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:30:33,331 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:30:33,343 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:30:33,346 - INFO - Data loaded into input area.
+2025-07-19 09:30:33,348 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:34,302 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:34,310 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:33:34,310 - INFO - Data loaded into input area.
+2025-07-19 09:33:34,310 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:46,954 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:46,969 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:33:46,969 - INFO - Data loaded into input area.
+2025-07-19 09:33:46,969 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:53,736 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:33:53,747 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:33:53,752 - INFO - Data loaded into input area.
+2025-07-19 09:33:53,752 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 09:52:26,301 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:52:26,302 - INFO - Data loaded into input area.
+2025-07-19 09:53:29,661 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:53:29,663 - INFO - Data loaded into input area.
+2025-07-19 09:53:50,585 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:53:50,585 - INFO - Data loaded into input area.
+2025-07-19 09:56:54,346 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:56:54,346 - INFO - Data loaded into input area.
+2025-07-19 09:57:56,647 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:57:56,647 - INFO - Data loaded into input area.
+2025-07-19 09:58:35,711 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:58:35,711 - INFO - Data loaded into input area.
+2025-07-19 09:59:21,114 - INFO - DataFrame shape: (200, 6)
+2025-07-19 09:59:21,131 - INFO - Data loaded into input area.
+2025-07-19 10:00:01,102 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:00:01,103 - INFO - Data loaded into input area.
+2025-07-19 10:02:00,872 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:00,872 - INFO - Data loaded into input area.
+2025-07-19 10:02:20,413 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:20,413 - INFO - Data loaded into input area.
+2025-07-19 10:02:28,605 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:28,605 - INFO - Data loaded into input area.
+2025-07-19 10:02:29,713 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:29,713 - INFO - Data loaded into input area.
+2025-07-19 10:02:31,697 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:31,697 - INFO - Data loaded into input area.
+2025-07-19 10:02:45,105 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:45,109 - INFO - Data loaded into input area.
+2025-07-19 10:02:48,946 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:02:48,946 - INFO - Data loaded into input area.
+2025-07-19 10:03:17,751 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:03:17,751 - INFO - Data loaded into input area.
+2025-07-19 10:03:26,251 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:03:26,260 - INFO - Data loaded into input area.
+2025-07-19 10:03:27,498 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:03:27,499 - INFO - Data loaded into input area.
+2025-07-19 10:03:27,734 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:03:27,734 - INFO - Data loaded into input area.
+2025-07-19 10:03:29,338 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:03:29,343 - INFO - Data loaded into input area.
+2025-07-19 10:04:16,645 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:04:16,660 - INFO - Data loaded into input area.
+2025-07-19 10:04:41,755 - INFO - DataFrame shape: (200, 6)
+2025-07-19 10:04:41,755 - INFO - Data loaded into input area.
