@@ -23,64 +23,117 @@ import google.generativeai as genai
 #
 ###############################################################################
 
-class GeminiLLMManager:
-    def __init__(self, api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', model_name: str = "gemini-1.5-flash"):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model_name)
-        self.commands: List[Dict] = []  # List of {"command": str, "args": List[str]}
-
-    def addCommandAndArgs(self, command: str, args: List[str]):
-        """Add a command and its argument names."""
-        self.commands.append({"command": command, "args": args})
+import json
+import re
+from typing import List, Dict, Optional, Union
 
 
-    def query(self, input_text: str) -> Optional[Tuple[str, Dict[str, str]]]:
-        """Identify best command and extract argument values using Gemini."""
-        if not self.commands:
-            raise ValueError("No commands have been added.")
 
-        # Construct the list of commands.
-        command_list = ""
-        for i, cmd in enumerate(self.commands):
-            args_str = ", ".join(cmd["args"]) if cmd["args"] else "none"
-            command_list += f"{i+1}. {cmd['command']} (Args: {args_str})\n"
+import json
+import re
+from typing import List, Dict, Optional
+from langchain.schema import HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-        # Compose the prompt.
-        prompt = (
-            "You are a helpful assistant. Your task is to identify the best matching command from the list, "
-            "based on the user's query given below. Available commands with args are given below. "
-            "Also extract argument values from user's query if they are mentioned.\n\n"
-            "Return ONLY a JSON object in this format:\n"
-            '{\n  "command": "<command>",\n  "args": { "arg1": "value1", "arg2": "value2" }\n}\n\n'
-            f"User Query: {input_text.strip()}\n\n"
-            f"Available Commands:\n{command_list}"
+
+class GeminiLangChainLLMManager:
+    def __init__(self, 
+                 api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', 
+                 model_name: str = "gemini-1.5-flash", 
+                 temperature: float = 0.2):
+    
+        self.columns: List[str] = []
+        self.commands: List[Dict[str, List[str]]] = []
+        self.llm = ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=api_key,
+            temperature=temperature
         )
 
+    def addCommandAndArgs(self, command: str, args: List[str]):
+        self.commands.append({"command": command, "args": args})
+
+    def addColumnName(self, columnName: str):
+        self.columns.append(columnName)
+
+    def query(self, user_prompt: str) -> Optional[Dict]:
+        if not self.commands and not self.columns:
+            raise ValueError("No commands or columns defined.")
+
+        prompt = self._construct_prompt(user_prompt)
         print("\n🔹 Prompt sent to Gemini:\n", prompt)
 
         try:
-            response = self.model.generate_content(prompt)
-            reply = response.text.strip()
+            response = self.llm([HumanMessage(content=prompt)])
+            reply = response.content.strip()
             print("\n🔸 Gemini Response:\n", reply)
-            
-            # Clean the reply: if it is wrapped in markdown code block formatting, extract the JSON part.
-            # For example, if reply starts with "```json" and ends with "```".
-            match = re.search(r'```json\s*(\{.*\})\s*```', reply, re.DOTALL)
-            if match:
-                json_str = match.group(1)
-            else:
-                json_str = reply
 
-            # Parse JSON from the cleaned string.
-            parsed = json.loads(json_str)
-            command = parsed["command"]
-            args = parsed.get("args", {})
-            return command, args
+            # Handle ```json blocks
+            match = re.search(r'```json\s*(\{.*?\})\s*```', reply, re.DOTALL)
+            json_str = match.group(1) if match else reply
+            result = json.loads(json_str)
+            return result
 
         except Exception as e:
             print("❌ Failed to parse Gemini response:", e)
             return None
 
+    def _construct_prompt(self, user_prompt: str) -> str:
+        columns_str = "\n".join(f"- {col}" for col in self.columns)
+        commands_str = "\n".join(
+            f"- {cmd['command']} (Args: {', '.join(cmd.get('args', []))})"
+            for cmd in self.commands
+        )
+
+        format_hint = '''
+Return a JSON object in exactly **one** of the following forms:
+
+1. If the prompt matches a command:
+{
+  "ResultMode": "COMMAND_OR_ACTION_RUN",
+  "output": {
+    "command_name": "<command>",
+    "args": { "arg1": "value1", "arg2": "value2" }
+  }
+}
+
+2. If the prompt asks for SQL analysis:
+{
+  "ResultMode": "SQL_COLUMN_ANALYSIS",
+  "output": {
+    "sql_query": "SELECT ... FROM table WHERE ..."
+  }
+}
+
+3. If the LLM gives its own answer:
+{
+  "ResultMode": "LLM_OWN_RESPONSE",
+  "output": {
+    "llm_own_answer": "Your answer here"
+  }
+}
+'''
+
+        return f"""
+You are a helpful assistant.
+
+Based on the user prompt, classify the request into one of:
+1. An action/command execution from available commands.
+2. A SQL-style analysis based on table columns.
+3. A general query needing a direct LLM response.
+
+Input Table Columns:
+{columns_str}
+
+Available Commands and Actions:
+{commands_str}
+
+User Prompt:
+"{user_prompt.strip()}"
+
+{format_hint}
+Respond ONLY with the appropriate JSON.
+"""
 
 
 ###############################################################################
@@ -146,5 +199,5 @@ class LLMManager:
 
 # global_LLM_manager = LLMManager()
 
-global_LLM_manager = GeminiLLMManager()
+global_LLM_manager = GeminiLangChainLLMManager()
 

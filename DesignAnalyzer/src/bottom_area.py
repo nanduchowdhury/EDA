@@ -20,8 +20,6 @@ from llm_manager import global_LLM_manager
 
 class BottomArea(QObject):
 
-    signal_update_command = pyqtSignal(str, dict)
-    
     DUMMY_INPUT_TAB = "input file"
 
 
@@ -112,6 +110,8 @@ class BottomArea(QObject):
         # --- Left side: QTabWidget (Data Info, Logs, Assistant) ---
         self.tabWidget = QTabWidget()
 
+        self.tabWidget.setTabPosition(QTabWidget.West)
+
         # Data Info tab
         self.designInfoTab = QWidget()
         self.designInfoText = QTextEdit()
@@ -131,34 +131,9 @@ class BottomArea(QObject):
         self.tabWidget.addTab(self.logsTab, "Logs")
 
         # Assistant tab
-        self.assistantTab = QWidget()
-        assistantLayout = QVBoxLayout(self.assistantTab)
-
-        self.assistantOutput = QTextEdit()
-        self.assistantOutput.setReadOnly(True)
-        self.assistantOutput.setPlaceholderText("Assistant Output")
-        self.assistantOutput.setStyleSheet("background-color: #f9f9f9;")
-        # self.assistantOutput.setMinimumHeight(150)
-        self.assistantOutput.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-
-        # Input + Send Button
-        inputRow = QHBoxLayout()
-        self.assistantInput = QTextEdit()
-        self.assistantInput.setPlaceholderText("Ask about what analysis or action you want to perform on your data...")
-        self.assistantInput.setFixedHeight(60)
-
-        self.sendButton = QPushButton("▶")
-        self.sendButton.setFixedWidth(80)
-        self.sendButton.clicked.connect(self._handleAssistantQuery)
-
-        inputRow.addWidget(self.assistantInput)
-        inputRow.addWidget(self.sendButton)
-
-        assistantLayout.addWidget(self.assistantOutput)
-        assistantLayout.addLayout(inputRow)
-
+        self.assistantManager = AssistantManager()
+        self.assistantTab = self.assistantManager.getTab()
         index = self.tabWidget.addTab(self.assistantTab, "Assistant")
-
         self.tabWidget.setCurrentIndex(index)
 
         # --- Right side: system info label ---
@@ -334,4 +309,111 @@ class InputTab:
 
     def clear_callback(self):
         self.list_widget.clear()
+
+
+
+class AssistantManager(QObject):
+
+    signal_update_command = pyqtSignal(str, dict)
+
+    def __init__(self, parent=None):
+
+        super().__init__()
+
+        self.assistantTab = QWidget(parent)
+        assistantLayout = QVBoxLayout(self.assistantTab)
+
+        # Output area
+        self.assistantOutput = QTextEdit()
+        self.assistantOutput.setReadOnly(True)
+        self.assistantOutput.setPlaceholderText("Assistant Output")
+        self.assistantOutput.setStyleSheet("background-color: #f9f9f9;")
+        self.assistantOutput.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
+        # Input + Send Button row
+        inputRow = QHBoxLayout()
+        self.assistantInput = QTextEdit()
+        self.assistantInput.setPlaceholderText("Ask about what analysis or action you want to perform on your data...")
+        self.assistantInput.setFixedHeight(60)
+
+        self.sendButton = QPushButton("▶")
+        self.sendButton.setFixedWidth(80)
+        self.sendButton.clicked.connect(self._handleAssistantQuery)
+
+        inputRow.addWidget(self.assistantInput)
+        inputRow.addWidget(self.sendButton)
+
+        # Layout assembly
+        assistantLayout.addWidget(self.assistantOutput)
+        assistantLayout.addLayout(inputRow)
+
+    def getTab(self):
+        return self.assistantTab
+
+    def _handleAssistantQuery(self):
+        query = self.assistantInput.toPlainText().strip()
+        if not query:
+            return
+
+        # Append user input
+        self.assistantOutput.append(f"<b>You:</b> {query}")
+        self.assistantInput.clear()
+
+        # Get LLM response
+        try:
+            json_llm_response = global_LLM_manager.query(query)
+        except Exception as e:
+            self.assistantOutput.append(f"<span style='color:red;'>Error: {str(e)}</span>")
+            return
+
+        # Dispatch response based on type
+        response_type = json_llm_response.get("ResultMode")
+        if response_type == "LLM_OWN_RESPONSE":
+            self._handleOwnResponse(json_llm_response.get("output", {}))
+        elif response_type == "SQL_COLUMN_ANALYSIS":
+            self._handleSQLColumnAnalysis(json_llm_response.get("output", {}))
+        elif response_type == "COMMAND_OR_ACTION_RUN":
+            self._handleCommandOrActionRun(json_llm_response.get("output", {}))
+        else:
+            self.assistantOutput.append("<i>Unknown response type received.</i>")
+
+    def _handleOwnResponse(self, output):
+
+        llm_own_resp = output.get("llm_own_answer", "")
+        self.assistantOutput.append(f"<b>Assistant:</b> {llm_own_resp}")
+
+    def _handleSQLColumnAnalysis(self, result):
+
+        sql_query = result.get("sql_query", "")
+
+        command = "execute sql query"
+        args = {"actual_query": sql_query}
+
+        self.signal_update_command.emit(command, args)
+
+        resp = f"Check the relevant data in results table."
+        self.assistantOutput.append(f"<b>Assistant:</b> {resp}")
+
+    def _handleCommandOrActionRun(self, output):
+
+        command = output.get("command_name")
+        args = output.get("args", [])
+
+        self.signal_update_command.emit(command, args)
+
+        resp = f"<b>Assistant:</b> Use following action or analysis:\n \
+                \t\t <b>{command}</b> \n\
+            \t with arguments: \n\
+                \t\t <b>{args}</b>"
+        
+        self.assistantOutput.append(resp)
+        self.assistantOutput.append("")
+
+        # Auto-scroll to bottom
+        self.assistantOutput.verticalScrollBar().setValue(
+            self.assistantOutput.verticalScrollBar().maximum()
+        )
+
+        self.assistantInput.clear()
+
 

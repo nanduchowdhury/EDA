@@ -3086,3 +3086,185 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-19 10:04:16,660 - INFO - Data loaded into input area.
 2025-07-19 10:04:41,755 - INFO - DataFrame shape: (200, 6)
 2025-07-19 10:04:41,755 - INFO - Data loaded into input area.
+2025-07-19 10:19:04,097 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 10:19:04,129 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 10:19:24,535 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 10:19:24,551 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 10:24:41,428 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 10:24:41,449 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:16,541 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:16,560 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:29,624 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:29,624 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:29,830 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:29,830 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:30,145 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 11:10:30,158 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 12:23:12,715 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'idempotency_key': 'stainless-python-retry-a9bc648a-7e48-4d5c-88d9-06d09fcdd315', 'json_data': {'messages': [{'role': 'user', 'content': '\nYou are a helpful assistant.\n\nBased on the user prompt, classify the request into one of:\n1. An action/command execution from available commands.\n2. A SQL-style analysis based on table columns.\n3. A general query needing a direct LLM response.\n\nInput Table Columns:\n\n\nAvailable Commands and Actions:\n- create bar chart (Args: x_axis, y_axis)\n- find outlier based on mean/std-dev (Args: column_name, z-value)\n- predict next months based on linear regression (Args: column_name, num-months)\n- extract data where specified column contains a string or name (Args: column_name, containing_string)\n- create world map (Args: column_name)\n\nUser Prompt:\n"get bar chart"\n\n\nReturn a JSON object in exactly **one** of the following forms:\n1. If the prompt matches a command:\n{\n  "ResultMode": "COMMAND_OR_ACTION_RUN",\n  "output": {\n    "command_name": "<command>",\n    "args": { "arg1": "value1", "arg2": "value2" }\n  }\n}\n\n2. If the prompt asks for SQL analysis:\n{\n  "ResultMode": "SQL_COLUMN_ANALYSIS",\n  "output": {\n    "sql_query": "SELECT ... FROM table WHERE ..."\n  }\n}\n\n3. If the LLM gives its own answer:\n{\n  "ResultMode": "LLM_OWN_RESPONSE",\n  "output": {\n    "llm_own_answer": "Your answer here"\n  }\n}\n\nRespond ONLY with the appropriate JSON.\n'}], 'model': 'gpt-4', 'n': 1, 'stream': True, 'temperature': 0.3}}
+2025-07-19 12:23:12,739 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-07-19 12:23:12,740 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=None socket_options=None
+2025-07-19 12:23:12,816 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000023A13EC3C90>
+2025-07-19 12:23:12,817 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x0000023A112090A0> server_hostname='api.openai.com' timeout=None
+2025-07-19 12:23:12,866 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000023A160DF1D0>
+2025-07-19 12:23:12,866 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-07-19 12:23:12,866 - DEBUG - send_request_headers.complete
+2025-07-19 12:23:12,866 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-07-19 12:23:12,875 - DEBUG - send_request_body.complete
+2025-07-19 12:23:12,876 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-07-19 12:23:13,358 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 404, b'Not Found', [(b'Date', b'Sat, 19 Jul 2025 06:53:12 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'vary', b'Origin'), (b'x-request-id', b'req_76a0ae0eb89ecb44daee7f51ce1f596b'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=2hsBMU5cKS6hoIUkYcDAIvwFQ6CYS6gvdsRxXKz3B0k-1752907992-1.0.1.1-lbNDRneXdK4pwwnN7HE9tPPXu9VfW5BKrq66x8skG5pc8Pi56A51tB5zGozdxNihfoFjuJ1Nx25CanFdWF_5W6.Cuirt6Pp5nE49CMoJius; path=/; expires=Sat, 19-Jul-25 07:23:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=B86.1EAHzdG7Ra3KQFlLEjEmGdREB2RcgLzpRYuQxpE-1752907992489-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'96184ce61adf54ec-DEL'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-07-19 12:23:13,358 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-07-19 12:23:13,375 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "404 Not Found" Headers([('date', 'Sat, 19 Jul 2025 06:53:12 GMT'), ('content-type', 'application/json; charset=utf-8'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('vary', 'Origin'), ('x-request-id', 'req_76a0ae0eb89ecb44daee7f51ce1f596b'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=2hsBMU5cKS6hoIUkYcDAIvwFQ6CYS6gvdsRxXKz3B0k-1752907992-1.0.1.1-lbNDRneXdK4pwwnN7HE9tPPXu9VfW5BKrq66x8skG5pc8Pi56A51tB5zGozdxNihfoFjuJ1Nx25CanFdWF_5W6.Cuirt6Pp5nE49CMoJius; path=/; expires=Sat, 19-Jul-25 07:23:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=B86.1EAHzdG7Ra3KQFlLEjEmGdREB2RcgLzpRYuQxpE-1752907992489-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '96184ce61adf54ec-DEL'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-07-19 12:23:13,377 - DEBUG - request_id: req_76a0ae0eb89ecb44daee7f51ce1f596b
+2025-07-19 12:23:13,380 - DEBUG - Encountered httpx.HTTPStatusError
+Traceback (most recent call last):
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\openai\_base_client.py", line 1017, in request
+    response.raise_for_status()
+  File "C:\Users\nandu\AppData\Local\Programs\Python\Python311\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://api.openai.com/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-07-19 12:23:13,432 - DEBUG - Not retrying
+2025-07-19 12:23:13,432 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-07-19 12:23:13,432 - DEBUG - receive_response_body.complete
+2025-07-19 12:23:13,437 - DEBUG - response_closed.started
+2025-07-19 12:23:13,439 - DEBUG - response_closed.complete
+2025-07-19 12:23:13,441 - DEBUG - Re-raising status error
+2025-07-19 20:10:31,726 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:10:31,746 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:13:56,071 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:13:56,108 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:19:23,847 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:19:23,874 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:29:33,016 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:29:33,048 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:36:13,065 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 20:36:13,097 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 22:26:55,868 - DEBUG - Converted retries value: 2 -> Retry(total=2, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:26:55,868 - DEBUG - Converted retries value: 2 -> Retry(total=2, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:26:56,643 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Tokyo&format=json&limit=1
+2025-07-19 22:26:56,656 - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-07-19 22:26:57,596 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Tokyo&format=json&limit=1 HTTP/1.1" 200 422
+2025-07-19 22:26:57,596 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Moscow&format=json&limit=1
+2025-07-19 22:26:58,576 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Moscow&format=json&limit=1 HTTP/1.1" 200 487
+2025-07-19 22:26:58,576 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Bangkok&format=json&limit=1
+2025-07-19 22:26:59,587 - DEBUG - Incremented Retry for (url='/search?q=Bangkok&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:26:59,601 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Bangkok&format=json&limit=1
+2025-07-19 22:26:59,603 - DEBUG - Starting new HTTPS connection (2): nominatim.openstreetmap.org:443
+2025-07-19 22:27:00,551 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Bangkok&format=json&limit=1 HTTP/1.1" 200 499
+2025-07-19 22:27:00,551 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Mumbai&format=json&limit=1
+2025-07-19 22:27:01,554 - DEBUG - Incremented Retry for (url='/search?q=Mumbai&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:01,557 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Mumbai&format=json&limit=1
+2025-07-19 22:27:01,562 - DEBUG - Starting new HTTPS connection (3): nominatim.openstreetmap.org:443
+2025-07-19 22:27:02,553 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Mumbai&format=json&limit=1 HTTP/1.1" 200 442
+2025-07-19 22:27:02,553 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Noida&format=json&limit=1
+2025-07-19 22:27:03,483 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Noida&format=json&limit=1 HTTP/1.1" 200 453
+2025-07-19 22:27:03,483 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=berlin&format=json&limit=1
+2025-07-19 22:27:04,506 - DEBUG - Incremented Retry for (url='/search?q=berlin&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:04,507 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=berlin&format=json&limit=1
+2025-07-19 22:27:04,509 - DEBUG - Starting new HTTPS connection (4): nominatim.openstreetmap.org:443
+2025-07-19 22:27:05,640 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=berlin&format=json&limit=1 HTTP/1.1" 200 413
+2025-07-19 22:27:05,640 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Osaka&format=json&limit=1
+2025-07-19 22:27:06,659 - DEBUG - Incremented Retry for (url='/search?q=Osaka&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:06,662 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Osaka&format=json&limit=1
+2025-07-19 22:27:06,667 - DEBUG - Starting new HTTPS connection (5): nominatim.openstreetmap.org:443
+2025-07-19 22:27:07,689 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Osaka&format=json&limit=1 HTTP/1.1" 200 431
+2025-07-19 22:27:07,689 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Delhi&format=json&limit=1
+2025-07-19 22:27:08,599 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Delhi&format=json&limit=1 HTTP/1.1" 200 408
+2025-07-19 22:27:08,615 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=madrid&format=json&limit=1
+2025-07-19 22:27:09,635 - DEBUG - Incremented Retry for (url='/search?q=madrid&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:09,637 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=madrid&format=json&limit=1
+2025-07-19 22:27:09,637 - DEBUG - Starting new HTTPS connection (6): nominatim.openstreetmap.org:443
+2025-07-19 22:27:10,671 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=madrid&format=json&limit=1 HTTP/1.1" 200 434
+2025-07-19 22:27:10,674 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Chennai&format=json&limit=1
+2025-07-19 22:27:11,539 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Chennai&format=json&limit=1 HTTP/1.1" 200 419
+2025-07-19 22:27:11,545 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Kolkata&format=json&limit=1
+2025-07-19 22:27:12,501 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Kolkata&format=json&limit=1 HTTP/1.1" 200 426
+2025-07-19 22:27:12,508 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=rome&format=json&limit=1
+2025-07-19 22:27:13,515 - DEBUG - Incremented Retry for (url='/search?q=rome&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:13,517 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=rome&format=json&limit=1
+2025-07-19 22:27:13,517 - DEBUG - Starting new HTTPS connection (7): nominatim.openstreetmap.org:443
+2025-07-19 22:27:14,650 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=rome&format=json&limit=1 HTTP/1.1" 200 427
+2025-07-19 22:27:14,655 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=New+York&format=json&limit=1
+2025-07-19 22:27:15,663 - DEBUG - Incremented Retry for (url='/search?q=New+York&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:15,663 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=New+York&format=json&limit=1
+2025-07-19 22:27:15,663 - DEBUG - Starting new HTTPS connection (8): nominatim.openstreetmap.org:443
+2025-07-19 22:27:16,796 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=New+York&format=json&limit=1 HTTP/1.1" 200 451
+2025-07-19 22:27:16,812 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Beijing&format=json&limit=1
+2025-07-19 22:27:17,614 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Beijing&format=json&limit=1 HTTP/1.1" 200 420
+2025-07-19 22:27:17,629 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Paris&format=json&limit=1
+2025-07-19 22:27:18,638 - DEBUG - Incremented Retry for (url='/search?q=Paris&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:18,646 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Paris&format=json&limit=1
+2025-07-19 22:27:18,647 - DEBUG - Starting new HTTPS connection (9): nominatim.openstreetmap.org:443
+2025-07-19 22:27:19,774 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Paris&format=json&limit=1 HTTP/1.1" 200 444
+2025-07-19 22:27:19,790 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Bangalore&format=json&limit=1
+2025-07-19 22:27:20,549 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Bangalore&format=json&limit=1 HTTP/1.1" 200 470
+2025-07-19 22:27:20,549 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=london&format=json&limit=1
+2025-07-19 22:27:21,568 - DEBUG - Incremented Retry for (url='/search?q=london&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:21,568 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=london&format=json&limit=1
+2025-07-19 22:27:21,568 - DEBUG - Starting new HTTPS connection (10): nominatim.openstreetmap.org:443
+2025-07-19 22:27:22,740 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=london&format=json&limit=1 HTTP/1.1" 200 429
+2025-07-19 22:27:22,752 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Shanghai&format=json&limit=1
+2025-07-19 22:27:23,665 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Shanghai&format=json&limit=1 HTTP/1.1" 200 420
+2025-07-19 22:27:23,665 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Dallas&format=json&limit=1
+2025-07-19 22:27:24,502 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Dallas&format=json&limit=1 HTTP/1.1" 200 444
+2025-07-19 22:27:24,519 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Tokyo&format=json&limit=1
+2025-07-19 22:27:25,519 - DEBUG - Incremented Retry for (url='/search?q=Tokyo&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:25,522 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Tokyo&format=json&limit=1
+2025-07-19 22:27:25,529 - DEBUG - Starting new HTTPS connection (11): nominatim.openstreetmap.org:443
+2025-07-19 22:27:26,628 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Tokyo&format=json&limit=1 HTTP/1.1" 200 422
+2025-07-19 22:27:26,628 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Moscow&format=json&limit=1
+2025-07-19 22:27:27,545 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Moscow&format=json&limit=1 HTTP/1.1" 200 487
+2025-07-19 22:27:27,561 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Bangkok&format=json&limit=1
+2025-07-19 22:27:28,541 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Bangkok&format=json&limit=1 HTTP/1.1" 200 499
+2025-07-19 22:27:28,541 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Mumbai&format=json&limit=1
+2025-07-19 22:27:29,535 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Mumbai&format=json&limit=1 HTTP/1.1" 200 442
+2025-07-19 22:27:29,535 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Noida&format=json&limit=1
+2025-07-19 22:27:30,516 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Noida&format=json&limit=1 HTTP/1.1" 200 453
+2025-07-19 22:27:30,532 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=berlin&format=json&limit=1
+2025-07-19 22:27:31,546 - DEBUG - Incremented Retry for (url='/search?q=berlin&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:31,547 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=berlin&format=json&limit=1
+2025-07-19 22:27:31,562 - DEBUG - Starting new HTTPS connection (12): nominatim.openstreetmap.org:443
+2025-07-19 22:27:32,670 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=berlin&format=json&limit=1 HTTP/1.1" 200 413
+2025-07-19 22:27:32,685 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Osaka&format=json&limit=1
+2025-07-19 22:27:33,604 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Osaka&format=json&limit=1 HTTP/1.1" 200 431
+2025-07-19 22:27:33,604 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Delhi&format=json&limit=1
+2025-07-19 22:27:34,616 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Delhi&format=json&limit=1 HTTP/1.1" 200 408
+2025-07-19 22:27:34,627 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=madrid&format=json&limit=1
+2025-07-19 22:27:35,635 - DEBUG - Incremented Retry for (url='/search?q=madrid&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:35,637 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=madrid&format=json&limit=1
+2025-07-19 22:27:35,642 - DEBUG - Starting new HTTPS connection (13): nominatim.openstreetmap.org:443
+2025-07-19 22:27:36,769 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=madrid&format=json&limit=1 HTTP/1.1" 200 434
+2025-07-19 22:27:36,769 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Chennai&format=json&limit=1
+2025-07-19 22:27:37,497 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Chennai&format=json&limit=1 HTTP/1.1" 200 419
+2025-07-19 22:27:37,514 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Kolkata&format=json&limit=1
+2025-07-19 22:27:38,458 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Kolkata&format=json&limit=1 HTTP/1.1" 200 426
+2025-07-19 22:27:38,473 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=rome&format=json&limit=1
+2025-07-19 22:27:39,497 - DEBUG - Incremented Retry for (url='/search?q=rome&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:39,497 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=rome&format=json&limit=1
+2025-07-19 22:27:39,514 - DEBUG - Starting new HTTPS connection (14): nominatim.openstreetmap.org:443
+2025-07-19 22:27:40,570 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=rome&format=json&limit=1 HTTP/1.1" 200 427
+2025-07-19 22:27:40,576 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=New+York&format=json&limit=1
+2025-07-19 22:27:41,594 - DEBUG - Incremented Retry for (url='/search?q=New+York&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:41,605 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=New+York&format=json&limit=1
+2025-07-19 22:27:41,609 - DEBUG - Starting new HTTPS connection (15): nominatim.openstreetmap.org:443
+2025-07-19 22:27:42,807 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=New+York&format=json&limit=1 HTTP/1.1" 200 451
+2025-07-19 22:27:42,822 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Beijing&format=json&limit=1
+2025-07-19 22:27:43,630 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Beijing&format=json&limit=1 HTTP/1.1" 200 420
+2025-07-19 22:27:43,630 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Paris&format=json&limit=1
+2025-07-19 22:27:44,643 - DEBUG - Incremented Retry for (url='/search?q=Paris&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:44,648 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=Paris&format=json&limit=1
+2025-07-19 22:27:44,660 - DEBUG - Starting new HTTPS connection (16): nominatim.openstreetmap.org:443
+2025-07-19 22:27:45,798 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Paris&format=json&limit=1 HTTP/1.1" 200 444
+2025-07-19 22:27:45,813 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Bangalore&format=json&limit=1
+2025-07-19 22:27:46,495 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Bangalore&format=json&limit=1 HTTP/1.1" 200 470
+2025-07-19 22:27:46,514 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=london&format=json&limit=1
+2025-07-19 22:27:47,535 - DEBUG - Incremented Retry for (url='/search?q=london&format=json&limit=1'): Retry(total=1, connect=None, read=None, redirect=None, status=None)
+2025-07-19 22:27:47,545 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='nominatim.openstreetmap.org', port=443): Read timed out. (read timeout=1)")': /search?q=london&format=json&limit=1
+2025-07-19 22:27:47,551 - DEBUG - Starting new HTTPS connection (17): nominatim.openstreetmap.org:443
+2025-07-19 22:27:48,699 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=london&format=json&limit=1 HTTP/1.1" 200 429
+2025-07-19 22:27:48,699 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Shanghai&format=json&limit=1
+2025-07-19 22:27:49,665 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Shanghai&format=json&limit=1 HTTP/1.1" 200 420
+2025-07-19 22:27:49,679 - DEBUG - Nominatim.geocode: https://nominatim.openstreetmap.org/search?q=Dallas&format=json&limit=1
+2025-07-19 22:27:50,600 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Dallas&format=json&limit=1 HTTP/1.1" 200 444
+2025-07-19 23:16:42,264 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-19 23:16:42,299 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv

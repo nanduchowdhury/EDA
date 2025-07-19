@@ -34,7 +34,7 @@ from session import Session
 
 from common import PlaceholderTextEdit, ScrollingLabel
 
-from predicates import Predicates, CreateBarChart
+from predicates import Predicates, CreateBarChart, SqlQueryPredicate
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -271,7 +271,7 @@ class MainUI(QMainWindow):
         self.bottomArea = BottomArea(self.mainLayout, self.sentralControl,
                                 self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
 
-        self.bottomArea.signal_update_command.connect(self.on_signal_update_command)
+        self.bottomArea.assistantManager.signal_update_command.connect(self.on_signal_update_command)
 
         
 
@@ -602,7 +602,9 @@ class MainUI(QMainWindow):
         
         barChartObj = CreateBarChart(self.sentralControl)
         self.all_predicates.addPredicate("create bar chart", barChartObj)
-        
+
+        sqlQueryPredicate = SqlQueryPredicate(self.sentralControl)
+        self.all_predicates.addPredicate("execute sql query", sqlQueryPredicate)
 
 
 from PyQt5.QtCore import Qt

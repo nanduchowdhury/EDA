@@ -193,4 +193,65 @@ class CreateBarChart(PredicateBase):
         input_table.highlightData(highlight_dict)
 
 
+class SqlQueryPredicate(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'actual_query': ""
+        }
+
+    def run(self):
+        
+        df_list = self.sentralControl.getDataForSelectedEntity()
+        df = df_list[0]
+        
+        result = []
+
+        actual_query = self.args['actual_query']
+
+        print(f"Executing SQL query: {actual_query}")
+
+        manager = SqlManager()
+        manager.loadDataFrame(df)
+
+        result = manager.executeSql(actual_query)
+
+        for col_name in result.columns:
+            self.setOutputObject(col_name, result[col_name].tolist())
+
+
+        return result
+    
+
+
+import sqlite3
+
+class SqlManager:
+    def __init__(self):
+        self.conn = sqlite3.connect(":memory:")
+        self.df = None
+        self.table_name = "csv_data"
+
+    def loadDataFrame(self, df: pd.DataFrame):
+        self.df = df
+        df.to_sql(self.table_name, self.conn, if_exists="replace", index=False)
+
+    def executeSql(self, sql: str) -> pd.DataFrame:
+        try:
+            # Replace 'table' in sql with the actual table name
+            sql = sql.replace("table", self.table_name)
+
+            result_df = pd.read_sql_query(sql, self.conn)
+
+            print(f"SQL Result DataFrame:\n{result_df}")
+
+            return result_df
+        except Exception as e:
+            print(f"SQL execution error: {e}")
+            return pd.DataFrame()
+
+
+
 
