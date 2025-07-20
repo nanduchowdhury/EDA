@@ -14,7 +14,7 @@ import time
 
 import json
 
-from common import CustomListWidget, PlaceholderTextEdit
+from common import CustomListWidget, PlaceholderTextEdit, TabWidget, TabWidgetRmbPopOut
 from llm_manager import global_LLM_manager
 
 
@@ -108,8 +108,8 @@ class BottomArea(QObject):
         rightPanelLayout = QHBoxLayout(rightPanelWidget)
 
         # --- Left side: QTabWidget (Data Info, Logs, Assistant) ---
-        self.tabWidget = QTabWidget()
-
+        self.tabWidget = TabWidget()
+        self.tabWidget.addRmbMenu([TabWidgetRmbPopOut()])
         self.tabWidget.setTabPosition(QTabWidget.West)
 
         # Data Info tab

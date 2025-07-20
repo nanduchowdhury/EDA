@@ -2,7 +2,113 @@
 from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel, QListWidgetItem
 
 from PyQt5.QtGui import QColor, QPainter, QTextCursor
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QPoint
+
+
+from PyQt5.QtWidgets import (
+    QTabWidget, QMenu, QDialog, QVBoxLayout, QHBoxLayout,
+    QPushButton, QWidget
+)
+from abc import ABC, abstractmethod
+
+
+class TabWidgetRmbMenu(ABC):
+    def __init__(self, name: str):
+        self.name = name
+
+    @abstractmethod
+    def onClick(self, tab_widget: QTabWidget, tab_index: int):
+        pass
+
+
+class TabWidgetRmbPopOut(TabWidgetRmbMenu):
+    def __init__(self, name="Pop Out"):
+        super().__init__(name)
+        self.popped_out = False
+        self.original_index = None
+        self.tab_content_widget = None
+        self.tab_name = ""
+        self.tab_widget = None
+
+    def onClick(self, tab_widget: QTabWidget, tab_index: int):
+        if self.popped_out:
+            return  # already popped out
+
+        self.popped_out = True
+        self.original_index = tab_index
+        self.tab_widget = tab_widget
+        self.tab_name = tab_widget.tabText(tab_index)
+        self.tab_content_widget = tab_widget.widget(tab_index)
+
+        # Remove from tab widget
+        tab_widget.removeTab(tab_index)
+
+        # Create dialog
+        dialog = QDialog(tab_widget)
+        dialog.setWindowTitle(f"Popout - {self.tab_name}")
+        dialog.setModal(True)
+
+        dialog_layout = QHBoxLayout(dialog)
+        dialog.setLayout(dialog_layout)
+
+        self.tabWidget = QTabWidget()
+
+        self.tab_content_widget.setParent(self.tabWidget)
+        self.tabWidget.addTab(self.tab_content_widget, self.tab_name)
+
+        dialog_layout.addWidget(self.tabWidget, stretch=3)
+
+         # Close button
+        close_btn = QPushButton("Close")
+        dialog_layout.addWidget(close_btn)
+
+        def on_close():
+            # Remove from dialog and restore to tab
+            self.tab_content_widget.setParent(None)
+            self.tab_widget.insertTab(self.original_index, self.tab_content_widget, self.tab_name)
+            self.popped_out = False
+            dialog.accept()
+
+        close_btn.clicked.connect(on_close)
+
+        dialog.exec_()
+
+
+class TabWidget(QTabWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._rmb_menu_items = []
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self._show_context_menu)
+
+    def addRmbMenu(self, menu_item_list):
+        self._rmb_menu_items.extend(menu_item_list)
+
+    def _show_context_menu(self, pos: QPoint):
+        # Map to global position
+        global_pos = self.mapToGlobal(pos)
+
+        tab_bar = self.tabBar()
+        tab_index = tab_bar.tabAt(pos)
+
+        if tab_index == -1:
+            return  # No tab under cursor
+
+        menu = QMenu(self)
+
+        # Populate menu items
+        for item in self._rmb_menu_items:
+            action = menu.addAction(item.name)
+
+            # Avoid lambda late-binding issue
+            def create_handler(menu_item, idx):
+                return lambda: menu_item.onClick(self, idx)
+
+            action.triggered.connect(create_handler(item, tab_index))
+
+        menu.exec_(global_pos)
+
 
 
 class CustomListWidget(QListWidget):
