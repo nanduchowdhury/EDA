@@ -15,11 +15,17 @@ from layout_plot import BasePlotView, BarChartView, WorldMapWidget
 
 from vtk_draw import VTKWidgetWrapper
 
-
+from common import TabWidget, TabWidgetRmbPopOut
 
 class ManageResultsTabs:
-    def __init__(self):
-        self.tabWidget = QTabWidget()
+    def __init__(self, windowWidth=600, windowHeight=400):
+        
+        self.windowWidth = windowWidth
+        self.windowHeight = windowHeight
+
+        self.tabWidget = TabWidget()
+        self.tabWidget.addRmbMenu([TabWidgetRmbPopOut(self.windowWidth, self.windowHeight)])
+
         self.tables = {}           # tabName -> ResultsTableView
         self.commands = {}         # tabName -> analysisCommand
 
@@ -239,10 +245,16 @@ class ResultsTableView(TableView):
 
 
 class ManageViewerTabs(QWidget):
-    def __init__(self, viewer_type="DRAW", width=600, height=400, parent=None):
+    def __init__(self, viewer_type="DRAW", 
+                 windowWidth=600, windowHeight=400,
+                 layoutWidth=600, layoutHeight=400, parent=None):
         super().__init__(parent)
-        self.width = width
-        self.height = height
+
+        self.windowWidth = windowWidth
+        self.windowHeight = windowHeight
+        self.layoutWidth = layoutWidth
+        self.layoutHeight = layoutHeight
+
         self.tab_counter = 1
         self.viewer_map = {}
         
@@ -250,7 +262,10 @@ class ManageViewerTabs(QWidget):
         self.inputTabToolTip = "Shows data from input"
 
         self.stackLayout = QStackedLayout(self)
-        self.tabWidget = QTabWidget()
+        
+        self.tabWidget = TabWidget()
+        self.tabWidget.addRmbMenu([TabWidgetRmbPopOut(self.windowWidth, self.windowHeight)])
+        
         self.stackLayout.addWidget(self.tabWidget)
 
         self._createTileView()
@@ -334,9 +349,9 @@ class ManageViewerTabs(QWidget):
     def addTabByType(self, viewer_type, tab_name='', tool_tip=''):
         tab_widget = None
         if viewer_type == "VTK":
-            tab_widget = VTKWidgetWrapper(width=self.width, height=self.height)
+            tab_widget = VTKWidgetWrapper(width=self.layoutWidth, height=self.layoutHeight)
         elif viewer_type == "DRAW":
-            tab_widget = PyQtGraphLayoutWithScales(width=self.width, height=self.height)
+            tab_widget = PyQtGraphLayoutWithScales(width=self.layoutWidth, height=self.layoutHeight)
         elif viewer_type == "PLOT":
             tab_widget = BarChartView()
         elif viewer_type == "TABLE":

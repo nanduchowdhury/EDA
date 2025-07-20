@@ -256,7 +256,7 @@ class MainUI(QMainWindow):
         self.mainLayout = QVBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
-        self.resultsManager = ManageResultsTabs()
+        self.resultsManager = ManageResultsTabs(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.create_top_layout()
         
@@ -269,7 +269,8 @@ class MainUI(QMainWindow):
                                                 sourceDropDown=self.sourceDropDown)
 
         self.bottomArea = BottomArea(self.mainLayout, self.sentralControl,
-                                self.WINDOW_HEIGHT, self.LAYOUT_HEIGHT)
+                                self.WINDOW_WIDTH, self.WINDOW_HEIGHT, 
+                                self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)
 
         self.bottomArea.assistantManager.signal_update_command.connect(self.on_signal_update_command)
 
@@ -382,8 +383,10 @@ class MainUI(QMainWindow):
         topLayout = QHBoxLayout()
 
         self.viewerTabs = ManageViewerTabs(viewer_type=self.PLOT_OR_DRAW,
-                                        width=self.LAYOUT_WIDTH,
-                                        height=self.LAYOUT_HEIGHT)
+                                        windowWidth=self.WINDOW_WIDTH,
+                                        windowHeight=self.WINDOW_HEIGHT,
+                                        layoutWidth=self.LAYOUT_WIDTH,
+                                        layoutHeight=self.LAYOUT_HEIGHT)
         
         # Access default view
         self.drawArea = self.viewerTabs.currentWidget()

@@ -24,13 +24,17 @@ class BottomArea(QObject):
 
 
     def __init__(self, _mainLayout, _sentralControl, 
-                 _windowHeight, _layoutHeight):
+                 _windowWidth, _windowHeight, 
+                 _layoutWidth, _layoutHeight):
         
         super().__init__()
 
         self.mainLayout = _mainLayout
         self.sentralControl = _sentralControl
+
+        self.windowWidth = _windowWidth
         self.windowHeight = _windowHeight
+        self.layoutWidth = _layoutWidth
         self.layoutHeight = _layoutHeight
 
         self.process_start_time = psutil.Process(os.getpid()).create_time()
@@ -109,7 +113,7 @@ class BottomArea(QObject):
 
         # --- Left side: QTabWidget (Data Info, Logs, Assistant) ---
         self.tabWidget = TabWidget()
-        self.tabWidget.addRmbMenu([TabWidgetRmbPopOut()])
+        self.tabWidget.addRmbMenu([TabWidgetRmbPopOut(self.windowWidth, self.windowHeight)])
         self.tabWidget.setTabPosition(QTabWidget.West)
 
         # Data Info tab

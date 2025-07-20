@@ -3268,3 +3268,7 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-19 22:27:50,600 - DEBUG - https://nominatim.openstreetmap.org:443 "GET /search?q=Dallas&format=json&limit=1 HTTP/1.1" 200 444
 2025-07-19 23:16:42,264 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-07-19 23:16:42,299 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-20 18:30:08,956 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-20 18:30:09,005 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-20 19:23:01,216 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-20 19:23:01,240 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv

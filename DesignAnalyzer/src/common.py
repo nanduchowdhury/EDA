@@ -21,14 +21,18 @@ class TabWidgetRmbMenu(ABC):
         pass
 
 
+
 class TabWidgetRmbPopOut(TabWidgetRmbMenu):
-    def __init__(self, name="Pop Out"):
+    def __init__(self, main_window_width, main_window_height, name="Pop Out"):
         super().__init__(name)
         self.popped_out = False
         self.original_index = None
         self.tab_content_widget = None
         self.tab_name = ""
         self.tab_widget = None
+        self.dialog = None
+        self.main_window_width = main_window_width
+        self.main_window_height = main_window_height
 
     def onClick(self, tab_widget: QTabWidget, tab_index: int):
         if self.popped_out:
@@ -43,35 +47,43 @@ class TabWidgetRmbPopOut(TabWidgetRmbMenu):
         # Remove from tab widget
         tab_widget.removeTab(tab_index)
 
-        # Create dialog
-        dialog = QDialog(tab_widget)
-        dialog.setWindowTitle(f"Popout - {self.tab_name}")
-        dialog.setModal(True)
+        # Custom dialog class with reject overridden
+        class CustomDialog(QDialog):
+            def __init__(dlg_self):
+                super().__init__(tab_widget)
+                dlg_self.setWindowTitle(f"Popout - {self.tab_name}")
+                dlg_self.setModal(True)
+                dlg_self.resize(int(self.main_window_width * 0.8), int(self.main_window_height * 0.8))
 
-        dialog_layout = QHBoxLayout(dialog)
-        dialog.setLayout(dialog_layout)
+                dialog_layout = QHBoxLayout(dlg_self)
+                dlg_self.setLayout(dialog_layout)
 
-        self.tabWidget = QTabWidget()
+                self.tabWidgetInDialog = QTabWidget()
+                self.tab_content_widget.setParent(self.tabWidgetInDialog)
+                self.tabWidgetInDialog.addTab(self.tab_content_widget, self.tab_name)
+                dialog_layout.addWidget(self.tabWidgetInDialog, stretch=3)
 
-        self.tab_content_widget.setParent(self.tabWidget)
-        self.tabWidget.addTab(self.tab_content_widget, self.tab_name)
+                close_btn = QPushButton("Close")
+                dialog_layout.addWidget(close_btn)
 
-        dialog_layout.addWidget(self.tabWidget, stretch=3)
+                close_btn.clicked.connect(self.on_close)
 
-         # Close button
-        close_btn = QPushButton("Close")
-        dialog_layout.addWidget(close_btn)
+            def reject(dlg_self):
+                self.on_close()  # call your close logic
+                super().reject()
 
-        def on_close():
-            # Remove from dialog and restore to tab
+        self.dialog = CustomDialog()
+        self.dialog.exec_()
+
+    def on_close(self):
+        if self.popped_out and self.tab_content_widget:
             self.tab_content_widget.setParent(None)
             self.tab_widget.insertTab(self.original_index, self.tab_content_widget, self.tab_name)
+            self.tab_widget.setCurrentIndex(self.original_index)
             self.popped_out = False
-            dialog.accept()
+        if self.dialog:
+            self.dialog.accept()
 
-        close_btn.clicked.connect(on_close)
-
-        dialog.exec_()
 
 
 class TabWidget(QTabWidget):
