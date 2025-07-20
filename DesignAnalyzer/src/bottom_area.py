@@ -14,7 +14,7 @@ import time
 
 import json
 
-from common import CustomListWidget
+from common import CustomListWidget, PlaceholderTextEdit
 from llm_manager import global_LLM_manager
 
 
@@ -332,13 +332,16 @@ class AssistantManager(QObject):
 
         # Input + Send Button row
         inputRow = QHBoxLayout()
-        self.assistantInput = QTextEdit()
+        self.assistantInput = PlaceholderTextEdit()
         self.assistantInput.setPlaceholderText("Ask about what analysis or action you want to perform on your data...")
         self.assistantInput.setFixedHeight(60)
 
         self.sendButton = QPushButton("▶")
         self.sendButton.setFixedWidth(80)
+
+        # Trigger query on 'Enter' press or button-press
         self.sendButton.clicked.connect(self._handleAssistantQuery)
+        self.assistantInput.on_enter_pressed(self._handleAssistantQuery)
 
         inputRow.addWidget(self.assistantInput)
         inputRow.addWidget(self.sendButton)
@@ -352,8 +355,11 @@ class AssistantManager(QObject):
 
     def _handleAssistantQuery(self):
         query = self.assistantInput.toPlainText().strip()
+
         if not query:
             return
+        
+        self.assistantInput.addHistory(query)
 
         # Append user input
         self.assistantOutput.append(f"<b>You:</b> {query}")
@@ -377,6 +383,13 @@ class AssistantManager(QObject):
         else:
             self.assistantOutput.append("<i>Unknown response type received.</i>")
 
+
+        # Put a newline and auto-scroll to bottom
+        self.assistantOutput.append("")
+        self.assistantOutput.verticalScrollBar().setValue(
+            self.assistantOutput.verticalScrollBar().maximum()
+        )
+
     def _handleOwnResponse(self, output):
 
         llm_own_resp = output.get("llm_own_answer", "")
@@ -393,6 +406,7 @@ class AssistantManager(QObject):
 
         resp = f"Check the relevant data in results table."
         self.assistantOutput.append(f"<b>Assistant:</b> {resp}")
+        
 
     def _handleCommandOrActionRun(self, output):
 
@@ -407,13 +421,6 @@ class AssistantManager(QObject):
                 \t\t <b>{args}</b>"
         
         self.assistantOutput.append(resp)
-        self.assistantOutput.append("")
-
-        # Auto-scroll to bottom
-        self.assistantOutput.verticalScrollBar().setValue(
-            self.assistantOutput.verticalScrollBar().maximum()
-        )
-
-        self.assistantInput.clear()
+        
 
 

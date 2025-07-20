@@ -1,7 +1,7 @@
 
-from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel
+from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel, QListWidgetItem
 
-from PyQt5.QtGui import QColor, QPainter
+from PyQt5.QtGui import QColor, QPainter, QTextCursor
 from PyQt5.QtCore import Qt, QTimer
 
 
@@ -17,20 +17,35 @@ class CustomListWidget(QListWidget):
         self.addItem(text)  # Add only if not found
 
 
+
 class PlaceholderTextEdit(QTextEdit):
     def __init__(self, placeholder_text="", parent=None):
         super().__init__(parent)
         self._placeholder_text = placeholder_text
         self._placeholder_visible = True
+        self._history = []
+        self._history_index = -1
+
+        self._suggestions = []  # Full suggestion list
+        self._current_suggestions = []  # Suggestions matching current input
         self._init_placeholder()
 
         self.textChanged.connect(self._on_text_changed)
         self.setAcceptRichText(False)  # Optional: plain text only
+        
+        self._enter_press_callback = None
+
+
+    def on_enter_pressed(self, callback):
+        """Register a function to be called when Enter is pressed."""
+        self._enter_press_callback = callback
 
     def _init_placeholder(self):
         """Initializes the placeholder appearance."""
         self.setTextColor(Qt.gray)
+        # self.blockSignals(True)
         self.setPlainText(self._placeholder_text)
+        # self.blockSignals(False)
         self._placeholder_visible = True
 
     def _on_text_changed(self):
@@ -43,9 +58,11 @@ class PlaceholderTextEdit(QTextEdit):
                 self.blockSignals(True)
                 self.setPlainText(content)
                 self.blockSignals(False)
-        elif not self.toPlainText().strip():
+                
+        # Do NOT trigger placeholder here - it results in infinite recursion
+        #elif not self.toPlainText().strip():
             # Field cleared: show placeholder again
-            self._init_placeholder()
+        #    self._init_placeholder()
 
     def focusInEvent(self, event):
         """Clear placeholder when focused."""
@@ -66,6 +83,60 @@ class PlaceholderTextEdit(QTextEdit):
         if self._placeholder_visible:
             return ""
         return super().toPlainText()
+
+    def addHistory(self, text):
+        if text and text not in self._history:
+            self._history.append(text)
+        self._history_index = len(self._history)
+
+    def setSuggestions(self, suggestions):
+        self._suggestions = suggestions
+
+    def keyPressEvent(self, event):
+
+        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            if self._enter_press_callback:
+                self._enter_press_callback()
+        
+        elif event.key() == Qt.Key_Up:
+            if self._history and self._history_index > 0:
+                self._history_index -= 1
+                
+                self.blockSignals(True)
+                self.setPlainText(self._history[self._history_index])
+                self.blockSignals(False)
+
+                self.moveCursor(QTextCursor.End)
+        elif event.key() == Qt.Key_Down:
+            if self._history and self._history_index < len(self._history) - 1:
+                self._history_index += 1
+
+                self.blockSignals(True)
+                self.setPlainText(self._history[self._history_index])
+                self.blockSignals(False)
+
+                self.moveCursor(QTextCursor.End)
+        elif event.key() == Qt.Key_Tab:
+            self._applySuggestion()
+        else:
+            super().keyPressEvent(event)
+
+    def _applySuggestion(self):
+        current_text = self.toPlainText()
+        if not current_text:
+            return
+
+        self._current_suggestions = [
+            s for s in self._suggestions if s.startswith(current_text)
+        ]
+        if self._current_suggestions:
+            next_suggestion = self._current_suggestions[0]
+
+            self.blockSignals(True)
+            self.setPlainText(next_suggestion)
+            self.blockSignals(False)
+            
+            self.moveCursor(QTextCursor.End)
 
 
 class ScrollingLabel(QLabel):
