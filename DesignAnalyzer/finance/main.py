@@ -8,9 +8,9 @@ import numpy as np
 import logging 
 
 
-import csv 
+import csv
 
-import pandas as pd
+import pandas as pd 
 
 from sklearn.linear_model import LinearRegression
 
