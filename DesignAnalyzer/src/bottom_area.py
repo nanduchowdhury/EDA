@@ -3,8 +3,7 @@ from PyQt5.QtWidgets import (
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
     QFileDialog, QLabel, QListWidgetItem
 )
-from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
-
+from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal, pyqtSlot
 
 import os
 import psutil
@@ -15,6 +14,8 @@ import time
 import json
 
 from common import CustomListWidget, PlaceholderTextEdit, TabWidget, TabWidgetRmbPopOut
+from common import global_signals
+
 from llm_manager import global_LLM_manager
 
 
@@ -152,44 +153,6 @@ class BottomArea(QObject):
 
         return rightPanelWidget
 
-    def _handleAssistantQuery(self):
-        query = self.assistantInput.toPlainText().strip()
-        if not query:
-            return
-
-        # Append user input
-        self.assistantOutput.append(f"<b>You:</b> {query}")
-
-        # Generate assistant reply (mock or real logic)
-        command, args = self._generateMockAssistantReply(query)
-
-        # Append assistant response
-        resp = f"<b>Assistant:</b> Use following action or analysis:\n \
-                \t\t <b>{command}</b> \n\
-            \t with arguments: \n\
-                \t\t <b>{args}</b>"
-        
-        self.assistantOutput.append(resp)
-
-        self.assistantOutput.append("")  # spacing
-
-        # Auto-scroll to bottom
-        self.assistantOutput.verticalScrollBar().setValue(
-            self.assistantOutput.verticalScrollBar().maximum()
-        )
-
-        self.assistantInput.clear()
-
-
-
-    def _generateMockAssistantReply(self, query: str) -> str:
-        
-        command, args = global_LLM_manager.query(query)
-
-        self.signal_update_command.emit(command, args)
-
-        return command, args
-
 
     def appendDesignInfo(self, info):
         self.designInfoText.append(info)
@@ -324,6 +287,8 @@ class AssistantManager(QObject):
 
         super().__init__()
 
+        global_signals.signal_update_sql_run_status.connect(self.on_signal_update_sql_run_status)
+
         self.assistantTab = QWidget(parent)
         assistantLayout = QVBoxLayout(self.assistantTab)
 
@@ -408,8 +373,14 @@ class AssistantManager(QObject):
 
         self.signal_update_command.emit(command, args)
 
-        resp = f"Check the relevant data in results table."
-        self.assistantOutput.append(f"<b>Assistant:</b> {resp}")
+
+    @pyqtSlot(dict)
+    def on_signal_update_sql_run_status(self, result):
+        
+        if result.get("status") == "success":
+            self.assistantOutput.append(f"<b>Assistant:</b> {result.get('message')}")
+            if result.get("result") is not None:
+                self.assistantOutput.append(f" {result.get('result')}")
         
 
     def _handleCommandOrActionRun(self, output):

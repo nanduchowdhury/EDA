@@ -1,3 +1,5 @@
+from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
+
 from abc import ABC, abstractmethod
 
 import json
@@ -5,8 +7,12 @@ import re
 
 import logging
 
+import sqlite3
+
 from global_name_index import gname_index
 from llm_manager import LLMManager, global_LLM_manager
+
+from common import global_signals
 
 from abc import ABC, abstractmethod
 
@@ -14,7 +20,7 @@ import pandas as pd
 
 from layout_plot import BarChartView
 
-class PredicateBase(ABC):
+class PredicateBase():
     def __init__(self):
         self.predicate_name = ""  # Name of the predicate
         self.args = {}            # input arguments
@@ -94,7 +100,6 @@ class PredicateBase(ABC):
     def onPostRun(self):
         pass
 
-    @abstractmethod
     def run(self):
         """Override this method in subclasses."""
         pass
@@ -193,9 +198,11 @@ class CreateBarChart(PredicateBase):
         input_table.highlightData(highlight_dict)
 
 
-class SqlQueryPredicate(PredicateBase):
+class SqlQueryPredicate(PredicateBase, QObject):
     def __init__(self, sentralControl):
         super().__init__()
+        QObject.__init__(self)
+
         self.sentralControl = sentralControl
 
         self.args = {
@@ -218,18 +225,36 @@ class SqlQueryPredicate(PredicateBase):
 
         result = manager.executeSql(actual_query)
 
-        for col_name in result.columns:
-            self.setOutputObject(col_name, result[col_name].tolist())
+        if result.shape == (1, 1):
+            global_signals.signal_update_sql_run_status.emit({
+                "status": "success",
+                "message": "Executed succcesfully.",
+                "result": result.iloc[0, 0]
+            })
+        elif result.empty:
+            global_signals.signal_update_sql_run_status.emit({
+                "status": "success",
+                "message": "Executed succcesfully, but no result found.",
+                "result": None
+            })
+        else:
+            global_signals.signal_update_sql_run_status.emit({
+                "status": "success",
+                "message": "Executed succcesfully. Check result tabs.",
+                "result": None
+            })
 
+            for col_name in result.columns:
+                self.setOutputObject(col_name, result[col_name].tolist())
 
         return result
     
 
 
-import sqlite3
+class SqlManager():
 
-class SqlManager:
     def __init__(self):
+
         self.conn = sqlite3.connect(":memory:")
         self.df = None
         self.table_name = "csv_data"
@@ -245,9 +270,8 @@ class SqlManager:
 
             result_df = pd.read_sql_query(sql, self.conn)
 
-            print(f"SQL Result DataFrame:\n{result_df}")
-
             return result_df
+        
         except Exception as e:
             print(f"SQL execution error: {e}")
             return pd.DataFrame()

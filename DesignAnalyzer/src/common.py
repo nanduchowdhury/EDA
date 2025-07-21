@@ -1,8 +1,7 @@
 
 from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel, QListWidgetItem
-
 from PyQt5.QtGui import QColor, QPainter, QTextCursor
-from PyQt5.QtCore import Qt, QTimer, QPoint
+from PyQt5.QtCore import Qt, QTimer, QPoint, QObject, pyqtSignal
 
 
 from PyQt5.QtWidgets import (
@@ -310,3 +309,15 @@ class ScrollingLabel(QLabel):
         while x < self.width():
             painter.drawText(x, y, self._text)
             x += text_width + 50  # space between repetitions
+
+
+class GlobalSignals(QObject):
+
+    signal_update_sql_run_status = pyqtSignal(dict)
+
+    def __init__(self):
+        super().__init__()
+
+
+global_signals = GlobalSignals()
+
