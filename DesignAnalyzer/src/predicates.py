@@ -220,34 +220,49 @@ class SqlQueryPredicate(PredicateBase, QObject):
 
         print(f"Executing SQL query: {actual_query}")
 
-        manager = SqlManager()
-        manager.loadDataFrame(df)
+        try:
 
-        result = manager.executeSql(actual_query)
+            manager = SqlManager()
+            manager.loadDataFrame(df)
 
-        if result.shape == (1, 1):
+            result = manager.executeSql(actual_query)
+
+            if result.shape == (1, 1):
+                global_signals.signal_update_sql_run_status.emit({
+                    "status": "success",
+                    "message": "The result is...",
+                    "result": result.iloc[0, 0]
+                })
+            elif result.empty:
+                global_signals.signal_update_sql_run_status.emit({
+                    "status": "success",
+                    "message": "No result found.",
+                    "result": None
+                })
+            else:
+                global_signals.signal_update_sql_run_status.emit({
+                    "status": "success",
+                    "message": "Check result tabs...",
+                    "result": None
+                })
+
+                for col_name in result.columns:
+                    self.setOutputObject(col_name, result[col_name].tolist())
+            
+            return result
+        
+        except Exception as e:
+
+            self.sentralControl.showMessage(f"Execution error: {e}")
+
             global_signals.signal_update_sql_run_status.emit({
-                "status": "success",
-                "message": "Executed succcesfully.",
-                "result": result.iloc[0, 0]
-            })
-        elif result.empty:
-            global_signals.signal_update_sql_run_status.emit({
-                "status": "success",
-                "message": "Executed succcesfully, but no result found.",
+                "status": "error",
+                "message": f"{str(e)}",
                 "result": None
             })
-        else:
-            global_signals.signal_update_sql_run_status.emit({
-                "status": "success",
-                "message": "Executed succcesfully. Check result tabs.",
-                "result": None
-            })
+            return None
 
-            for col_name in result.columns:
-                self.setOutputObject(col_name, result[col_name].tolist())
-
-        return result
+        
     
 
 
@@ -273,8 +288,7 @@ class SqlManager():
             return result_df
         
         except Exception as e:
-            print(f"SQL execution error: {e}")
-            return pd.DataFrame()
+            raise ValueError(f"{e}")
 
 
 

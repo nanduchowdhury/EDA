@@ -646,7 +646,8 @@ class SourceDropDown(QComboBox):
 
             self.header_to_index[header] = model.indexFromItem(item).row()
 
-    def addItem(self, header, name):
+    def addItem(self, header, name, selected=False):
+
         if header not in self.header_to_index:
             raise ValueError(f"Header '{header}' not found. Add it first with addHeader().")
 
@@ -666,7 +667,8 @@ class SourceDropDown(QComboBox):
         item.setFont(font)
 
         # ✅ Make the newly added item selected
-        self.setCurrentIndex(index)
+        if selected:
+            self.setCurrentIndex(index)
 
 
     def getSelected(self):
@@ -776,7 +778,7 @@ class SentralControl:
             self.sourceDropDown.addItem(header, name)
 
             if header != 'RESULTS' and header != self.DEF_RESOLVED_DESIGN:
-                self.sourceDropDown.addItem(header, f'all {header.lower()}')
+                self.sourceDropDown.addItem(header, f'all {header.lower()}', selected=True)
 
             self.fileNameToData[name] = None
         

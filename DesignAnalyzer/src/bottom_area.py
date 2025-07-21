@@ -377,10 +377,9 @@ class AssistantManager(QObject):
     @pyqtSlot(dict)
     def on_signal_update_sql_run_status(self, result):
         
-        if result.get("status") == "success":
-            self.assistantOutput.append(f"<b>Assistant:</b> {result.get('message')}")
-            if result.get("result") is not None:
-                self.assistantOutput.append(f" {result.get('result')}")
+        self.assistantOutput.append(f"<b>Assistant:</b> {result.get('message')}")
+        if result.get("result") is not None:
+            self.assistantOutput.append(f" {result.get('result')}")
         
 
     def _handleCommandOrActionRun(self, output):
