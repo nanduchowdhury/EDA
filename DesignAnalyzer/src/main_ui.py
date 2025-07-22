@@ -7,11 +7,10 @@ from PyQt5.QtWidgets import (
     QStyleOptionComboBox, QStyle, QStylePainter, QScrollArea
 )
 
-
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
 
 
-from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem
 
 from PyQt5.QtCore import Qt, pyqtSlot
 import sys
@@ -44,7 +43,6 @@ from error_log_manager import ErrorManager, UILogHandler
 
 import logging
 from datetime import datetime
-
 
 
 class ReadSessionMenuItem(MenuItemAbstract):
@@ -559,12 +557,14 @@ class MainUI(QMainWindow):
         outputs = list(predicate.iterateOutputs())
 
         if outputs:
-            self.resultsManager.addNewTab(predicate.getShortName(), 
-                                        predicate.getCompleteNameWithArgs())
-            model = self.resultsManager.setOutputsForTab(predicate.getShortName(), outputs)
+            unique_tab_name = self.generate_unique_tab_name(predicate.getShortName())
 
-            self.sentralControl.addEntryForResults(predicate.getCompleteNameWithArgs())
-            self.sentralControl.addDataForResultsEntity(predicate.getCompleteNameWithArgs(), 
+            self.resultsManager.addNewTab(unique_tab_name, 
+                                        predicate.getCompleteNameWithArgs())
+            model = self.resultsManager.setOutputsForTab(unique_tab_name, outputs)
+
+            self.sentralControl.addEntryForResults(unique_tab_name)
+            self.sentralControl.addDataForResultsEntity(unique_tab_name, 
                                                         predicate.getDataFrame())
 
 
@@ -579,6 +579,13 @@ class MainUI(QMainWindow):
 
                     self.drawManager.draw_instances(inst_list, QColor("white"))
 
+
+
+
+    def generate_unique_tab_name(self, base_name: str) -> str:
+        """Generate a unique name starting with date-time in 05Jul_HHMMSS format followed by base name."""
+        timestamp = datetime.now().strftime('%d%b_%H%M%S')  # e.g., 05Jul_172302
+        return f"{timestamp}-{base_name}"
 
 
     def updateParamLabels(self):
@@ -610,8 +617,7 @@ class MainUI(QMainWindow):
         self.all_predicates.addPredicate("execute sql query", sqlQueryPredicate)
 
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+
 
 class SourceDropDown(QComboBox):
     def __init__(self, parent=None):
@@ -848,6 +854,16 @@ class SentralControl:
             #    # h_vals = table.hilightColumnData("Units Sold", "> 500 and < 1000")
             #    h_vals = table.hilightColumnData("Units Sold", "equal to 934 or 413")
 
+
+    def getSelectedTable(self):
+        
+        header, name = self.sourceDropDown.getSelected()
+
+        table = self.resultsManager.getResultsTable(name)
+        if not table:
+            table = self.viewerTabs.getSelectedTabWidget()
+
+        return table
 
 
 class ManageArgs(QWidget):

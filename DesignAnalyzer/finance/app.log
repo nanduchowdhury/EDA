@@ -3437,3 +3437,13 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-21 16:37:31,836 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/products-100000.csv
 2025-07-21 16:45:06,378 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/products-1000000.csv
 2025-07-21 16:45:08,905 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/products-1000000.csv
+2025-07-21 21:02:24,249 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 21:02:24,285 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 21:07:32,626 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 21:07:32,643 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 21:13:55,906 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 21:13:55,923 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 22:09:54,373 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 22:09:54,421 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 22:23:28,865 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-21 22:23:28,897 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv

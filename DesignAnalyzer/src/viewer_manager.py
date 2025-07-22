@@ -130,36 +130,40 @@ class TableView(QTableView):
         return -1
 
     def hilightColumnData(self, col_name: str, expression: str):
-        """Highlights data in column where expression is true, like '>90 and <150'."""
+        """Highlights data in column where expression is true, like 'x > 900' or 'x == \"Tokyo\"'."""
         try:
             df = self.model._df
-            # Prepare mask based on expression
             series = df[col_name]
             mask = series.apply(lambda x: self._eval_expression(x, expression))
-            # Highlight using your existing method
             highlight_values = series[mask].tolist()
             self.highlightData({col_name: highlight_values})
-
             return highlight_values
-        
+
         except Exception as e:
             print(f"Highlight error: {e}")
+            return []
 
-    def _eval_expression(self, value, expression):
+    def _eval_expression(self, x, expr: str):
+        """Safely evaluate an expression string using x as the value."""
         try:
-            value = float(value)  # cast to number if needed
-            # Inject value again after 'and'/'or'
-            tokens = expression.strip().split()
-            rebuilt = []
-            for i, token in enumerate(tokens):
-                rebuilt.append(token)
-                if token in ['and', 'or']:
-                    rebuilt.append(str(value))  # insert value after and/or
-            full_expr = f"{value} {' '.join(rebuilt)}"
-            return eval(full_expr)
+            # Only allow safe names and operators
+            allowed_names = {"x": x}
+            allowed_builtins = {}
+
+            # Compile the expression first for safety
+            code = compile(expr, "<string>", "eval")
+
+            # Check for disallowed names (e.g., __import__, etc.)
+            for name in code.co_names:
+                if name not in allowed_names:
+                    raise NameError(f"Use of name '{name}' not allowed in expression")
+
+            return eval(code, {"__builtins__": allowed_builtins}, allowed_names)
+
         except Exception as e:
-            print(f"Error evaluating expression: {e}")
+            print(f"Eval error: {e}")
             return False
+
 
     def registerOnItemClickCallback(self, callback):
         self._onItemClickCallback = callback

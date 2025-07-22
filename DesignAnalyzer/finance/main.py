@@ -171,36 +171,29 @@ class PredictNextMonths(PredicateBase):
 
         return predicted_values.tolist()
 
-class ExtractColumnsRows(PredicateBase):
+class HighlightTableColumnDataConditional(PredicateBase):
     def __init__(self, sentralControl):
         super().__init__()
         self.sentralControl = sentralControl
 
         self.args = {
             'column_name': "",
-            'containing_string': "",
+            'python_syntax_condition': "",
         }
 
     def run(self):
         
-        df_list = self.sentralControl.getDataForSelectedEntity()
-        df = df_list[0]
+        column_name = self.args['column_name']
+        python_syntax_condition = self.args['python_syntax_condition']
+
+        # df_list = self.sentralControl.getDataForSelectedEntity()
+        # df = df_list[0]
         
         result = []
 
-        column_name = self.args['column_name']
-        containing_string = self.args['containing_string']
+        table = self.sentralControl.getSelectedTable()
+        h_vals = table.hilightColumnData(column_name, python_syntax_condition)
 
-        if column_name and containing_string:
-            result = df[df[column_name].str.contains(containing_string, case=False, na=False)]
-            if not result.empty:
-                for col_name in result.columns:
-                    col_data = result[col_name].tolist()  # Get list of values for this column
-                    self.setOutputObject(col_name, col_data)
-            else:
-                result = ["No matching rows found for the specified column and row name"]
-        else:
-            result = ["No column or row name specified for extraction"]
 
         return result
 
@@ -290,8 +283,8 @@ class FinanceUI(MainUI):
         predict = PredictNextMonths(self.sentralControl)
         self.all_predicates.addPredicate("predict next months based on linear regression", predict)
 
-        extract = ExtractColumnsRows(self.sentralControl)
-        self.all_predicates.addPredicate("extract data where specified column contains a string or name", extract)
+        highlight = HighlightTableColumnDataConditional(self.sentralControl)
+        self.all_predicates.addPredicate("highlight table column data based on python syntax condition", highlight)
 
         worldMapObj = CreateWorldMap(self.sentralControl)
         self.all_predicates.addPredicate("create world map", worldMapObj)
