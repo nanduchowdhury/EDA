@@ -10,6 +10,9 @@ from PyQt5.QtWidgets import (
 )
 from abc import ABC, abstractmethod
 
+import time
+from datetime import datetime
+
 
 class TabWidgetRmbMenu(ABC):
     def __init__(self, name: str):
@@ -309,6 +312,51 @@ class ScrollingLabel(QLabel):
         while x < self.width():
             painter.drawText(x, y, self._text)
             x += text_width + 50  # space between repetitions
+
+
+
+class TimeKeeper:
+    def __init__(self):
+        self._start_time = None
+        self._start_timestamp = None
+
+    def start(self):
+        """Start the timer and return current date-time in short format."""
+        self._start_time = time.time()
+        self._start_timestamp = datetime.now()
+        return self._format_datetime(self._start_timestamp)
+
+    def stop(self):
+        """Stop the timer and return dict with current date-time and elapsed time."""
+        if self._start_time is None:
+            raise ValueError("Timer has not been started.")
+        
+        end_time = time.time()
+        end_timestamp = datetime.now()
+        elapsed = int(end_time - self._start_time)
+        
+        return {
+            "current": self._format_datetime(end_timestamp),
+            "elapsed": self._format_elapsed(elapsed)
+        }
+
+    def _format_datetime(self, dt):
+        """Return date-time string as 23Jul14:22"""
+        return dt.strftime("%d%b%H:%M")
+
+    def _format_elapsed(self, seconds):
+        if seconds < 60:
+            return f"{seconds}s"
+        elif seconds < 3600:
+            minutes = seconds // 60
+            seconds = seconds % 60
+            return f"{minutes}m{seconds}s"
+        else:
+            hours = seconds // 3600
+            minutes = (seconds % 3600) // 60
+            seconds = seconds % 60
+            return f"{hours}h{minutes}m{seconds}s"
+
 
 
 class GlobalSignals(QObject):

@@ -3474,3 +3474,20 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-23 11:11:15,358 - INFO - Error in FormatTable: [TextSize Error] Must be a positive integer.
 2025-07-23 11:11:42,588 - INFO - Error in FormatTable: [Grid Error] Grid must be 'horizontal', 'vertical', 'both', or 'none'.
 2025-07-23 11:14:57,702 - INFO - Error in FormatTable: [TextSize Error] Must be a positive integer.
+2025-07-23 11:31:33,391 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:31:33,425 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:31:51,393 - INFO - Error executing 'format table': [TextSize Error] Must be a positive integer.
+2025-07-23 11:38:37,836 - INFO - Execution error: Execution failed on sql 'SELECT ghr FROM csv_data WHERE ghr = 'Widget'': no such column: ghr
+2025-07-23 11:48:00,988 - INFO - Error executing 'format table': [TextSize Error] Must be a positive integer.
+2025-07-23 12:27:51,710 - INFO - Execution error: Execution failed on sql 'SELECT COUNT(*) FROM Product WHERE Tool IS NOT NULL': no such table: Product
+2025-07-23 12:28:05,042 - INFO - Execution error: Execution failed on sql 'SELECT COUNT(*) FROM Product WHERE Tool IS NOT NULL': no such table: Product
+2025-07-23 13:03:16,139 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:03:16,174 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:06:22,593 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:06:22,614 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:08:16,277 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:08:16,305 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 13:09:16,245 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 13:09:19,440 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 17:45:05,337 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 17:45:09,728 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv

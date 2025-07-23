@@ -14,7 +14,7 @@ import time
 import json
 
 from common import CustomListWidget, PlaceholderTextEdit, TabWidget, TabWidgetRmbPopOut
-from common import global_signals
+from common import global_signals, TimeKeeper
 
 from llm_manager import global_LLM_manager
 
@@ -289,6 +289,8 @@ class AssistantManager(QObject):
 
         global_signals.signal_update_sql_run_status.connect(self.on_signal_update_sql_run_status)
 
+        self.timeKeeer = TimeKeeper()
+
         self.assistantTab = QWidget(parent)
         assistantLayout = QVBoxLayout(self.assistantTab)
 
@@ -322,6 +324,19 @@ class AssistantManager(QObject):
     def getTab(self):
         return self.assistantTab
 
+    def getCurrentAndElapsedTimeStr(self):
+        
+        data = self.timeKeeer.stop()
+        current = data.get("current", "")
+        elapsed = data.get("elapsed", "")
+
+        return f"[{elapsed}]"
+    
+    def getCurrentTimeStr(self):
+        data = self.timeKeeer.start()
+
+        return f"[{data}]"
+
     def _handleAssistantQuery(self):
         query = self.assistantInput.toPlainText().strip()
 
@@ -331,7 +346,8 @@ class AssistantManager(QObject):
         self.assistantInput.addHistory(query)
 
         # Append user input
-        self.assistantOutput.append(f"<b>You:</b> {query}")
+        current_time = self.getCurrentTimeStr()
+        self.assistantOutput.append(f"{current_time} <b>You:</b> {query}")
         self.assistantInput.clear()
 
         # Get LLM response
@@ -377,7 +393,9 @@ class AssistantManager(QObject):
     @pyqtSlot(dict)
     def on_signal_update_sql_run_status(self, result):
         
-        self.assistantOutput.append(f"<b>Assistant:</b> {result.get('message')}")
+        elapsed_time = self.getCurrentAndElapsedTimeStr()
+
+        self.assistantOutput.append(f"{elapsed_time} <b>Assistant:</b> {result.get('message')}")
         if result.get("result") is not None:
             self.assistantOutput.append(f" {result.get('result')}")
         

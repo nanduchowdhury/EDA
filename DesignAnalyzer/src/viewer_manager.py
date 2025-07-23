@@ -93,7 +93,6 @@ class ManageResultsTabs:
 class TableView(QTableView):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         self.model = PandasTableModel()
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.model)
@@ -101,10 +100,10 @@ class TableView(QTableView):
 
         self._onItemClickCallback = None
         self._onItemSelectedCallback = None
+        self._default_alignment = Qt.AlignLeft | Qt.AlignVCenter
 
         self.clicked.connect(self._handleClick)
         self.selectionModel().selectionChanged.connect(self._handleSelection)
-
         self.horizontalHeader().sectionClicked.connect(self._handleHeaderClick)
 
     def loadFromDataFrame(self, df: pd.DataFrame):
@@ -216,94 +215,61 @@ class TableView(QTableView):
         return self.model._df.copy()
 
     def highlightData(self, data_dict):
-        """Highlight matching cells based on {column_name: [list_of_values]}."""
-        self.model.highlightCells(data_dict)
+        self.model.setHighlightRules(data_dict)
 
     def resizeAllColumns(self):
         for i in range(self.model.columnCount()):
             self.resizeColumnToContents(i)
+            
+    def setFontStyle(self, font: str = None, size: int = None):
+        f = self.font()
+        if font:
+            f.setFamily(font)
+        if size:
+            f.setPointSize(size)
+        self.setFont(f)
 
+    def setTextColor(self, color: str):
+        if not QColor(color).isValid():
+            raise ValueError(f"Invalid text color: {color}")
+        self.setStyleSheet(self.styleSheet() + f"\nQTableView {{ color: {color}; }}")
+
+    def setGridStyle(self, style: str):
+        style = style.lower()
+        if style not in ['none', 'horizontal', 'vertical', 'both']:
+            raise ValueError("Grid must be one of 'horizontal', 'vertical', 'both', 'none'.")
+
+        if style == 'none':
+            self.setShowGrid(False)
+        else:
+            self.setShowGrid(True)
+            self.setGridStyle(Qt.SolidLine)
+            css = "\nQTableView::item {"
+            if style in ['horizontal', 'both']:
+                css += " border-top: 1px solid gray; border-bottom: 1px solid gray;"
+            if style in ['vertical', 'both']:
+                css += " border-left: 1px solid gray; border-right: 1px solid gray;"
+            css += " }"
+            self.setStyleSheet(self.styleSheet() + css)
+
+    def setTextAlignment(self, alignment: str):
+        align_map = {
+            "left": Qt.AlignLeft | Qt.AlignVCenter,
+            "center": Qt.AlignCenter,
+            "right": Qt.AlignRight | Qt.AlignVCenter
+        }
+        self._default_alignment = align_map.get(alignment.lower(), Qt.AlignLeft | Qt.AlignVCenter)
+        self.viewport().update()
 
     def setDataFormat(self, font=None, grid=None, alignment=None, textColor=None, textSize=None):
-
-        if textSize:
-            if isinstance(textSize, (int, str)) and textSize.isdigit():
-                textSize = int(textSize)
-            else:
-                raise ValueError("[TextSize Error] Must be a positive integer.")
-            
-        if font and not isinstance(font, str):
-            raise ValueError("[Font Error] Font must be a string representing the font name.")
-        
-        if textColor and not isinstance(QColor(textColor), QColor):
-            raise ValueError("[TextColor Error] Text color must be a string representing a valid color.")
-        
-        if grid and grid.lower() not in ["horizontal", "vertical", "both", "none"]:
-            raise ValueError("[Grid Error] Grid must be 'horizontal', 'vertical', 'both', or 'none'.")
-        
-        if alignment and alignment.lower() not in ["left", "center", "right"]:
-            raise ValueError("[Alignment Error] Alignment must be 'left', 'center', or 'right'.")
-
-        # Font and text size
         if font or textSize:
-            try:
-                if font and isinstance(font, str):
-                    size = textSize if isinstance(textSize, int) and textSize > 0 else self.font().pointSize()
-                    self.setFont(QFont(font, size))
-                    print(f"Font set to {font} with size {size}")
-                elif textSize and isinstance(textSize, int) and textSize > 0:
-                    f = self.font()
-                    f.setPointSize(textSize)
-                    self.setFont(f)
-                    print(f"Font size set to {textSize}")
-            except Exception as e:
-                raise ValueError(f"[Font Error] {e}")
-
-        # Text color
+            self.setFontStyle(font, int(textSize) if textSize else None)
         if textColor:
-            try:
-                QColor(textColor)  # This will raise if invalid
-                current_style = self.styleSheet()
-                self.setStyleSheet(f"{current_style}\nQTableView {{ color: {textColor}; }}")
-                print(f"Text color set to {textColor}")
-            except Exception as e:
-                raise ValueError(f"[TextColor Error] {e}")
-
-        # Grid lines
-        if grid and isinstance(grid, str):
-            try:
-                grid = grid.lower()
-                if grid == "horizontal":
-                    self.setShowGrid(True)
-                    self.setGridStyle(Qt.SolidLine)
-                    self.setStyleSheet(self.styleSheet() + "\nQTableView::item { border-top: 1px solid gray; border-bottom: 1px solid gray; border-left: none; border-right: none; }")
-                elif grid == "vertical":
-                    self.setShowGrid(True)
-                    self.setGridStyle(Qt.SolidLine)
-                    self.setStyleSheet(self.styleSheet() + "\nQTableView::item { border-left: 1px solid gray; border-right: 1px solid gray; border-top: none; border-bottom: none; }")
-                elif grid == "both":
-                    self.setShowGrid(True)
-                    self.setGridStyle(Qt.SolidLine)
-                else:
-                    self.setShowGrid(False)
-            except Exception as e:
-                raise ValueError(f"[Grid Error] {e}")
-
-        # Text alignment
-        if alignment and isinstance(alignment, str):
-            try:
-                align_map = {
-                    "left": Qt.AlignLeft | Qt.AlignVCenter,
-                    "center": Qt.AlignCenter,
-                    "right": Qt.AlignRight | Qt.AlignVCenter
-                }
-                self._default_alignment = align_map.get(alignment.lower(), Qt.AlignLeft | Qt.AlignVCenter)
-            except Exception as e:
-                raise ValueError(f"[Alignment Error] {e}")
-        else:
-            self._default_alignment = Qt.AlignLeft | Qt.AlignVCenter
-
-        self.viewport().update()
+            self.setTextColor(textColor)
+        if grid:
+            self.setGridStyle(grid)
+        if alignment:
+            self.setTextAlignment(alignment)
 
 
 
@@ -483,32 +449,19 @@ class PandasTableModel(QAbstractTableModel):
     def __init__(self, df=None):
         super().__init__()
         self._df = df if df is not None else pd.DataFrame()
-        self._highlight = {}  # {(row, col): QColor}
+        self._highlight_rules = {}  # {col_name: [values]}
         self._sort_column = None
         self._sort_order = Qt.AscendingOrder
 
     def setDataFrame(self, df: pd.DataFrame):
         self.beginResetModel()
         self._df = df.copy()
-        self._highlight.clear()
+        self._highlight_rules.clear()
         self.endResetModel()
 
-    def highlightCells(self, highlight_dict):
-        """Highlight cells where column matches values in list."""
-        self._highlight.clear()
-
-        if self._df is None or self._df.empty:
-            return
-
-        for col_name, values in highlight_dict.items():
-            if col_name not in self._df.columns:
-                continue
-            col_index = self._df.columns.get_loc(col_name)
-            for row in range(len(self._df)):
-                cell_val = str(self._df.iat[row, col_index])
-                if cell_val in map(str, values):
-                    self._highlight[(row, col_index)] = QColor('yellow')
-
+    def setHighlightRules(self, highlight_dict: dict):
+        """Save the highlight rules per column – no actual cell iteration."""
+        self._highlight_rules = highlight_dict.copy()
         self.dataChanged.emit(
             self.index(0, 0),
             self.index(self.rowCount() - 1, self.columnCount() - 1),
@@ -521,7 +474,6 @@ class PandasTableModel(QAbstractTableModel):
     def columnCount(self, parent=QModelIndex()):
         return 0 if self._df is None else len(self._df.columns)
 
-
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
@@ -530,27 +482,27 @@ class PandasTableModel(QAbstractTableModel):
 
         if role == Qt.DisplayRole:
             return str(self._df.iat[row, col])
-        
+
         elif role == Qt.TextAlignmentRole:
-            # fallback to left alignment if not overridden
             return getattr(self.parent(), '_default_alignment', Qt.AlignLeft | Qt.AlignVCenter)
 
         elif role == Qt.BackgroundRole:
-            return self._highlight.get((row, col), QVariant())
+            col_name = self._df.columns[col]
+            highlight_vals = self._highlight_rules.get(col_name, [])
+            if str(self._df.iat[row, col]) in map(str, highlight_vals):
+                return QColor('yellow')
 
         return QVariant()
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         if role != Qt.DisplayRole or self._df is None:
             return QVariant()
-
         if orientation == Qt.Horizontal:
             return str(self._df.columns[section])
         else:
             return str(section + 1)
 
     def sort(self, column, order):
-        """Sort the dataframe based on the column index."""
         if self._df is None or column >= self.columnCount():
             return
 
