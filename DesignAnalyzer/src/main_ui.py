@@ -547,7 +547,7 @@ class MainUI(QMainWindow):
 
         # Execute the predicate
         try:
-            result = predicate.run()
+            result = predicate.execute()
             # print(f"Result of '{predicate_name}': {result}")
         except Exception as e:
             print(f"Error running predicate '{predicate_name}': {e}")

@@ -38,6 +38,14 @@ class PredicateBase():
     def getArgs(self):
         return self.args
 
+    def cleanArg(self, argName):
+        if isinstance(argName, str) and argName.strip() == "":
+            return None
+        elif argName.lower() == "none":
+            return None
+        
+        return argName
+
     def setOutputObject(self, argName, valueList):
         """Sets the output values for a given argument name."""
         if not isinstance(valueList, list):
@@ -104,6 +112,12 @@ class PredicateBase():
         """Override this method in subclasses."""
         pass
 
+    def execute(self):
+        try:
+            result = self.run()
+            return result
+        except Exception as e:
+            self.sentralControl.showMessage(f"Error executing '{self.predicate_name}': {e}")
 
 
 class Predicates:

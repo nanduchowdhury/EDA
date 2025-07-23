@@ -194,8 +194,47 @@ class HighlightTableColumnDataConditional(PredicateBase):
         table = self.sentralControl.getSelectedTable()
         h_vals = table.hilightColumnData(column_name, python_syntax_condition)
 
+        return result
+
+
+class FormatTable(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'font': "",
+            'grid': "",
+            'alignment': "",
+            'textColor': "",
+            'textSize': ""
+        }
+
+    def run(self):
+        
+        font = self.cleanArg(self.args['font'])
+        grid = self.cleanArg(self.args['grid'])
+        alignment = self.cleanArg(self.args['alignment'])
+        textColor = self.cleanArg(self.args['textColor'])
+        textSize = self.cleanArg(self.args['textSize'])
+
+        # df_list = self.sentralControl.getDataForSelectedEntity()
+        # df = df_list[0]
+        
+        result = []
+
+        table = self.sentralControl.getSelectedTable()
+
+        table.setDataFormat(
+            font=font,
+            grid=grid,
+            alignment=alignment,
+            textColor=textColor,
+            textSize=textSize
+        )
 
         return result
+        
 
 class FindOutlier(PredicateBase):
     def __init__(self, sentralControl):
@@ -285,6 +324,9 @@ class FinanceUI(MainUI):
 
         highlight = HighlightTableColumnDataConditional(self.sentralControl)
         self.all_predicates.addPredicate("highlight table column data based on python syntax condition", highlight)
+
+        formatTable = FormatTable(self.sentralControl)
+        self.all_predicates.addPredicate("format table", formatTable)
 
         worldMapObj = CreateWorldMap(self.sentralControl)
         self.all_predicates.addPredicate("create world map", worldMapObj)

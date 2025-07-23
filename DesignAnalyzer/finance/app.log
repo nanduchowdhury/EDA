@@ -3447,3 +3447,30 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-21 22:09:54,421 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-07-21 22:23:28,865 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-07-21 22:23:28,897 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 13:57:16,605 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 13:57:16,643 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 15:44:32,771 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 15:44:32,801 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 15:46:38,188 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 15:46:38,204 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 16:06:13,407 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 16:06:13,429 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-22 21:11:16,843 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN percent DECIMAL; UPDATE csv_data_name SET percent = Revenue / `Units Sold`;': no such table: csv_data_name
+2025-07-22 21:11:46,929 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN percent DECIMAL; UPDATE csv_data_name SET percent = Revenue / `Units Sold`;': no such table: csv_data_name
+2025-07-22 21:12:58,763 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data ADD COLUMN percent DECIMAL; UPDATE csv_data SET percent = Revenue / `Units Sold`;': You can only execute one statement at a time.
+2025-07-22 21:13:28,808 - INFO - Execution error: Execution failed on sql 'ALTUPDATE csv_data SET percent = Revenue / `Units Sold`;': near "ALTUPDATE": syntax error
+2025-07-23 09:47:00,153 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 09:47:00,200 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 09:55:54,644 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 09:55:54,670 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 10:12:19,035 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 10:12:19,051 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 10:15:48,350 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 10:15:48,381 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:01:47,698 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:01:47,729 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:10:32,031 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:10:32,075 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 11:11:15,358 - INFO - Error in FormatTable: [TextSize Error] Must be a positive integer.
+2025-07-23 11:11:42,588 - INFO - Error in FormatTable: [Grid Error] Grid must be 'horizontal', 'vertical', 'both', or 'none'.
+2025-07-23 11:14:57,702 - INFO - Error in FormatTable: [TextSize Error] Must be a positive integer.
