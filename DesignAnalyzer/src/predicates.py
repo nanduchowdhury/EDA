@@ -177,7 +177,7 @@ class CreateBarChart(PredicateBase):
         self.x_axis = self.args['x_axis']
         self.y_axis = self.args['y_axis']
 
-        drawArea = self.sentralControl.viewerTabs.addTabByType("PLOT", 
+        drawArea = self.sentralControl.viewerTabs.addTabByType("BAR_CHART", 
                                     self.getShortName(),
                                     self.getCompleteNameWithArgs())
 
@@ -210,6 +210,39 @@ class CreateBarChart(PredicateBase):
 
         input_table = self.sentralControl.viewerTabs.getInputTabWidget()
         input_table.highlightData(highlight_dict)
+
+
+class CreatePieChart(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.label_column = None
+        self.value_column = None
+
+        self.args = {
+            'label_column': "",
+            'value_column': "",
+        }
+
+    def run(self):
+
+        self.label_column = self.args['label_column']
+        self.value_column = self.args['value_column']
+
+        drawArea = self.sentralControl.viewerTabs.addTabByType("PIE_CHART", 
+                                    self.getShortName(),
+                                    self.getCompleteNameWithArgs())
+
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        df = df_list[0]
+
+        drawArea.setLabelAndValue(self.label_column, self.value_column)
+        drawArea.setDataFrame(df)
+
+        return True
+    
 
 
 class SqlQueryPredicate(PredicateBase, QObject):

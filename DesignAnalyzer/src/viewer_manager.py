@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButto
 from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex, QSortFilterProxyModel
 
 from layout_draw import PyQtGraphLayoutWithScales
-from layout_plot import BasePlotView, BarChartView, WorldMapWidget
+from layout_plot import BasePlotView, BarChartView, WorldMapWidget, PieChartView
 
 from vtk_draw import VTKWidgetWrapper
 
@@ -220,7 +220,7 @@ class TableView(QTableView):
     def resizeAllColumns(self):
         for i in range(self.model.columnCount()):
             self.resizeColumnToContents(i)
-            
+
     def setFontStyle(self, font: str = None, size: int = None):
         f = self.font()
         if font:
@@ -404,8 +404,10 @@ class ManageViewerTabs(QWidget):
             tab_widget = VTKWidgetWrapper(width=self.layoutWidth, height=self.layoutHeight)
         elif viewer_type == "DRAW":
             tab_widget = PyQtGraphLayoutWithScales(width=self.layoutWidth, height=self.layoutHeight)
-        elif viewer_type == "PLOT":
+        elif viewer_type == "BAR_CHART":
             tab_widget = BarChartView()
+        elif viewer_type == "PIE_CHART":
+            tab_widget = PieChartView()
         elif viewer_type == "TABLE":
             tab_widget = self._createTableWidget()
         elif viewer_type == "WORLD_MAP":

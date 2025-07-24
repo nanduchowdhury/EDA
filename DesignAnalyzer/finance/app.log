@@ -3491,3 +3491,49 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-23 13:09:19,440 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
 2025-07-23 17:45:05,337 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
 2025-07-23 17:45:09,728 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 19:49:14,295 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 19:49:17,917 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-23 20:19:10,511 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
+2025-07-23 20:20:04,981 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
+2025-07-23 20:20:14,394 - INFO - Error executing 'format table': Grid must be one of 'horizontal', 'vertical', 'both', 'none'.
+2025-07-23 20:20:33,347 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
+2025-07-23 20:32:23,062 - INFO - Outlier search done.
+2025-07-23 20:32:55,078 - INFO - Outlier search done.
+2025-07-23 20:33:13,733 - INFO - Outlier search done.
+2025-07-23 22:35:55,465 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:35:55,503 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:36:27,221 - INFO - Error executing 'create pie chart': 'PieChartView' object has no attribute 'setXYColumn'
+2025-07-23 22:42:40,902 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:42:40,922 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:43:11,822 - INFO - Error executing 'create pie chart': 'PieChartView' object has no attribute 'x_col'
+2025-07-23 22:45:40,679 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:45:40,714 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 22:52:13,826 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-23 22:52:13,861 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-23 22:53:13,368 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN Percentage_Amount FLOAT; UPDATE csv_data_name SET Percentage_Amount = (Amount / SUM(Amount) OVER ()) * 100;': no such table: csv_data_name
+2025-07-23 22:53:38,030 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN Percentage_Amount FLOAT; UPDATE csv_data_name SET Percentage_Amount = (Amount / SUM(Amount) OVER ()) * 100;': no such table: csv_data_name
+2025-07-23 22:54:16,976 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN Percentage_Amount FLOAT; UPDATE csv_data_name SET Percentage_Amount = (Amount / SUM(Amount) OVER ()) * 100;': no such table: csv_data_name
+2025-07-23 22:54:48,234 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data_name ADD COLUMN Percentage_Amount FLOAT; UPDATE csv_data_name SET Percentage_Amount = (Amount / SUM(Amount) OVER ()) * 100;': no such table: csv_data_name
+2025-07-23 23:04:22,788 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 23:04:22,816 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-23 23:05:42,733 - INFO - Execution error: Execution failed on sql 'SELECT `Unit Sold`, COUNT(*) AS Count, (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM csv_data)) AS Percentage FROM csv_data GROUP BY `Unit Sold`': no such column: Unit Sold
+2025-07-23 23:05:53,833 - INFO - Execution error: Execution failed on sql 'SELECT *, (UnitsSold * 100.0 / SUM(UnitsSold) OVER ()) AS Percent_UnitsSold FROM csv_data': no such column: UnitsSold
+2025-07-24 10:21:05,042 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-24 10:21:05,076 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-24 10:34:30,297 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 10:34:30,337 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 10:47:23,671 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 10:47:23,693 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 10:50:26,222 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 10:50:26,245 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:08:20,949 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:08:20,985 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:08:33,515 - INFO - Error executing 'create pie chart': name 'QGraphicsScene' is not defined
+2025-07-24 11:10:17,068 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:10:17,082 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:10:24,532 - INFO - Error executing 'create pie chart': setLayout(self, a0: QLayout): argument 1 has unexpected type 'QGraphicsScene'
+2025-07-24 11:12:42,540 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:12:42,557 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:12:51,380 - INFO - Error executing 'create pie chart': 'PieChartView' object has no attribute 'scene'
+2025-07-24 11:20:59,892 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:20:59,919 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv

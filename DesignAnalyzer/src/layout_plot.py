@@ -1,10 +1,16 @@
 
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction
-from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction, QToolTip
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont
 
+
+from matplotlib.figure import Figure
+
+import mplcursors
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import numpy as np
 
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
@@ -18,6 +24,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import random
 import pandas as pd
+
 
 import logging
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
@@ -124,12 +131,21 @@ class BarChartView(BasePlotView):
         self.dataFrame = df.copy()
         self.updatePlot()
 
+    def checkInputValidity(self):
+        if self.dataFrame.empty:
+            raise ValueError("Input data is empty. Please set valid input data.")
+        if self.x_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.x_col}' not found in input data.")
+        if self.y_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.y_col}' not found in input data.")
+        if self.dataFrame.shape[0] > 500:
+            raise ValueError("Input data has too many rows. Please try on smaller set.")
+        
     def updatePlot(self):
         self.plotItem.clear()
         self.bar_items.clear()
 
-        if self.dataFrame.empty or self.x_col not in self.dataFrame or self.y_col not in self.dataFrame:
-            return
+        self.checkInputValidity()
 
         bar_width = 0.8
         for i, row in self.dataFrame.iterrows():
@@ -158,33 +174,114 @@ class BarChartView(BasePlotView):
 
 # ---------------- Pie Chart ----------------
 
-class PieChartView(BasePlotView):
-    sliceClicked = pyqtSignal(str)  # Not supported by matplotlib directly
+class BasePiePlotView(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.view = QGraphicsView()
+        self.scene = QGraphicsScene()
+        self.view.setScene(self.scene)
+        layout = QVBoxLayout()
+        layout.addWidget(self.view)
+        self.setLayout(layout)
+
+    def zoomFit(self):
+        self.view.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
+
+    def clear(self):
+        self.scene.clear()
+
+
+
+class PieChartView(BasePiePlotView):
+    sliceClicked = pyqtSignal(str)  # Emits label when a slice is clicked
 
     def __init__(self, parent=None, label_col='Label', value_col='Value'):
+        super().__init__(parent)
         self.label_col = label_col
         self.value_col = value_col
-        super().__init__(parent)
+        self.dataFrame = None
+        self.wedges = []
 
+    def setLabelAndValue(self, label_col, value_col):
+        self.label_col = label_col
+        self.value_col = value_col
+
+    def setDataFrame(self, df):
+        self.dataFrame = df
+        self.updatePlot()
+
+    def checkInputValidity(self):
+        if self.dataFrame.empty:
+            raise ValueError("Input data is empty. Please set valid input data.")
+        if self.label_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.label_col}' not found in input data.")
+        if self.value_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.y_col}' not found in input data.")
+        if self.dataFrame.shape[0] > 100:
+            raise ValueError("Input data has too many rows. Please try on smaller set.")
+        
     def updatePlot(self):
-        self.view.clear()
-        if self.dataFrame.empty or self.label_col not in self.dataFrame or self.value_col not in self.dataFrame:
-            return
 
-        fig, ax = plt.subplots()
-        labels = self.dataFrame[self.label_col].astype(str)
-        values = self.dataFrame[self.value_col].astype(float)
-        colors = [plt.cm.tab20(i) for i in range(len(values))]
+        self.checkInputValidity()
 
-        ax.pie(values, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
-        ax.axis('equal')
+        self.clear()
+
+        fig = Figure(facecolor='black')
+        ax = fig.add_subplot(111)
+        ax.set_facecolor('black')
+
+        labels = self.dataFrame[self.label_col].astype(str).tolist()
+        values = self.dataFrame[self.value_col].astype(float).tolist()
+        total = sum(values)
+        colors = ['blue', 'red', 'green', 'yellow', 'purple', 'brown', 'white']
+        colors = (colors * ((len(values) // len(colors)) + 1))[:len(values)]
+
+        wedges, texts = ax.pie(
+            values,
+            labels=labels,
+            labeldistance=1.15,
+            startangle=90,
+            colors=colors,
+            textprops={'color': 'white'},
+        )
+
+        ax.axis('equal')  # Circular
+
+        # Annotate each wedge with label + percent for hover and click
+        for wedge, label, value in zip(wedges, labels, values):
+            wedge.set_label(label)
+            wedge.set_gid(f"{label}: {value / total * 100:.1f}%")
+
+        self.wedges = wedges
+
+        # Embed canvas
         canvas = FigureCanvas(fig)
         proxy = QGraphicsProxyWidget()
         proxy.setWidget(canvas)
-        self.view.addItem(proxy)
+        self.scene.addItem(proxy)
         proxy.setPos(0, 0)
         self.zoomFit()
 
+        # Hook events
+        canvas.mpl_connect("motion_notify_event", self._onHover)
+        canvas.mpl_connect("button_press_event", self._onClick)
+
+    def _onHover(self, event):
+        if event.inaxes:
+            for wedge in self.wedges:
+                if wedge.contains_point([event.x, event.y], radius=1.0):
+                    tooltip = wedge.get_gid()  # label: percent%
+                    pos = QPoint(event.guiEvent.globalX() + 10, event.guiEvent.globalY() + 10)
+                    QToolTip.showText(pos, tooltip, self)
+                    return
+        QToolTip.hideText()
+
+    def _onClick(self, event):
+        if event.inaxes:
+            for wedge in self.wedges:
+                if wedge.contains_point([event.x, event.y], radius=1.0):
+                    label = wedge.get_label()
+                    self.sliceClicked.emit(label)
 
 
 class WorldMapWidget(BasePlotView):

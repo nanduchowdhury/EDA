@@ -33,7 +33,7 @@ from session import Session
 
 from common import PlaceholderTextEdit, ScrollingLabel
 
-from predicates import Predicates, CreateBarChart, SqlQueryPredicate
+from predicates import Predicates, CreateBarChart, CreatePieChart, SqlQueryPredicate
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -228,7 +228,7 @@ class MainUI(QMainWindow):
         else:
             QMessageBox.warning(self, "Not Found", f"No predicate found matching: {command}")
 
-    def __init__(self, PLOT_OR_DRAW="PLOT"):
+    def __init__(self, PLOT_OR_DRAW="BAR_CHART"):
         
         super().__init__()
 
@@ -612,6 +612,9 @@ class MainUI(QMainWindow):
         
         barChartObj = CreateBarChart(self.sentralControl)
         self.all_predicates.addPredicate("create bar chart", barChartObj)
+
+        pieChartObj = CreatePieChart(self.sentralControl)
+        self.all_predicates.addPredicate("create pie chart", pieChartObj)
 
         sqlQueryPredicate = SqlQueryPredicate(self.sentralControl)
         self.all_predicates.addPredicate("execute sql query", sqlQueryPredicate)
