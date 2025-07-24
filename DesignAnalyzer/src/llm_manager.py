@@ -94,11 +94,11 @@ class GeminiLangChainLLMManager:
             return None
 
     def _construct_prompt(self, user_prompt: str) -> str:
-        # Take last N history items
+        # Format last N history entries
         recent_history = self.chat_history[-self.context_window_size:]
 
         user_history_str = "\n".join(
-            f"User: {item['user_query']}\nAssistant: {item['gemini_response']}"
+            f'{{\n  "User": {json.dumps(item["user_query"])},\n  "Assistant": {item["gemini_response"]}\n}}'
             for item in recent_history
         )
 
@@ -109,58 +109,58 @@ class GeminiLangChainLLMManager:
         )
 
         format_hint = '''
-Return a JSON object in exactly **one** of the following forms:
+    Return a JSON object in exactly **one** of the following forms:
 
-1. If the prompt matches a command:
-{
-  "ResultMode": "COMMAND_OR_ACTION_RUN",
-  "output": {
-    "command_name": "<command>",
-    "args": { "arg1": "value1", "arg2": "value2" }
-  }
-}
+    1. If the prompt matches a command:
+    {
+    "ResultMode": "COMMAND_OR_ACTION_RUN",
+    "output": {
+        "command_name": "<command>",
+        "args": { "arg1": "value1", "arg2": "value2" }
+    }
+    }
 
-2. If the prompt asks for SQL analysis:
-{
-  "ResultMode": "SQL_COLUMN_ANALYSIS",
-  "output": {
-    "sql_query": "SELECT ... FROM table WHERE ..."
-  }
-}
+    2. If the prompt asks for SQL analysis:
+    {
+    "ResultMode": "SQL_COLUMN_ANALYSIS",
+    "output": {
+        "sql_query": "SELECT ... FROM table WHERE ..."
+    }
+    }
 
-3. If the LLM gives its own answer:
-{
-  "ResultMode": "LLM_OWN_RESPONSE",
-  "output": {
-    "llm_own_answer": "Your answer here"
-  }
-}
-'''
+    3. If the LLM gives its own answer:
+    {
+    "ResultMode": "LLM_OWN_RESPONSE",
+    "output": {
+        "llm_own_answer": "Your answer here"
+    }
+    }
+    '''
 
         return f"""
-You are a helpful assistant.
+    You are a helpful assistant.
 
-Based on the current user prompt and recent history, classify the request into one of:
-1. An action/command execution from available commands.
-2. A SQL-style analysis based on table columns.
-3. A general query needing a direct LLM response.
+    Based on the current user prompt and recent history, classify the request into one of:
+    1. An action/command execution from available commands.
+    2. A SQL-style analysis based on table columns.
+    3. A general query needing a direct LLM response.
 
-Recent User-Gemini History:
-{user_history_str}
+    Recent User-Gemini History:
+    {user_history_str}
 
+    Input Table Columns:
+    {columns_str}
 
-Input Table Columns:
-{columns_str}
+    Available Commands and Actions:
+    {commands_str}
 
-Available Commands and Actions:
-{commands_str}
+    Current User Prompt:
+    "{user_prompt.strip()}"
 
-Current User Prompt:
-"{user_prompt.strip()}"
+    {format_hint}
+    Respond ONLY with the appropriate JSON.
+    """
 
-{format_hint}
-Respond ONLY with the appropriate JSON.
-"""
 
 
 ###############################################################################

@@ -3552,3 +3552,23 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-24 13:42:20,226 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-07-24 15:51:33,404 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-07-24 15:51:33,435 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 15:53:34,463 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 15:53:34,501 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:10:23,993 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:10:24,021 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:11:00,000 - INFO - Error executing 'create bar chart': Column 'AMount' not found in input data.
+2025-07-24 16:14:28,285 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:14:28,319 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:22:06,181 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:22:06,212 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:24:27,554 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:24:27,589 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:30:09,007 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:30:09,042 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:30:27,031 - INFO - Error executing 'create pie chart': 'PieChartView' object has no attribute 'y_col'
+2025-07-24 16:31:32,713 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:31:32,745 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 16:52:53,863 - INFO - Execution error: Execution failed on sql 'ALTER TABLE csv_data ADD COLUMN Percent_of_Amount FLOAT; UPDATE csv_data SET Percent_of_Amount = (Amount / SUM(Amount) OVER ()) * 100;': You can only execute one statement at a time.
+2025-07-24 16:54:38,208 - INFO - Execution error: 'NoneType' object is not iterable
+2025-07-24 18:22:22,638 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 18:22:22,653 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
