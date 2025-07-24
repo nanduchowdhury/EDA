@@ -32,7 +32,7 @@ from typing import List, Dict, Optional, Union
 import json
 import re
 from typing import List, Dict, Optional
-from langchain.schema import HumanMessage
+from langchain.schema import AIMessage, HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 
@@ -41,14 +41,23 @@ class GeminiLangChainLLMManager:
                  api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', 
                  model_name: str = "gemini-1.5-flash", 
                  temperature: float = 0.2):
-    
+
         self.columns: List[str] = []
         self.commands: List[Dict[str, List[str]]] = []
+        self.chat_history: List[Dict[str, str]] = []  # user_query + gemini_response
+        self.context_window_size: int = 5
+
         self.llm = ChatGoogleGenerativeAI(
             model=model_name,
             google_api_key=api_key,
             temperature=temperature
         )
+
+    def set_context_window_size(self, window_size: int = 5):
+        self.context_window_size = window_size
+
+    def reset_context(self):
+        self.chat_history.clear()
 
     def addCommandAndArgs(self, command: str, args: List[str]):
         self.commands.append({"command": command, "args": args})
@@ -68,7 +77,13 @@ class GeminiLangChainLLMManager:
             reply = response.content.strip()
             print("\n🔸 Gemini Response:\n", reply)
 
-            # Handle ```json blocks
+            # Save the user-Gemini pair in chat history
+            self.chat_history.append({
+                "user_query": user_prompt.strip(),
+                "gemini_response": reply
+            })
+
+            # Extract JSON from response
             match = re.search(r'```json\s*(\{.*?\})\s*```', reply, re.DOTALL)
             json_str = match.group(1) if match else reply
             result = json.loads(json_str)
@@ -79,6 +94,14 @@ class GeminiLangChainLLMManager:
             return None
 
     def _construct_prompt(self, user_prompt: str) -> str:
+        # Take last N history items
+        recent_history = self.chat_history[-self.context_window_size:]
+
+        user_history_str = "\n".join(
+            f"User: {item['user_query']}\nAssistant: {item['gemini_response']}"
+            for item in recent_history
+        )
+
         columns_str = "\n".join(f"- {col}" for col in self.columns)
         commands_str = "\n".join(
             f"- {cmd['command']} (Args: {', '.join(cmd.get('args', []))})"
@@ -117,10 +140,14 @@ Return a JSON object in exactly **one** of the following forms:
         return f"""
 You are a helpful assistant.
 
-Based on the user prompt, classify the request into one of:
+Based on the current user prompt and recent history, classify the request into one of:
 1. An action/command execution from available commands.
 2. A SQL-style analysis based on table columns.
 3. A general query needing a direct LLM response.
+
+Recent User-Gemini History:
+{user_history_str}
+
 
 Input Table Columns:
 {columns_str}
@@ -128,7 +155,7 @@ Input Table Columns:
 Available Commands and Actions:
 {commands_str}
 
-User Prompt:
+Current User Prompt:
 "{user_prompt.strip()}"
 
 {format_hint}

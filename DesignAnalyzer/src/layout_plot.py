@@ -2,7 +2,7 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction, QToolTip
-from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint, QEvent
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont
 
 
@@ -178,17 +178,86 @@ class BasePiePlotView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.view = QGraphicsView()
+        self.view.setRenderHint(QPainter.Antialiasing)
+        self.view.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.scene = QGraphicsScene()
         self.view.setScene(self.scene)
+
         layout = QVBoxLayout()
         layout.addWidget(self.view)
         self.setLayout(layout)
 
+        self._gridLines = []
+        self._zoomFactor = 1.2
+        self._panStep = 50
+
+        self.view.viewport().installEventFilter(self)  # For mouse-wheel zoom
+
+    def zoomIn(self):
+        self.view.scale(self._zoomFactor, self._zoomFactor)
+
+    def zoomOut(self):
+        self.view.scale(1 / self._zoomFactor, 1 / self._zoomFactor)
+
     def zoomFit(self):
-        self.view.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
+        self.view.fitInView(self.scene.itemsBoundingRect(), Qt.KeepAspectRatio)
+
+    def panLeft(self):
+        self.view.horizontalScrollBar().setValue(
+            self.view.horizontalScrollBar().value() - self._panStep)
+
+    def panRight(self):
+        self.view.horizontalScrollBar().setValue(
+            self.view.horizontalScrollBar().value() + self._panStep)
+
+    def panUp(self):
+        self.view.verticalScrollBar().setValue(
+            self.view.verticalScrollBar().value() - self._panStep)
+
+    def panDown(self):
+        self.view.verticalScrollBar().setValue(
+            self.view.verticalScrollBar().value() + self._panStep)
+
+    def showGrid(self, show: bool):
+        # Clear old grid
+        for line in self._gridLines:
+            self.scene.removeItem(line)
+        self._gridLines.clear()
+
+        if not show:
+            return
+
+        rect = self.scene.sceneRect()
+        spacing = 50  # pixels
+
+        # Vertical lines
+        x = rect.left()
+        while x < rect.right():
+            line = self.scene.addLine(x, rect.top(), x, rect.bottom(), QPen(QColor('gray'), 0.5, Qt.DotLine))
+            self._gridLines.append(line)
+            x += spacing
+
+        # Horizontal lines
+        y = rect.top()
+        while y < rect.bottom():
+            line = self.scene.addLine(rect.left(), y, rect.right(), y, QPen(QColor('gray'), 0.5, Qt.DotLine))
+            self._gridLines.append(line)
+            y += spacing
 
     def clear(self):
         self.scene.clear()
+        self._gridLines.clear()
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.Wheel and source is self.view.viewport():
+            zoomIn = event.angleDelta().y() > 0
+            if zoomIn:
+                self.zoomIn()
+            else:
+                self.zoomOut()
+            return True
+        return super().eventFilter(source, event)
+
 
 
 

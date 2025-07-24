@@ -240,6 +240,7 @@ class CreatePieChart(PredicateBase):
 
         drawArea.setLabelAndValue(self.label_column, self.value_column)
         drawArea.setDataFrame(df)
+        drawArea.showGrid(True)
 
         return True
     

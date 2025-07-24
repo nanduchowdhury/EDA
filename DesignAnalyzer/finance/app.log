@@ -3537,3 +3537,18 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-24 11:12:51,380 - INFO - Error executing 'create pie chart': 'PieChartView' object has no attribute 'scene'
 2025-07-24 11:20:59,892 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-07-24 11:20:59,919 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 11:25:10,412 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-24 11:25:10,430 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-07-24 11:26:17,113 - INFO - Error executing 'create pie chart': 'COUNT'
+2025-07-24 12:48:39,792 - INFO - Error executing 'create pie chart': 'None'
+2025-07-24 13:00:10,116 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:00:10,136 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:00:21,756 - INFO - Error executing 'create pie chart': type object 'Qt' has no attribute 'Antialiasing'
+2025-07-24 13:13:06,242 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:13:06,267 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:27:31,330 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:27:31,358 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:42:20,192 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 13:42:20,226 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 15:51:33,404 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 15:51:33,435 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
