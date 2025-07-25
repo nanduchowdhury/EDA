@@ -202,7 +202,7 @@ class HighlightTableColumnDataConditional(PredicateBase):
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'Python syntax condition for highlighting',
-                'example': 'example : x > 100'
+                'example': 'example : x > 800 & x < 900    x == \'Orchid\''
             }
         }
 
@@ -377,19 +377,19 @@ class FinanceUI(MainUI):
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
         findOutlier = FindOutlier(self.sentralControl)
-        self.all_predicates.addPredicate("find outlier based on mean/std-dev", findOutlier)
+        self.all_predicates.addPredicate("financial analysis", "find outlier based on mean/std-dev", findOutlier)
 
         predict = PredictNextMonths(self.sentralControl)
-        self.all_predicates.addPredicate("predict next months based on linear regression", predict)
+        self.all_predicates.addPredicate("financial analysis", "predict next months based on linear regression", predict)
 
         highlight = HighlightTableColumnDataConditional(self.sentralControl)
-        self.all_predicates.addPredicate("highlight table column data based on python syntax condition", highlight)
+        self.all_predicates.addPredicate("table formatting", "highlight table column data based on python syntax condition", highlight)
 
         formatTable = FormatTable(self.sentralControl)
-        self.all_predicates.addPredicate("format table", formatTable)
+        self.all_predicates.addPredicate("table formatting", "format table", formatTable)
 
         worldMapObj = CreateWorldMap(self.sentralControl)
-        self.all_predicates.addPredicate("create world map", worldMapObj)
+        self.all_predicates.addPredicate("world map analysis", "create world map", worldMapObj)
 
 
 if __name__ == "__main__":

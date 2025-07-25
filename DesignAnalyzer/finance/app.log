@@ -3780,3 +3780,39 @@ message: "Generative Language API has not been used in project 966683554322 befo
 2025-07-25 12:35:04,359 - INFO - Error: No response from LLM.
 2025-07-25 12:42:23,247 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
 2025-07-25 12:47:32,150 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
+2025-07-25 13:06:02,468 - INFO - Prediction search done.
+2025-07-25 13:06:32,056 - INFO - Prediction search done.
+2025-07-25 17:32:30,686 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 17:32:30,780 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 17:54:57,160 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 17:54:59,587 - INFO - Error: No response from LLM.
+2025-07-25 17:57:51,370 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 17:57:54,241 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv

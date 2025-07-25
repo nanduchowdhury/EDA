@@ -134,41 +134,74 @@ class PredicateBase():
 
 class Predicates:
     def __init__(self):
-        self.predicates = {}  # name -> (arg_list, predicate_object)
+        self.predicates = {}  # group_name -> {predicate_name -> predicate_object}
 
-    def addPredicate(self, name, predicateObj):
-
+    def addPredicate(self, group_name, name, predicateObj):
+        """
+        Add a predicate to a specified group.
+        """
         predicateObj.setPredicateName(name)
-        self.predicates[name] = predicateObj
+
+        if group_name not in self.predicates:
+            self.predicates[group_name] = {}
+
+        self.predicates[group_name][name] = predicateObj
 
         global_LLM_manager.addCommandAndArgs(name, predicateObj.getArgs())
 
-
     def removePredicate(self, name):
-        if name in self.predicates:
-            del self.predicates[name]
-        else:
-            raise ValueError(f"Remove predicate : '{name}' not found.")
+        """
+        Remove predicate by name from any group.
+        """
+        for group in self.predicates:
+            if name in self.predicates[group]:
+                del self.predicates[group][name]
+                # Clean up group if empty
+                if not self.predicates[group]:
+                    del self.predicates[group]
+                return
+        raise ValueError(f"Remove predicate: '{name}' not found.")
 
     def getNumPredicates(self):
-        return len(self.predicates)
+        return sum(len(preds) for preds in self.predicates.values())
 
     def getPredicateArgs(self, name):
-        if name not in self.predicates:
-            raise ValueError(f"Predicate '{name}' not found.")
-        return self.predicates[name].getArgs()
+        for group_preds in self.predicates.values():
+            if name in group_preds:
+                return group_preds[name].getArgs()
+        raise ValueError(f"Predicate '{name}' not found.")
 
-    def getAllPredicates(self):
+    def getAllGroupPredicates(self, group_name):
         """
-        Returns a dictionary of all predicates: {name: (arg_list, predicate_object)}
+        Returns dict: {predicate_name: predicate_object} for a specific group.
         """
-        return self.predicates.copy()
+        if group_name not in self.predicates:
+            return {}
+        return self.predicates[group_name].copy()
+
+    def getAllGroups(self):
+        """
+        Returns a list of all group names.
+        """
+        return list(self.predicates.keys())
+
+    def getPredicateObj(self, predicate_name):
+        """
+        Returns the predicate object corresponding to the given name.
+        """
+        for group_preds in self.predicates.values():
+            if predicate_name in group_preds:
+                return group_preds[predicate_name]
+        raise ValueError(f"Predicate '{predicate_name}' not found.")
+
 
     def __iter__(self):
         """
-        Allows: for name, (args, obj) in predicates_instance:
+        Allows iteration over all (name, predicate_obj) pairs across all groups.
         """
-        return iter(self.predicates.items())
+        for group_preds in self.predicates.values():
+            for name, obj in group_preds.items():
+                yield name, obj
 
 
 class CreateBarChart(PredicateBase):

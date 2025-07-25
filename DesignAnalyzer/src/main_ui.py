@@ -10,9 +10,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
 
 
-from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QBrush, QColor, QTextCharFormat, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem
 
 from PyQt5.QtCore import Qt, pyqtSlot
+
 import sys
 
 import json
@@ -220,13 +221,10 @@ class MainUI(QMainWindow):
 
         print(f"Received command: {command}, args: {args}")
 
-        matching_items = self.commandList.findItems(command, Qt.MatchExactly)
-        if matching_items:
-            self.commandList.setCurrentItem(matching_items[0])
-            self.manageArgs.setArgValues(args)
-            self.runButton.click()
-        else:
-            QMessageBox.warning(self, "Not Found", f"No predicate found matching: {command}")
+        self.analysisActionPanel.selectItem(command)
+        self.manageArgs.setArgValues(args)
+        self.runButton.click()
+        
 
     def __init__(self, PLOT_OR_DRAW="BAR_CHART"):
         
@@ -401,14 +399,15 @@ class MainUI(QMainWindow):
 
 
     def push_predicates_to_command_area(self):
-        self.commandList.clear()  # Optional: clear existing items
-        self.commandList.itemSelectionChanged.connect(self.updateParamLabels)
+        
+        self.analysisActionPanel.registerSelectionChangedSlot(self.updateParamLabels)
 
-        for predicate in self.all_predicates.getAllPredicates().keys():
-            item = QListWidgetItem(predicate)
-            item.setToolTip(f"<b>{predicate}</b>")
-            self.commandList.addItem(item)
+        for header in self.all_predicates.getAllGroups():
+            group_preds = self.all_predicates.getAllGroupPredicates(header)
 
+            for predicate in group_preds:
+                
+                self.analysisActionPanel.addItem(header, predicate)
     
 
     def create_command_area(self):
@@ -429,28 +428,11 @@ class MainUI(QMainWindow):
         self.sourceDropDown.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         leftLayout.addWidget(self.sourceDropDown)
 
-        # TextEdit + OK Button row
-        row2 = QHBoxLayout()
-        self.commandInput = PlaceholderTextEdit("Enter command to search for analysis...")
-        self.commandInput.setFixedHeight(30)
-        self.commandInput.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        self.okButton = QPushButton("Search")
-        self.okButton.clicked.connect(self.runSearchAnalysis)
-        self.okButton.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        row2.addWidget(self.commandInput)
-        row2.addWidget(self.okButton)
-        leftLayout.addLayout(row2)
 
         leftLayout.addWidget(self._hline())
-        leftLayout.addWidget(QLabel("Analyses & Actions"))
 
-        # Command list
-        self.commandList = QListWidget()
-        self.commandList.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.commandList.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        leftLayout.addWidget(self.commandList)
+        self.analysisActionPanel = AnalysisActionPanel(self)
+        leftLayout.addWidget(self.analysisActionPanel)
 
         leftLayout.addWidget(self._hline())
 
@@ -511,33 +493,16 @@ class MainUI(QMainWindow):
         line.setFrameShadow(QFrame.Sunken)
         return line
 
-    def runSearchAnalysis(self):
-        command_text = self.commandInput.toPlainText()
-        print(f"Command: {command_text}")
-
-        response = global_LLM_manager.query(command_text)
-        print(f"LLM response: {response}")
-
-        matching_items = self.commandList.findItems(response, Qt.MatchExactly)
-        if matching_items:
-            self.commandList.setCurrentItem(matching_items[0])
-        else:
-            QMessageBox.warning(self, "Not Found", f"No predicate found matching: {response}")
 
     def runSelectedPredicate(self):
-        selected_items = self.commandList.selectedItems()
-        if not selected_items:
-            QMessageBox.warning(self, "Warning", "No predicate selected.")
-            return
 
-        predicate_name = selected_items[0].text()
+        predicate_name = self.analysisActionPanel.getSelectedItem()
         try:
             # Get the expected argument names and the predicate object
-            predicate = self.all_predicates.getAllPredicates()[predicate_name]
+            predicate = self.all_predicates.getPredicateObj(predicate_name)
         except KeyError:
             print(f"Predicate '{predicate_name}' not found.")
             return
-
 
         
         arg_values = self.manageArgs.getArgValues()
@@ -589,11 +554,8 @@ class MainUI(QMainWindow):
 
 
     def updateParamLabels(self):
-        selected_items = self.commandList.selectedItems()
-        if not selected_items:
-            return
 
-        selected_name = selected_items[0].text()
+        selected_name = self.analysisActionPanel.getSelectedItem()
 
         try:
             args_dict = self.all_predicates.getPredicateArgs(selected_name)
@@ -607,13 +569,13 @@ class MainUI(QMainWindow):
     def registerPredicates(self):
         
         barChartObj = CreateBarChart(self.sentralControl)
-        self.all_predicates.addPredicate("create bar chart", barChartObj)
+        self.all_predicates.addPredicate("charts", "create bar chart", barChartObj)
 
         pieChartObj = CreatePieChart(self.sentralControl)
-        self.all_predicates.addPredicate("create pie chart", pieChartObj)
+        self.all_predicates.addPredicate("charts", "create pie chart", pieChartObj)
 
         sqlQueryPredicate = SqlQueryPredicate(self.sentralControl)
-        self.all_predicates.addPredicate("execute sql query", sqlQueryPredicate)
+        self.all_predicates.addPredicate("SQL", "execute sql query", sqlQueryPredicate)
 
 
 
@@ -955,3 +917,114 @@ class ManageArgs(QWidget):
         return updated_args
 
 
+
+class AnalysisActionPanel(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.group_items = {}  # group_name -> QListWidgetItem
+        self.predicate_items = {}  # predicate_name -> QListWidgetItem
+        self.group_to_predicates = {}  # group_name -> list of predicate_names
+
+        layout = QVBoxLayout(self)
+
+        # Search box
+        self.searchBox = QTextEdit()
+        self.searchBox.setPlaceholderText("Search for actions and analysis")
+        self.searchBox.setFixedHeight(35)
+        self.searchBox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        layout.addWidget(self.searchBox)
+
+        # List Widget
+        self.listWidget = QListWidget()
+        layout.addWidget(self.listWidget)
+
+        self.listWidget.setSortingEnabled(False)
+        self.listWidget.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.listWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        self.searchBox.textChanged.connect(self._onSearch)
+
+    def addItem(self, group_name, predicate_name):
+        # Add group if not already present
+        if group_name not in self.group_items:
+            group_item = QListWidgetItem(group_name)
+            group_font = QFont()
+            group_font.setBold(True)
+            group_item.setFont(group_font)
+            
+            # Set group item as non-selectable
+            group_item.setFlags(Qt.ItemIsEnabled)
+            group_item.setFlags(Qt.NoItemFlags)
+
+
+            self.listWidget.addItem(group_item)
+            self.group_items[group_name] = group_item
+            self.group_to_predicates[group_name] = []
+
+        # Avoid duplicates
+        if predicate_name in self.predicate_items:
+            return
+
+        # Add predicate under group
+        display_text = f"\t{predicate_name}"
+        item = QListWidgetItem(display_text)
+        item.setData(Qt.UserRole, predicate_name)
+        item.setToolTip(f"<b>{predicate_name}</b>")
+
+        group_item = self.group_items[group_name]  # assuming you stored it
+        self.listWidget.insertItem(self.listWidget.row(group_item) + 1, item)
+
+        self.predicate_items[predicate_name] = item
+        self.group_to_predicates[group_name].append(predicate_name)
+
+
+    def _onSearch(self):
+        search_text = self.searchBox.toPlainText().strip().lower()
+        self._resetHighlights()
+
+        if not search_text:
+            return
+
+        # First match to scroll
+        found_first = False
+
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            pred_name = item.data(Qt.UserRole)
+            if pred_name:
+                lower_pred = pred_name.lower()
+                if search_text in lower_pred:
+                    item.setForeground(QColor("red"))
+                    if not found_first:
+                        self.listWidget.scrollToItem(item)
+                        found_first = True
+                else:
+                    # Reset to original text
+                    item.setForeground(QColor("black"))
+                    # item.setText(f"\t{pred_name}")
+
+    def _resetHighlights(self):
+        for group, predicates in self.group_to_predicates.items():
+            for pred_name in predicates:
+                item = self.predicate_items.get(pred_name)
+                if item:
+                    item.setForeground(QColor("black"))
+
+
+    def registerSelectionChangedSlot(self, slot_func):
+        self.listWidget.itemSelectionChanged.connect(slot_func)
+
+    def getSelectedItem(self):
+        selected = self.listWidget.selectedItems()
+        for item in selected:
+            pred_name = item.data(Qt.UserRole)
+            if pred_name:
+                return pred_name
+        return None
+
+    def selectItem(self, predicate_name):
+        item = self.predicate_items.get(predicate_name)
+        if item:
+            self.listWidget.setCurrentItem(item)
+            self.listWidget.scrollToItem(item)
