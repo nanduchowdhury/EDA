@@ -3572,3 +3572,211 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-07-24 16:54:38,208 - INFO - Execution error: 'NoneType' object is not iterable
 2025-07-24 18:22:22,638 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
 2025-07-24 18:22:22,653 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 18:25:18,409 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 18:25:18,431 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:29:02,040 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:29:02,065 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:29:14,772 - INFO - Error executing 'create bar chart': string indices must be integers, not 'str'
+2025-07-24 19:33:43,456 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:33:43,488 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:33:58,224 - INFO - Error executing 'create bar chart': string indices must be integers, not 'str'
+2025-07-24 19:36:41,464 - INFO - Error executing 'create bar chart': string indices must be integers, not 'str'
+2025-07-24 19:51:58,983 - INFO - Error executing 'create bar chart': No valid entity selected in the dropdown
+2025-07-24 19:52:38,958 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 19:52:38,973 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 20:20:32,614 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 20:20:32,651 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-24 20:20:32,654 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-24 20:20:35,758 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-24 20:21:53,713 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-24 20:21:56,698 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-24 21:42:54,110 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-24 21:43:13,603 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-24 21:49:58,441 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 10:57:48,384 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 10:57:48,416 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 10:57:54,765 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 10:57:57,113 - INFO - Error: No response from LLM.
+2025-07-25 10:58:26,608 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 10:58:28,928 - INFO - Error: No response from LLM.
+2025-07-25 10:59:15,923 - INFO - Error executing 'create bar chart': unhashable type: 'dict'
+2025-07-25 12:23:34,871 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:23:34,897 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:23:53,134 - INFO - Error executing 'create bar chart': unhashable type: 'dict'
+2025-07-25 12:29:43,871 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:29:43,896 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:29:53,358 - INFO - Error executing 'create bar chart': unhashable type: 'dict'
+2025-07-25 12:34:06,514 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:34:06,531 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_monthly_data.csv
+2025-07-25 12:35:01,946 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 12:35:04,359 - INFO - Error: No response from LLM.
+2025-07-25 12:42:23,247 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'
+2025-07-25 12:47:32,150 - INFO - Error executing 'format table': 'PenStyle' object has no attribute 'lower'

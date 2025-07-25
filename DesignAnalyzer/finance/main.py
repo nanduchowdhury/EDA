@@ -84,12 +84,17 @@ class CreateWorldMap(PredicateBase):
         self.cities = None
 
         self.args = {
-            'column_name': ""
+            'column_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Label',
+                'example': 'example : Region or City'
+            }
         }
 
     def run(self):
 
-        column_name = self.args['column_name']
+        column_name = self.args['column_name']['user_value']
 
         drawArea = self.sentralControl.viewerTabs.addTabByType("WORLD_MAP", 
                                     self.getShortName(),
@@ -113,14 +118,24 @@ class PredictNextMonths(PredicateBase):
         self.sentralControl = sentralControl
 
         self.args = {
-            'column_name': '',
-            'num-months': 2,
+            'column_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Label',
+                'example': 'example : Date or Category'
+            },
+            'num_months': {
+                'user_value': 2,
+                'default': 2,
+                'tool_tip': 'Number of months to predict',
+                'example': 'example : 3'
+            }
         }
 
     def run(self):
         result = []
-        column_name = self.args['column_name']
-        num_months = self.args['num-months']
+        column_name = self.args['column_name']['user_value']
+        num_months = self.args['num_months']['user_value']
 
         if num_months and column_name:
 
@@ -177,14 +192,24 @@ class HighlightTableColumnDataConditional(PredicateBase):
         self.sentralControl = sentralControl
 
         self.args = {
-            'column_name': "",
-            'python_syntax_condition': "",
+            'column_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Label',
+                'example': 'example : Date or Category'
+            },
+            'python_syntax_condition': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Python syntax condition for highlighting',
+                'example': 'example : x > 100'
+            }
         }
 
     def run(self):
         
-        column_name = self.args['column_name']
-        python_syntax_condition = self.args['python_syntax_condition']
+        column_name = self.args['column_name']['user_value']
+        python_syntax_condition = self.args['python_syntax_condition']['user_value']
 
         # df_list = self.sentralControl.getDataForSelectedEntity()
         # df = df_list[0]
@@ -203,20 +228,45 @@ class FormatTable(PredicateBase):
         self.sentralControl = sentralControl
 
         self.args = {
-            'font': "",
-            'grid': "",
-            'alignment': "",
-            'textColor': "",
-            'textSize': ""
+            'font': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Font type for the table',
+                'example': 'example : Arial'
+            },
+            'grid': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Grid style for the table',
+                'example': 'example : vertical or horizontal'
+            },
+            'alignment': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Text alignment in the table',
+                'example': 'example : center or left or right'
+            },
+            'textColor': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Text color in the table',
+                'example': 'example : red'
+            },
+            'textSize': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Text size in the table',
+                'example': 'example : 12'
+            }
         }
 
     def run(self):
         
-        font = self.cleanArg(self.args['font'])
-        grid = self.cleanArg(self.args['grid'])
-        alignment = self.cleanArg(self.args['alignment'])
-        textColor = self.cleanArg(self.args['textColor'])
-        textSize = self.cleanArg(self.args['textSize'])
+        font = self.cleanArg(self.args['font']['user_value'])
+        grid = self.cleanArg(self.args['grid']['user_value'])
+        alignment = self.cleanArg(self.args['alignment']['user_value'])
+        textColor = self.cleanArg(self.args['textColor']['user_value'])
+        textSize = self.cleanArg(self.args['textSize']['user_value'])
 
         # df_list = self.sentralControl.getDataForSelectedEntity()
         # df = df_list[0]
@@ -242,14 +292,24 @@ class FindOutlier(PredicateBase):
         self.sentralControl = sentralControl
 
         self.args = {
-            'column_name': '',
-            'z-value': 0.9
+            'column_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Label',
+                'example': 'example : Date or Category'
+            },
+            'z-value': {
+                'user_value': '',
+                'default': 0.9,
+                'tool_tip': 'Z-value for outlier detection',
+                'example': 'example : 0.9 1.9'
+            }
         }
 
     def run(self):
         result = []
-        column_name = self.args['column_name']
-        z_val = self.args['z-value']
+        column_name = self.args['column_name']['user_value']
+        z_val = self.args['z-value']['user_value']
 
         if z_val and column_name:
 

@@ -76,14 +76,24 @@ class FindVolume(PredicateBase):
         self.sentralControl = sentralControl
 
         self.args = {
-            'radius': 0.9,
-            'height': 0.9,
+            'radius': {
+                'user_value': 0.9,
+                'default': 0.9,
+                'tool_tip': 'Radius of the cylinder',
+                'example': 'example : 0.5'
+            },
+            'height': {
+                'user_value': 0.9,
+                'default': 0.9,
+                'tool_tip': 'Height of the cylinder',
+                'example': 'example : 1.0'
+            }
         }
 
     def run(self):
         result = []
-        radius = int(self.args['radius'])
-        height = int(self.args['height'])
+        radius = int(self.args['radius']['user_value'])
+        height = int(self.args['height']['user_value'])
 
         volume = math.pi * radius ** 2 * height
         result.append(volume)

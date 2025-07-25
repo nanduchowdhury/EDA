@@ -32,8 +32,20 @@ class PredicateBase():
     def setArg(self, name, value):
         self.args[name] = value
 
-    def setArgs(self, args_dict):
-        self.args.update(args_dict)
+    def setUserValueArgs(self, args_dict):
+        """
+        Update only the 'user_value' fields in self.args
+        for keys present in args_dict. Avoid nesting.
+        """
+        for key, value in args_dict.items():
+            if key in self.args and isinstance(self.args[key], dict):
+                # If value itself is a dict, extract its 'user_value' if exists
+                if isinstance(value, dict) and 'user_value' in value:
+                    self.args[key]['user_value'] = value['user_value']
+                else:
+                    self.args[key]['user_value'] = value
+
+
 
     def getArgs(self):
         return self.args
@@ -168,14 +180,24 @@ class CreateBarChart(PredicateBase):
         self.y_axis = None
 
         self.args = {
-            'x_axis': "",
-            'y_axis': "",
+            'x_axis': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the X-axis',
+                'example': 'example : Date or Category'
+            },
+            'y_axis': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Y-axis',
+                'example': 'example : Sales or Profit'
+            },
         }
 
     def run(self):
 
-        self.x_axis = self.args['x_axis']
-        self.y_axis = self.args['y_axis']
+        self.x_axis = self.args['x_axis']['user_value']
+        self.y_axis = self.args['y_axis']['user_value']
 
         drawArea = self.sentralControl.viewerTabs.addTabByType("BAR_CHART", 
                                     self.getShortName(),
@@ -189,11 +211,6 @@ class CreateBarChart(PredicateBase):
         drawArea.setDataFrame(df)
 
         drawArea.registerActionOnShowInTable(self.highlightInTable)
-        # self.highlightInTable()
-
-        # drawArea.plotBar(dataList, x_axis, y_axis)
-        # drawArea.plotBar(dataList, "COUNTRY", "2026")
-        # drawArea.plotPie(dataList)
 
         return True
     
@@ -221,14 +238,24 @@ class CreatePieChart(PredicateBase):
         self.value_column = None
 
         self.args = {
-            'label_column': "",
-            'value_column': "",
+            'label_column': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Label',
+                'example': 'example : Date or Category'
+            },
+            'value_column': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Value',
+                'example': 'example : Sales or Profit'
+            }
         }
 
     def run(self):
 
-        self.label_column = self.args['label_column']
-        self.value_column = self.args['value_column']
+        self.label_column = self.args['label_column']['user_value']
+        self.value_column = self.args['value_column']['user_value']
 
         drawArea = self.sentralControl.viewerTabs.addTabByType("PIE_CHART", 
                                     self.getShortName(),
@@ -254,7 +281,12 @@ class SqlQueryPredicate(PredicateBase, QObject):
         self.sentralControl = sentralControl
 
         self.args = {
-            'actual_query': ""
+            'sql_query': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'SQL query to be executed',
+                'example': 'example : SELECT * FROM table WHERE condition'
+            }
         }
 
     def run(self):
@@ -264,7 +296,7 @@ class SqlQueryPredicate(PredicateBase, QObject):
         
         result = []
 
-        actual_query = self.args['actual_query']
+        actual_query = self.args['actual_query']['user_value']
 
         print(f"Executing SQL query: {actual_query}")
 

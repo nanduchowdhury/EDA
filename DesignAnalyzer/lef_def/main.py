@@ -40,11 +40,16 @@ class GetViasForLayer(LefDefPredicate):
         super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
         self.args = {
-            'layer': None,  # Layer name to search for vias
+            'layer': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Layer name to search for vias',
+                'example': 'example : VIA1'
+            }
         }
 
     def run(self):
-        layerName = self.args['layer']
+        layerName = self.args['layer']['user_value']
 
         result = self.defParserImplement.get_via_names(layerName)
 
@@ -58,12 +63,17 @@ class GetInstanceCoords(LefDefPredicate):
         super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
         self.args = {
-            'name': None,  # Regular expression to match instance names
+            'instance_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the instance to search for',
+                'example': 'example : U1*'
+            }
         }
 
 
     def run(self):
-        name_regex = self.args["name"]
+        name_regex = self.args["instance_name"]["user_value"]
 
         # all_inst = list(design_data.instData.instance_data)
     

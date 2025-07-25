@@ -136,7 +136,7 @@ class BottomArea(QObject):
         self.tabWidget.addTab(self.logsTab, "Logs")
 
         # Assistant tab
-        self.assistantManager = AssistantManager()
+        self.assistantManager = AssistantManager(self.sentralControl)
         self.assistantTab = self.assistantManager.getTab()
         index = self.tabWidget.addTab(self.assistantTab, "Assistant")
         self.tabWidget.setCurrentIndex(index)
@@ -283,9 +283,11 @@ class AssistantManager(QObject):
 
     signal_update_command = pyqtSignal(str, dict)
 
-    def __init__(self, parent=None):
+    def __init__(self, sentralControl, parent=None):
 
         super().__init__()
+
+        self.sentralControl = sentralControl
 
         global_signals.signal_update_sql_run_status.connect(self.on_signal_update_sql_run_status)
 
@@ -355,6 +357,12 @@ class AssistantManager(QObject):
             json_llm_response = global_LLM_manager.query(query)
         except Exception as e:
             self.assistantOutput.append(f"<span style='color:red;'>Error: {str(e)}</span>")
+            self.sentralControl.showMessage(f"Error: {str(e)}")
+            return
+
+        if not json_llm_response:
+            self.assistantOutput.append(f"<span style='color:red;'>Error: No response from LLM.</span>")
+            self.sentralControl.showMessage(f"Error: No response from LLM.")
             return
 
         # Dispatch response based on type

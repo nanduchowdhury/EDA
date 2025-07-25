@@ -539,11 +539,11 @@ class MainUI(QMainWindow):
             return
 
 
+        
         arg_values = self.manageArgs.getArgValues()
 
-
         # Set arguments and run the predicate
-        predicate.setArgs(arg_values)
+        predicate.setUserValueArgs(arg_values)
 
         # Execute the predicate
         try:
@@ -596,14 +596,10 @@ class MainUI(QMainWindow):
         selected_name = selected_items[0].text()
 
         try:
-            arg_names = self.all_predicates.getPredicateArgs(selected_name)
+            args_dict = self.all_predicates.getPredicateArgs(selected_name)
         except ValueError:
-            arg_names = []
+            args_dict = {}
 
-        # Update labels and visibility
-        
-        # Convert to dict with empty string values
-        args_dict = {name: "" for name in arg_names}
         
         self.manageArgs.setArgValues(args_dict)
 
@@ -915,15 +911,23 @@ class ManageArgs(QWidget):
 
     def setArgValues(self, args: dict):
         """
-        Show arg-name + value as label-edit pairs.
+        Show arg-name + value as label-edit pairs using metadata:
+        - Label text = arg name
+        - Label tooltip = tool_tip
+        - Edit text = default
+        - Edit tooltip = example
         """
-        for i, (key, value) in enumerate(args.items()):
+        for i, (key, meta) in enumerate(args.items()):
             if i >= self.max_args:
                 break  # ignore excess
+
             label, edit = self.paramEdits[i]
+
             label.setText(key)
-            label.setToolTip(key)
-            edit.setText(str(value))
+            label.setToolTip(meta.get('tool_tip', key))
+
+            edit.setText(str(meta.get('default', '')))
+            edit.setToolTip(meta.get('example', ''))
 
             label.show()
             edit.show()
@@ -934,14 +938,20 @@ class ManageArgs(QWidget):
             label.hide()
             edit.hide()
 
+
     def getArgValues(self) -> dict:
-        """
-        Return dict of {arg_name: value} from visible rows.
-        """
-        result = {}
+
+        updated_args = {}
+
         for label, edit in self.paramEdits:
             if label.isVisible() and edit.isVisible():
                 key = label.text()
                 value = edit.text().strip()
-                result[key] = value
-        return result
+
+                updated_args[key] = {
+                    'user_value': value,
+                }
+
+        return updated_args
+
+
