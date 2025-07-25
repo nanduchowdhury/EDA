@@ -221,6 +221,32 @@ class HighlightTableColumnDataConditional(PredicateBase):
 
         return result
 
+class TableAlternateRowsColor(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'color': {
+                'user_value': '',
+                'default': 'light green',
+                'tool_tip': 'Color for alternate rows',
+                'example': 'example : light blue'
+            }
+        }
+
+    def run(self):
+
+        color = self.args['color']['user_value']
+
+        result = []
+
+        table = self.sentralControl.getSelectedTable()
+        table.colorAlternateRows(color)
+
+        return result
+
+
 
 class FormatTable(PredicateBase):
     def __init__(self, sentralControl):
@@ -387,6 +413,10 @@ class FinanceUI(MainUI):
 
         formatTable = FormatTable(self.sentralControl)
         self.all_predicates.addPredicate("table formatting", "format table", formatTable)
+
+        alternateRows = TableAlternateRowsColor(self.sentralControl)
+        self.all_predicates.addPredicate("table formatting", "color alternate rows", alternateRows)
+
 
         worldMapObj = CreateWorldMap(self.sentralControl)
         self.all_predicates.addPredicate("world map analysis", "create world map", worldMapObj)

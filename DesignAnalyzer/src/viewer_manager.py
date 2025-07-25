@@ -112,6 +112,15 @@ class TableView(QTableView):
         self.setModel(self.proxy_model)
         self.resizeAllColumns()
 
+    def colorAlternateRows(self, color: str):
+        """Color alternate rows with the given color and its lighter version."""
+        base_color = QColor(color)
+        if not base_color.isValid():
+            raise ValueError(f"Invalid color: {color}")
+        lighter_color = base_color.lighter(130)  # 130% lighter
+        self.model.setAlternateRowColors((base_color.name(), lighter_color.name()))
+        self.viewport().update()
+
     def sortColumn(self, column: int, ascending: bool = True):
         """Sorts the table based on column index."""
         order = Qt.AscendingOrder if ascending else Qt.DescendingOrder
@@ -454,6 +463,7 @@ class PandasTableModel(QAbstractTableModel):
         self._highlight_rules = {}  # {col_name: [values]}
         self._sort_column = None
         self._sort_order = Qt.AscendingOrder
+        self._alternate_row_colors = None
 
     def setDataFrame(self, df: pd.DataFrame):
         self.beginResetModel()
@@ -476,6 +486,15 @@ class PandasTableModel(QAbstractTableModel):
     def columnCount(self, parent=QModelIndex()):
         return 0 if self._df is None else len(self._df.columns)
 
+    def setAlternateRowColors(self, color_tuple):
+        """Set colors for alternate rows: (color, lighter_color)."""
+        self._alternate_row_colors = color_tuple
+        self.dataChanged.emit(
+            self.index(0, 0),
+            self.index(self.rowCount() - 1, self.columnCount() - 1),
+            [Qt.BackgroundRole]
+        )
+
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
@@ -489,6 +508,11 @@ class PandasTableModel(QAbstractTableModel):
             return getattr(self.parent(), '_default_alignment', Qt.AlignLeft | Qt.AlignVCenter)
 
         elif role == Qt.BackgroundRole:
+            # Alternate row coloring
+            if self._alternate_row_colors:
+                color, lighter_color = self._alternate_row_colors
+                return QColor(color) if row % 2 == 0 else QColor(lighter_color)
+            # Highlight rules
             col_name = self._df.columns[col]
             highlight_vals = self._highlight_rules.get(col_name, [])
             if str(self._df.iat[row, col]) in map(str, highlight_vals):
