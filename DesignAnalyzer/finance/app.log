@@ -3816,3 +3816,22 @@ message: "Generative Language API has not been used in project 966683554322 befo
 2025-07-25 17:54:59,587 - INFO - Error: No response from LLM.
 2025-07-25 17:57:51,370 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
 2025-07-25 17:57:54,241 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 18:54:33,758 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 18:54:36,814 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 21:04:36,954 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 21:04:39,971 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-25 21:09:10,470 - INFO - Error executing 'apply column color gradient': Invalid color(s).
+2025-07-25 21:21:10,456 - INFO - Error executing 'execute sql query': 'actual_query'
+2025-07-25 21:21:32,402 - INFO - Error executing 'execute sql query': 'actual_query'
+2025-07-25 21:21:58,755 - INFO - Error executing 'execute sql query': 'actual_query'
+2025-07-25 21:22:08,768 - INFO - Error executing 'execute sql query': 'actual_query'
+2025-07-25 22:44:12,319 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
+2025-07-25 22:46:31,892 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
+2025-07-25 22:46:34,225 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
+2025-07-25 22:48:17,558 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv
+2025-07-25 22:48:19,573 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv
+2025-07-25 22:49:00,226 - INFO - Error executing 'apply column color gradient': Column 'date' is not numeric. Gradient coloring requires numeric data.
+2025-07-25 22:50:44,641 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
+2025-07-25 22:50:46,791 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
+2025-07-25 22:52:31,706 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv
+2025-07-25 22:52:33,710 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv

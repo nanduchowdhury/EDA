@@ -247,6 +247,46 @@ class TableAlternateRowsColor(PredicateBase):
         return result
 
 
+class TableApplyColumnColorGradient(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'column_name': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to apply gradient',
+                'example': 'example : Sales'
+            },
+            'low_color': {
+                'user_value': '',
+                'default': 'green',
+                'tool_tip': 'Low color for gradient',
+                'example': 'example : green'
+            },
+            'high_color': {
+                'user_value': '',
+                'default': 'red',
+                'tool_tip': 'High color for gradient',
+                'example': 'example : red'
+            }
+        }
+
+    def run(self):
+
+        column_name = self.args['column_name']['user_value']
+        low_color = self.args['low_color']['user_value']
+        high_color = self.args['high_color']['user_value']
+
+        result = []
+
+        table = self.sentralControl.getSelectedTable()
+        table.applyColumnColorGradient(column_name, low_color, high_color)
+
+        return result
+
+
 
 class FormatTable(PredicateBase):
     def __init__(self, sentralControl):
@@ -413,6 +453,9 @@ class FinanceUI(MainUI):
 
         formatTable = FormatTable(self.sentralControl)
         self.all_predicates.addPredicate("table formatting", "format table", formatTable)
+
+        applyColumnColorGradient = TableApplyColumnColorGradient(self.sentralControl)
+        self.all_predicates.addPredicate("table formatting", "apply column color gradient", applyColumnColorGradient)
 
         alternateRows = TableAlternateRowsColor(self.sentralControl)
         self.all_predicates.addPredicate("table formatting", "color alternate rows", alternateRows)

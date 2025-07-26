@@ -106,6 +106,20 @@ class TableView(QTableView):
         self.selectionModel().selectionChanged.connect(self._handleSelection)
         self.horizontalHeader().sectionClicked.connect(self._handleHeaderClick)
 
+    def applyColumnColorGradient(self, col_name: str, lowColor: str, highColor: str):
+        """Apply a color gradient to a column based on its values."""
+
+        if not pd.api.types.is_numeric_dtype(self.model._df[col_name]):
+            raise ValueError(f"Column '{col_name}' is not numeric. Gradient coloring requires numeric data.")
+
+        if col_name not in self.model._df.columns:
+            raise ValueError(f"Column '{col_name}' not found.")
+        if not QColor(lowColor).isValid() or not QColor(highColor).isValid():
+            raise ValueError("Invalid color(s).")
+        self.model.setColumnGradient(col_name, lowColor, highColor)
+        self.viewport().update()
+
+
     def loadFromDataFrame(self, df: pd.DataFrame):
         self.model.setDataFrame(df)
         self.proxy_model.invalidateFilter()
@@ -464,6 +478,8 @@ class PandasTableModel(QAbstractTableModel):
         self._sort_column = None
         self._sort_order = Qt.AscendingOrder
         self._alternate_row_colors = None
+        self._column_gradient = None  # (col_name, lowColor, highColor)
+
 
     def setDataFrame(self, df: pd.DataFrame):
         self.beginResetModel()
@@ -495,6 +511,14 @@ class PandasTableModel(QAbstractTableModel):
             [Qt.BackgroundRole]
         )
 
+    def setColumnGradient(self, col_name, lowColor, highColor):
+        self._column_gradient = (col_name, lowColor, highColor)
+        self.dataChanged.emit(
+            self.index(0, 0),
+            self.index(self.rowCount() - 1, self.columnCount() - 1),
+            [Qt.BackgroundRole]
+        )
+
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
@@ -508,17 +532,51 @@ class PandasTableModel(QAbstractTableModel):
             return getattr(self.parent(), '_default_alignment', Qt.AlignLeft | Qt.AlignVCenter)
 
         elif role == Qt.BackgroundRole:
+            # Gradient coloring
+            grad_color = self._handleGradientColoring(row, col)
+            if grad_color:
+                return grad_color
             # Alternate row coloring
-            if self._alternate_row_colors:
-                color, lighter_color = self._alternate_row_colors
-                return QColor(color) if row % 2 == 0 else QColor(lighter_color)
+            alt_color = self._handleAlternateRowColoring(row)
+            if alt_color:
+                return alt_color
             # Highlight rules
-            col_name = self._df.columns[col]
-            highlight_vals = self._highlight_rules.get(col_name, [])
-            if str(self._df.iat[row, col]) in map(str, highlight_vals):
-                return QColor('yellow')
+            highlight_color = self._handleHighlightRules(row, col)
+            if highlight_color:
+                return highlight_color
 
         return QVariant()
+
+    def _handleAlternateRowColoring(self, row):
+        if self._alternate_row_colors:
+            color, lighter_color = self._alternate_row_colors
+            return QColor(color) if row % 2 == 0 else QColor(lighter_color)
+        return None
+
+    def _handleHighlightRules(self, row, col):
+        col_name = self._df.columns[col]
+        highlight_vals = self._highlight_rules.get(col_name, [])
+        if str(self._df.iat[row, col]) in map(str, highlight_vals):
+            return QColor('yellow')
+        return None
+
+    def _handleGradientColoring(self, row, col):
+        if self._column_gradient:
+            grad_col, lowColor, highColor = self._column_gradient
+            if self._df.columns[col] == grad_col:
+                values = pd.to_numeric(self._df[grad_col], errors='coerce')
+                vmin, vmax = values.min(), values.max()
+                val = values.iloc[row]
+                if pd.isna(val) or vmin == vmax:
+                    return QColor(lowColor)
+                ratio = (val - vmin) / (vmax - vmin)
+                c1 = QColor(lowColor)
+                c2 = QColor(highColor)
+                r = c1.red()   + ratio * (c2.red()   - c1.red())
+                g = c1.green() + ratio * (c2.green() - c1.green())
+                b = c1.blue()  + ratio * (c2.blue()  - c1.blue())
+                return QColor(int(r), int(g), int(b))
+        return None
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         if role != Qt.DisplayRole or self._df is None:
