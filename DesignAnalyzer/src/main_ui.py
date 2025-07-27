@@ -47,10 +47,9 @@ from datetime import datetime
 
 
 class ReadSessionMenuItem(MenuItemAbstract):
-    def __init__(self, session, all_input_tabs):
+    def __init__(self, session, inputTab):
         self.session = session
-        self.all_input_tabs = all_input_tabs
-
+        self.inputTab = inputTab
 
     def onClick(self):
         file_dialog = QFileDialog()
@@ -59,26 +58,27 @@ class ReadSessionMenuItem(MenuItemAbstract):
         if file_path:
             self.session.readSession(file_path)
 
-            for tab_name, tab in self.all_input_tabs.items():
-                
-                list = self.session.getAttr(tab_name)
-                tab.addItems(list)
-                
-                        
-
+            # Iterate over all keys in the session data
+            for group in self.session._data.keys():
+                sources = self.session.getAttr(group)
+                for source in sources:
+                    items = self.session.getAttr(group, source)
+                    self.inputTab.addItems(group, source, items)
 
 
 class WriteSessionMenuItem(MenuItemAbstract):
-    def __init__(self, session, all_input_tabs):
+    def __init__(self, session, inputTab):
         self.session = session
-        self.all_input_tabs = all_input_tabs
+        self.inputTab = inputTab
 
     def onClick(self):
 
-        for tab_name, tab in self.all_input_tabs.items():
-            items = tab.getAllItemsInList()
-
-            self.session.setAttr(tab_name, items)
+        groups = self.inputTab.getAllGroups()
+        for group in groups:
+            sources = self.inputTab.getAllGroupSources(group)
+            for source in sources:
+                items = self.inputTab.getAllItemsInList(group, source)
+                self.session.setAttr(group, {source: [items]})
             
         self.session.dump()
 
@@ -280,12 +280,12 @@ class MainUI(QMainWindow):
     def create_GUI(self):
 
         self.readSessionMenuObj = ReadSessionMenuItem(self.session, 
-                                        self.bottomArea.all_input_tabs)
+                                        self.bottomArea.inputTab)
         
         self.menu.createMenuItem("File", "Read Session", self.readSessionMenuObj)
 
         self.writeSessionMenuObj = WriteSessionMenuItem(self.session, 
-                                        self.bottomArea.all_input_tabs)
+                                        self.bottomArea.inputTab)
         
         self.menu.createMenuItem("File", "Write Session", self.writeSessionMenuObj)
 

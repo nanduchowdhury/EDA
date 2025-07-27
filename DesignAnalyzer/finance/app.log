@@ -3835,3 +3835,98 @@ message: "Generative Language API has not been used in project 966683554322 befo
 2025-07-25 22:50:46,791 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Listings.csv
 2025-07-25 22:52:31,706 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv
 2025-07-25 22:52:33,710 - INFO - End reading CSV file: C:/Users/nandu/Downloads/Airbnb+Data/Airbnb Data/Reviews.csv
+2025-07-25 22:55:12,056 - INFO - Start reading CSV file: C:/Users/nandu/Downloads/NYC_Taxi_Trips/taxi_trips/2017_taxi_trips.csv
+2025-07-25 22:56:20,492 - INFO - End reading CSV file: C:/Users/nandu/Downloads/NYC_Taxi_Trips/taxi_trips/2017_taxi_trips.csv
+2025-07-25 22:59:50,022 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-25 22:59:52,399 - INFO - Error: No response from LLM.
+2025-07-26 22:59:42,258 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-26 22:59:45,093 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-07-26 22:59:54,506 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-26 22:59:56,879 - INFO - Error: No response from LLM.
+2025-07-26 23:17:35,670 - INFO - Error executing 'apply column color gradient': Column 'Color' is not numeric. Gradient coloring requires numeric data.
+2025-07-27 11:43:33,238 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-07-27 11:43:35,586 - INFO - Error: No response from LLM.

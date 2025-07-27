@@ -23,15 +23,15 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 from predicates import Predicates, PredicateBase
 
 class LoadDataToolItem(ToolBarItemAbstract):
-    def __init__(self, all_input_tabs, sentralControl):
+    def __init__(self, inputTab, sentralControl):
         super().__init__("Load data")
 
-        self.all_input_tabs = all_input_tabs
+        self.inputTab = inputTab
         self.sentralControl = sentralControl
 
     def onClick(self):
 
-        csvList = self.all_input_tabs["CSV"].getAllItemsInList()
+        csvList = self.inputTab.getAllItemsInList("Files", "CSV")
 
         for csv_file in csvList:
             self.sentralControl.showMessage(f"Start reading CSV file: {csv_file}")
@@ -437,7 +437,7 @@ class FinanceUI(MainUI):
 
         self.bottomArea.create_input_tab("CSV")
 
-        self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.all_input_tabs, 
+        self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.inputTab,
                                                     self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)

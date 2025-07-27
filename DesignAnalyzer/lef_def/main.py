@@ -99,12 +99,12 @@ class GetInstanceCoords(LefDefPredicate):
 
 
 class LoadDesignToolItem(ToolBarItemAbstract):
-    def __init__(self, all_input_tabs,
+    def __init__(self, inputTab,
                     defParserImplement, lefParserImplement, _sentralControl,
                     drawManager):
         super().__init__("Load Design")
 
-        self.all_input_tabs = all_input_tabs
+        self.inputTab = inputTab
 
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
@@ -118,8 +118,8 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         
     def loadLefDef(self):
 
-        lefList = self.all_input_tabs["LEF"].getAllItemsInList()
-        defList = self.all_input_tabs["DEF"].getAllItemsInList()
+        lefList = self.inputTab.getAllItemsInList("Files", "LEF")
+        defList = self.inputTab.getAllItemsInList("Files", "DEF")
 
         for l in lefList:
             print(f"Loading LEF file: {l}")
@@ -156,7 +156,7 @@ class LefDefUI(MainUI):
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
 
-        self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.all_input_tabs,
+        self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.inputTab,
                                 self.defParserImplement, self.lefParserImplement,
                                 self.sentralControl,
                                 self.drawManager)

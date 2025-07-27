@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
-    QFileDialog, QLabel, QListWidgetItem
+    QFileDialog, QLabel, QListWidgetItem, QGridLayout
 )
 from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal, pyqtSlot
+
 
 import os
 import psutil
@@ -43,29 +44,14 @@ class BottomArea(QObject):
         self.create_bottom_area()
 
 
-    def get_tab_by_name(self, tab_name):
-        if tab_name in self.all_input_tabs:
-            return self.all_input_tabs[tab_name]
-        else:
-            raise ValueError(f"No tab found by name {tab_name}")
-
     def create_input_tab(self, tab_name):
-        
-        if self.DUMMY_INPUT_TAB in self.all_input_tabs:
-            dummy_tab_index = self.all_input_tabs[self.DUMMY_INPUT_TAB].tab_index
-            self.leftPanelTabs.setTabText(dummy_tab_index, tab_name)
-            self.all_input_tabs[tab_name] = self.all_input_tabs[self.DUMMY_INPUT_TAB]
-            del self.all_input_tabs[self.DUMMY_INPUT_TAB]
-        else:
-            tab = InputTab(parent=self, sentralControl=self.sentralControl, tab_widget_container=self.leftPanelTabs)
-            tab.create_tab(tab_name)
-            self.all_input_tabs[tab_name] = tab
+        self.inputTab.createFilesSurceTab("Files", tab_name)
 
     def create_bottom_area(self):
 
         self.bottomArea = QWidget()
 
-        self.bottomArea.setStyleSheet("border: 1px solid black;")
+        # self.bottomArea.setStyleSheet("border: 1px solid black;")
         
         # self.bottomArea.setMinimumHeight(self.windowHeight - self.layoutHeight)
         # self.bottomArea.setStyleSheet("background-color: #fce4ec; border: 1px solid black;")
@@ -97,13 +83,10 @@ class BottomArea(QObject):
         # Left Panel (1/3 width):
         leftPanelWidget = QWidget()
         leftPanelLayout = QVBoxLayout(leftPanelWidget)
-        self.leftPanelTabs = QTabWidget()
         
-        tab = InputTab(parent=self, sentralControl=self.sentralControl, tab_widget_container=self.leftPanelTabs)
-        tab.create_tab(self.DUMMY_INPUT_TAB)
-        self.all_input_tabs = {self.DUMMY_INPUT_TAB: tab}
+        self.inputTab = InputTab(sentralControl=self.sentralControl)
 
-        leftPanelLayout.addWidget(self.leftPanelTabs)
+        leftPanelLayout.addWidget(self.inputTab)
         return leftPanelWidget
 
 
@@ -210,72 +193,189 @@ class BottomArea(QObject):
 
 
 
-class InputTab:
-    def __init__(self, parent, sentralControl, 
-                 tab_widget_container: QTabWidget):
-        
+
+class InputTab(QTabWidget):
+    def __init__(self, sentralControl, parent=None):
+        super().__init__(parent)
+
         self.parent = parent
         self.sentralControl = sentralControl
+        self.group_tabs = {}  # group_name -> QTabWidget
+        self.list_widgets = {}  # (group_name, source_name) -> QListWidget
 
-        self.tab_widget_container = tab_widget_container
-        self.tab_widget = QWidget()
+        # Add default groups and sources
+        self.createSourceGroupTab("Files")
 
-        self.list_widget = None
-        self.tab_index = None
+        self.createSourceGroupTab("Cloud")
+        self.createGoogleCloudSourceTab("Cloud", "Google Cloud Storage")
+        self.createSnowflakeSourceTab("Cloud", "Snowflake")
 
-    def create_tab(self, tab_name):
-        tab_layout = QHBoxLayout(self.tab_widget)
+    def createSourceGroupTab(self, group_name):
+        """Create a new group tab that holds source tabs, with a label above."""
+        group_widget = QWidget()
+        group_layout = QVBoxLayout(group_widget)
 
-        vertical = QVBoxLayout()
+        label = QLabel(f"Select {group_name} sources")
+        label.setAlignment(Qt.AlignLeft)
+        group_layout.addWidget(label)
+
+        group_tab = QTabWidget()
+        group_layout.addWidget(group_tab)
+
+        self.addTab(group_widget, group_name)
+        self.group_tabs[group_name] = group_tab
+
+    def createFilesSurceTab(self, group_name, source_name):
+        """Create a new source tab under an existing group."""
+        if group_name not in self.group_tabs:
+            raise ValueError(f"Group '{group_name}' not found. Call createSourceGroupTab() first.")
+
+        tab_widget = QWidget()
+        tab_layout = QHBoxLayout(tab_widget)
+
+        # Buttons and list
+        button_layout = QVBoxLayout()
         input_button = QPushButton("Select file")
         clear_button = QPushButton("Clear files")
-        vertical.addWidget(input_button)
-        vertical.addWidget(clear_button)
+        button_layout.addWidget(input_button)
+        button_layout.addWidget(clear_button)
 
-        self.list_widget = CustomListWidget()
-        h_layout = QHBoxLayout()
-        h_layout.addLayout(vertical)
-        h_layout.addWidget(self.list_widget)
+        list_widget = CustomListWidget()
+        self.list_widgets[(group_name, source_name)] = list_widget
 
-        input_button.clicked.connect(self.select_callback)
-        clear_button.clicked.connect(self.clear_callback)
+        input_button.clicked.connect(lambda: self.select_callback(group_name, source_name))
+        clear_button.clicked.connect(lambda: self.clear_callback(group_name, source_name))
 
-        tab_layout.addLayout(h_layout)
-        self.tab_widget.setLayout(tab_layout)
+        # Assemble the tab layout
+        content_layout = QHBoxLayout()
+        content_layout.addLayout(button_layout)
+        content_layout.addWidget(list_widget)
+        tab_layout.addLayout(content_layout)
 
-        self.tab_index = self.tab_widget_container.addTab(self.tab_widget, tab_name)
+        # Add the source tab
+        self.group_tabs[group_name].addTab(tab_widget, source_name)
 
 
-    def select_callback(self):
+    def createSnowflakeSourceTab(self, group_name, source_name):
+        if group_name not in self.group_tabs:
+            raise ValueError(f"Group '{group_name}' not found. Call createSourceGroupTab() first.")
+
+        tab_widget = QWidget()
+        grid_layout = QGridLayout(tab_widget)
+
+        # Row 0: Username & Password
+        label_user = QLabel("Username")
+        self.snowflakeUsername = QTextEdit()
+        self.snowflakeUsername.setFixedHeight(30)
+        label_pass = QLabel("Password")
+        self.snowflakePassword = QTextEdit()
+        self.snowflakePassword.setFixedHeight(30)
+        grid_layout.addWidget(label_user, 0, 0)
+        grid_layout.addWidget(self.snowflakeUsername, 0, 1)
+        grid_layout.addWidget(label_pass, 0, 2)
+        grid_layout.addWidget(self.snowflakePassword, 0, 3)
+
+        # Row 1: Account & Warehouse
+        label_account = QLabel("Account")
+        self.snowflakeAccount = QTextEdit()
+        self.snowflakeAccount.setFixedHeight(30)
+        label_warehouse = QLabel("Warehouse")
+        self.snowflakeWarehouse = QTextEdit()
+        self.snowflakeWarehouse.setFixedHeight(30)
+        grid_layout.addWidget(label_account, 1, 0)
+        grid_layout.addWidget(self.snowflakeAccount, 1, 1)
+        grid_layout.addWidget(label_warehouse, 1, 2)
+        grid_layout.addWidget(self.snowflakeWarehouse, 1, 3)
+
+        # Row 2: Database & Schema
+        label_db = QLabel("Database")
+        self.snowflakeDatabase = QTextEdit()
+        self.snowflakeDatabase.setFixedHeight(30)
+        label_schema = QLabel("Schema")
+        self.snowflakeSchema = QTextEdit()
+        self.snowflakeSchema.setFixedHeight(30)
+        grid_layout.addWidget(label_db, 2, 0)
+        grid_layout.addWidget(self.snowflakeDatabase, 2, 1)
+        grid_layout.addWidget(label_schema, 2, 2)
+        grid_layout.addWidget(self.snowflakeSchema, 2, 3)
+
+        self.group_tabs[group_name].addTab(tab_widget, source_name)
+
+
+    def createGoogleCloudSourceTab(self, group_name, source_name):
+        if group_name not in self.group_tabs:
+            raise ValueError(f"Group '{group_name}' not found. Call createSourceGroupTab() first.")
+
+        tab_widget = QWidget()
+        grid_layout = QGridLayout(tab_widget)
+
+        label_json = QLabel("GConsole JSON File")
+        self.gCloudJsonFile = QTextEdit()
+        self.gCloudJsonFile.setFixedHeight(30)
+        grid_layout.addWidget(label_json, 0, 0)
+        grid_layout.addWidget(self.gCloudJsonFile, 0, 1)
+
+        label_blob = QLabel("Blob name")
+        self.gCloudBlobName = QTextEdit()
+        self.gCloudBlobName.setFixedHeight(30)
+        grid_layout.addWidget(label_blob, 1, 0)
+        grid_layout.addWidget(self.gCloudBlobName, 1, 1)
+
+        self.group_tabs[group_name].addTab(tab_widget, source_name)
+
+
+    def getGConsoleJson(self):
+        """Return the text from the GConsole JSON File text edit."""
+        return self.gCloudJsonFile.toPlainText() if hasattr(self, 'gCloudJsonFile') else None
+
+    def getGCloudBlobName(self):
+        """Return the text from the Blob name text edit."""
+        return self.gCloudBlobName.toPlainText() if hasattr(self, 'gCloudBlobName') else None
+
+    def select_callback(self, group_name, source_name):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(None, "Select a file")
 
         if file_path:
-            self._addItem(file_path)
+            self._addItem(group_name, source_name, file_path)
 
-    def _addItem(self, file_path):
+    def _addItem(self, group_name, source_name, file_path):
+        list_widget = self.list_widgets[(group_name, source_name)]
         base_name = os.path.basename(file_path)
-        existing_items = [self.list_widget.item(i).text() for i in range(self.list_widget.count())]
+        existing_items = [list_widget.item(i).text() for i in range(list_widget.count())]
         if base_name not in existing_items:
             item = QListWidgetItem(base_name)
             item.setToolTip(file_path)
-            self.list_widget.addItem(item)
+            list_widget.addItem(item)
 
             self.sentralControl.addEntryForFile(base_name)
 
-
-    def addItems(self, file_paths):
+    def addItems(self, group_name, source_name, file_paths):
         for file_path in file_paths:
-            self._addItem(file_path)
+            self._addItem(group_name, source_name, file_path)
 
-    def getAllItemsInList(self):
+    def getAllItemsInList(self, group_name, source_name):
+        list_widget = self.list_widgets[(group_name, source_name)]
         return [
-            self.list_widget.item(i).toolTip()
-            for i in range(self.list_widget.count())
+            list_widget.item(i).toolTip()
+            for i in range(list_widget.count())
         ]
 
-    def clear_callback(self):
-        self.list_widget.clear()
+    def clear_callback(self, group_name, source_name):
+        list_widget = self.list_widgets[(group_name, source_name)]
+        list_widget.clear()
+
+    def getAllGroups(self):
+        """Return a list of all group names."""
+        return list(self.group_tabs.keys())
+
+    def getAllGroupSources(self, group):
+        """Return all source names for a given group."""
+        sources = []
+        for (group_name, source_name) in self.list_widgets.keys():
+            if group_name == group:
+                sources.append(source_name)
+        return sources
 
 
 

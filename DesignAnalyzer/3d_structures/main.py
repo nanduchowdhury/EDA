@@ -21,10 +21,10 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 from predicates import Predicates, PredicateBase
 
 class LoadDataToolItem(ToolBarItemAbstract):
-    def __init__(self, all_input_tabs, sentralControl):
+    def __init__(self, inputTab, sentralControl):
         super().__init__("Load data")
 
-        self.all_input_tabs = all_input_tabs
+        self.inputTab = inputTab
         self.sentralControl = sentralControl
 
 
@@ -32,7 +32,7 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
         self.sentralControl.showMessage("Loading STL data started.")
 
-        stlList = self.all_input_tabs["STL"].getAllItemsInList()
+        stlList = self.inputTab.getAllItemsInList("Files", "STL")
 
         for stl_file in stlList:
             logging.info(f"Reading STL file: {stl_file}")
@@ -110,7 +110,7 @@ class StructuresUI(MainUI):
 
         self.bottomArea.create_input_tab("STL")
 
-        self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.all_input_tabs, 
+        self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.inputTab, 
                                                     self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
