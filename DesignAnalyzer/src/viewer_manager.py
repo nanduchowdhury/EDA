@@ -15,6 +15,8 @@ from layout_plot import BasePlotView, BarChartView, WorldMapWidget, PieChartView
 
 from vtk_draw import VTKWidgetWrapper
 
+from pdf_viewer import PDFViewer
+
 from common import TabWidget, TabWidgetRmbPopOut
 
 class ManageResultsTabs:
@@ -435,6 +437,8 @@ class ManageViewerTabs(QWidget):
             tab_widget = self._createTableWidget()
         elif viewer_type == "WORLD_MAP":
             tab_widget = WorldMapWidget()
+        elif viewer_type == "PDF":
+            tab_widget = PDFViewer(parent=self)
 
         if tab_widget:
             if not tab_name:

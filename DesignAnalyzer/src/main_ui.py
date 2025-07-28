@@ -378,7 +378,8 @@ class MainUI(QMainWindow):
     def create_top_layout(self):
         topLayout = QHBoxLayout()
 
-        self.viewerTabs = ManageViewerTabs(viewer_type=self.PLOT_OR_DRAW,
+        self.viewerTabs = ManageViewerTabs(parent=self, 
+                                        viewer_type=self.PLOT_OR_DRAW,
                                         windowWidth=self.WINDOW_WIDTH,
                                         windowHeight=self.WINDOW_HEIGHT,
                                         layoutWidth=self.LAYOUT_WIDTH,
