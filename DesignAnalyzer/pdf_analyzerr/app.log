@@ -78,3 +78,1831 @@
 2025-07-28 08:52:36,843 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf
 2025-07-28 08:52:37,023 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf read successfully.
 2025-07-28 08:52:37,023 - INFO - Loading PDF data done.
+2025-07-28 08:57:13,937 - INFO - Loading PDF started.
+2025-07-28 08:57:13,970 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf
+2025-07-28 08:57:14,137 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf read successfully.
+2025-07-28 08:57:14,137 - INFO - Loading PDF data done.
+2025-07-28 09:08:34,729 - INFO - Loading PDF started.
+2025-07-28 09:08:34,747 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf
+2025-07-28 09:08:34,828 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf read successfully.
+2025-07-28 09:08:34,829 - INFO - Loading PDF data done.
+2025-07-28 09:39:39,666 - INFO - Loading PDF started.
+2025-07-28 09:39:39,766 - INFO - Reading PDF file: C:/Users/nandu/EDA/DesignAnalyzer/test/pdf_analyzerr/dummy_statement.pdf
+2025-07-28 09:39:40,080 - INFO - PDF file C:/Users/nandu/EDA/DesignAnalyzer/test/pdf_analyzerr/dummy_statement.pdf read successfully.
+2025-07-28 09:39:40,081 - INFO - Loading PDF data done.
+2025-07-28 09:40:09,686 - DEBUG - seek: 0
+2025-07-28 09:40:09,689 - DEBUG - find_xref: b''
+2025-07-28 09:40:09,691 - DEBUG - find_xref: b''
+2025-07-28 09:40:09,691 - DEBUG - find_xref: b'%%EOF'
+2025-07-28 09:40:09,691 - DEBUG - find_xref: b''
+2025-07-28 09:40:09,691 - DEBUG - find_xref: b'183027'
+2025-07-28 09:40:09,697 - DEBUG - find_xref: b''
+2025-07-28 09:40:09,698 - DEBUG - find_xref: b'startxref'
+2025-07-28 09:40:09,698 - DEBUG - xref found: pos=b'183027'
+2025-07-28 09:40:09,700 - DEBUG - seek: 183027
+2025-07-28 09:40:09,700 - DEBUG - nexttoken: (183027, /b'xref')
+2025-07-28 09:40:09,701 - DEBUG - read_xref_from: start=183027, token=/b'xref'
+2025-07-28 09:40:09,705 - DEBUG - nextline: 183031, b'\r\n'
+2025-07-28 09:40:09,705 - DEBUG - nextline: 183033, b'0 22\r\n'
+2025-07-28 09:40:09,708 - DEBUG - nextline: 183039, b'0000000004 65535 f\r\n'
+2025-07-28 09:40:09,708 - DEBUG - nextline: 183059, b'0000000016 00000 n\r\n'
+2025-07-28 09:40:09,708 - DEBUG - nextline: 183079, b'0000003604 00000 n\r\n'
+2025-07-28 09:40:09,708 - DEBUG - nextline: 183099, b'0000182710 00000 n\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183119, b'0000000007 00000 f\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183139, b'0000003662 00000 n\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183159, b'0000098145 00000 n\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183179, b'0000000009 00000 f\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183199, b'0000154282 00000 n\r\n'
+2025-07-28 09:40:09,712 - DEBUG - nextline: 183219, b'0000000014 00000 f\r\n'
+2025-07-28 09:40:09,718 - DEBUG - nextline: 183239, b'0000178986 00000 n\r\n'
+2025-07-28 09:40:09,718 - DEBUG - nextline: 183259, b'0000097900 00000 n\r\n'
+2025-07-28 09:40:09,718 - DEBUG - nextline: 183279, b'0000003892 00000 n\r\n'
+2025-07-28 09:40:09,718 - DEBUG - nextline: 183299, b'0000004269 00000 n\r\n'
+2025-07-28 09:40:09,718 - DEBUG - nextline: 183319, b'0000000020 00000 f\r\n'
+2025-07-28 09:40:09,725 - DEBUG - nextline: 183339, b'0000069774 00000 n\r\n'
+2025-07-28 09:40:09,726 - DEBUG - nextline: 183359, b'0000004100 00000 n\r\n'
+2025-07-28 09:40:09,726 - DEBUG - nextline: 183379, b'0000182308 00000 n\r\n'
+2025-07-28 09:40:09,726 - DEBUG - nextline: 183399, b'0000097875 00000 n\r\n'
+2025-07-28 09:40:09,726 - DEBUG - nextline: 183419, b'0000182507 00000 n\r\n'
+2025-07-28 09:40:09,726 - DEBUG - nextline: 183439, b'0000000000 00001 f\r\n'
+2025-07-28 09:40:09,734 - DEBUG - nextline: 183459, b'0000000077 00000 n\r\n'
+2025-07-28 09:40:09,735 - DEBUG - nextline: 183479, b'trailer\r\n'
+2025-07-28 09:40:09,735 - DEBUG - seek: 183479
+2025-07-28 09:40:09,744 - DEBUG - xref objects: {1: (None, 16, 0), 2: (None, 3604, 0), 3: (None, 182710, 0), 5: (None, 3662, 0), 6: (None, 98145, 0), 8: (None, 154282, 0), 10: (None, 178986, 0), 11: (None, 97900, 0), 12: (None, 3892, 0), 13: (None, 4269, 0), 15: (None, 69774, 0), 16: (None, 4100, 0), 17: (None, 182308, 0), 18: (None, 97875, 0), 19: (None, 182507, 0), 21: (None, 77, 0)}
+2025-07-28 09:40:09,744 - DEBUG - nexttoken: (183479, /b'trailer')
+2025-07-28 09:40:09,744 - DEBUG - nexttoken: (183488, /b'<<')
+2025-07-28 09:40:09,744 - DEBUG - start_type: pos=183488, type='d'
+2025-07-28 09:40:09,750 - DEBUG - nexttoken: (183490, /'Size')
+2025-07-28 09:40:09,752 - DEBUG - nexttoken: (183496, 22)
+2025-07-28 09:40:09,752 - DEBUG - nexttoken: (183498, /'Root')
+2025-07-28 09:40:09,756 - DEBUG - nexttoken: (183504, 1)
+2025-07-28 09:40:09,760 - DEBUG - nexttoken: (183506, 0)
+2025-07-28 09:40:09,760 - DEBUG - nexttoken: (183508, /b'R')
+2025-07-28 09:40:09,764 - DEBUG - do_keyword: pos=183508, token=/b'R', stack=[(183490, /'Size'), (183496, 22), (183498, /'Root'), (183504, 1), (183506, 0)]
+2025-07-28 09:40:09,766 - DEBUG - nexttoken: (183509, /'Info')
+2025-07-28 09:40:09,771 - DEBUG - nexttoken: (183515, 3)
+2025-07-28 09:40:09,771 - DEBUG - nexttoken: (183517, 0)
+2025-07-28 09:40:09,775 - DEBUG - nexttoken: (183519, /b'R')
+2025-07-28 09:40:09,779 - DEBUG - do_keyword: pos=183519, token=/b'R', stack=[(183490, /'Size'), (183496, 22), (183498, /'Root'), (183508, <PDFObjRef:1>), (183509, /'Info'), (183515, 3), (183517, 0)]
+2025-07-28 09:40:09,779 - DEBUG - nexttoken: (183520, /'ID')
+2025-07-28 09:40:09,779 - DEBUG - nexttoken: (183523, /b'[')
+2025-07-28 09:40:09,787 - DEBUG - start_type: pos=183523, type='a'
+2025-07-28 09:40:09,790 - DEBUG - nexttoken: (183524, b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8')
+2025-07-28 09:40:09,790 - DEBUG - nexttoken: (183558, b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15')
+2025-07-28 09:40:09,796 - DEBUG - nexttoken: (183592, /b']')
+2025-07-28 09:40:09,796 - DEBUG - end_type: pos=183523, type='a', objs=[b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']
+2025-07-28 09:40:09,796 - DEBUG - nexttoken: (183593, /b'>>')
+2025-07-28 09:40:09,802 - DEBUG - end_type: pos=183488, type='d', objs=[/'Size', 22, /'Root', <PDFObjRef:1>, /'Info', <PDFObjRef:3>, /'ID', [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']]
+2025-07-28 09:40:09,803 - DEBUG - nexttoken: (183597, /b'startxref')
+2025-07-28 09:40:09,803 - DEBUG - do_keyword: pos=183597, token=/b'startxref', stack=[(183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']})]
+2025-07-28 09:40:09,808 - DEBUG - add_results: ((183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}),)
+2025-07-28 09:40:09,812 - DEBUG - nextobject: (183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']})
+2025-07-28 09:40:09,812 - DEBUG - trailer={'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}
+2025-07-28 09:40:09,812 - DEBUG - trailer: {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}
+2025-07-28 09:40:09,818 - DEBUG - getobj: objid=3
+2025-07-28 09:40:09,819 - DEBUG - seek: 182710
+2025-07-28 09:40:09,823 - DEBUG - nexttoken: (182710, 3)
+2025-07-28 09:40:09,823 - DEBUG - nexttoken: (182712, 0)
+2025-07-28 09:40:09,823 - DEBUG - nexttoken: (182714, /b'obj')
+2025-07-28 09:40:09,830 - DEBUG - nexttoken: (182718, /b'<<')
+2025-07-28 09:40:09,830 - DEBUG - start_type: pos=182718, type='d'
+2025-07-28 09:40:09,830 - DEBUG - nexttoken: (182720, /'CreationDate')
+2025-07-28 09:40:09,838 - DEBUG - nexttoken: (182733, b"D:20090206165338-06'00'")
+2025-07-28 09:40:09,841 - DEBUG - nexttoken: (182758, /'Author')
+2025-07-28 09:40:09,844 - DEBUG - nexttoken: (182765, b'paplener')
+2025-07-28 09:40:09,846 - DEBUG - nexttoken: (182775, /'CPYVersion')
+2025-07-28 09:40:09,846 - DEBUG - nexttoken: (182786, b'3.0')
+2025-07-28 09:40:09,852 - DEBUG - nexttoken: (182791, /'Creator')
+2025-07-28 09:40:09,854 - DEBUG - nexttoken: (182799, b'eCopy Desktop 9.1.1.17')
+2025-07-28 09:40:09,857 - DEBUG - nexttoken: (182823, /'Producer')
+2025-07-28 09:40:09,857 - DEBUG - nexttoken: (182832, b'Adobe PDF Library 8.0')
+2025-07-28 09:40:09,862 - DEBUG - nexttoken: (182855, /'ModDate')
+2025-07-28 09:40:09,866 - DEBUG - nexttoken: (182863, b"D:20090206165526-06'00'")
+2025-07-28 09:40:09,866 - DEBUG - nexttoken: (182888, /'ImportPCL')
+2025-07-28 09:40:09,873 - DEBUG - nexttoken: (182898, b'DummyStatement Generic.pdf')
+2025-07-28 09:40:09,875 - DEBUG - nexttoken: (182926, /'Title')
+2025-07-28 09:40:09,879 - DEBUG - nexttoken: (182932, b'eStatements-DummyStatement Generic-020609')
+2025-07-28 09:40:09,879 - DEBUG - nexttoken: (182975, /'ModifiedBy')
+2025-07-28 09:40:09,884 - DEBUG - nexttoken: (182986, b'paplener\nD:20090206225519Z\n')
+2025-07-28 09:40:09,888 - DEBUG - nexttoken: (183017, /b'>>')
+2025-07-28 09:40:09,890 - DEBUG - end_type: pos=182718, type='d', objs=[/'CreationDate', b"D:20090206165338-06'00'", /'Author', b'paplener', /'CPYVersion', b'3.0', /'Creator', b'eCopy Desktop 9.1.1.17', /'Producer', b'Adobe PDF Library 8.0', /'ModDate', b"D:20090206165526-06'00'", /'ImportPCL', b'DummyStatement Generic.pdf', /'Title', b'eStatements-DummyStatement Generic-020609', /'ModifiedBy', b'paplener\nD:20090206225519Z\n']
+2025-07-28 09:40:09,890 - DEBUG - nexttoken: (183020, /b'endobj')
+2025-07-28 09:40:09,896 - DEBUG - do_keyword: pos=183020, token=/b'endobj', stack=[(182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'})]
+2025-07-28 09:40:09,900 - DEBUG - add_results: ((182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'}),)
+2025-07-28 09:40:09,906 - DEBUG - nextobject: (182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'})
+2025-07-28 09:40:09,906 - DEBUG - register: objid=3: {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'}
+2025-07-28 09:40:09,913 - DEBUG - getobj: objid=1
+2025-07-28 09:40:09,914 - DEBUG - seek: 16
+2025-07-28 09:40:09,920 - DEBUG - nexttoken: (16, 1)
+2025-07-28 09:40:09,924 - DEBUG - nexttoken: (18, 0)
+2025-07-28 09:40:09,929 - DEBUG - nexttoken: (20, /b'obj')
+2025-07-28 09:40:09,930 - DEBUG - nexttoken: (24, /b'<<')
+2025-07-28 09:40:09,930 - DEBUG - start_type: pos=24, type='d'
+2025-07-28 09:40:09,941 - DEBUG - nexttoken: (26, /'Metadata')
+2025-07-28 09:40:09,943 - DEBUG - nexttoken: (36, 21)
+2025-07-28 09:40:09,947 - DEBUG - nexttoken: (39, 0)
+2025-07-28 09:40:09,950 - DEBUG - nexttoken: (41, /b'R')
+2025-07-28 09:40:09,956 - DEBUG - do_keyword: pos=41, token=/b'R', stack=[(26, /'Metadata'), (36, 21), (39, 0)]
+2025-07-28 09:40:09,957 - DEBUG - nexttoken: (42, /'Pages')
+2025-07-28 09:40:09,963 - DEBUG - nexttoken: (49, 2)
+2025-07-28 09:40:09,963 - DEBUG - nexttoken: (51, 0)
+2025-07-28 09:40:09,971 - DEBUG - nexttoken: (53, /b'R')
+2025-07-28 09:40:09,973 - DEBUG - do_keyword: pos=53, token=/b'R', stack=[(26, /'Metadata'), (41, <PDFObjRef:21>), (42, /'Pages'), (49, 2), (51, 0)]
+2025-07-28 09:40:09,979 - DEBUG - nexttoken: (54, /'Type')
+2025-07-28 09:40:09,979 - DEBUG - nexttoken: (59, /'Catalog')
+2025-07-28 09:40:09,987 - DEBUG - nexttoken: (67, /b'>>')
+2025-07-28 09:40:09,991 - DEBUG - end_type: pos=24, type='d', objs=[/'Metadata', <PDFObjRef:21>, /'Pages', <PDFObjRef:2>, /'Type', /'Catalog']
+2025-07-28 09:40:09,996 - DEBUG - nexttoken: (70, /b'endobj')
+2025-07-28 09:40:09,996 - DEBUG - do_keyword: pos=70, token=/b'endobj', stack=[(24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'})]
+2025-07-28 09:40:09,996 - DEBUG - add_results: ((24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'}),)
+2025-07-28 09:40:10,007 - DEBUG - nextobject: (24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'})
+2025-07-28 09:40:10,007 - DEBUG - register: objid=1: {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'}
+2025-07-28 09:40:10,013 - DEBUG - getobj: objid=2
+2025-07-28 09:40:10,013 - DEBUG - seek: 3604
+2025-07-28 09:40:10,023 - DEBUG - nexttoken: (3604, 2)
+2025-07-28 09:40:10,029 - DEBUG - nexttoken: (3606, 0)
+2025-07-28 09:40:10,031 - DEBUG - nexttoken: (3608, /b'obj')
+2025-07-28 09:40:10,039 - DEBUG - nexttoken: (3612, /b'<<')
+2025-07-28 09:40:10,041 - DEBUG - start_type: pos=3612, type='d'
+2025-07-28 09:40:10,046 - DEBUG - nexttoken: (3614, /'Count')
+2025-07-28 09:40:10,046 - DEBUG - nexttoken: (3621, 2)
+2025-07-28 09:40:10,056 - DEBUG - nexttoken: (3622, /'Type')
+2025-07-28 09:40:10,061 - DEBUG - nexttoken: (3627, /'Pages')
+2025-07-28 09:40:10,067 - DEBUG - nexttoken: (3633, /'Kids')
+2025-07-28 09:40:10,073 - DEBUG - nexttoken: (3638, /b'[')
+2025-07-28 09:40:10,077 - DEBUG - start_type: pos=3638, type='a'
+2025-07-28 09:40:10,079 - DEBUG - nexttoken: (3639, 5)
+2025-07-28 09:40:10,085 - DEBUG - nexttoken: (3641, 0)
+2025-07-28 09:40:10,090 - DEBUG - nexttoken: (3643, /b'R')
+2025-07-28 09:40:10,096 - DEBUG - do_keyword: pos=3643, token=/b'R', stack=[(3639, 5), (3641, 0)]
+2025-07-28 09:40:10,096 - DEBUG - nexttoken: (3645, 12)
+2025-07-28 09:40:10,107 - DEBUG - nexttoken: (3648, 0)
+2025-07-28 09:40:10,112 - DEBUG - nexttoken: (3650, /b'R')
+2025-07-28 09:40:10,112 - DEBUG - do_keyword: pos=3650, token=/b'R', stack=[(3643, <PDFObjRef:5>), (3645, 12), (3648, 0)]
+2025-07-28 09:40:10,120 - DEBUG - nexttoken: (3651, /b']')
+2025-07-28 09:40:10,125 - DEBUG - end_type: pos=3638, type='a', objs=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:40:10,131 - DEBUG - nexttoken: (3652, /b'>>')
+2025-07-28 09:40:10,139 - DEBUG - end_type: pos=3612, type='d', objs=[/'Count', 2, /'Type', /'Pages', /'Kids', [<PDFObjRef:5>, <PDFObjRef:12>]]
+2025-07-28 09:40:10,145 - DEBUG - nexttoken: (3655, /b'endobj')
+2025-07-28 09:40:10,153 - DEBUG - do_keyword: pos=3655, token=/b'endobj', stack=[(3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]})]
+2025-07-28 09:40:10,157 - DEBUG - add_results: ((3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]}),)
+2025-07-28 09:40:10,162 - DEBUG - nextobject: (3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]})
+2025-07-28 09:40:10,166 - DEBUG - register: objid=2: {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]}
+2025-07-28 09:40:10,176 - DEBUG - Pages: Kids=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:40:10,184 - DEBUG - getobj: objid=5
+2025-07-28 09:40:10,191 - DEBUG - seek: 3662
+2025-07-28 09:40:10,196 - DEBUG - nexttoken: (3662, 5)
+2025-07-28 09:40:10,204 - DEBUG - nexttoken: (3664, 0)
+2025-07-28 09:40:10,208 - DEBUG - nexttoken: (3666, /b'obj')
+2025-07-28 09:40:10,216 - DEBUG - nexttoken: (3670, /b'<<')
+2025-07-28 09:40:10,221 - DEBUG - start_type: pos=3670, type='d'
+2025-07-28 09:40:10,223 - DEBUG - nexttoken: (3672, /'Annots')
+2025-07-28 09:40:10,230 - DEBUG - nexttoken: (3680, 18)
+2025-07-28 09:40:10,237 - DEBUG - nexttoken: (3683, 0)
+2025-07-28 09:40:10,242 - DEBUG - nexttoken: (3685, /b'R')
+2025-07-28 09:40:10,246 - DEBUG - do_keyword: pos=3685, token=/b'R', stack=[(3672, /'Annots'), (3680, 18), (3683, 0)]
+2025-07-28 09:40:10,250 - DEBUG - nexttoken: (3686, /'Parent')
+2025-07-28 09:40:10,256 - DEBUG - nexttoken: (3694, 2)
+2025-07-28 09:40:10,263 - DEBUG - nexttoken: (3696, 0)
+2025-07-28 09:40:10,263 - DEBUG - nexttoken: (3698, /b'R')
+2025-07-28 09:40:10,274 - DEBUG - do_keyword: pos=3698, token=/b'R', stack=[(3672, /'Annots'), (3685, <PDFObjRef:18>), (3686, /'Parent'), (3694, 2), (3696, 0)]
+2025-07-28 09:40:10,279 - DEBUG - nexttoken: (3699, /'Contents')
+2025-07-28 09:40:10,279 - DEBUG - nexttoken: (3709, 11)
+2025-07-28 09:40:10,290 - DEBUG - nexttoken: (3712, 0)
+2025-07-28 09:40:10,296 - DEBUG - nexttoken: (3714, /b'R')
+2025-07-28 09:40:10,296 - DEBUG - do_keyword: pos=3714, token=/b'R', stack=[(3672, /'Annots'), (3685, <PDFObjRef:18>), (3686, /'Parent'), (3698, <PDFObjRef:2>), (3699, /'Contents'), (3709, 11), (3712, 0)]
+2025-07-28 09:40:10,307 - DEBUG - nexttoken: (3715, /'Origin')
+2025-07-28 09:40:10,312 - DEBUG - nexttoken: (3722, b'PCL6D9.tmp,0')
+2025-07-28 09:40:10,312 - DEBUG - nexttoken: (3736, /'eCopyCompressed')
+2025-07-28 09:40:10,324 - DEBUG - nexttoken: (3753, True)
+2025-07-28 09:40:10,329 - DEBUG - nexttoken: (3757, /'MediaBox')
+2025-07-28 09:40:10,329 - DEBUG - nexttoken: (3766, /b'[')
+2025-07-28 09:40:10,340 - DEBUG - start_type: pos=3766, type='a'
+2025-07-28 09:40:10,345 - DEBUG - nexttoken: (3767, 0.0)
+2025-07-28 09:40:10,345 - DEBUG - nexttoken: (3771, 0.0)
+2025-07-28 09:40:10,357 - DEBUG - nexttoken: (3775, 612.0)
+2025-07-28 09:40:10,361 - DEBUG - nexttoken: (3781, 792.0)
+2025-07-28 09:40:10,373 - DEBUG - nexttoken: (3786, /b']')
+2025-07-28 09:40:10,377 - DEBUG - end_type: pos=3766, type='a', objs=[0.0, 0.0, 612.0, 792.0]
+2025-07-28 09:40:10,387 - DEBUG - nexttoken: (3787, /'Resources')
+2025-07-28 09:40:10,389 - DEBUG - nexttoken: (3797, /b'<<')
+2025-07-28 09:40:10,396 - DEBUG - start_type: pos=3797, type='d'
+2025-07-28 09:40:10,406 - DEBUG - nexttoken: (3799, /'XObject')
+2025-07-28 09:40:10,413 - DEBUG - nexttoken: (3807, /b'<<')
+2025-07-28 09:40:10,414 - DEBUG - start_type: pos=3807, type='d'
+2025-07-28 09:40:10,423 - DEBUG - nexttoken: (3809, /'Im0')
+2025-07-28 09:40:10,430 - DEBUG - nexttoken: (3814, 6)
+2025-07-28 09:40:10,430 - DEBUG - nexttoken: (3816, 0)
+2025-07-28 09:40:10,442 - DEBUG - nexttoken: (3818, /b'R')
+2025-07-28 09:40:10,444 - DEBUG - do_keyword: pos=3818, token=/b'R', stack=[(3809, /'Im0'), (3814, 6), (3816, 0)]
+2025-07-28 09:40:10,455 - DEBUG - nexttoken: (3819, /'Im1')
+2025-07-28 09:40:10,457 - DEBUG - nexttoken: (3824, 8)
+2025-07-28 09:40:10,463 - DEBUG - nexttoken: (3826, 0)
+2025-07-28 09:40:10,472 - DEBUG - nexttoken: (3828, /b'R')
+2025-07-28 09:40:10,474 - DEBUG - do_keyword: pos=3828, token=/b'R', stack=[(3809, /'Im0'), (3818, <PDFObjRef:6>), (3819, /'Im1'), (3824, 8), (3826, 0)]
+2025-07-28 09:40:10,479 - DEBUG - nexttoken: (3829, /'Im2')
+2025-07-28 09:40:10,491 - DEBUG - nexttoken: (3834, 10)
+2025-07-28 09:40:10,496 - DEBUG - nexttoken: (3837, 0)
+2025-07-28 09:40:10,507 - DEBUG - nexttoken: (3839, /b'R')
+2025-07-28 09:40:10,507 - DEBUG - do_keyword: pos=3839, token=/b'R', stack=[(3809, /'Im0'), (3818, <PDFObjRef:6>), (3819, /'Im1'), (3828, <PDFObjRef:8>), (3829, /'Im2'), (3834, 10), (3837, 0)]
+2025-07-28 09:40:10,515 - DEBUG - nexttoken: (3840, /b'>>')
+2025-07-28 09:40:10,524 - DEBUG - end_type: pos=3807, type='d', objs=[/'Im0', <PDFObjRef:6>, /'Im1', <PDFObjRef:8>, /'Im2', <PDFObjRef:10>]
+2025-07-28 09:40:10,531 - DEBUG - nexttoken: (3842, /'ProcSet')
+2025-07-28 09:40:10,540 - DEBUG - nexttoken: (3850, /b'[')
+2025-07-28 09:40:10,542 - DEBUG - start_type: pos=3850, type='a'
+2025-07-28 09:40:10,548 - DEBUG - nexttoken: (3851, /'PDF')
+2025-07-28 09:40:10,557 - DEBUG - nexttoken: (3855, /'ImageB')
+2025-07-28 09:40:10,564 - DEBUG - nexttoken: (3862, /'ImageC')
+2025-07-28 09:40:10,572 - DEBUG - nexttoken: (3869, /b']')
+2025-07-28 09:40:10,574 - DEBUG - end_type: pos=3850, type='a', objs=[/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:40:10,581 - DEBUG - nexttoken: (3870, /b'>>')
+2025-07-28 09:40:10,590 - DEBUG - end_type: pos=3797, type='d', objs=[/'XObject', {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, /'ProcSet', [/'PDF', /'ImageB', /'ImageC']]
+2025-07-28 09:40:10,597 - DEBUG - nexttoken: (3872, /'Type')
+2025-07-28 09:40:10,605 - DEBUG - nexttoken: (3877, /'Page')
+2025-07-28 09:40:10,606 - DEBUG - nexttoken: (3882, /b'>>')
+2025-07-28 09:40:10,615 - DEBUG - end_type: pos=3670, type='d', objs=[/'Annots', <PDFObjRef:18>, /'Parent', <PDFObjRef:2>, /'Contents', <PDFObjRef:11>, /'Origin', b'PCL6D9.tmp,0', /'eCopyCompressed', True, /'MediaBox', [0.0, 0.0, 612.0, 792.0], /'Resources', {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, /'Type', /'Page']
+2025-07-28 09:40:10,623 - DEBUG - nexttoken: (3885, /b'endobj')
+2025-07-28 09:40:10,630 - DEBUG - do_keyword: pos=3885, token=/b'endobj', stack=[(3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})]
+2025-07-28 09:40:10,643 - DEBUG - add_results: ((3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}),)
+2025-07-28 09:40:10,647 - DEBUG - nextobject: (3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})
+2025-07-28 09:40:10,662 - DEBUG - register: objid=5: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:10,663 - DEBUG - Page: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:10,673 - DEBUG - getobj: objid=11
+2025-07-28 09:40:10,685 - DEBUG - seek: 97900
+2025-07-28 09:40:10,695 - DEBUG - nexttoken: (97900, 11)
+2025-07-28 09:40:10,697 - DEBUG - nexttoken: (97903, 0)
+2025-07-28 09:40:10,707 - DEBUG - nexttoken: (97905, /b'obj')
+2025-07-28 09:40:10,713 - DEBUG - nexttoken: (97909, /b'<<')
+2025-07-28 09:40:10,724 - DEBUG - start_type: pos=97909, type='d'
+2025-07-28 09:40:10,730 - DEBUG - nexttoken: (97911, /'Length')
+2025-07-28 09:40:10,740 - DEBUG - nexttoken: (97919, 194)
+2025-07-28 09:40:10,743 - DEBUG - nexttoken: (97922, /b'>>')
+2025-07-28 09:40:10,756 - DEBUG - end_type: pos=97909, type='d', objs=[/'Length', 194]
+2025-07-28 09:40:10,759 - DEBUG - nexttoken: (97924, /b'stream')
+2025-07-28 09:40:10,772 - DEBUG - do_keyword: pos=97924, token=/b'stream', stack=[(97909, {'Length': 194})]
+2025-07-28 09:40:10,776 - DEBUG - seek: 97924
+2025-07-28 09:40:10,784 - DEBUG - nextline: 97924, b'stream\r\n'
+2025-07-28 09:40:10,792 - DEBUG - seek: 98126
+2025-07-28 09:40:10,801 - DEBUG - nextline: 98126, b'\r\n'
+2025-07-28 09:40:10,807 - DEBUG - nextline: 98128, b'endstream\r'
+2025-07-28 09:40:10,811 - DEBUG - seek: 98128
+2025-07-28 09:40:10,823 - DEBUG - Stream: pos=97932, objlen=196, dic={'Length': 194}, data=bytearray(b'q\n612.4799')...
+2025-07-28 09:40:10,823 - DEBUG - nexttoken: (98128, /b'endstream')
+2025-07-28 09:40:10,832 - DEBUG - do_keyword: pos=98128, token=/b'endstream', stack=[(97932, <PDFStream(None): raw=194, {'Length': 194}>)]
+2025-07-28 09:40:10,843 - DEBUG - nexttoken: (98138, /b'endobj')
+2025-07-28 09:40:10,849 - DEBUG - do_keyword: pos=98138, token=/b'endobj', stack=[(97932, <PDFStream(None): raw=194, {'Length': 194}>), (98128, /b'endstream')]
+2025-07-28 09:40:10,857 - DEBUG - add_results: ((97932, <PDFStream(None): raw=194, {'Length': 194}>), (98128, /b'endstream'))
+2025-07-28 09:40:10,865 - DEBUG - nextobject: (97932, <PDFStream(None): raw=194, {'Length': 194}>)
+2025-07-28 09:40:10,874 - DEBUG - register: objid=11: <PDFStream(11): raw=194, {'Length': 194}>
+2025-07-28 09:40:10,882 - DEBUG - getobj: objid=12
+2025-07-28 09:40:10,890 - DEBUG - seek: 3892
+2025-07-28 09:40:10,898 - DEBUG - nexttoken: (3892, 12)
+2025-07-28 09:40:10,907 - DEBUG - nexttoken: (3895, 0)
+2025-07-28 09:40:10,915 - DEBUG - nexttoken: (3897, /b'obj')
+2025-07-28 09:40:10,923 - DEBUG - nexttoken: (3901, /b'<<')
+2025-07-28 09:40:10,931 - DEBUG - start_type: pos=3901, type='d'
+2025-07-28 09:40:10,944 - DEBUG - nexttoken: (3903, /'Parent')
+2025-07-28 09:40:10,948 - DEBUG - nexttoken: (3911, 2)
+2025-07-28 09:40:10,959 - DEBUG - nexttoken: (3913, 0)
+2025-07-28 09:40:10,970 - DEBUG - nexttoken: (3915, /b'R')
+2025-07-28 09:40:10,979 - DEBUG - do_keyword: pos=3915, token=/b'R', stack=[(3903, /'Parent'), (3911, 2), (3913, 0)]
+2025-07-28 09:40:10,989 - DEBUG - nexttoken: (3916, /'Contents')
+2025-07-28 09:40:10,997 - DEBUG - nexttoken: (3926, 16)
+2025-07-28 09:40:10,997 - DEBUG - nexttoken: (3929, 0)
+2025-07-28 09:40:11,007 - DEBUG - nexttoken: (3931, /b'R')
+2025-07-28 09:40:11,014 - DEBUG - do_keyword: pos=3931, token=/b'R', stack=[(3903, /'Parent'), (3915, <PDFObjRef:2>), (3916, /'Contents'), (3926, 16), (3929, 0)]
+2025-07-28 09:40:11,030 - DEBUG - nexttoken: (3932, /'Origin')
+2025-07-28 09:40:11,040 - DEBUG - nexttoken: (3939, b'PCL6D9.tmp,1')
+2025-07-28 09:40:11,044 - DEBUG - nexttoken: (3953, /'eCopyCompressed')
+2025-07-28 09:40:11,057 - DEBUG - nexttoken: (3970, True)
+2025-07-28 09:40:11,059 - DEBUG - nexttoken: (3974, /'MediaBox')
+2025-07-28 09:40:11,067 - DEBUG - nexttoken: (3983, /b'[')
+2025-07-28 09:40:11,073 - DEBUG - start_type: pos=3983, type='a'
+2025-07-28 09:40:11,091 - DEBUG - nexttoken: (3984, 0.0)
+2025-07-28 09:40:11,093 - DEBUG - nexttoken: (3988, 0.0)
+2025-07-28 09:40:11,106 - DEBUG - nexttoken: (3992, 612.0)
+2025-07-28 09:40:11,112 - DEBUG - nexttoken: (3998, 792.0)
+2025-07-28 09:40:11,125 - DEBUG - nexttoken: (4003, /b']')
+2025-07-28 09:40:11,129 - DEBUG - end_type: pos=3983, type='a', objs=[0.0, 0.0, 612.0, 792.0]
+2025-07-28 09:40:11,144 - DEBUG - nexttoken: (4004, /'Resources')
+2025-07-28 09:40:11,147 - DEBUG - nexttoken: (4014, /b'<<')
+2025-07-28 09:40:11,157 - DEBUG - start_type: pos=4014, type='d'
+2025-07-28 09:40:11,164 - DEBUG - nexttoken: (4016, /'XObject')
+2025-07-28 09:40:11,174 - DEBUG - nexttoken: (4024, /b'<<')
+2025-07-28 09:40:11,181 - DEBUG - start_type: pos=4024, type='d'
+2025-07-28 09:40:11,198 - DEBUG - nexttoken: (4026, /'Im0')
+2025-07-28 09:40:11,206 - DEBUG - nexttoken: (4031, 13)
+2025-07-28 09:40:11,214 - DEBUG - nexttoken: (4034, 0)
+2025-07-28 09:40:11,224 - DEBUG - nexttoken: (4036, /b'R')
+2025-07-28 09:40:11,228 - DEBUG - do_keyword: pos=4036, token=/b'R', stack=[(4026, /'Im0'), (4031, 13), (4034, 0)]
+2025-07-28 09:40:11,240 - DEBUG - nexttoken: (4037, /'Im1')
+2025-07-28 09:40:11,245 - DEBUG - nexttoken: (4042, 15)
+2025-07-28 09:40:11,262 - DEBUG - nexttoken: (4045, 0)
+2025-07-28 09:40:11,263 - DEBUG - nexttoken: (4047, /b'R')
+2025-07-28 09:40:11,280 - DEBUG - do_keyword: pos=4047, token=/b'R', stack=[(4026, /'Im0'), (4036, <PDFObjRef:13>), (4037, /'Im1'), (4042, 15), (4045, 0)]
+2025-07-28 09:40:11,290 - DEBUG - nexttoken: (4048, /b'>>')
+2025-07-28 09:40:11,300 - DEBUG - end_type: pos=4024, type='d', objs=[/'Im0', <PDFObjRef:13>, /'Im1', <PDFObjRef:15>]
+2025-07-28 09:40:11,308 - DEBUG - nexttoken: (4050, /'ProcSet')
+2025-07-28 09:40:11,310 - DEBUG - nexttoken: (4058, /b'[')
+2025-07-28 09:40:11,324 - DEBUG - start_type: pos=4058, type='a'
+2025-07-28 09:40:11,335 - DEBUG - nexttoken: (4059, /'PDF')
+2025-07-28 09:40:11,344 - DEBUG - nexttoken: (4063, /'ImageB')
+2025-07-28 09:40:11,348 - DEBUG - nexttoken: (4070, /'ImageC')
+2025-07-28 09:40:11,358 - DEBUG - nexttoken: (4077, /b']')
+2025-07-28 09:40:11,373 - DEBUG - end_type: pos=4058, type='a', objs=[/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:40:11,374 - DEBUG - nexttoken: (4078, /b'>>')
+2025-07-28 09:40:11,390 - DEBUG - end_type: pos=4014, type='d', objs=[/'XObject', {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, /'ProcSet', [/'PDF', /'ImageB', /'ImageC']]
+2025-07-28 09:40:11,396 - DEBUG - nexttoken: (4080, /'Type')
+2025-07-28 09:40:11,407 - DEBUG - nexttoken: (4085, /'Page')
+2025-07-28 09:40:11,423 - DEBUG - nexttoken: (4090, /b'>>')
+2025-07-28 09:40:11,432 - DEBUG - end_type: pos=3901, type='d', objs=[/'Parent', <PDFObjRef:2>, /'Contents', <PDFObjRef:16>, /'Origin', b'PCL6D9.tmp,1', /'eCopyCompressed', True, /'MediaBox', [0.0, 0.0, 612.0, 792.0], /'Resources', {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, /'Type', /'Page']
+2025-07-28 09:40:11,442 - DEBUG - nexttoken: (4093, /b'endobj')
+2025-07-28 09:40:11,445 - DEBUG - do_keyword: pos=4093, token=/b'endobj', stack=[(3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})]
+2025-07-28 09:40:11,460 - DEBUG - add_results: ((3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}),)
+2025-07-28 09:40:11,469 - DEBUG - nextobject: (3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})
+2025-07-28 09:40:11,473 - DEBUG - register: objid=12: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:11,489 - DEBUG - Page: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:11,497 - DEBUG - getobj: objid=16
+2025-07-28 09:40:11,506 - DEBUG - seek: 4100
+2025-07-28 09:40:11,506 - DEBUG - nexttoken: (4100, 16)
+2025-07-28 09:40:11,527 - DEBUG - nexttoken: (4103, 0)
+2025-07-28 09:40:11,540 - DEBUG - nexttoken: (4105, /b'obj')
+2025-07-28 09:40:11,545 - DEBUG - nexttoken: (4109, /b'<<')
+2025-07-28 09:40:11,556 - DEBUG - start_type: pos=4109, type='d'
+2025-07-28 09:40:11,561 - DEBUG - nexttoken: (4111, /'Length')
+2025-07-28 09:40:11,577 - DEBUG - nexttoken: (4119, 118)
+2025-07-28 09:40:11,583 - DEBUG - nexttoken: (4122, /b'>>')
+2025-07-28 09:40:11,598 - DEBUG - end_type: pos=4109, type='d', objs=[/'Length', 118]
+2025-07-28 09:40:11,606 - DEBUG - nexttoken: (4124, /b'stream')
+2025-07-28 09:40:11,621 - DEBUG - do_keyword: pos=4124, token=/b'stream', stack=[(4109, {'Length': 118})]
+2025-07-28 09:40:11,630 - DEBUG - seek: 4124
+2025-07-28 09:40:11,641 - DEBUG - nextline: 4124, b'stream\r\n'
+2025-07-28 09:40:11,649 - DEBUG - seek: 4250
+2025-07-28 09:40:11,657 - DEBUG - nextline: 4250, b'\r\n'
+2025-07-28 09:40:11,665 - DEBUG - nextline: 4252, b'endstream\r'
+2025-07-28 09:40:11,673 - DEBUG - seek: 4252
+2025-07-28 09:40:11,681 - DEBUG - Stream: pos=4132, objlen=120, dic={'Length': 118}, data=bytearray(b'q\n612.4799')...
+2025-07-28 09:40:11,690 - DEBUG - nexttoken: (4252, /b'endstream')
+2025-07-28 09:40:11,707 - DEBUG - do_keyword: pos=4252, token=/b'endstream', stack=[(4132, <PDFStream(None): raw=118, {'Length': 118}>)]
+2025-07-28 09:40:11,718 - DEBUG - nexttoken: (4262, /b'endobj')
+2025-07-28 09:40:11,727 - DEBUG - do_keyword: pos=4262, token=/b'endobj', stack=[(4132, <PDFStream(None): raw=118, {'Length': 118}>), (4252, /b'endstream')]
+2025-07-28 09:40:11,740 - DEBUG - add_results: ((4132, <PDFStream(None): raw=118, {'Length': 118}>), (4252, /b'endstream'))
+2025-07-28 09:40:11,746 - DEBUG - nextobject: (4132, <PDFStream(None): raw=118, {'Length': 118}>)
+2025-07-28 09:40:11,757 - DEBUG - register: objid=16: <PDFStream(16): raw=118, {'Length': 118}>
+2025-07-28 09:40:11,773 - DEBUG - Processing page: <PDFPage: Resources={'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, MediaBox=(0.0, 0.0, 612.0, 792.0)>
+2025-07-28 09:40:11,773 - DEBUG - render_contents: resources={'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, streams=[<PDFStream(11): raw=194, {'Length': 194}>], ctm=(1, 0, 0, 1, -0.0, -0.0)
+2025-07-28 09:40:11,795 - DEBUG - Resource: 'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}
+2025-07-28 09:40:11,807 - DEBUG - Resource: 'ProcSet': [/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:40:11,811 - DEBUG - seek: 0
+2025-07-28 09:40:11,828 - DEBUG - nexttoken: (0, /b'q')
+2025-07-28 09:40:11,840 - DEBUG - do_keyword: pos=0, token=/b'q', stack=[]
+2025-07-28 09:40:11,846 - DEBUG - add_results: ((0, /b'q'),)
+2025-07-28 09:40:11,856 - DEBUG - nextobject: (0, /b'q')
+2025-07-28 09:40:11,873 - DEBUG - exec: q
+2025-07-28 09:40:11,873 - DEBUG - nexttoken: (2, 612.4799805)
+2025-07-28 09:40:11,894 - DEBUG - add_results: ((2, 612.4799805),)
+2025-07-28 09:40:11,909 - DEBUG - nextobject: (2, 612.4799805)
+2025-07-28 09:40:11,919 - DEBUG - nexttoken: (14, 0)
+2025-07-28 09:40:11,932 - DEBUG - add_results: ((14, 0),)
+2025-07-28 09:40:11,944 - DEBUG - nextobject: (14, 0)
+2025-07-28 09:40:11,955 - DEBUG - nexttoken: (16, 0)
+2025-07-28 09:40:11,956 - DEBUG - add_results: ((16, 0),)
+2025-07-28 09:40:11,973 - DEBUG - nextobject: (16, 0)
+2025-07-28 09:40:11,987 - DEBUG - nexttoken: (18, 792.960022)
+2025-07-28 09:40:11,995 - DEBUG - add_results: ((18, 792.960022),)
+2025-07-28 09:40:12,006 - DEBUG - nextobject: (18, 792.960022)
+2025-07-28 09:40:12,014 - DEBUG - nexttoken: (29, 0)
+2025-07-28 09:40:12,031 - DEBUG - add_results: ((29, 0),)
+2025-07-28 09:40:12,041 - DEBUG - nextobject: (29, 0)
+2025-07-28 09:40:12,055 - DEBUG - nexttoken: (31, -0.960022)
+2025-07-28 09:40:12,057 - DEBUG - add_results: ((31, -0.960022),)
+2025-07-28 09:40:12,073 - DEBUG - nextobject: (31, -0.960022)
+2025-07-28 09:40:12,089 - DEBUG - nexttoken: (41, /b'cm')
+2025-07-28 09:40:12,097 - DEBUG - do_keyword: pos=41, token=/b'cm', stack=[]
+2025-07-28 09:40:12,109 - DEBUG - add_results: ((41, /b'cm'),)
+2025-07-28 09:40:12,124 - DEBUG - nextobject: (41, /b'cm')
+2025-07-28 09:40:12,133 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -0.960022]
+2025-07-28 09:40:12,147 - DEBUG - nexttoken: (44, /'Im0')
+2025-07-28 09:40:12,156 - DEBUG - add_results: ((44, /'Im0'),)
+2025-07-28 09:40:12,163 - DEBUG - nextobject: (44, /'Im0')
+2025-07-28 09:40:12,173 - DEBUG - nexttoken: (49, /b'Do')
+2025-07-28 09:40:12,191 - DEBUG - do_keyword: pos=49, token=/b'Do', stack=[]
+2025-07-28 09:40:12,208 - DEBUG - add_results: ((49, /b'Do'),)
+2025-07-28 09:40:12,216 - DEBUG - nextobject: (49, /b'Do')
+2025-07-28 09:40:12,229 - DEBUG - exec: Do [/'Im0']
+2025-07-28 09:40:12,240 - DEBUG - getobj: objid=6
+2025-07-28 09:40:12,255 - DEBUG - seek: 98145
+2025-07-28 09:40:12,262 - DEBUG - nexttoken: (98145, 6)
+2025-07-28 09:40:12,273 - DEBUG - nexttoken: (98147, 0)
+2025-07-28 09:40:12,288 - DEBUG - nexttoken: (98149, /b'obj')
+2025-07-28 09:40:12,290 - DEBUG - nexttoken: (98153, /b'<<')
+2025-07-28 09:40:12,306 - DEBUG - start_type: pos=98153, type='d'
+2025-07-28 09:40:12,324 - DEBUG - nexttoken: (98155, /'Subtype')
+2025-07-28 09:40:12,330 - DEBUG - nexttoken: (98163, /'Image')
+2025-07-28 09:40:12,347 - DEBUG - nexttoken: (98169, /'Length')
+2025-07-28 09:40:12,358 - DEBUG - nexttoken: (98177, 55923)
+2025-07-28 09:40:12,384 - DEBUG - nexttoken: (98182, /'Filter')
+2025-07-28 09:40:12,392 - DEBUG - nexttoken: (98189, /'DCTDecode')
+2025-07-28 09:40:12,406 - DEBUG - nexttoken: (98199, /'Name')
+2025-07-28 09:40:12,423 - DEBUG - nexttoken: (98204, /'X')
+2025-07-28 09:40:12,433 - DEBUG - nexttoken: (98206, /'BitsPerComponent')
+2025-07-28 09:40:12,441 - DEBUG - nexttoken: (98224, 8)
+2025-07-28 09:40:12,457 - DEBUG - nexttoken: (98225, /'ColorSpace')
+2025-07-28 09:40:12,466 - DEBUG - nexttoken: (98236, /'DeviceRGB')
+2025-07-28 09:40:12,481 - DEBUG - nexttoken: (98246, /'Width')
+2025-07-28 09:40:12,488 - DEBUG - nexttoken: (98253, 1276)
+2025-07-28 09:40:12,497 - DEBUG - nexttoken: (98257, /'DecodeParms')
+2025-07-28 09:40:12,514 - DEBUG - nexttoken: (98269, /b'<<')
+2025-07-28 09:40:12,523 - DEBUG - start_type: pos=98269, type='d'
+2025-07-28 09:40:12,540 - DEBUG - nexttoken: (98271, /'Columns')
+2025-07-28 09:40:12,558 - DEBUG - nexttoken: (98280, 1276)
+2025-07-28 09:40:12,564 - DEBUG - nexttoken: (98284, /'Rows')
+2025-07-28 09:40:12,573 - DEBUG - nexttoken: (98290, 1652)
+2025-07-28 09:40:12,596 - DEBUG - nexttoken: (98294, /'Colors')
+2025-07-28 09:40:12,607 - DEBUG - nexttoken: (98302, 3)
+2025-07-28 09:40:12,614 - DEBUG - nexttoken: (98303, /b'>>')
+2025-07-28 09:40:12,630 - DEBUG - end_type: pos=98269, type='d', objs=[/'Columns', 1276, /'Rows', 1652, /'Colors', 3]
+2025-07-28 09:40:12,647 - DEBUG - nexttoken: (98305, /'Height')
+2025-07-28 09:40:12,657 - DEBUG - nexttoken: (98313, 1652)
+2025-07-28 09:40:12,673 - DEBUG - nexttoken: (98317, /'Type')
+2025-07-28 09:40:12,686 - DEBUG - nexttoken: (98322, /'XObject')
+2025-07-28 09:40:12,695 - DEBUG - nexttoken: (98330, /b'>>')
+2025-07-28 09:40:12,706 - DEBUG - end_type: pos=98153, type='d', objs=[/'Subtype', /'Image', /'Length', 55923, /'Filter', /'DCTDecode', /'Name', /'X', /'BitsPerComponent', 8, /'ColorSpace', /'DeviceRGB', /'Width', 1276, /'DecodeParms', {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, /'Height', 1652, /'Type', /'XObject']
+2025-07-28 09:40:12,723 - DEBUG - nexttoken: (98332, /b'stream')
+2025-07-28 09:40:12,723 - DEBUG - do_keyword: pos=98332, token=/b'stream', stack=[(98153, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'})]
+2025-07-28 09:40:12,747 - DEBUG - seek: 98332
+2025-07-28 09:40:12,757 - DEBUG - nextline: 98332, b'stream\r\n'
+2025-07-28 09:40:12,775 - DEBUG - seek: 154263
+2025-07-28 09:40:12,789 - DEBUG - nextline: 154263, b'\r\n'
+2025-07-28 09:40:12,799 - DEBUG - nextline: 154265, b'endstream\r'
+2025-07-28 09:40:12,807 - DEBUG - seek: 154265
+2025-07-28 09:40:12,826 - DEBUG - Stream: pos=98340, objlen=55925, dic={'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}, data=bytearray(b'\xff\xd8\xff\xe0\x00\x10JFIF')...
+2025-07-28 09:40:12,840 - DEBUG - nexttoken: (154265, /b'endstream')
+2025-07-28 09:40:12,848 - DEBUG - do_keyword: pos=154265, token=/b'endstream', stack=[(98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)]
+2025-07-28 09:40:12,863 - DEBUG - nexttoken: (154275, /b'endobj')
+2025-07-28 09:40:12,876 - DEBUG - do_keyword: pos=154275, token=/b'endobj', stack=[(98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (154265, /b'endstream')]
+2025-07-28 09:40:12,892 - DEBUG - add_results: ((98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (154265, /b'endstream'))
+2025-07-28 09:40:12,908 - DEBUG - nextobject: (98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)
+2025-07-28 09:40:12,917 - DEBUG - register: objid=6: <PDFStream(6): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:40:12,932 - DEBUG - Processing xobj: <PDFStream(6): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:40:12,932 - DEBUG - nexttoken: (52, /b'Q')
+2025-07-28 09:40:12,948 - DEBUG - do_keyword: pos=52, token=/b'Q', stack=[]
+2025-07-28 09:40:12,964 - DEBUG - add_results: ((52, /b'Q'),)
+2025-07-28 09:40:12,979 - DEBUG - nextobject: (52, /b'Q')
+2025-07-28 09:40:12,979 - DEBUG - exec: Q
+2025-07-28 09:40:12,995 - DEBUG - nexttoken: (54, /b'q')
+2025-07-28 09:40:13,011 - DEBUG - do_keyword: pos=54, token=/b'q', stack=[]
+2025-07-28 09:40:13,026 - DEBUG - add_results: ((54, /b'q'),)
+2025-07-28 09:40:13,042 - DEBUG - nextobject: (54, /b'q')
+2025-07-28 09:40:13,058 - DEBUG - exec: q
+2025-07-28 09:40:13,058 - DEBUG - nexttoken: (56, 0)
+2025-07-28 09:40:13,083 - DEBUG - add_results: ((56, 0),)
+2025-07-28 09:40:13,098 - DEBUG - nextobject: (56, 0)
+2025-07-28 09:40:13,107 - DEBUG - nexttoken: (58, 0)
+2025-07-28 09:40:13,124 - DEBUG - add_results: ((58, 0),)
+2025-07-28 09:40:13,140 - DEBUG - nextobject: (58, 0)
+2025-07-28 09:40:13,149 - DEBUG - nexttoken: (60, 0)
+2025-07-28 09:40:13,164 - DEBUG - add_results: ((60, 0),)
+2025-07-28 09:40:13,173 - DEBUG - nextobject: (60, 0)
+2025-07-28 09:40:13,194 - DEBUG - nexttoken: (62, /b'rg')
+2025-07-28 09:40:13,207 - DEBUG - do_keyword: pos=62, token=/b'rg', stack=[]
+2025-07-28 09:40:13,223 - DEBUG - add_results: ((62, /b'rg'),)
+2025-07-28 09:40:13,230 - DEBUG - nextobject: (62, /b'rg')
+2025-07-28 09:40:13,249 - DEBUG - exec: rg [0, 0, 0]
+2025-07-28 09:40:13,264 - DEBUG - nexttoken: (65, 612.4799805)
+2025-07-28 09:40:13,273 - DEBUG - add_results: ((65, 612.4799805),)
+2025-07-28 09:40:13,291 - DEBUG - nextobject: (65, 612.4799805)
+2025-07-28 09:40:13,291 - DEBUG - nexttoken: (77, 0)
+2025-07-28 09:40:13,313 - DEBUG - add_results: ((77, 0),)
+2025-07-28 09:40:13,324 - DEBUG - nextobject: (77, 0)
+2025-07-28 09:40:13,340 - DEBUG - nexttoken: (79, 0)
+2025-07-28 09:40:13,357 - DEBUG - add_results: ((79, 0),)
+2025-07-28 09:40:13,373 - DEBUG - nextobject: (79, 0)
+2025-07-28 09:40:13,383 - DEBUG - nexttoken: (81, 792.960022)
+2025-07-28 09:40:13,390 - DEBUG - add_results: ((81, 792.960022),)
+2025-07-28 09:40:13,407 - DEBUG - nextobject: (81, 792.960022)
+2025-07-28 09:40:13,423 - DEBUG - nexttoken: (92, 0)
+2025-07-28 09:40:13,440 - DEBUG - add_results: ((92, 0),)
+2025-07-28 09:40:13,449 - DEBUG - nextobject: (92, 0)
+2025-07-28 09:40:13,468 - DEBUG - nexttoken: (94, -1.4400177)
+2025-07-28 09:40:13,481 - DEBUG - add_results: ((94, -1.4400177),)
+2025-07-28 09:40:13,499 - DEBUG - nextobject: (94, -1.4400177)
+2025-07-28 09:40:13,511 - DEBUG - nexttoken: (105, /b'cm')
+2025-07-28 09:40:13,524 - DEBUG - do_keyword: pos=105, token=/b'cm', stack=[]
+2025-07-28 09:40:13,541 - DEBUG - add_results: ((105, /b'cm'),)
+2025-07-28 09:40:13,558 - DEBUG - nextobject: (105, /b'cm')
+2025-07-28 09:40:13,574 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:40:13,574 - DEBUG - nexttoken: (108, /'Im1')
+2025-07-28 09:40:13,597 - DEBUG - add_results: ((108, /'Im1'),)
+2025-07-28 09:40:13,607 - DEBUG - nextobject: (108, /'Im1')
+2025-07-28 09:40:13,624 - DEBUG - nexttoken: (113, /b'Do')
+2025-07-28 09:40:13,640 - DEBUG - do_keyword: pos=113, token=/b'Do', stack=[]
+2025-07-28 09:40:13,664 - DEBUG - add_results: ((113, /b'Do'),)
+2025-07-28 09:40:13,681 - DEBUG - nextobject: (113, /b'Do')
+2025-07-28 09:40:13,698 - DEBUG - exec: Do [/'Im1']
+2025-07-28 09:40:13,708 - DEBUG - getobj: objid=8
+2025-07-28 09:40:13,725 - DEBUG - seek: 154282
+2025-07-28 09:40:13,741 - DEBUG - nexttoken: (154282, 8)
+2025-07-28 09:40:13,758 - DEBUG - nexttoken: (154284, 0)
+2025-07-28 09:40:13,778 - DEBUG - nexttoken: (154286, /b'obj')
+2025-07-28 09:40:13,790 - DEBUG - nexttoken: (154290, /b'<<')
+2025-07-28 09:40:13,807 - DEBUG - start_type: pos=154290, type='d'
+2025-07-28 09:40:13,823 - DEBUG - nexttoken: (154292, /'Subtype')
+2025-07-28 09:40:13,840 - DEBUG - nexttoken: (154300, /'Image')
+2025-07-28 09:40:13,856 - DEBUG - nexttoken: (154306, /'Length')
+2025-07-28 09:40:13,863 - DEBUG - nexttoken: (154314, 24478)
+2025-07-28 09:40:13,888 - DEBUG - nexttoken: (154319, /'Filter')
+2025-07-28 09:40:13,895 - DEBUG - nexttoken: (154326, /'CCITTFaxDecode')
+2025-07-28 09:40:13,914 - DEBUG - nexttoken: (154341, /'Name')
+2025-07-28 09:40:13,933 - DEBUG - nexttoken: (154346, /'X')
+2025-07-28 09:40:13,950 - DEBUG - nexttoken: (154348, /'ImageMask')
+2025-07-28 09:40:13,963 - DEBUG - nexttoken: (154359, True)
+2025-07-28 09:40:13,973 - DEBUG - nexttoken: (154363, /'eCopyMaskColor')
+2025-07-28 09:40:13,990 - DEBUG - nexttoken: (154379, 0)
+2025-07-28 09:40:14,008 - DEBUG - nexttoken: (154380, /'BitsPerComponent')
+2025-07-28 09:40:14,024 - DEBUG - nexttoken: (154398, 1)
+2025-07-28 09:40:14,040 - DEBUG - nexttoken: (154399, /'Width')
+2025-07-28 09:40:14,058 - DEBUG - nexttoken: (154406, 2552)
+2025-07-28 09:40:14,073 - DEBUG - nexttoken: (154410, /'DecodeParms')
+2025-07-28 09:40:14,091 - DEBUG - nexttoken: (154422, /b'<<')
+2025-07-28 09:40:14,107 - DEBUG - start_type: pos=154422, type='d'
+2025-07-28 09:40:14,123 - DEBUG - nexttoken: (154424, /'K')
+2025-07-28 09:40:14,148 - DEBUG - nexttoken: (154427, -1)
+2025-07-28 09:40:14,158 - DEBUG - nexttoken: (154429, /'Columns')
+2025-07-28 09:40:14,181 - DEBUG - nexttoken: (154438, 2552)
+2025-07-28 09:40:14,198 - DEBUG - nexttoken: (154442, /'Rows')
+2025-07-28 09:40:14,214 - DEBUG - nexttoken: (154448, 3304)
+2025-07-28 09:40:14,230 - DEBUG - nexttoken: (154452, /b'>>')
+2025-07-28 09:40:14,240 - DEBUG - end_type: pos=154422, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:40:14,257 - DEBUG - nexttoken: (154454, /'Height')
+2025-07-28 09:40:14,274 - DEBUG - nexttoken: (154462, 3304)
+2025-07-28 09:40:14,298 - DEBUG - nexttoken: (154466, /'Type')
+2025-07-28 09:40:14,307 - DEBUG - nexttoken: (154471, /'XObject')
+2025-07-28 09:40:14,328 - DEBUG - nexttoken: (154479, /b'>>')
+2025-07-28 09:40:14,341 - DEBUG - end_type: pos=154290, type='d', objs=[/'Subtype', /'Image', /'Length', 24478, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 0, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:40:14,357 - DEBUG - nexttoken: (154481, /b'stream')
+2025-07-28 09:40:14,383 - DEBUG - do_keyword: pos=154481, token=/b'stream', stack=[(154290, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:40:14,399 - DEBUG - seek: 154481
+2025-07-28 09:40:14,424 - DEBUG - nextline: 154481, b'stream\r\n'
+2025-07-28 09:40:14,440 - DEBUG - seek: 178967
+2025-07-28 09:40:14,451 - DEBUG - nextline: 178967, b'\r\n'
+2025-07-28 09:40:14,465 - DEBUG - nextline: 178969, b'endstream\r'
+2025-07-28 09:40:14,473 - DEBUG - seek: 178969
+2025-07-28 09:40:14,498 - DEBUG - Stream: pos=154489, objlen=24480, dic={'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:40:14,523 - DEBUG - nexttoken: (178969, /b'endstream')
+2025-07-28 09:40:14,540 - DEBUG - do_keyword: pos=178969, token=/b'endstream', stack=[(154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:40:14,557 - DEBUG - nexttoken: (178979, /b'endobj')
+2025-07-28 09:40:14,574 - DEBUG - do_keyword: pos=178979, token=/b'endobj', stack=[(154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (178969, /b'endstream')]
+2025-07-28 09:40:14,590 - DEBUG - add_results: ((154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (178969, /b'endstream'))
+2025-07-28 09:40:14,623 - DEBUG - nextobject: (154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:40:14,657 - DEBUG - register: objid=8: <PDFStream(8): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:14,692 - DEBUG - Processing xobj: <PDFStream(8): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:14,710 - DEBUG - nexttoken: (116, /b'Q')
+2025-07-28 09:40:14,727 - DEBUG - do_keyword: pos=116, token=/b'Q', stack=[]
+2025-07-28 09:40:14,751 - DEBUG - add_results: ((116, /b'Q'),)
+2025-07-28 09:40:14,755 - DEBUG - nextobject: (116, /b'Q')
+2025-07-28 09:40:14,777 - DEBUG - exec: Q
+2025-07-28 09:40:14,789 - DEBUG - nexttoken: (118, /b'q')
+2025-07-28 09:40:14,806 - DEBUG - do_keyword: pos=118, token=/b'q', stack=[]
+2025-07-28 09:40:14,832 - DEBUG - add_results: ((118, /b'q'),)
+2025-07-28 09:40:14,856 - DEBUG - nextobject: (118, /b'q')
+2025-07-28 09:40:14,872 - DEBUG - exec: q
+2025-07-28 09:40:14,880 - DEBUG - nexttoken: (120, 0.098)
+2025-07-28 09:40:14,897 - DEBUG - add_results: ((120, 0.098),)
+2025-07-28 09:40:14,914 - DEBUG - nextobject: (120, 0.098)
+2025-07-28 09:40:14,932 - DEBUG - nexttoken: (126, 0.588)
+2025-07-28 09:40:14,953 - DEBUG - add_results: ((126, 0.588),)
+2025-07-28 09:40:14,972 - DEBUG - nextobject: (126, 0.588)
+2025-07-28 09:40:14,980 - DEBUG - nexttoken: (132, 0.302)
+2025-07-28 09:40:15,006 - DEBUG - add_results: ((132, 0.302),)
+2025-07-28 09:40:15,029 - DEBUG - nextobject: (132, 0.302)
+2025-07-28 09:40:15,039 - DEBUG - nexttoken: (138, /b'rg')
+2025-07-28 09:40:15,062 - DEBUG - do_keyword: pos=138, token=/b'rg', stack=[]
+2025-07-28 09:40:15,074 - DEBUG - add_results: ((138, /b'rg'),)
+2025-07-28 09:40:15,090 - DEBUG - nextobject: (138, /b'rg')
+2025-07-28 09:40:15,117 - DEBUG - exec: rg [0.098, 0.588, 0.302]
+2025-07-28 09:40:15,139 - DEBUG - nexttoken: (141, 612.4799805)
+2025-07-28 09:40:15,156 - DEBUG - add_results: ((141, 612.4799805),)
+2025-07-28 09:40:15,176 - DEBUG - nextobject: (141, 612.4799805)
+2025-07-28 09:40:15,201 - DEBUG - nexttoken: (153, 0)
+2025-07-28 09:40:15,223 - DEBUG - add_results: ((153, 0),)
+2025-07-28 09:40:15,239 - DEBUG - nextobject: (153, 0)
+2025-07-28 09:40:15,256 - DEBUG - nexttoken: (155, 0)
+2025-07-28 09:40:15,272 - DEBUG - add_results: ((155, 0),)
+2025-07-28 09:40:15,290 - DEBUG - nextobject: (155, 0)
+2025-07-28 09:40:15,313 - DEBUG - nexttoken: (157, 792.960022)
+2025-07-28 09:40:15,340 - DEBUG - add_results: ((157, 792.960022),)
+2025-07-28 09:40:15,356 - DEBUG - nextobject: (157, 792.960022)
+2025-07-28 09:40:15,373 - DEBUG - nexttoken: (168, 0)
+2025-07-28 09:40:15,390 - DEBUG - add_results: ((168, 0),)
+2025-07-28 09:40:15,406 - DEBUG - nextobject: (168, 0)
+2025-07-28 09:40:15,422 - DEBUG - nexttoken: (170, -1.4400177)
+2025-07-28 09:40:15,439 - DEBUG - add_results: ((170, -1.4400177),)
+2025-07-28 09:40:15,452 - DEBUG - nextobject: (170, -1.4400177)
+2025-07-28 09:40:15,464 - DEBUG - nexttoken: (181, /b'cm')
+2025-07-28 09:40:15,480 - DEBUG - do_keyword: pos=181, token=/b'cm', stack=[]
+2025-07-28 09:40:15,505 - DEBUG - add_results: ((181, /b'cm'),)
+2025-07-28 09:40:15,505 - DEBUG - nextobject: (181, /b'cm')
+2025-07-28 09:40:15,539 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:40:15,556 - DEBUG - nexttoken: (184, /'Im2')
+2025-07-28 09:40:15,573 - DEBUG - add_results: ((184, /'Im2'),)
+2025-07-28 09:40:15,590 - DEBUG - nextobject: (184, /'Im2')
+2025-07-28 09:40:15,612 - DEBUG - nexttoken: (189, /b'Do')
+2025-07-28 09:40:15,622 - DEBUG - do_keyword: pos=189, token=/b'Do', stack=[]
+2025-07-28 09:40:15,646 - DEBUG - add_results: ((189, /b'Do'),)
+2025-07-28 09:40:15,658 - DEBUG - nextobject: (189, /b'Do')
+2025-07-28 09:40:15,672 - DEBUG - exec: Do [/'Im2']
+2025-07-28 09:40:15,693 - DEBUG - getobj: objid=10
+2025-07-28 09:40:15,714 - DEBUG - seek: 178986
+2025-07-28 09:40:15,722 - DEBUG - nexttoken: (178986, 10)
+2025-07-28 09:40:15,755 - DEBUG - nexttoken: (178989, 0)
+2025-07-28 09:40:15,772 - DEBUG - nexttoken: (178991, /b'obj')
+2025-07-28 09:40:15,789 - DEBUG - nexttoken: (178995, /b'<<')
+2025-07-28 09:40:15,807 - DEBUG - start_type: pos=178995, type='d'
+2025-07-28 09:40:15,825 - DEBUG - nexttoken: (178997, /'Subtype')
+2025-07-28 09:40:15,839 - DEBUG - nexttoken: (179005, /'Image')
+2025-07-28 09:40:15,856 - DEBUG - nexttoken: (179011, /'Length')
+2025-07-28 09:40:15,882 - DEBUG - nexttoken: (179019, 3090)
+2025-07-28 09:40:15,902 - DEBUG - nexttoken: (179023, /'Filter')
+2025-07-28 09:40:15,914 - DEBUG - nexttoken: (179030, /'CCITTFaxDecode')
+2025-07-28 09:40:15,940 - DEBUG - nexttoken: (179045, /'Name')
+2025-07-28 09:40:15,956 - DEBUG - nexttoken: (179050, /'X')
+2025-07-28 09:40:15,972 - DEBUG - nexttoken: (179052, /'ImageMask')
+2025-07-28 09:40:15,991 - DEBUG - nexttoken: (179063, True)
+2025-07-28 09:40:16,014 - DEBUG - nexttoken: (179067, /'eCopyMaskColor')
+2025-07-28 09:40:16,030 - DEBUG - nexttoken: (179083, 5084697)
+2025-07-28 09:40:16,048 - DEBUG - nexttoken: (179090, /'BitsPerComponent')
+2025-07-28 09:40:16,056 - DEBUG - nexttoken: (179108, 1)
+2025-07-28 09:40:16,079 - DEBUG - nexttoken: (179109, /'Width')
+2025-07-28 09:40:16,107 - DEBUG - nexttoken: (179116, 2552)
+2025-07-28 09:40:16,126 - DEBUG - nexttoken: (179120, /'DecodeParms')
+2025-07-28 09:40:16,140 - DEBUG - nexttoken: (179132, /b'<<')
+2025-07-28 09:40:16,156 - DEBUG - start_type: pos=179132, type='d'
+2025-07-28 09:40:16,183 - DEBUG - nexttoken: (179134, /'K')
+2025-07-28 09:40:16,210 - DEBUG - nexttoken: (179137, -1)
+2025-07-28 09:40:16,222 - DEBUG - nexttoken: (179139, /'Columns')
+2025-07-28 09:40:16,247 - DEBUG - nexttoken: (179148, 2552)
+2025-07-28 09:40:16,264 - DEBUG - nexttoken: (179152, /'Rows')
+2025-07-28 09:40:16,280 - DEBUG - nexttoken: (179158, 3304)
+2025-07-28 09:40:16,297 - DEBUG - nexttoken: (179162, /b'>>')
+2025-07-28 09:40:16,318 - DEBUG - end_type: pos=179132, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:40:16,322 - DEBUG - nexttoken: (179164, /'Height')
+2025-07-28 09:40:16,356 - DEBUG - nexttoken: (179172, 3304)
+2025-07-28 09:40:16,375 - DEBUG - nexttoken: (179176, /'Type')
+2025-07-28 09:40:16,392 - DEBUG - nexttoken: (179181, /'XObject')
+2025-07-28 09:40:16,406 - DEBUG - nexttoken: (179189, /b'>>')
+2025-07-28 09:40:16,423 - DEBUG - end_type: pos=178995, type='d', objs=[/'Subtype', /'Image', /'Length', 3090, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 5084697, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:40:16,448 - DEBUG - nexttoken: (179191, /b'stream')
+2025-07-28 09:40:16,464 - DEBUG - do_keyword: pos=179191, token=/b'stream', stack=[(178995, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:40:16,480 - DEBUG - seek: 179191
+2025-07-28 09:40:16,505 - DEBUG - nextline: 179191, b'stream\r\n'
+2025-07-28 09:40:16,525 - DEBUG - seek: 182289
+2025-07-28 09:40:16,539 - DEBUG - nextline: 182289, b'\r\n'
+2025-07-28 09:40:16,563 - DEBUG - nextline: 182291, b'endstream\r'
+2025-07-28 09:40:16,580 - DEBUG - seek: 182291
+2025-07-28 09:40:16,597 - DEBUG - Stream: pos=179199, objlen=3092, dic={'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:40:16,620 - DEBUG - nexttoken: (182291, /b'endstream')
+2025-07-28 09:40:16,628 - DEBUG - do_keyword: pos=182291, token=/b'endstream', stack=[(179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:40:16,657 - DEBUG - nexttoken: (182301, /b'endobj')
+2025-07-28 09:40:16,677 - DEBUG - do_keyword: pos=182301, token=/b'endobj', stack=[(179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (182291, /b'endstream')]
+2025-07-28 09:40:16,689 - DEBUG - add_results: ((179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (182291, /b'endstream'))
+2025-07-28 09:40:16,716 - DEBUG - nextobject: (179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:40:16,732 - DEBUG - register: objid=10: <PDFStream(10): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:16,755 - DEBUG - Processing xobj: <PDFStream(10): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:16,772 - DEBUG - nexttoken: (192, /b'Q')
+2025-07-28 09:40:16,789 - DEBUG - do_keyword: pos=192, token=/b'Q', stack=[]
+2025-07-28 09:40:16,805 - DEBUG - add_results: ((192, /b'Q'),)
+2025-07-28 09:40:16,832 - DEBUG - nextobject: (192, /b'Q')
+2025-07-28 09:40:16,856 - DEBUG - exec: Q
+2025-07-28 09:40:16,872 - DEBUG - Processing page: <PDFPage: Resources={'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, MediaBox=(0.0, 0.0, 612.0, 792.0)>
+2025-07-28 09:40:16,891 - DEBUG - render_contents: resources={'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, streams=[<PDFStream(16): raw=118, {'Length': 118}>], ctm=(1, 0, 0, 1, -0.0, -0.0)
+2025-07-28 09:40:16,906 - DEBUG - Resource: 'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}
+2025-07-28 09:40:16,933 - DEBUG - Resource: 'ProcSet': [/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:40:16,949 - DEBUG - seek: 0
+2025-07-28 09:40:16,972 - DEBUG - nexttoken: (0, /b'q')
+2025-07-28 09:40:16,990 - DEBUG - do_keyword: pos=0, token=/b'q', stack=[]
+2025-07-28 09:40:17,007 - DEBUG - add_results: ((0, /b'q'),)
+2025-07-28 09:40:17,023 - DEBUG - nextobject: (0, /b'q')
+2025-07-28 09:40:17,050 - DEBUG - exec: q
+2025-07-28 09:40:17,066 - DEBUG - nexttoken: (2, 612.4799805)
+2025-07-28 09:40:17,090 - DEBUG - add_results: ((2, 612.4799805),)
+2025-07-28 09:40:17,109 - DEBUG - nextobject: (2, 612.4799805)
+2025-07-28 09:40:17,128 - DEBUG - nexttoken: (14, 0)
+2025-07-28 09:40:17,147 - DEBUG - add_results: ((14, 0),)
+2025-07-28 09:40:17,173 - DEBUG - nextobject: (14, 0)
+2025-07-28 09:40:17,192 - DEBUG - nexttoken: (16, 0)
+2025-07-28 09:40:17,205 - DEBUG - add_results: ((16, 0),)
+2025-07-28 09:40:17,228 - DEBUG - nextobject: (16, 0)
+2025-07-28 09:40:17,244 - DEBUG - nexttoken: (18, 792.960022)
+2025-07-28 09:40:17,269 - DEBUG - add_results: ((18, 792.960022),)
+2025-07-28 09:40:17,290 - DEBUG - nextobject: (18, 792.960022)
+2025-07-28 09:40:17,310 - DEBUG - nexttoken: (29, 0)
+2025-07-28 09:40:17,322 - DEBUG - add_results: ((29, 0),)
+2025-07-28 09:40:17,346 - DEBUG - nextobject: (29, 0)
+2025-07-28 09:40:17,371 - DEBUG - nexttoken: (31, -0.960022)
+2025-07-28 09:40:17,546 - DEBUG - add_results: ((31, -0.960022),)
+2025-07-28 09:40:17,641 - DEBUG - nextobject: (31, -0.960022)
+2025-07-28 09:40:17,707 - DEBUG - nexttoken: (41, /b'cm')
+2025-07-28 09:40:17,805 - DEBUG - do_keyword: pos=41, token=/b'cm', stack=[]
+2025-07-28 09:40:17,892 - DEBUG - add_results: ((41, /b'cm'),)
+2025-07-28 09:40:17,990 - DEBUG - nextobject: (41, /b'cm')
+2025-07-28 09:40:18,080 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -0.960022]
+2025-07-28 09:40:18,187 - DEBUG - nexttoken: (44, /'Im0')
+2025-07-28 09:40:18,282 - DEBUG - add_results: ((44, /'Im0'),)
+2025-07-28 09:40:18,378 - DEBUG - nextobject: (44, /'Im0')
+2025-07-28 09:40:18,473 - DEBUG - nexttoken: (49, /b'Do')
+2025-07-28 09:40:18,570 - DEBUG - do_keyword: pos=49, token=/b'Do', stack=[]
+2025-07-28 09:40:18,659 - DEBUG - add_results: ((49, /b'Do'),)
+2025-07-28 09:40:18,740 - DEBUG - nextobject: (49, /b'Do')
+2025-07-28 09:40:18,824 - DEBUG - exec: Do [/'Im0']
+2025-07-28 09:40:18,913 - DEBUG - getobj: objid=13
+2025-07-28 09:40:18,991 - DEBUG - seek: 4269
+2025-07-28 09:40:19,076 - DEBUG - nexttoken: (4269, 13)
+2025-07-28 09:40:19,143 - DEBUG - nexttoken: (4272, 0)
+2025-07-28 09:40:19,222 - DEBUG - nexttoken: (4274, /b'obj')
+2025-07-28 09:40:19,292 - DEBUG - nexttoken: (4278, /b'<<')
+2025-07-28 09:40:19,381 - DEBUG - start_type: pos=4278, type='d'
+2025-07-28 09:40:19,456 - DEBUG - nexttoken: (4280, /'Subtype')
+2025-07-28 09:40:19,539 - DEBUG - nexttoken: (4288, /'Image')
+2025-07-28 09:40:19,626 - DEBUG - nexttoken: (4294, /'Length')
+2025-07-28 09:40:19,699 - DEBUG - nexttoken: (4302, 65290)
+2025-07-28 09:40:19,774 - DEBUG - nexttoken: (4307, /'Filter')
+2025-07-28 09:40:19,863 - DEBUG - nexttoken: (4314, /'DCTDecode')
+2025-07-28 09:40:19,941 - DEBUG - nexttoken: (4324, /'Name')
+2025-07-28 09:40:20,017 - DEBUG - nexttoken: (4329, /'X')
+2025-07-28 09:40:20,114 - DEBUG - nexttoken: (4331, /'BitsPerComponent')
+2025-07-28 09:40:20,189 - DEBUG - nexttoken: (4349, 8)
+2025-07-28 09:40:20,311 - DEBUG - nexttoken: (4350, /'ColorSpace')
+2025-07-28 09:40:20,392 - DEBUG - nexttoken: (4361, /'DeviceRGB')
+2025-07-28 09:40:20,472 - DEBUG - nexttoken: (4371, /'Width')
+2025-07-28 09:40:20,555 - DEBUG - nexttoken: (4378, 1276)
+2025-07-28 09:40:20,628 - DEBUG - nexttoken: (4382, /'DecodeParms')
+2025-07-28 09:40:20,722 - DEBUG - nexttoken: (4394, /b'<<')
+2025-07-28 09:40:20,795 - DEBUG - start_type: pos=4394, type='d'
+2025-07-28 09:40:20,889 - DEBUG - nexttoken: (4396, /'Columns')
+2025-07-28 09:40:20,959 - DEBUG - nexttoken: (4405, 1276)
+2025-07-28 09:40:21,049 - DEBUG - nexttoken: (4409, /'Rows')
+2025-07-28 09:40:21,130 - DEBUG - nexttoken: (4415, 1652)
+2025-07-28 09:40:21,211 - DEBUG - nexttoken: (4419, /'Colors')
+2025-07-28 09:40:21,289 - DEBUG - nexttoken: (4427, 3)
+2025-07-28 09:40:21,377 - DEBUG - nexttoken: (4428, /b'>>')
+2025-07-28 09:40:21,470 - DEBUG - end_type: pos=4394, type='d', objs=[/'Columns', 1276, /'Rows', 1652, /'Colors', 3]
+2025-07-28 09:40:21,555 - DEBUG - nexttoken: (4430, /'Height')
+2025-07-28 09:40:21,638 - DEBUG - nexttoken: (4438, 1652)
+2025-07-28 09:40:21,710 - DEBUG - nexttoken: (4442, /'Type')
+2025-07-28 09:40:21,794 - DEBUG - nexttoken: (4447, /'XObject')
+2025-07-28 09:40:21,875 - DEBUG - nexttoken: (4455, /b'>>')
+2025-07-28 09:40:21,961 - DEBUG - end_type: pos=4278, type='d', objs=[/'Subtype', /'Image', /'Length', 65290, /'Filter', /'DCTDecode', /'Name', /'X', /'BitsPerComponent', 8, /'ColorSpace', /'DeviceRGB', /'Width', 1276, /'DecodeParms', {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, /'Height', 1652, /'Type', /'XObject']
+2025-07-28 09:40:22,042 - DEBUG - nexttoken: (4457, /b'stream')
+2025-07-28 09:40:22,122 - DEBUG - do_keyword: pos=4457, token=/b'stream', stack=[(4278, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'})]
+2025-07-28 09:40:22,201 - DEBUG - seek: 4457
+2025-07-28 09:40:22,287 - DEBUG - nextline: 4457, b'stream\r\n'
+2025-07-28 09:40:22,366 - DEBUG - seek: 69755
+2025-07-28 09:40:22,455 - DEBUG - nextline: 69755, b'\r\n'
+2025-07-28 09:40:22,533 - DEBUG - nextline: 69757, b'endstream\r'
+2025-07-28 09:40:22,611 - DEBUG - seek: 69757
+2025-07-28 09:40:22,707 - DEBUG - Stream: pos=4465, objlen=65292, dic={'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}, data=bytearray(b'\xff\xd8\xff\xe0\x00\x10JFIF')...
+2025-07-28 09:40:22,804 - DEBUG - nexttoken: (69757, /b'endstream')
+2025-07-28 09:40:22,889 - DEBUG - do_keyword: pos=69757, token=/b'endstream', stack=[(4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)]
+2025-07-28 09:40:22,972 - DEBUG - nexttoken: (69767, /b'endobj')
+2025-07-28 09:40:23,062 - DEBUG - do_keyword: pos=69767, token=/b'endobj', stack=[(4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (69757, /b'endstream')]
+2025-07-28 09:40:23,147 - DEBUG - add_results: ((4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (69757, /b'endstream'))
+2025-07-28 09:40:23,241 - DEBUG - nextobject: (4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)
+2025-07-28 09:40:23,324 - DEBUG - register: objid=13: <PDFStream(13): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:40:23,409 - DEBUG - Processing xobj: <PDFStream(13): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:40:23,508 - DEBUG - nexttoken: (52, /b'Q')
+2025-07-28 09:40:23,595 - DEBUG - do_keyword: pos=52, token=/b'Q', stack=[]
+2025-07-28 09:40:23,677 - DEBUG - add_results: ((52, /b'Q'),)
+2025-07-28 09:40:23,763 - DEBUG - nextobject: (52, /b'Q')
+2025-07-28 09:40:23,867 - DEBUG - exec: Q
+2025-07-28 09:40:23,964 - DEBUG - nexttoken: (54, /b'q')
+2025-07-28 09:40:24,058 - DEBUG - do_keyword: pos=54, token=/b'q', stack=[]
+2025-07-28 09:40:24,152 - DEBUG - add_results: ((54, /b'q'),)
+2025-07-28 09:40:24,231 - DEBUG - nextobject: (54, /b'q')
+2025-07-28 09:40:24,323 - DEBUG - exec: q
+2025-07-28 09:40:24,408 - DEBUG - nexttoken: (56, 0)
+2025-07-28 09:40:24,490 - DEBUG - add_results: ((56, 0),)
+2025-07-28 09:40:24,579 - DEBUG - nextobject: (56, 0)
+2025-07-28 09:40:24,672 - DEBUG - nexttoken: (58, 0)
+2025-07-28 09:40:24,762 - DEBUG - add_results: ((58, 0),)
+2025-07-28 09:40:24,854 - DEBUG - nextobject: (58, 0)
+2025-07-28 09:40:24,906 - DEBUG - nexttoken: (60, 0)
+2025-07-28 09:40:24,971 - DEBUG - add_results: ((60, 0),)
+2025-07-28 09:40:25,039 - DEBUG - nextobject: (60, 0)
+2025-07-28 09:40:25,105 - DEBUG - nexttoken: (62, /b'rg')
+2025-07-28 09:40:25,208 - DEBUG - do_keyword: pos=62, token=/b'rg', stack=[]
+2025-07-28 09:40:25,305 - DEBUG - add_results: ((62, /b'rg'),)
+2025-07-28 09:40:25,396 - DEBUG - nextobject: (62, /b'rg')
+2025-07-28 09:40:25,478 - DEBUG - exec: rg [0, 0, 0]
+2025-07-28 09:40:25,571 - DEBUG - nexttoken: (65, 612.4799805)
+2025-07-28 09:40:25,653 - DEBUG - add_results: ((65, 612.4799805),)
+2025-07-28 09:40:25,738 - DEBUG - nextobject: (65, 612.4799805)
+2025-07-28 09:40:25,836 - DEBUG - nexttoken: (77, 0)
+2025-07-28 09:40:25,918 - DEBUG - add_results: ((77, 0),)
+2025-07-28 09:40:26,013 - DEBUG - nextobject: (77, 0)
+2025-07-28 09:40:26,106 - DEBUG - nexttoken: (79, 0)
+2025-07-28 09:40:26,195 - DEBUG - add_results: ((79, 0),)
+2025-07-28 09:40:26,281 - DEBUG - nextobject: (79, 0)
+2025-07-28 09:40:26,368 - DEBUG - nexttoken: (81, 792.960022)
+2025-07-28 09:40:26,468 - DEBUG - add_results: ((81, 792.960022),)
+2025-07-28 09:40:26,555 - DEBUG - nextobject: (81, 792.960022)
+2025-07-28 09:40:26,646 - DEBUG - nexttoken: (92, 0)
+2025-07-28 09:40:26,722 - DEBUG - add_results: ((92, 0),)
+2025-07-28 09:40:26,812 - DEBUG - nextobject: (92, 0)
+2025-07-28 09:40:26,907 - DEBUG - nexttoken: (94, -1.4400177)
+2025-07-28 09:40:26,996 - DEBUG - add_results: ((94, -1.4400177),)
+2025-07-28 09:40:27,096 - DEBUG - nextobject: (94, -1.4400177)
+2025-07-28 09:40:27,186 - DEBUG - nexttoken: (105, /b'cm')
+2025-07-28 09:40:27,280 - DEBUG - do_keyword: pos=105, token=/b'cm', stack=[]
+2025-07-28 09:40:27,370 - DEBUG - add_results: ((105, /b'cm'),)
+2025-07-28 09:40:27,459 - DEBUG - nextobject: (105, /b'cm')
+2025-07-28 09:40:27,541 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:40:27,646 - DEBUG - nexttoken: (108, /'Im1')
+2025-07-28 09:40:27,746 - DEBUG - add_results: ((108, /'Im1'),)
+2025-07-28 09:40:27,845 - DEBUG - nextobject: (108, /'Im1')
+2025-07-28 09:40:27,930 - DEBUG - nexttoken: (113, /b'Do')
+2025-07-28 09:40:28,022 - DEBUG - do_keyword: pos=113, token=/b'Do', stack=[]
+2025-07-28 09:40:28,111 - DEBUG - add_results: ((113, /b'Do'),)
+2025-07-28 09:40:28,208 - DEBUG - nextobject: (113, /b'Do')
+2025-07-28 09:40:28,289 - DEBUG - exec: Do [/'Im1']
+2025-07-28 09:40:28,380 - DEBUG - getobj: objid=15
+2025-07-28 09:40:28,472 - DEBUG - seek: 69774
+2025-07-28 09:40:28,555 - DEBUG - nexttoken: (69774, 15)
+2025-07-28 09:40:28,646 - DEBUG - nexttoken: (69777, 0)
+2025-07-28 09:40:28,739 - DEBUG - nexttoken: (69779, /b'obj')
+2025-07-28 09:40:28,828 - DEBUG - nexttoken: (69783, /b'<<')
+2025-07-28 09:40:28,929 - DEBUG - start_type: pos=69783, type='d'
+2025-07-28 09:40:29,038 - DEBUG - nexttoken: (69785, /'Subtype')
+2025-07-28 09:40:29,153 - DEBUG - nexttoken: (69793, /'Image')
+2025-07-28 09:40:29,261 - DEBUG - nexttoken: (69799, /'Length')
+2025-07-28 09:40:29,357 - DEBUG - nexttoken: (69807, 27874)
+2025-07-28 09:40:29,473 - DEBUG - nexttoken: (69812, /'Filter')
+2025-07-28 09:40:29,596 - DEBUG - nexttoken: (69819, /'CCITTFaxDecode')
+2025-07-28 09:40:29,705 - DEBUG - nexttoken: (69834, /'Name')
+2025-07-28 09:40:29,819 - DEBUG - nexttoken: (69839, /'X')
+2025-07-28 09:40:29,930 - DEBUG - nexttoken: (69841, /'ImageMask')
+2025-07-28 09:40:30,042 - DEBUG - nexttoken: (69852, True)
+2025-07-28 09:40:30,139 - DEBUG - nexttoken: (69856, /'eCopyMaskColor')
+2025-07-28 09:40:30,242 - DEBUG - nexttoken: (69872, 0)
+2025-07-28 09:40:30,404 - DEBUG - nexttoken: (69873, /'BitsPerComponent')
+2025-07-28 09:40:30,493 - DEBUG - nexttoken: (69891, 1)
+2025-07-28 09:40:30,597 - DEBUG - nexttoken: (69892, /'Width')
+2025-07-28 09:40:30,690 - DEBUG - nexttoken: (69899, 2552)
+2025-07-28 09:40:30,788 - DEBUG - nexttoken: (69903, /'DecodeParms')
+2025-07-28 09:40:30,875 - DEBUG - nexttoken: (69915, /b'<<')
+2025-07-28 09:40:30,961 - DEBUG - start_type: pos=69915, type='d'
+2025-07-28 09:40:31,066 - DEBUG - nexttoken: (69917, /'K')
+2025-07-28 09:40:31,154 - DEBUG - nexttoken: (69920, -1)
+2025-07-28 09:40:31,255 - DEBUG - nexttoken: (69922, /'Columns')
+2025-07-28 09:40:31,346 - DEBUG - nexttoken: (69931, 2552)
+2025-07-28 09:40:31,446 - DEBUG - nexttoken: (69935, /'Rows')
+2025-07-28 09:40:31,540 - DEBUG - nexttoken: (69941, 3304)
+2025-07-28 09:40:31,646 - DEBUG - nexttoken: (69945, /b'>>')
+2025-07-28 09:40:31,744 - DEBUG - end_type: pos=69915, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:40:31,843 - DEBUG - nexttoken: (69947, /'Height')
+2025-07-28 09:40:31,938 - DEBUG - nexttoken: (69955, 3304)
+2025-07-28 09:40:32,029 - DEBUG - nexttoken: (69959, /'Type')
+2025-07-28 09:40:32,129 - DEBUG - nexttoken: (69964, /'XObject')
+2025-07-28 09:40:32,227 - DEBUG - nexttoken: (69972, /b'>>')
+2025-07-28 09:40:32,308 - DEBUG - end_type: pos=69783, type='d', objs=[/'Subtype', /'Image', /'Length', 27874, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 0, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:40:32,412 - DEBUG - nexttoken: (69974, /b'stream')
+2025-07-28 09:40:32,479 - DEBUG - do_keyword: pos=69974, token=/b'stream', stack=[(69783, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:40:32,590 - DEBUG - seek: 69974
+2025-07-28 09:40:32,686 - DEBUG - nextline: 69974, b'stream\r\n'
+2025-07-28 09:40:32,780 - DEBUG - seek: 97856
+2025-07-28 09:40:32,888 - DEBUG - nextline: 97856, b'\r\n'
+2025-07-28 09:40:32,998 - DEBUG - nextline: 97858, b'endstream\r'
+2025-07-28 09:40:33,096 - DEBUG - seek: 97858
+2025-07-28 09:40:33,196 - DEBUG - Stream: pos=69982, objlen=27876, dic={'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:40:33,296 - DEBUG - nexttoken: (97858, /b'endstream')
+2025-07-28 09:40:33,389 - DEBUG - do_keyword: pos=97858, token=/b'endstream', stack=[(69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:40:33,488 - DEBUG - nexttoken: (97868, /b'endobj')
+2025-07-28 09:40:33,589 - DEBUG - do_keyword: pos=97868, token=/b'endobj', stack=[(69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (97858, /b'endstream')]
+2025-07-28 09:40:33,689 - DEBUG - add_results: ((69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (97858, /b'endstream'))
+2025-07-28 09:40:33,786 - DEBUG - nextobject: (69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:40:33,893 - DEBUG - register: objid=15: <PDFStream(15): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:33,987 - DEBUG - Processing xobj: <PDFStream(15): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:40:34,091 - DEBUG - nexttoken: (116, /b'Q')
+2025-07-28 09:40:34,189 - DEBUG - do_keyword: pos=116, token=/b'Q', stack=[]
+2025-07-28 09:40:34,309 - DEBUG - add_results: ((116, /b'Q'),)
+2025-07-28 09:40:34,406 - DEBUG - nextobject: (116, /b'Q')
+2025-07-28 09:40:34,512 - DEBUG - exec: Q
+2025-07-28 09:40:34,609 - DEBUG - getobj: objid=2
+2025-07-28 09:40:34,706 - DEBUG - Pages: Kids=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:40:34,806 - DEBUG - getobj: objid=5
+2025-07-28 09:40:34,904 - DEBUG - Page: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:34,995 - DEBUG - getobj: objid=11
+2025-07-28 09:40:35,095 - DEBUG - getobj: objid=12
+2025-07-28 09:40:35,200 - DEBUG - Page: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:40:35,289 - DEBUG - getobj: objid=16
+2025-07-28 09:40:35,403 - INFO - Error executing 'get tables from PDF': No table found.
+2025-07-28 09:45:10,712 - INFO - Loading PDF started.
+2025-07-28 09:45:10,738 - INFO - Reading PDF file: C:/Users/nandu/EDA/DesignAnalyzer/test/pdf_analyzerr/dummy_statement.pdf
+2025-07-28 09:45:10,892 - INFO - PDF file C:/Users/nandu/EDA/DesignAnalyzer/test/pdf_analyzerr/dummy_statement.pdf read successfully.
+2025-07-28 09:45:10,892 - INFO - Loading PDF data done.
+2025-07-28 09:45:16,421 - DEBUG - seek: 0
+2025-07-28 09:45:16,421 - DEBUG - find_xref: b''
+2025-07-28 09:45:16,421 - DEBUG - find_xref: b''
+2025-07-28 09:45:16,421 - DEBUG - find_xref: b'%%EOF'
+2025-07-28 09:45:16,421 - DEBUG - find_xref: b''
+2025-07-28 09:45:16,432 - DEBUG - find_xref: b'183027'
+2025-07-28 09:45:16,433 - DEBUG - find_xref: b''
+2025-07-28 09:45:16,433 - DEBUG - find_xref: b'startxref'
+2025-07-28 09:45:16,437 - DEBUG - xref found: pos=b'183027'
+2025-07-28 09:45:16,437 - DEBUG - seek: 183027
+2025-07-28 09:45:16,440 - DEBUG - nexttoken: (183027, /b'xref')
+2025-07-28 09:45:16,440 - DEBUG - read_xref_from: start=183027, token=/b'xref'
+2025-07-28 09:45:16,440 - DEBUG - nextline: 183031, b'\r\n'
+2025-07-28 09:45:16,445 - DEBUG - nextline: 183033, b'0 22\r\n'
+2025-07-28 09:45:16,446 - DEBUG - nextline: 183039, b'0000000004 65535 f\r\n'
+2025-07-28 09:45:16,446 - DEBUG - nextline: 183059, b'0000000016 00000 n\r\n'
+2025-07-28 09:45:16,449 - DEBUG - nextline: 183079, b'0000003604 00000 n\r\n'
+2025-07-28 09:45:16,451 - DEBUG - nextline: 183099, b'0000182710 00000 n\r\n'
+2025-07-28 09:45:16,452 - DEBUG - nextline: 183119, b'0000000007 00000 f\r\n'
+2025-07-28 09:45:16,453 - DEBUG - nextline: 183139, b'0000003662 00000 n\r\n'
+2025-07-28 09:45:16,455 - DEBUG - nextline: 183159, b'0000098145 00000 n\r\n'
+2025-07-28 09:45:16,456 - DEBUG - nextline: 183179, b'0000000009 00000 f\r\n'
+2025-07-28 09:45:16,457 - DEBUG - nextline: 183199, b'0000154282 00000 n\r\n'
+2025-07-28 09:45:16,459 - DEBUG - nextline: 183219, b'0000000014 00000 f\r\n'
+2025-07-28 09:45:16,459 - DEBUG - nextline: 183239, b'0000178986 00000 n\r\n'
+2025-07-28 09:45:16,459 - DEBUG - nextline: 183259, b'0000097900 00000 n\r\n'
+2025-07-28 09:45:16,459 - DEBUG - nextline: 183279, b'0000003892 00000 n\r\n'
+2025-07-28 09:45:16,464 - DEBUG - nextline: 183299, b'0000004269 00000 n\r\n'
+2025-07-28 09:45:16,464 - DEBUG - nextline: 183319, b'0000000020 00000 f\r\n'
+2025-07-28 09:45:16,464 - DEBUG - nextline: 183339, b'0000069774 00000 n\r\n'
+2025-07-28 09:45:16,467 - DEBUG - nextline: 183359, b'0000004100 00000 n\r\n'
+2025-07-28 09:45:16,469 - DEBUG - nextline: 183379, b'0000182308 00000 n\r\n'
+2025-07-28 09:45:16,469 - DEBUG - nextline: 183399, b'0000097875 00000 n\r\n'
+2025-07-28 09:45:16,473 - DEBUG - nextline: 183419, b'0000182507 00000 n\r\n'
+2025-07-28 09:45:16,473 - DEBUG - nextline: 183439, b'0000000000 00001 f\r\n'
+2025-07-28 09:45:16,476 - DEBUG - nextline: 183459, b'0000000077 00000 n\r\n'
+2025-07-28 09:45:16,476 - DEBUG - nextline: 183479, b'trailer\r\n'
+2025-07-28 09:45:16,476 - DEBUG - seek: 183479
+2025-07-28 09:45:16,480 - DEBUG - xref objects: {1: (None, 16, 0), 2: (None, 3604, 0), 3: (None, 182710, 0), 5: (None, 3662, 0), 6: (None, 98145, 0), 8: (None, 154282, 0), 10: (None, 178986, 0), 11: (None, 97900, 0), 12: (None, 3892, 0), 13: (None, 4269, 0), 15: (None, 69774, 0), 16: (None, 4100, 0), 17: (None, 182308, 0), 18: (None, 97875, 0), 19: (None, 182507, 0), 21: (None, 77, 0)}
+2025-07-28 09:45:16,482 - DEBUG - nexttoken: (183479, /b'trailer')
+2025-07-28 09:45:16,484 - DEBUG - nexttoken: (183488, /b'<<')
+2025-07-28 09:45:16,487 - DEBUG - start_type: pos=183488, type='d'
+2025-07-28 09:45:16,490 - DEBUG - nexttoken: (183490, /'Size')
+2025-07-28 09:45:16,490 - DEBUG - nexttoken: (183496, 22)
+2025-07-28 09:45:16,492 - DEBUG - nexttoken: (183498, /'Root')
+2025-07-28 09:45:16,492 - DEBUG - nexttoken: (183504, 1)
+2025-07-28 09:45:16,497 - DEBUG - nexttoken: (183506, 0)
+2025-07-28 09:45:16,497 - DEBUG - nexttoken: (183508, /b'R')
+2025-07-28 09:45:16,499 - DEBUG - do_keyword: pos=183508, token=/b'R', stack=[(183490, /'Size'), (183496, 22), (183498, /'Root'), (183504, 1), (183506, 0)]
+2025-07-28 09:45:16,503 - DEBUG - nexttoken: (183509, /'Info')
+2025-07-28 09:45:16,503 - DEBUG - nexttoken: (183515, 3)
+2025-07-28 09:45:16,506 - DEBUG - nexttoken: (183517, 0)
+2025-07-28 09:45:16,506 - DEBUG - nexttoken: (183519, /b'R')
+2025-07-28 09:45:16,510 - DEBUG - do_keyword: pos=183519, token=/b'R', stack=[(183490, /'Size'), (183496, 22), (183498, /'Root'), (183508, <PDFObjRef:1>), (183509, /'Info'), (183515, 3), (183517, 0)]
+2025-07-28 09:45:16,510 - DEBUG - nexttoken: (183520, /'ID')
+2025-07-28 09:45:16,510 - DEBUG - nexttoken: (183523, /b'[')
+2025-07-28 09:45:16,510 - DEBUG - start_type: pos=183523, type='a'
+2025-07-28 09:45:16,518 - DEBUG - nexttoken: (183524, b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8')
+2025-07-28 09:45:16,518 - DEBUG - nexttoken: (183558, b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15')
+2025-07-28 09:45:16,518 - DEBUG - nexttoken: (183592, /b']')
+2025-07-28 09:45:16,525 - DEBUG - end_type: pos=183523, type='a', objs=[b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']
+2025-07-28 09:45:16,526 - DEBUG - nexttoken: (183593, /b'>>')
+2025-07-28 09:45:16,526 - DEBUG - end_type: pos=183488, type='d', objs=[/'Size', 22, /'Root', <PDFObjRef:1>, /'Info', <PDFObjRef:3>, /'ID', [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']]
+2025-07-28 09:45:16,531 - DEBUG - nexttoken: (183597, /b'startxref')
+2025-07-28 09:45:16,531 - DEBUG - do_keyword: pos=183597, token=/b'startxref', stack=[(183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']})]
+2025-07-28 09:45:16,534 - DEBUG - add_results: ((183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}),)
+2025-07-28 09:45:16,539 - DEBUG - nextobject: (183488, {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']})
+2025-07-28 09:45:16,541 - DEBUG - trailer={'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}
+2025-07-28 09:45:16,543 - DEBUG - trailer: {'Size': 22, 'Root': <PDFObjRef:1>, 'Info': <PDFObjRef:3>, 'ID': [b'\x14\xe2\xe6\x97\xd0\xf3\xfc@\xb2>\x8e\xaf\x95\x8d\xcd\xb8', b')u\x0e\xa8kf\xbdN\xb6\x101\xb1\xac\x050\x15']}
+2025-07-28 09:45:16,546 - DEBUG - getobj: objid=3
+2025-07-28 09:45:16,546 - DEBUG - seek: 182710
+2025-07-28 09:45:16,551 - DEBUG - nexttoken: (182710, 3)
+2025-07-28 09:45:16,551 - DEBUG - nexttoken: (182712, 0)
+2025-07-28 09:45:16,556 - DEBUG - nexttoken: (182714, /b'obj')
+2025-07-28 09:45:16,559 - DEBUG - nexttoken: (182718, /b'<<')
+2025-07-28 09:45:16,559 - DEBUG - start_type: pos=182718, type='d'
+2025-07-28 09:45:16,559 - DEBUG - nexttoken: (182720, /'CreationDate')
+2025-07-28 09:45:16,567 - DEBUG - nexttoken: (182733, b"D:20090206165338-06'00'")
+2025-07-28 09:45:16,567 - DEBUG - nexttoken: (182758, /'Author')
+2025-07-28 09:45:16,573 - DEBUG - nexttoken: (182765, b'paplener')
+2025-07-28 09:45:16,575 - DEBUG - nexttoken: (182775, /'CPYVersion')
+2025-07-28 09:45:16,575 - DEBUG - nexttoken: (182786, b'3.0')
+2025-07-28 09:45:16,575 - DEBUG - nexttoken: (182791, /'Creator')
+2025-07-28 09:45:16,584 - DEBUG - nexttoken: (182799, b'eCopy Desktop 9.1.1.17')
+2025-07-28 09:45:16,584 - DEBUG - nexttoken: (182823, /'Producer')
+2025-07-28 09:45:16,590 - DEBUG - nexttoken: (182832, b'Adobe PDF Library 8.0')
+2025-07-28 09:45:16,591 - DEBUG - nexttoken: (182855, /'ModDate')
+2025-07-28 09:45:16,596 - DEBUG - nexttoken: (182863, b"D:20090206165526-06'00'")
+2025-07-28 09:45:16,600 - DEBUG - nexttoken: (182888, /'ImportPCL')
+2025-07-28 09:45:16,600 - DEBUG - nexttoken: (182898, b'DummyStatement Generic.pdf')
+2025-07-28 09:45:16,600 - DEBUG - nexttoken: (182926, /'Title')
+2025-07-28 09:45:16,608 - DEBUG - nexttoken: (182932, b'eStatements-DummyStatement Generic-020609')
+2025-07-28 09:45:16,608 - DEBUG - nexttoken: (182975, /'ModifiedBy')
+2025-07-28 09:45:16,615 - DEBUG - nexttoken: (182986, b'paplener\nD:20090206225519Z\n')
+2025-07-28 09:45:16,616 - DEBUG - nexttoken: (183017, /b'>>')
+2025-07-28 09:45:16,616 - DEBUG - end_type: pos=182718, type='d', objs=[/'CreationDate', b"D:20090206165338-06'00'", /'Author', b'paplener', /'CPYVersion', b'3.0', /'Creator', b'eCopy Desktop 9.1.1.17', /'Producer', b'Adobe PDF Library 8.0', /'ModDate', b"D:20090206165526-06'00'", /'ImportPCL', b'DummyStatement Generic.pdf', /'Title', b'eStatements-DummyStatement Generic-020609', /'ModifiedBy', b'paplener\nD:20090206225519Z\n']
+2025-07-28 09:45:16,625 - DEBUG - nexttoken: (183020, /b'endobj')
+2025-07-28 09:45:16,625 - DEBUG - do_keyword: pos=183020, token=/b'endobj', stack=[(182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'})]
+2025-07-28 09:45:16,630 - DEBUG - add_results: ((182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'}),)
+2025-07-28 09:45:16,633 - DEBUG - nextobject: (182718, {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'})
+2025-07-28 09:45:16,633 - DEBUG - register: objid=3: {'CreationDate': b"D:20090206165338-06'00'", 'Author': b'paplener', 'CPYVersion': b'3.0', 'Creator': b'eCopy Desktop 9.1.1.17', 'Producer': b'Adobe PDF Library 8.0', 'ModDate': b"D:20090206165526-06'00'", 'ImportPCL': b'DummyStatement Generic.pdf', 'Title': b'eStatements-DummyStatement Generic-020609', 'ModifiedBy': b'paplener\nD:20090206225519Z\n'}
+2025-07-28 09:45:16,642 - DEBUG - getobj: objid=1
+2025-07-28 09:45:16,642 - DEBUG - seek: 16
+2025-07-28 09:45:16,648 - DEBUG - nexttoken: (16, 1)
+2025-07-28 09:45:16,650 - DEBUG - nexttoken: (18, 0)
+2025-07-28 09:45:16,656 - DEBUG - nexttoken: (20, /b'obj')
+2025-07-28 09:45:16,658 - DEBUG - nexttoken: (24, /b'<<')
+2025-07-28 09:45:16,658 - DEBUG - start_type: pos=24, type='d'
+2025-07-28 09:45:16,667 - DEBUG - nexttoken: (26, /'Metadata')
+2025-07-28 09:45:16,667 - DEBUG - nexttoken: (36, 21)
+2025-07-28 09:45:16,675 - DEBUG - nexttoken: (39, 0)
+2025-07-28 09:45:16,675 - DEBUG - nexttoken: (41, /b'R')
+2025-07-28 09:45:16,675 - DEBUG - do_keyword: pos=41, token=/b'R', stack=[(26, /'Metadata'), (36, 21), (39, 0)]
+2025-07-28 09:45:16,684 - DEBUG - nexttoken: (42, /'Pages')
+2025-07-28 09:45:16,689 - DEBUG - nexttoken: (49, 2)
+2025-07-28 09:45:16,691 - DEBUG - nexttoken: (51, 0)
+2025-07-28 09:45:16,697 - DEBUG - nexttoken: (53, /b'R')
+2025-07-28 09:45:16,699 - DEBUG - do_keyword: pos=53, token=/b'R', stack=[(26, /'Metadata'), (41, <PDFObjRef:21>), (42, /'Pages'), (49, 2), (51, 0)]
+2025-07-28 09:45:16,703 - DEBUG - nexttoken: (54, /'Type')
+2025-07-28 09:45:16,706 - DEBUG - nexttoken: (59, /'Catalog')
+2025-07-28 09:45:16,711 - DEBUG - nexttoken: (67, /b'>>')
+2025-07-28 09:45:16,714 - DEBUG - end_type: pos=24, type='d', objs=[/'Metadata', <PDFObjRef:21>, /'Pages', <PDFObjRef:2>, /'Type', /'Catalog']
+2025-07-28 09:45:16,714 - DEBUG - nexttoken: (70, /b'endobj')
+2025-07-28 09:45:16,723 - DEBUG - do_keyword: pos=70, token=/b'endobj', stack=[(24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'})]
+2025-07-28 09:45:16,728 - DEBUG - add_results: ((24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'}),)
+2025-07-28 09:45:16,731 - DEBUG - nextobject: (24, {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'})
+2025-07-28 09:45:16,731 - DEBUG - register: objid=1: {'Metadata': <PDFObjRef:21>, 'Pages': <PDFObjRef:2>, 'Type': /'Catalog'}
+2025-07-28 09:45:16,740 - DEBUG - getobj: objid=2
+2025-07-28 09:45:16,745 - DEBUG - seek: 3604
+2025-07-28 09:45:16,748 - DEBUG - nexttoken: (3604, 2)
+2025-07-28 09:45:16,748 - DEBUG - nexttoken: (3606, 0)
+2025-07-28 09:45:16,756 - DEBUG - nexttoken: (3608, /b'obj')
+2025-07-28 09:45:16,765 - DEBUG - nexttoken: (3612, /b'<<')
+2025-07-28 09:45:16,769 - DEBUG - start_type: pos=3612, type='d'
+2025-07-28 09:45:16,773 - DEBUG - nexttoken: (3614, /'Count')
+2025-07-28 09:45:16,781 - DEBUG - nexttoken: (3621, 2)
+2025-07-28 09:45:16,783 - DEBUG - nexttoken: (3622, /'Type')
+2025-07-28 09:45:16,789 - DEBUG - nexttoken: (3627, /'Pages')
+2025-07-28 09:45:16,793 - DEBUG - nexttoken: (3633, /'Kids')
+2025-07-28 09:45:16,797 - DEBUG - nexttoken: (3638, /b'[')
+2025-07-28 09:45:16,803 - DEBUG - start_type: pos=3638, type='a'
+2025-07-28 09:45:16,806 - DEBUG - nexttoken: (3639, 5)
+2025-07-28 09:45:16,814 - DEBUG - nexttoken: (3641, 0)
+2025-07-28 09:45:16,814 - DEBUG - nexttoken: (3643, /b'R')
+2025-07-28 09:45:16,822 - DEBUG - do_keyword: pos=3643, token=/b'R', stack=[(3639, 5), (3641, 0)]
+2025-07-28 09:45:16,823 - DEBUG - nexttoken: (3645, 12)
+2025-07-28 09:45:16,830 - DEBUG - nexttoken: (3648, 0)
+2025-07-28 09:45:16,830 - DEBUG - nexttoken: (3650, /b'R')
+2025-07-28 09:45:16,840 - DEBUG - do_keyword: pos=3650, token=/b'R', stack=[(3643, <PDFObjRef:5>), (3645, 12), (3648, 0)]
+2025-07-28 09:45:16,840 - DEBUG - nexttoken: (3651, /b']')
+2025-07-28 09:45:16,847 - DEBUG - end_type: pos=3638, type='a', objs=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:45:16,855 - DEBUG - nexttoken: (3652, /b'>>')
+2025-07-28 09:45:16,857 - DEBUG - end_type: pos=3612, type='d', objs=[/'Count', 2, /'Type', /'Pages', /'Kids', [<PDFObjRef:5>, <PDFObjRef:12>]]
+2025-07-28 09:45:16,863 - DEBUG - nexttoken: (3655, /b'endobj')
+2025-07-28 09:45:16,863 - DEBUG - do_keyword: pos=3655, token=/b'endobj', stack=[(3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]})]
+2025-07-28 09:45:16,873 - DEBUG - add_results: ((3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]}),)
+2025-07-28 09:45:16,876 - DEBUG - nextobject: (3612, {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]})
+2025-07-28 09:45:16,880 - DEBUG - register: objid=2: {'Count': 2, 'Type': /'Pages', 'Kids': [<PDFObjRef:5>, <PDFObjRef:12>]}
+2025-07-28 09:45:16,880 - DEBUG - Pages: Kids=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:45:16,890 - DEBUG - getobj: objid=5
+2025-07-28 09:45:16,898 - DEBUG - seek: 3662
+2025-07-28 09:45:16,898 - DEBUG - nexttoken: (3662, 5)
+2025-07-28 09:45:16,907 - DEBUG - nexttoken: (3664, 0)
+2025-07-28 09:45:16,907 - DEBUG - nexttoken: (3666, /b'obj')
+2025-07-28 09:45:16,915 - DEBUG - nexttoken: (3670, /b'<<')
+2025-07-28 09:45:16,923 - DEBUG - start_type: pos=3670, type='d'
+2025-07-28 09:45:16,925 - DEBUG - nexttoken: (3672, /'Annots')
+2025-07-28 09:45:16,931 - DEBUG - nexttoken: (3680, 18)
+2025-07-28 09:45:16,938 - DEBUG - nexttoken: (3683, 0)
+2025-07-28 09:45:16,940 - DEBUG - nexttoken: (3685, /b'R')
+2025-07-28 09:45:16,946 - DEBUG - do_keyword: pos=3685, token=/b'R', stack=[(3672, /'Annots'), (3680, 18), (3683, 0)]
+2025-07-28 09:45:16,946 - DEBUG - nexttoken: (3686, /'Parent')
+2025-07-28 09:45:16,956 - DEBUG - nexttoken: (3694, 2)
+2025-07-28 09:45:16,965 - DEBUG - nexttoken: (3696, 0)
+2025-07-28 09:45:16,969 - DEBUG - nexttoken: (3698, /b'R')
+2025-07-28 09:45:16,972 - DEBUG - do_keyword: pos=3698, token=/b'R', stack=[(3672, /'Annots'), (3685, <PDFObjRef:18>), (3686, /'Parent'), (3694, 2), (3696, 0)]
+2025-07-28 09:45:16,978 - DEBUG - nexttoken: (3699, /'Contents')
+2025-07-28 09:45:16,978 - DEBUG - nexttoken: (3709, 11)
+2025-07-28 09:45:16,989 - DEBUG - nexttoken: (3712, 0)
+2025-07-28 09:45:16,995 - DEBUG - nexttoken: (3714, /b'R')
+2025-07-28 09:45:16,998 - DEBUG - do_keyword: pos=3714, token=/b'R', stack=[(3672, /'Annots'), (3685, <PDFObjRef:18>), (3686, /'Parent'), (3698, <PDFObjRef:2>), (3699, /'Contents'), (3709, 11), (3712, 0)]
+2025-07-28 09:45:17,006 - DEBUG - nexttoken: (3715, /'Origin')
+2025-07-28 09:45:17,012 - DEBUG - nexttoken: (3722, b'PCL6D9.tmp,0')
+2025-07-28 09:45:17,012 - DEBUG - nexttoken: (3736, /'eCopyCompressed')
+2025-07-28 09:45:17,023 - DEBUG - nexttoken: (3753, True)
+2025-07-28 09:45:17,028 - DEBUG - nexttoken: (3757, /'MediaBox')
+2025-07-28 09:45:17,031 - DEBUG - nexttoken: (3766, /b'[')
+2025-07-28 09:45:17,039 - DEBUG - start_type: pos=3766, type='a'
+2025-07-28 09:45:17,043 - DEBUG - nexttoken: (3767, 0.0)
+2025-07-28 09:45:17,052 - DEBUG - nexttoken: (3771, 0.0)
+2025-07-28 09:45:17,056 - DEBUG - nexttoken: (3775, 612.0)
+2025-07-28 09:45:17,059 - DEBUG - nexttoken: (3781, 792.0)
+2025-07-28 09:45:17,069 - DEBUG - nexttoken: (3786, /b']')
+2025-07-28 09:45:17,075 - DEBUG - end_type: pos=3766, type='a', objs=[0.0, 0.0, 612.0, 792.0]
+2025-07-28 09:45:17,086 - DEBUG - nexttoken: (3787, /'Resources')
+2025-07-28 09:45:17,090 - DEBUG - nexttoken: (3797, /b'<<')
+2025-07-28 09:45:17,098 - DEBUG - start_type: pos=3797, type='d'
+2025-07-28 09:45:17,106 - DEBUG - nexttoken: (3799, /'XObject')
+2025-07-28 09:45:17,107 - DEBUG - nexttoken: (3807, /b'<<')
+2025-07-28 09:45:17,114 - DEBUG - start_type: pos=3807, type='d'
+2025-07-28 09:45:17,123 - DEBUG - nexttoken: (3809, /'Im0')
+2025-07-28 09:45:17,130 - DEBUG - nexttoken: (3814, 6)
+2025-07-28 09:45:17,130 - DEBUG - nexttoken: (3816, 0)
+2025-07-28 09:45:17,140 - DEBUG - nexttoken: (3818, /b'R')
+2025-07-28 09:45:17,146 - DEBUG - do_keyword: pos=3818, token=/b'R', stack=[(3809, /'Im0'), (3814, 6), (3816, 0)]
+2025-07-28 09:45:17,146 - DEBUG - nexttoken: (3819, /'Im1')
+2025-07-28 09:45:17,156 - DEBUG - nexttoken: (3824, 8)
+2025-07-28 09:45:17,162 - DEBUG - nexttoken: (3826, 0)
+2025-07-28 09:45:17,162 - DEBUG - nexttoken: (3828, /b'R')
+2025-07-28 09:45:17,174 - DEBUG - do_keyword: pos=3828, token=/b'R', stack=[(3809, /'Im0'), (3818, <PDFObjRef:6>), (3819, /'Im1'), (3824, 8), (3826, 0)]
+2025-07-28 09:45:17,178 - DEBUG - nexttoken: (3829, /'Im2')
+2025-07-28 09:45:17,187 - DEBUG - nexttoken: (3834, 10)
+2025-07-28 09:45:17,195 - DEBUG - nexttoken: (3837, 0)
+2025-07-28 09:45:17,203 - DEBUG - nexttoken: (3839, /b'R')
+2025-07-28 09:45:17,206 - DEBUG - do_keyword: pos=3839, token=/b'R', stack=[(3809, /'Im0'), (3818, <PDFObjRef:6>), (3819, /'Im1'), (3828, <PDFObjRef:8>), (3829, /'Im2'), (3834, 10), (3837, 0)]
+2025-07-28 09:45:17,211 - DEBUG - nexttoken: (3840, /b'>>')
+2025-07-28 09:45:17,223 - DEBUG - end_type: pos=3807, type='d', objs=[/'Im0', <PDFObjRef:6>, /'Im1', <PDFObjRef:8>, /'Im2', <PDFObjRef:10>]
+2025-07-28 09:45:17,228 - DEBUG - nexttoken: (3842, /'ProcSet')
+2025-07-28 09:45:17,240 - DEBUG - nexttoken: (3850, /b'[')
+2025-07-28 09:45:17,244 - DEBUG - start_type: pos=3850, type='a'
+2025-07-28 09:45:17,252 - DEBUG - nexttoken: (3851, /'PDF')
+2025-07-28 09:45:17,257 - DEBUG - nexttoken: (3855, /'ImageB')
+2025-07-28 09:45:17,265 - DEBUG - nexttoken: (3862, /'ImageC')
+2025-07-28 09:45:17,277 - DEBUG - nexttoken: (3869, /b']')
+2025-07-28 09:45:17,277 - DEBUG - end_type: pos=3850, type='a', objs=[/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:45:17,290 - DEBUG - nexttoken: (3870, /b'>>')
+2025-07-28 09:45:17,293 - DEBUG - end_type: pos=3797, type='d', objs=[/'XObject', {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, /'ProcSet', [/'PDF', /'ImageB', /'ImageC']]
+2025-07-28 09:45:17,297 - DEBUG - nexttoken: (3872, /'Type')
+2025-07-28 09:45:17,306 - DEBUG - nexttoken: (3877, /'Page')
+2025-07-28 09:45:17,314 - DEBUG - nexttoken: (3882, /b'>>')
+2025-07-28 09:45:17,323 - DEBUG - end_type: pos=3670, type='d', objs=[/'Annots', <PDFObjRef:18>, /'Parent', <PDFObjRef:2>, /'Contents', <PDFObjRef:11>, /'Origin', b'PCL6D9.tmp,0', /'eCopyCompressed', True, /'MediaBox', [0.0, 0.0, 612.0, 792.0], /'Resources', {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, /'Type', /'Page']
+2025-07-28 09:45:17,330 - DEBUG - nexttoken: (3885, /b'endobj')
+2025-07-28 09:45:17,331 - DEBUG - do_keyword: pos=3885, token=/b'endobj', stack=[(3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})]
+2025-07-28 09:45:17,339 - DEBUG - add_results: ((3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}),)
+2025-07-28 09:45:17,347 - DEBUG - nextobject: (3670, {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})
+2025-07-28 09:45:17,357 - DEBUG - register: objid=5: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:17,363 - DEBUG - Page: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:17,373 - DEBUG - getobj: objid=11
+2025-07-28 09:45:17,380 - DEBUG - seek: 97900
+2025-07-28 09:45:17,389 - DEBUG - nexttoken: (97900, 11)
+2025-07-28 09:45:17,389 - DEBUG - nexttoken: (97903, 0)
+2025-07-28 09:45:17,399 - DEBUG - nexttoken: (97905, /b'obj')
+2025-07-28 09:45:17,408 - DEBUG - nexttoken: (97909, /b'<<')
+2025-07-28 09:45:17,416 - DEBUG - start_type: pos=97909, type='d'
+2025-07-28 09:45:17,422 - DEBUG - nexttoken: (97911, /'Length')
+2025-07-28 09:45:17,426 - DEBUG - nexttoken: (97919, 194)
+2025-07-28 09:45:17,438 - DEBUG - nexttoken: (97922, /b'>>')
+2025-07-28 09:45:17,442 - DEBUG - end_type: pos=97909, type='d', objs=[/'Length', 194]
+2025-07-28 09:45:17,451 - DEBUG - nexttoken: (97924, /b'stream')
+2025-07-28 09:45:17,459 - DEBUG - do_keyword: pos=97924, token=/b'stream', stack=[(97909, {'Length': 194})]
+2025-07-28 09:45:17,459 - DEBUG - seek: 97924
+2025-07-28 09:45:17,472 - DEBUG - nextline: 97924, b'stream\r\n'
+2025-07-28 09:45:17,475 - DEBUG - seek: 98126
+2025-07-28 09:45:17,483 - DEBUG - nextline: 98126, b'\r\n'
+2025-07-28 09:45:17,491 - DEBUG - nextline: 98128, b'endstream\r'
+2025-07-28 09:45:17,500 - DEBUG - seek: 98128
+2025-07-28 09:45:17,508 - DEBUG - Stream: pos=97932, objlen=196, dic={'Length': 194}, data=bytearray(b'q\n612.4799')...
+2025-07-28 09:45:17,516 - DEBUG - nexttoken: (98128, /b'endstream')
+2025-07-28 09:45:17,525 - DEBUG - do_keyword: pos=98128, token=/b'endstream', stack=[(97932, <PDFStream(None): raw=194, {'Length': 194}>)]
+2025-07-28 09:45:17,533 - DEBUG - nexttoken: (98138, /b'endobj')
+2025-07-28 09:45:17,540 - DEBUG - do_keyword: pos=98138, token=/b'endobj', stack=[(97932, <PDFStream(None): raw=194, {'Length': 194}>), (98128, /b'endstream')]
+2025-07-28 09:45:17,549 - DEBUG - add_results: ((97932, <PDFStream(None): raw=194, {'Length': 194}>), (98128, /b'endstream'))
+2025-07-28 09:45:17,556 - DEBUG - nextobject: (97932, <PDFStream(None): raw=194, {'Length': 194}>)
+2025-07-28 09:45:17,562 - DEBUG - register: objid=11: <PDFStream(11): raw=194, {'Length': 194}>
+2025-07-28 09:45:17,573 - DEBUG - getobj: objid=12
+2025-07-28 09:45:17,578 - DEBUG - seek: 3892
+2025-07-28 09:45:17,589 - DEBUG - nexttoken: (3892, 12)
+2025-07-28 09:45:17,599 - DEBUG - nexttoken: (3895, 0)
+2025-07-28 09:45:17,606 - DEBUG - nexttoken: (3897, /b'obj')
+2025-07-28 09:45:17,615 - DEBUG - nexttoken: (3901, /b'<<')
+2025-07-28 09:45:17,623 - DEBUG - start_type: pos=3901, type='d'
+2025-07-28 09:45:17,623 - DEBUG - nexttoken: (3903, /'Parent')
+2025-07-28 09:45:17,639 - DEBUG - nexttoken: (3911, 2)
+2025-07-28 09:45:17,642 - DEBUG - nexttoken: (3913, 0)
+2025-07-28 09:45:17,656 - DEBUG - nexttoken: (3915, /b'R')
+2025-07-28 09:45:17,658 - DEBUG - do_keyword: pos=3915, token=/b'R', stack=[(3903, /'Parent'), (3911, 2), (3913, 0)]
+2025-07-28 09:45:17,674 - DEBUG - nexttoken: (3916, /'Contents')
+2025-07-28 09:45:17,676 - DEBUG - nexttoken: (3926, 16)
+2025-07-28 09:45:17,689 - DEBUG - nexttoken: (3929, 0)
+2025-07-28 09:45:17,698 - DEBUG - nexttoken: (3931, /b'R')
+2025-07-28 09:45:17,706 - DEBUG - do_keyword: pos=3931, token=/b'R', stack=[(3903, /'Parent'), (3915, <PDFObjRef:2>), (3916, /'Contents'), (3926, 16), (3929, 0)]
+2025-07-28 09:45:17,709 - DEBUG - nexttoken: (3932, /'Origin')
+2025-07-28 09:45:17,723 - DEBUG - nexttoken: (3939, b'PCL6D9.tmp,1')
+2025-07-28 09:45:17,726 - DEBUG - nexttoken: (3953, /'eCopyCompressed')
+2025-07-28 09:45:17,738 - DEBUG - nexttoken: (3970, True)
+2025-07-28 09:45:17,742 - DEBUG - nexttoken: (3974, /'MediaBox')
+2025-07-28 09:45:17,757 - DEBUG - nexttoken: (3983, /b'[')
+2025-07-28 09:45:17,760 - DEBUG - start_type: pos=3983, type='a'
+2025-07-28 09:45:17,773 - DEBUG - nexttoken: (3984, 0.0)
+2025-07-28 09:45:17,773 - DEBUG - nexttoken: (3988, 0.0)
+2025-07-28 09:45:17,792 - DEBUG - nexttoken: (3992, 612.0)
+2025-07-28 09:45:17,798 - DEBUG - nexttoken: (3998, 792.0)
+2025-07-28 09:45:17,806 - DEBUG - nexttoken: (4003, /b']')
+2025-07-28 09:45:17,806 - DEBUG - end_type: pos=3983, type='a', objs=[0.0, 0.0, 612.0, 792.0]
+2025-07-28 09:45:17,823 - DEBUG - nexttoken: (4004, /'Resources')
+2025-07-28 09:45:17,834 - DEBUG - nexttoken: (4014, /b'<<')
+2025-07-28 09:45:17,840 - DEBUG - start_type: pos=4014, type='d'
+2025-07-28 09:45:17,846 - DEBUG - nexttoken: (4016, /'XObject')
+2025-07-28 09:45:17,856 - DEBUG - nexttoken: (4024, /b'<<')
+2025-07-28 09:45:17,862 - DEBUG - start_type: pos=4024, type='d'
+2025-07-28 09:45:17,873 - DEBUG - nexttoken: (4026, /'Im0')
+2025-07-28 09:45:17,880 - DEBUG - nexttoken: (4031, 13)
+2025-07-28 09:45:17,891 - DEBUG - nexttoken: (4034, 0)
+2025-07-28 09:45:17,899 - DEBUG - nexttoken: (4036, /b'R')
+2025-07-28 09:45:17,906 - DEBUG - do_keyword: pos=4036, token=/b'R', stack=[(4026, /'Im0'), (4031, 13), (4034, 0)]
+2025-07-28 09:45:17,922 - DEBUG - nexttoken: (4037, /'Im1')
+2025-07-28 09:45:17,923 - DEBUG - nexttoken: (4042, 15)
+2025-07-28 09:45:17,939 - DEBUG - nexttoken: (4045, 0)
+2025-07-28 09:45:17,943 - DEBUG - nexttoken: (4047, /b'R')
+2025-07-28 09:45:17,956 - DEBUG - do_keyword: pos=4047, token=/b'R', stack=[(4026, /'Im0'), (4036, <PDFObjRef:13>), (4037, /'Im1'), (4042, 15), (4045, 0)]
+2025-07-28 09:45:17,967 - DEBUG - nexttoken: (4048, /b'>>')
+2025-07-28 09:45:17,973 - DEBUG - end_type: pos=4024, type='d', objs=[/'Im0', <PDFObjRef:13>, /'Im1', <PDFObjRef:15>]
+2025-07-28 09:45:17,981 - DEBUG - nexttoken: (4050, /'ProcSet')
+2025-07-28 09:45:17,997 - DEBUG - nexttoken: (4058, /b'[')
+2025-07-28 09:45:18,005 - DEBUG - start_type: pos=4058, type='a'
+2025-07-28 09:45:18,006 - DEBUG - nexttoken: (4059, /'PDF')
+2025-07-28 09:45:18,022 - DEBUG - nexttoken: (4063, /'ImageB')
+2025-07-28 09:45:18,033 - DEBUG - nexttoken: (4070, /'ImageC')
+2025-07-28 09:45:18,042 - DEBUG - nexttoken: (4077, /b']')
+2025-07-28 09:45:18,050 - DEBUG - end_type: pos=4058, type='a', objs=[/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:45:18,058 - DEBUG - nexttoken: (4078, /b'>>')
+2025-07-28 09:45:18,067 - DEBUG - end_type: pos=4014, type='d', objs=[/'XObject', {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, /'ProcSet', [/'PDF', /'ImageB', /'ImageC']]
+2025-07-28 09:45:18,075 - DEBUG - nexttoken: (4080, /'Type')
+2025-07-28 09:45:18,089 - DEBUG - nexttoken: (4085, /'Page')
+2025-07-28 09:45:18,090 - DEBUG - nexttoken: (4090, /b'>>')
+2025-07-28 09:45:18,108 - DEBUG - end_type: pos=3901, type='d', objs=[/'Parent', <PDFObjRef:2>, /'Contents', <PDFObjRef:16>, /'Origin', b'PCL6D9.tmp,1', /'eCopyCompressed', True, /'MediaBox', [0.0, 0.0, 612.0, 792.0], /'Resources', {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, /'Type', /'Page']
+2025-07-28 09:45:18,115 - DEBUG - nexttoken: (4093, /b'endobj')
+2025-07-28 09:45:18,123 - DEBUG - do_keyword: pos=4093, token=/b'endobj', stack=[(3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})]
+2025-07-28 09:45:18,132 - DEBUG - add_results: ((3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}),)
+2025-07-28 09:45:18,140 - DEBUG - nextobject: (3901, {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'})
+2025-07-28 09:45:18,156 - DEBUG - register: objid=12: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:18,159 - DEBUG - Page: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:18,173 - DEBUG - getobj: objid=16
+2025-07-28 09:45:18,179 - DEBUG - seek: 4100
+2025-07-28 09:45:18,195 - DEBUG - nexttoken: (4100, 16)
+2025-07-28 09:45:18,206 - DEBUG - nexttoken: (4103, 0)
+2025-07-28 09:45:18,213 - DEBUG - nexttoken: (4105, /b'obj')
+2025-07-28 09:45:18,222 - DEBUG - nexttoken: (4109, /b'<<')
+2025-07-28 09:45:18,222 - DEBUG - start_type: pos=4109, type='d'
+2025-07-28 09:45:18,244 - DEBUG - nexttoken: (4111, /'Length')
+2025-07-28 09:45:18,251 - DEBUG - nexttoken: (4119, 118)
+2025-07-28 09:45:18,260 - DEBUG - nexttoken: (4122, /b'>>')
+2025-07-28 09:45:18,272 - DEBUG - end_type: pos=4109, type='d', objs=[/'Length', 118]
+2025-07-28 09:45:18,285 - DEBUG - nexttoken: (4124, /b'stream')
+2025-07-28 09:45:18,294 - DEBUG - do_keyword: pos=4124, token=/b'stream', stack=[(4109, {'Length': 118})]
+2025-07-28 09:45:18,309 - DEBUG - seek: 4124
+2025-07-28 09:45:18,318 - DEBUG - nextline: 4124, b'stream\r\n'
+2025-07-28 09:45:18,322 - DEBUG - seek: 4250
+2025-07-28 09:45:18,331 - DEBUG - nextline: 4250, b'\r\n'
+2025-07-28 09:45:18,339 - DEBUG - nextline: 4252, b'endstream\r'
+2025-07-28 09:45:18,356 - DEBUG - seek: 4252
+2025-07-28 09:45:18,361 - DEBUG - Stream: pos=4132, objlen=120, dic={'Length': 118}, data=bytearray(b'q\n612.4799')...
+2025-07-28 09:45:18,377 - DEBUG - nexttoken: (4252, /b'endstream')
+2025-07-28 09:45:18,389 - DEBUG - do_keyword: pos=4252, token=/b'endstream', stack=[(4132, <PDFStream(None): raw=118, {'Length': 118}>)]
+2025-07-28 09:45:18,401 - DEBUG - nexttoken: (4262, /b'endobj')
+2025-07-28 09:45:18,421 - DEBUG - do_keyword: pos=4262, token=/b'endobj', stack=[(4132, <PDFStream(None): raw=118, {'Length': 118}>), (4252, /b'endstream')]
+2025-07-28 09:45:18,440 - DEBUG - add_results: ((4132, <PDFStream(None): raw=118, {'Length': 118}>), (4252, /b'endstream'))
+2025-07-28 09:45:18,446 - DEBUG - nextobject: (4132, <PDFStream(None): raw=118, {'Length': 118}>)
+2025-07-28 09:45:18,462 - DEBUG - register: objid=16: <PDFStream(16): raw=118, {'Length': 118}>
+2025-07-28 09:45:18,477 - DEBUG - Processing page: <PDFPage: Resources={'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, MediaBox=(0.0, 0.0, 612.0, 792.0)>
+2025-07-28 09:45:18,489 - DEBUG - render_contents: resources={'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, streams=[<PDFStream(11): raw=194, {'Length': 194}>], ctm=(1, 0, 0, 1, -0.0, -0.0)
+2025-07-28 09:45:18,500 - DEBUG - Resource: 'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}
+2025-07-28 09:45:18,511 - DEBUG - Resource: 'ProcSet': [/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:45:18,523 - DEBUG - seek: 0
+2025-07-28 09:45:18,530 - DEBUG - nexttoken: (0, /b'q')
+2025-07-28 09:45:18,539 - DEBUG - do_keyword: pos=0, token=/b'q', stack=[]
+2025-07-28 09:45:18,556 - DEBUG - add_results: ((0, /b'q'),)
+2025-07-28 09:45:18,573 - DEBUG - nextobject: (0, /b'q')
+2025-07-28 09:45:18,581 - DEBUG - exec: q
+2025-07-28 09:45:18,590 - DEBUG - nexttoken: (2, 612.4799805)
+2025-07-28 09:45:18,600 - DEBUG - add_results: ((2, 612.4799805),)
+2025-07-28 09:45:18,613 - DEBUG - nextobject: (2, 612.4799805)
+2025-07-28 09:45:18,626 - DEBUG - nexttoken: (14, 0)
+2025-07-28 09:45:18,630 - DEBUG - add_results: ((14, 0),)
+2025-07-28 09:45:18,646 - DEBUG - nextobject: (14, 0)
+2025-07-28 09:45:18,657 - DEBUG - nexttoken: (16, 0)
+2025-07-28 09:45:18,663 - DEBUG - add_results: ((16, 0),)
+2025-07-28 09:45:18,673 - DEBUG - nextobject: (16, 0)
+2025-07-28 09:45:18,690 - DEBUG - nexttoken: (18, 792.960022)
+2025-07-28 09:45:18,703 - DEBUG - add_results: ((18, 792.960022),)
+2025-07-28 09:45:18,711 - DEBUG - nextobject: (18, 792.960022)
+2025-07-28 09:45:18,723 - DEBUG - nexttoken: (29, 0)
+2025-07-28 09:45:18,739 - DEBUG - add_results: ((29, 0),)
+2025-07-28 09:45:18,745 - DEBUG - nextobject: (29, 0)
+2025-07-28 09:45:18,761 - DEBUG - nexttoken: (31, -0.960022)
+2025-07-28 09:45:18,772 - DEBUG - add_results: ((31, -0.960022),)
+2025-07-28 09:45:18,786 - DEBUG - nextobject: (31, -0.960022)
+2025-07-28 09:45:18,789 - DEBUG - nexttoken: (41, /b'cm')
+2025-07-28 09:45:18,809 - DEBUG - do_keyword: pos=41, token=/b'cm', stack=[]
+2025-07-28 09:45:18,823 - DEBUG - add_results: ((41, /b'cm'),)
+2025-07-28 09:45:18,838 - DEBUG - nextobject: (41, /b'cm')
+2025-07-28 09:45:18,853 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -0.960022]
+2025-07-28 09:45:18,860 - DEBUG - nexttoken: (44, /'Im0')
+2025-07-28 09:45:18,873 - DEBUG - add_results: ((44, /'Im0'),)
+2025-07-28 09:45:18,890 - DEBUG - nextobject: (44, /'Im0')
+2025-07-28 09:45:18,901 - DEBUG - nexttoken: (49, /b'Do')
+2025-07-28 09:45:18,913 - DEBUG - do_keyword: pos=49, token=/b'Do', stack=[]
+2025-07-28 09:45:18,926 - DEBUG - add_results: ((49, /b'Do'),)
+2025-07-28 09:45:18,940 - DEBUG - nextobject: (49, /b'Do')
+2025-07-28 09:45:18,956 - DEBUG - exec: Do [/'Im0']
+2025-07-28 09:45:18,964 - DEBUG - getobj: objid=6
+2025-07-28 09:45:18,981 - DEBUG - seek: 98145
+2025-07-28 09:45:18,992 - DEBUG - nexttoken: (98145, 6)
+2025-07-28 09:45:19,007 - DEBUG - nexttoken: (98147, 0)
+2025-07-28 09:45:19,021 - DEBUG - nexttoken: (98149, /b'obj')
+2025-07-28 09:45:19,030 - DEBUG - nexttoken: (98153, /b'<<')
+2025-07-28 09:45:19,045 - DEBUG - start_type: pos=98153, type='d'
+2025-07-28 09:45:19,060 - DEBUG - nexttoken: (98155, /'Subtype')
+2025-07-28 09:45:19,073 - DEBUG - nexttoken: (98163, /'Image')
+2025-07-28 09:45:19,088 - DEBUG - nexttoken: (98169, /'Length')
+2025-07-28 09:45:19,101 - DEBUG - nexttoken: (98177, 55923)
+2025-07-28 09:45:19,112 - DEBUG - nexttoken: (98182, /'Filter')
+2025-07-28 09:45:19,123 - DEBUG - nexttoken: (98189, /'DCTDecode')
+2025-07-28 09:45:19,145 - DEBUG - nexttoken: (98199, /'Name')
+2025-07-28 09:45:19,157 - DEBUG - nexttoken: (98204, /'X')
+2025-07-28 09:45:19,173 - DEBUG - nexttoken: (98206, /'BitsPerComponent')
+2025-07-28 09:45:19,180 - DEBUG - nexttoken: (98224, 8)
+2025-07-28 09:45:19,197 - DEBUG - nexttoken: (98225, /'ColorSpace')
+2025-07-28 09:45:19,207 - DEBUG - nexttoken: (98236, /'DeviceRGB')
+2025-07-28 09:45:19,207 - DEBUG - nexttoken: (98246, /'Width')
+2025-07-28 09:45:19,228 - DEBUG - nexttoken: (98253, 1276)
+2025-07-28 09:45:19,240 - DEBUG - nexttoken: (98257, /'DecodeParms')
+2025-07-28 09:45:19,254 - DEBUG - nexttoken: (98269, /b'<<')
+2025-07-28 09:45:19,263 - DEBUG - start_type: pos=98269, type='d'
+2025-07-28 09:45:19,276 - DEBUG - nexttoken: (98271, /'Columns')
+2025-07-28 09:45:19,292 - DEBUG - nexttoken: (98280, 1276)
+2025-07-28 09:45:19,305 - DEBUG - nexttoken: (98284, /'Rows')
+2025-07-28 09:45:19,314 - DEBUG - nexttoken: (98290, 1652)
+2025-07-28 09:45:19,323 - DEBUG - nexttoken: (98294, /'Colors')
+2025-07-28 09:45:19,340 - DEBUG - nexttoken: (98302, 3)
+2025-07-28 09:45:19,347 - DEBUG - nexttoken: (98303, /b'>>')
+2025-07-28 09:45:19,364 - DEBUG - end_type: pos=98269, type='d', objs=[/'Columns', 1276, /'Rows', 1652, /'Colors', 3]
+2025-07-28 09:45:19,374 - DEBUG - nexttoken: (98305, /'Height')
+2025-07-28 09:45:19,391 - DEBUG - nexttoken: (98313, 1652)
+2025-07-28 09:45:19,401 - DEBUG - nexttoken: (98317, /'Type')
+2025-07-28 09:45:19,413 - DEBUG - nexttoken: (98322, /'XObject')
+2025-07-28 09:45:19,425 - DEBUG - nexttoken: (98330, /b'>>')
+2025-07-28 09:45:19,444 - DEBUG - end_type: pos=98153, type='d', objs=[/'Subtype', /'Image', /'Length', 55923, /'Filter', /'DCTDecode', /'Name', /'X', /'BitsPerComponent', 8, /'ColorSpace', /'DeviceRGB', /'Width', 1276, /'DecodeParms', {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, /'Height', 1652, /'Type', /'XObject']
+2025-07-28 09:45:19,457 - DEBUG - nexttoken: (98332, /b'stream')
+2025-07-28 09:45:19,464 - DEBUG - do_keyword: pos=98332, token=/b'stream', stack=[(98153, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'})]
+2025-07-28 09:45:19,481 - DEBUG - seek: 98332
+2025-07-28 09:45:19,490 - DEBUG - nextline: 98332, b'stream\r\n'
+2025-07-28 09:45:19,508 - DEBUG - seek: 154263
+2025-07-28 09:45:19,524 - DEBUG - nextline: 154263, b'\r\n'
+2025-07-28 09:45:19,541 - DEBUG - nextline: 154265, b'endstream\r'
+2025-07-28 09:45:19,554 - DEBUG - seek: 154265
+2025-07-28 09:45:19,564 - DEBUG - Stream: pos=98340, objlen=55925, dic={'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}, data=bytearray(b'\xff\xd8\xff\xe0\x00\x10JFIF')...
+2025-07-28 09:45:19,578 - DEBUG - nexttoken: (154265, /b'endstream')
+2025-07-28 09:45:19,591 - DEBUG - do_keyword: pos=154265, token=/b'endstream', stack=[(98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)]
+2025-07-28 09:45:19,607 - DEBUG - nexttoken: (154275, /b'endobj')
+2025-07-28 09:45:19,614 - DEBUG - do_keyword: pos=154275, token=/b'endobj', stack=[(98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (154265, /b'endstream')]
+2025-07-28 09:45:19,629 - DEBUG - add_results: ((98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (154265, /b'endstream'))
+2025-07-28 09:45:19,640 - DEBUG - nextobject: (98340, <PDFStream(None): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)
+2025-07-28 09:45:19,656 - DEBUG - register: objid=6: <PDFStream(6): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:45:19,673 - DEBUG - Processing xobj: <PDFStream(6): raw=55923, {'Subtype': /'Image', 'Length': 55923, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:45:19,688 - DEBUG - nexttoken: (52, /b'Q')
+2025-07-28 09:45:19,696 - DEBUG - do_keyword: pos=52, token=/b'Q', stack=[]
+2025-07-28 09:45:19,710 - DEBUG - add_results: ((52, /b'Q'),)
+2025-07-28 09:45:19,730 - DEBUG - nextobject: (52, /b'Q')
+2025-07-28 09:45:19,740 - DEBUG - exec: Q
+2025-07-28 09:45:19,757 - DEBUG - nexttoken: (54, /b'q')
+2025-07-28 09:45:19,771 - DEBUG - do_keyword: pos=54, token=/b'q', stack=[]
+2025-07-28 09:45:19,778 - DEBUG - add_results: ((54, /b'q'),)
+2025-07-28 09:45:19,795 - DEBUG - nextobject: (54, /b'q')
+2025-07-28 09:45:19,807 - DEBUG - exec: q
+2025-07-28 09:45:19,823 - DEBUG - nexttoken: (56, 0)
+2025-07-28 09:45:19,837 - DEBUG - add_results: ((56, 0),)
+2025-07-28 09:45:19,840 - DEBUG - nextobject: (56, 0)
+2025-07-28 09:45:19,862 - DEBUG - nexttoken: (58, 0)
+2025-07-28 09:45:19,873 - DEBUG - add_results: ((58, 0),)
+2025-07-28 09:45:19,892 - DEBUG - nextobject: (58, 0)
+2025-07-28 09:45:19,908 - DEBUG - nexttoken: (60, 0)
+2025-07-28 09:45:19,913 - DEBUG - add_results: ((60, 0),)
+2025-07-28 09:45:19,930 - DEBUG - nextobject: (60, 0)
+2025-07-28 09:45:19,941 - DEBUG - nexttoken: (62, /b'rg')
+2025-07-28 09:45:19,957 - DEBUG - do_keyword: pos=62, token=/b'rg', stack=[]
+2025-07-28 09:45:19,974 - DEBUG - add_results: ((62, /b'rg'),)
+2025-07-28 09:45:19,992 - DEBUG - nextobject: (62, /b'rg')
+2025-07-28 09:45:20,013 - DEBUG - exec: rg [0, 0, 0]
+2025-07-28 09:45:20,024 - DEBUG - nexttoken: (65, 612.4799805)
+2025-07-28 09:45:20,040 - DEBUG - add_results: ((65, 612.4799805),)
+2025-07-28 09:45:20,058 - DEBUG - nextobject: (65, 612.4799805)
+2025-07-28 09:45:20,074 - DEBUG - nexttoken: (77, 0)
+2025-07-28 09:45:20,081 - DEBUG - add_results: ((77, 0),)
+2025-07-28 09:45:20,097 - DEBUG - nextobject: (77, 0)
+2025-07-28 09:45:20,107 - DEBUG - nexttoken: (79, 0)
+2025-07-28 09:45:20,124 - DEBUG - add_results: ((79, 0),)
+2025-07-28 09:45:20,140 - DEBUG - nextobject: (79, 0)
+2025-07-28 09:45:20,146 - DEBUG - nexttoken: (81, 792.960022)
+2025-07-28 09:45:20,162 - DEBUG - add_results: ((81, 792.960022),)
+2025-07-28 09:45:20,180 - DEBUG - nextobject: (81, 792.960022)
+2025-07-28 09:45:20,190 - DEBUG - nexttoken: (92, 0)
+2025-07-28 09:45:20,211 - DEBUG - add_results: ((92, 0),)
+2025-07-28 09:45:20,225 - DEBUG - nextobject: (92, 0)
+2025-07-28 09:45:20,241 - DEBUG - nexttoken: (94, -1.4400177)
+2025-07-28 09:45:20,255 - DEBUG - add_results: ((94, -1.4400177),)
+2025-07-28 09:45:20,262 - DEBUG - nextobject: (94, -1.4400177)
+2025-07-28 09:45:20,279 - DEBUG - nexttoken: (105, /b'cm')
+2025-07-28 09:45:20,290 - DEBUG - do_keyword: pos=105, token=/b'cm', stack=[]
+2025-07-28 09:45:20,307 - DEBUG - add_results: ((105, /b'cm'),)
+2025-07-28 09:45:20,323 - DEBUG - nextobject: (105, /b'cm')
+2025-07-28 09:45:20,337 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:45:20,359 - DEBUG - nexttoken: (108, /'Im1')
+2025-07-28 09:45:20,371 - DEBUG - add_results: ((108, /'Im1'),)
+2025-07-28 09:45:20,388 - DEBUG - nextobject: (108, /'Im1')
+2025-07-28 09:45:20,391 - DEBUG - nexttoken: (113, /b'Do')
+2025-07-28 09:45:20,411 - DEBUG - do_keyword: pos=113, token=/b'Do', stack=[]
+2025-07-28 09:45:20,427 - DEBUG - add_results: ((113, /b'Do'),)
+2025-07-28 09:45:20,438 - DEBUG - nextobject: (113, /b'Do')
+2025-07-28 09:45:20,454 - DEBUG - exec: Do [/'Im1']
+2025-07-28 09:45:20,459 - DEBUG - getobj: objid=8
+2025-07-28 09:45:20,478 - DEBUG - seek: 154282
+2025-07-28 09:45:20,492 - DEBUG - nexttoken: (154282, 8)
+2025-07-28 09:45:20,513 - DEBUG - nexttoken: (154284, 0)
+2025-07-28 09:45:20,527 - DEBUG - nexttoken: (154286, /b'obj')
+2025-07-28 09:45:20,538 - DEBUG - nexttoken: (154290, /b'<<')
+2025-07-28 09:45:20,559 - DEBUG - start_type: pos=154290, type='d'
+2025-07-28 09:45:20,571 - DEBUG - nexttoken: (154292, /'Subtype')
+2025-07-28 09:45:20,588 - DEBUG - nexttoken: (154300, /'Image')
+2025-07-28 09:45:20,603 - DEBUG - nexttoken: (154306, /'Length')
+2025-07-28 09:45:20,614 - DEBUG - nexttoken: (154314, 24478)
+2025-07-28 09:45:20,633 - DEBUG - nexttoken: (154319, /'Filter')
+2025-07-28 09:45:20,654 - DEBUG - nexttoken: (154326, /'CCITTFaxDecode')
+2025-07-28 09:45:20,674 - DEBUG - nexttoken: (154341, /'Name')
+2025-07-28 09:45:20,690 - DEBUG - nexttoken: (154346, /'X')
+2025-07-28 09:45:20,706 - DEBUG - nexttoken: (154348, /'ImageMask')
+2025-07-28 09:45:20,721 - DEBUG - nexttoken: (154359, True)
+2025-07-28 09:45:20,723 - DEBUG - nexttoken: (154363, /'eCopyMaskColor')
+2025-07-28 09:45:20,745 - DEBUG - nexttoken: (154379, 0)
+2025-07-28 09:45:20,762 - DEBUG - nexttoken: (154380, /'BitsPerComponent')
+2025-07-28 09:45:20,774 - DEBUG - nexttoken: (154398, 1)
+2025-07-28 09:45:20,790 - DEBUG - nexttoken: (154399, /'Width')
+2025-07-28 09:45:20,806 - DEBUG - nexttoken: (154406, 2552)
+2025-07-28 09:45:20,822 - DEBUG - nexttoken: (154410, /'DecodeParms')
+2025-07-28 09:45:20,836 - DEBUG - nexttoken: (154422, /b'<<')
+2025-07-28 09:45:20,843 - DEBUG - start_type: pos=154422, type='d'
+2025-07-28 09:45:20,861 - DEBUG - nexttoken: (154424, /'K')
+2025-07-28 09:45:20,872 - DEBUG - nexttoken: (154427, -1)
+2025-07-28 09:45:20,889 - DEBUG - nexttoken: (154429, /'Columns')
+2025-07-28 09:45:20,907 - DEBUG - nexttoken: (154438, 2552)
+2025-07-28 09:45:20,924 - DEBUG - nexttoken: (154442, /'Rows')
+2025-07-28 09:45:20,939 - DEBUG - nexttoken: (154448, 3304)
+2025-07-28 09:45:20,956 - DEBUG - nexttoken: (154452, /b'>>')
+2025-07-28 09:45:20,973 - DEBUG - end_type: pos=154422, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:45:20,989 - DEBUG - nexttoken: (154454, /'Height')
+2025-07-28 09:45:21,007 - DEBUG - nexttoken: (154462, 3304)
+2025-07-28 09:45:21,024 - DEBUG - nexttoken: (154466, /'Type')
+2025-07-28 09:45:21,038 - DEBUG - nexttoken: (154471, /'XObject')
+2025-07-28 09:45:21,052 - DEBUG - nexttoken: (154479, /b'>>')
+2025-07-28 09:45:21,067 - DEBUG - end_type: pos=154290, type='d', objs=[/'Subtype', /'Image', /'Length', 24478, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 0, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:45:21,084 - DEBUG - nexttoken: (154481, /b'stream')
+2025-07-28 09:45:21,092 - DEBUG - do_keyword: pos=154481, token=/b'stream', stack=[(154290, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:45:21,107 - DEBUG - seek: 154481
+2025-07-28 09:45:21,123 - DEBUG - nextline: 154481, b'stream\r\n'
+2025-07-28 09:45:21,140 - DEBUG - seek: 178967
+2025-07-28 09:45:21,157 - DEBUG - nextline: 178967, b'\r\n'
+2025-07-28 09:45:21,176 - DEBUG - nextline: 178969, b'endstream\r'
+2025-07-28 09:45:21,192 - DEBUG - seek: 178969
+2025-07-28 09:45:21,207 - DEBUG - Stream: pos=154489, objlen=24480, dic={'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:45:21,223 - DEBUG - nexttoken: (178969, /b'endstream')
+2025-07-28 09:45:21,240 - DEBUG - do_keyword: pos=178969, token=/b'endstream', stack=[(154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:45:21,259 - DEBUG - nexttoken: (178979, /b'endobj')
+2025-07-28 09:45:21,277 - DEBUG - do_keyword: pos=178979, token=/b'endobj', stack=[(154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (178969, /b'endstream')]
+2025-07-28 09:45:21,290 - DEBUG - add_results: ((154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (178969, /b'endstream'))
+2025-07-28 09:45:21,307 - DEBUG - nextobject: (154489, <PDFStream(None): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:45:21,324 - DEBUG - register: objid=8: <PDFStream(8): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:21,340 - DEBUG - Processing xobj: <PDFStream(8): raw=24478, {'Subtype': /'Image', 'Length': 24478, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:21,357 - DEBUG - nexttoken: (116, /b'Q')
+2025-07-28 09:45:21,370 - DEBUG - do_keyword: pos=116, token=/b'Q', stack=[]
+2025-07-28 09:45:21,386 - DEBUG - add_results: ((116, /b'Q'),)
+2025-07-28 09:45:21,394 - DEBUG - nextobject: (116, /b'Q')
+2025-07-28 09:45:21,421 - DEBUG - exec: Q
+2025-07-28 09:45:21,438 - DEBUG - nexttoken: (118, /b'q')
+2025-07-28 09:45:21,454 - DEBUG - do_keyword: pos=118, token=/b'q', stack=[]
+2025-07-28 09:45:21,474 - DEBUG - add_results: ((118, /b'q'),)
+2025-07-28 09:45:21,488 - DEBUG - nextobject: (118, /b'q')
+2025-07-28 09:45:21,507 - DEBUG - exec: q
+2025-07-28 09:45:21,524 - DEBUG - nexttoken: (120, 0.098)
+2025-07-28 09:45:21,540 - DEBUG - add_results: ((120, 0.098),)
+2025-07-28 09:45:21,556 - DEBUG - nextobject: (120, 0.098)
+2025-07-28 09:45:21,578 - DEBUG - nexttoken: (126, 0.588)
+2025-07-28 09:45:21,592 - DEBUG - add_results: ((126, 0.588),)
+2025-07-28 09:45:21,608 - DEBUG - nextobject: (126, 0.588)
+2025-07-28 09:45:21,624 - DEBUG - nexttoken: (132, 0.302)
+2025-07-28 09:45:21,640 - DEBUG - add_results: ((132, 0.302),)
+2025-07-28 09:45:21,660 - DEBUG - nextobject: (132, 0.302)
+2025-07-28 09:45:21,673 - DEBUG - nexttoken: (138, /b'rg')
+2025-07-28 09:45:21,690 - DEBUG - do_keyword: pos=138, token=/b'rg', stack=[]
+2025-07-28 09:45:21,706 - DEBUG - add_results: ((138, /b'rg'),)
+2025-07-28 09:45:21,723 - DEBUG - nextobject: (138, /b'rg')
+2025-07-28 09:45:21,739 - DEBUG - exec: rg [0.098, 0.588, 0.302]
+2025-07-28 09:45:21,757 - DEBUG - nexttoken: (141, 612.4799805)
+2025-07-28 09:45:21,773 - DEBUG - add_results: ((141, 612.4799805),)
+2025-07-28 09:45:21,791 - DEBUG - nextobject: (141, 612.4799805)
+2025-07-28 09:45:21,807 - DEBUG - nexttoken: (153, 0)
+2025-07-28 09:45:21,824 - DEBUG - add_results: ((153, 0),)
+2025-07-28 09:45:21,839 - DEBUG - nextobject: (153, 0)
+2025-07-28 09:45:21,856 - DEBUG - nexttoken: (155, 0)
+2025-07-28 09:45:21,880 - DEBUG - add_results: ((155, 0),)
+2025-07-28 09:45:21,896 - DEBUG - nextobject: (155, 0)
+2025-07-28 09:45:21,907 - DEBUG - nexttoken: (157, 792.960022)
+2025-07-28 09:45:21,923 - DEBUG - add_results: ((157, 792.960022),)
+2025-07-28 09:45:21,941 - DEBUG - nextobject: (157, 792.960022)
+2025-07-28 09:45:21,956 - DEBUG - nexttoken: (168, 0)
+2025-07-28 09:45:21,981 - DEBUG - add_results: ((168, 0),)
+2025-07-28 09:45:21,997 - DEBUG - nextobject: (168, 0)
+2025-07-28 09:45:22,007 - DEBUG - nexttoken: (170, -1.4400177)
+2025-07-28 09:45:22,030 - DEBUG - add_results: ((170, -1.4400177),)
+2025-07-28 09:45:22,046 - DEBUG - nextobject: (170, -1.4400177)
+2025-07-28 09:45:22,071 - DEBUG - nexttoken: (181, /b'cm')
+2025-07-28 09:45:22,088 - DEBUG - do_keyword: pos=181, token=/b'cm', stack=[]
+2025-07-28 09:45:22,105 - DEBUG - add_results: ((181, /b'cm'),)
+2025-07-28 09:45:22,121 - DEBUG - nextobject: (181, /b'cm')
+2025-07-28 09:45:22,138 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:45:22,156 - DEBUG - nexttoken: (184, /'Im2')
+2025-07-28 09:45:22,173 - DEBUG - add_results: ((184, /'Im2'),)
+2025-07-28 09:45:22,190 - DEBUG - nextobject: (184, /'Im2')
+2025-07-28 09:45:22,206 - DEBUG - nexttoken: (189, /b'Do')
+2025-07-28 09:45:22,223 - DEBUG - do_keyword: pos=189, token=/b'Do', stack=[]
+2025-07-28 09:45:22,241 - DEBUG - add_results: ((189, /b'Do'),)
+2025-07-28 09:45:22,257 - DEBUG - nextobject: (189, /b'Do')
+2025-07-28 09:45:22,274 - DEBUG - exec: Do [/'Im2']
+2025-07-28 09:45:22,290 - DEBUG - getobj: objid=10
+2025-07-28 09:45:22,308 - DEBUG - seek: 178986
+2025-07-28 09:45:22,323 - DEBUG - nexttoken: (178986, 10)
+2025-07-28 09:45:22,341 - DEBUG - nexttoken: (178989, 0)
+2025-07-28 09:45:22,356 - DEBUG - nexttoken: (178991, /b'obj')
+2025-07-28 09:45:22,373 - DEBUG - nexttoken: (178995, /b'<<')
+2025-07-28 09:45:22,389 - DEBUG - start_type: pos=178995, type='d'
+2025-07-28 09:45:22,406 - DEBUG - nexttoken: (178997, /'Subtype')
+2025-07-28 09:45:22,430 - DEBUG - nexttoken: (179005, /'Image')
+2025-07-28 09:45:22,446 - DEBUG - nexttoken: (179011, /'Length')
+2025-07-28 09:45:22,468 - DEBUG - nexttoken: (179019, 3090)
+2025-07-28 09:45:22,492 - DEBUG - nexttoken: (179023, /'Filter')
+2025-07-28 09:45:22,509 - DEBUG - nexttoken: (179030, /'CCITTFaxDecode')
+2025-07-28 09:45:22,524 - DEBUG - nexttoken: (179045, /'Name')
+2025-07-28 09:45:22,544 - DEBUG - nexttoken: (179050, /'X')
+2025-07-28 09:45:22,563 - DEBUG - nexttoken: (179052, /'ImageMask')
+2025-07-28 09:45:22,580 - DEBUG - nexttoken: (179063, True)
+2025-07-28 09:45:22,597 - DEBUG - nexttoken: (179067, /'eCopyMaskColor')
+2025-07-28 09:45:22,614 - DEBUG - nexttoken: (179083, 5084697)
+2025-07-28 09:45:22,630 - DEBUG - nexttoken: (179090, /'BitsPerComponent')
+2025-07-28 09:45:22,646 - DEBUG - nexttoken: (179108, 1)
+2025-07-28 09:45:22,671 - DEBUG - nexttoken: (179109, /'Width')
+2025-07-28 09:45:22,692 - DEBUG - nexttoken: (179116, 2552)
+2025-07-28 09:45:22,707 - DEBUG - nexttoken: (179120, /'DecodeParms')
+2025-07-28 09:45:22,729 - DEBUG - nexttoken: (179132, /b'<<')
+2025-07-28 09:45:22,764 - DEBUG - start_type: pos=179132, type='d'
+2025-07-28 09:45:22,799 - DEBUG - nexttoken: (179134, /'K')
+2025-07-28 09:45:22,831 - DEBUG - nexttoken: (179137, -1)
+2025-07-28 09:45:22,854 - DEBUG - nexttoken: (179139, /'Columns')
+2025-07-28 09:45:22,871 - DEBUG - nexttoken: (179148, 2552)
+2025-07-28 09:45:22,895 - DEBUG - nexttoken: (179152, /'Rows')
+2025-07-28 09:45:22,912 - DEBUG - nexttoken: (179158, 3304)
+2025-07-28 09:45:22,938 - DEBUG - nexttoken: (179162, /b'>>')
+2025-07-28 09:45:22,955 - DEBUG - end_type: pos=179132, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:45:22,971 - DEBUG - nexttoken: (179164, /'Height')
+2025-07-28 09:45:22,988 - DEBUG - nexttoken: (179172, 3304)
+2025-07-28 09:45:23,007 - DEBUG - nexttoken: (179176, /'Type')
+2025-07-28 09:45:23,023 - DEBUG - nexttoken: (179181, /'XObject')
+2025-07-28 09:45:23,045 - DEBUG - nexttoken: (179189, /b'>>')
+2025-07-28 09:45:23,063 - DEBUG - end_type: pos=178995, type='d', objs=[/'Subtype', /'Image', /'Length', 3090, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 5084697, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:45:23,080 - DEBUG - nexttoken: (179191, /b'stream')
+2025-07-28 09:45:23,107 - DEBUG - do_keyword: pos=179191, token=/b'stream', stack=[(178995, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:45:23,123 - DEBUG - seek: 179191
+2025-07-28 09:45:23,145 - DEBUG - nextline: 179191, b'stream\r\n'
+2025-07-28 09:45:23,169 - DEBUG - seek: 182289
+2025-07-28 09:45:23,187 - DEBUG - nextline: 182289, b'\r\n'
+2025-07-28 09:45:23,204 - DEBUG - nextline: 182291, b'endstream\r'
+2025-07-28 09:45:23,223 - DEBUG - seek: 182291
+2025-07-28 09:45:23,248 - DEBUG - Stream: pos=179199, objlen=3092, dic={'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:45:23,265 - DEBUG - nexttoken: (182291, /b'endstream')
+2025-07-28 09:45:23,280 - DEBUG - do_keyword: pos=182291, token=/b'endstream', stack=[(179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:45:23,305 - DEBUG - nexttoken: (182301, /b'endobj')
+2025-07-28 09:45:23,372 - DEBUG - do_keyword: pos=182301, token=/b'endobj', stack=[(179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (182291, /b'endstream')]
+2025-07-28 09:45:23,456 - DEBUG - add_results: ((179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (182291, /b'endstream'))
+2025-07-28 09:45:23,538 - DEBUG - nextobject: (179199, <PDFStream(None): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:45:23,616 - DEBUG - register: objid=10: <PDFStream(10): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:23,689 - DEBUG - Processing xobj: <PDFStream(10): raw=3090, {'Subtype': /'Image', 'Length': 3090, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 5084697, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:23,755 - DEBUG - nexttoken: (192, /b'Q')
+2025-07-28 09:45:23,839 - DEBUG - do_keyword: pos=192, token=/b'Q', stack=[]
+2025-07-28 09:45:23,909 - DEBUG - add_results: ((192, /b'Q'),)
+2025-07-28 09:45:23,988 - DEBUG - nextobject: (192, /b'Q')
+2025-07-28 09:45:24,072 - DEBUG - exec: Q
+2025-07-28 09:45:24,141 - DEBUG - Processing page: <PDFPage: Resources={'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, MediaBox=(0.0, 0.0, 612.0, 792.0)>
+2025-07-28 09:45:24,222 - DEBUG - render_contents: resources={'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, streams=[<PDFStream(16): raw=118, {'Length': 118}>], ctm=(1, 0, 0, 1, -0.0, -0.0)
+2025-07-28 09:45:24,316 - DEBUG - Resource: 'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}
+2025-07-28 09:45:24,396 - DEBUG - Resource: 'ProcSet': [/'PDF', /'ImageB', /'ImageC']
+2025-07-28 09:45:24,498 - DEBUG - seek: 0
+2025-07-28 09:45:24,597 - DEBUG - nexttoken: (0, /b'q')
+2025-07-28 09:45:24,679 - DEBUG - do_keyword: pos=0, token=/b'q', stack=[]
+2025-07-28 09:45:24,768 - DEBUG - add_results: ((0, /b'q'),)
+2025-07-28 09:45:24,839 - DEBUG - nextobject: (0, /b'q')
+2025-07-28 09:45:24,913 - DEBUG - exec: q
+2025-07-28 09:45:24,988 - DEBUG - nexttoken: (2, 612.4799805)
+2025-07-28 09:45:25,070 - DEBUG - add_results: ((2, 612.4799805),)
+2025-07-28 09:45:25,144 - DEBUG - nextobject: (2, 612.4799805)
+2025-07-28 09:45:25,222 - DEBUG - nexttoken: (14, 0)
+2025-07-28 09:45:25,295 - DEBUG - add_results: ((14, 0),)
+2025-07-28 09:45:25,373 - DEBUG - nextobject: (14, 0)
+2025-07-28 09:45:25,446 - DEBUG - nexttoken: (16, 0)
+2025-07-28 09:45:25,529 - DEBUG - add_results: ((16, 0),)
+2025-07-28 09:45:25,605 - DEBUG - nextobject: (16, 0)
+2025-07-28 09:45:25,676 - DEBUG - nexttoken: (18, 792.960022)
+2025-07-28 09:45:25,766 - DEBUG - add_results: ((18, 792.960022),)
+2025-07-28 09:45:25,856 - DEBUG - nextobject: (18, 792.960022)
+2025-07-28 09:45:25,938 - DEBUG - nexttoken: (29, 0)
+2025-07-28 09:45:26,018 - DEBUG - add_results: ((29, 0),)
+2025-07-28 09:45:26,110 - DEBUG - nextobject: (29, 0)
+2025-07-28 09:45:26,179 - DEBUG - nexttoken: (31, -0.960022)
+2025-07-28 09:45:26,255 - DEBUG - add_results: ((31, -0.960022),)
+2025-07-28 09:45:26,328 - DEBUG - nextobject: (31, -0.960022)
+2025-07-28 09:45:26,422 - DEBUG - nexttoken: (41, /b'cm')
+2025-07-28 09:45:26,502 - DEBUG - do_keyword: pos=41, token=/b'cm', stack=[]
+2025-07-28 09:45:26,589 - DEBUG - add_results: ((41, /b'cm'),)
+2025-07-28 09:45:26,661 - DEBUG - nextobject: (41, /b'cm')
+2025-07-28 09:45:26,760 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -0.960022]
+2025-07-28 09:45:26,837 - DEBUG - nexttoken: (44, /'Im0')
+2025-07-28 09:45:26,910 - DEBUG - add_results: ((44, /'Im0'),)
+2025-07-28 09:45:26,995 - DEBUG - nextobject: (44, /'Im0')
+2025-07-28 09:45:27,103 - DEBUG - nexttoken: (49, /b'Do')
+2025-07-28 09:45:27,187 - DEBUG - do_keyword: pos=49, token=/b'Do', stack=[]
+2025-07-28 09:45:27,280 - DEBUG - add_results: ((49, /b'Do'),)
+2025-07-28 09:45:27,362 - DEBUG - nextobject: (49, /b'Do')
+2025-07-28 09:45:27,449 - DEBUG - exec: Do [/'Im0']
+2025-07-28 09:45:27,535 - DEBUG - getobj: objid=13
+2025-07-28 09:45:27,619 - DEBUG - seek: 4269
+2025-07-28 09:45:27,712 - DEBUG - nexttoken: (4269, 13)
+2025-07-28 09:45:27,788 - DEBUG - nexttoken: (4272, 0)
+2025-07-28 09:45:27,874 - DEBUG - nexttoken: (4274, /b'obj')
+2025-07-28 09:45:27,967 - DEBUG - nexttoken: (4278, /b'<<')
+2025-07-28 09:45:28,046 - DEBUG - start_type: pos=4278, type='d'
+2025-07-28 09:45:28,138 - DEBUG - nexttoken: (4280, /'Subtype')
+2025-07-28 09:45:28,220 - DEBUG - nexttoken: (4288, /'Image')
+2025-07-28 09:45:28,296 - DEBUG - nexttoken: (4294, /'Length')
+2025-07-28 09:45:28,403 - DEBUG - nexttoken: (4302, 65290)
+2025-07-28 09:45:28,487 - DEBUG - nexttoken: (4307, /'Filter')
+2025-07-28 09:45:28,579 - DEBUG - nexttoken: (4314, /'DCTDecode')
+2025-07-28 09:45:28,669 - DEBUG - nexttoken: (4324, /'Name')
+2025-07-28 09:45:28,755 - DEBUG - nexttoken: (4329, /'X')
+2025-07-28 09:45:28,835 - DEBUG - nexttoken: (4331, /'BitsPerComponent')
+2025-07-28 09:45:28,925 - DEBUG - nexttoken: (4349, 8)
+2025-07-28 09:45:29,013 - DEBUG - nexttoken: (4350, /'ColorSpace')
+2025-07-28 09:45:29,094 - DEBUG - nexttoken: (4361, /'DeviceRGB')
+2025-07-28 09:45:29,186 - DEBUG - nexttoken: (4371, /'Width')
+2025-07-28 09:45:29,269 - DEBUG - nexttoken: (4378, 1276)
+2025-07-28 09:45:29,355 - DEBUG - nexttoken: (4382, /'DecodeParms')
+2025-07-28 09:45:29,432 - DEBUG - nexttoken: (4394, /b'<<')
+2025-07-28 09:45:29,513 - DEBUG - start_type: pos=4394, type='d'
+2025-07-28 09:45:29,605 - DEBUG - nexttoken: (4396, /'Columns')
+2025-07-28 09:45:29,697 - DEBUG - nexttoken: (4405, 1276)
+2025-07-28 09:45:29,785 - DEBUG - nexttoken: (4409, /'Rows')
+2025-07-28 09:45:29,865 - DEBUG - nexttoken: (4415, 1652)
+2025-07-28 09:45:29,948 - DEBUG - nexttoken: (4419, /'Colors')
+2025-07-28 09:45:30,027 - DEBUG - nexttoken: (4427, 3)
+2025-07-28 09:45:30,113 - DEBUG - nexttoken: (4428, /b'>>')
+2025-07-28 09:45:30,195 - DEBUG - end_type: pos=4394, type='d', objs=[/'Columns', 1276, /'Rows', 1652, /'Colors', 3]
+2025-07-28 09:45:30,276 - DEBUG - nexttoken: (4430, /'Height')
+2025-07-28 09:45:30,360 - DEBUG - nexttoken: (4438, 1652)
+2025-07-28 09:45:30,441 - DEBUG - nexttoken: (4442, /'Type')
+2025-07-28 09:45:30,523 - DEBUG - nexttoken: (4447, /'XObject')
+2025-07-28 09:45:30,611 - DEBUG - nexttoken: (4455, /b'>>')
+2025-07-28 09:45:30,690 - DEBUG - end_type: pos=4278, type='d', objs=[/'Subtype', /'Image', /'Length', 65290, /'Filter', /'DCTDecode', /'Name', /'X', /'BitsPerComponent', 8, /'ColorSpace', /'DeviceRGB', /'Width', 1276, /'DecodeParms', {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, /'Height', 1652, /'Type', /'XObject']
+2025-07-28 09:45:30,772 - DEBUG - nexttoken: (4457, /b'stream')
+2025-07-28 09:45:30,846 - DEBUG - do_keyword: pos=4457, token=/b'stream', stack=[(4278, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'})]
+2025-07-28 09:45:30,932 - DEBUG - seek: 4457
+2025-07-28 09:45:31,038 - DEBUG - nextline: 4457, b'stream\r\n'
+2025-07-28 09:45:31,124 - DEBUG - seek: 69755
+2025-07-28 09:45:31,212 - DEBUG - nextline: 69755, b'\r\n'
+2025-07-28 09:45:31,295 - DEBUG - nextline: 69757, b'endstream\r'
+2025-07-28 09:45:31,385 - DEBUG - seek: 69757
+2025-07-28 09:45:31,471 - DEBUG - Stream: pos=4465, objlen=65292, dic={'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}, data=bytearray(b'\xff\xd8\xff\xe0\x00\x10JFIF')...
+2025-07-28 09:45:31,560 - DEBUG - nexttoken: (69757, /b'endstream')
+2025-07-28 09:45:31,645 - DEBUG - do_keyword: pos=69757, token=/b'endstream', stack=[(4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)]
+2025-07-28 09:45:31,729 - DEBUG - nexttoken: (69767, /b'endobj')
+2025-07-28 09:45:31,811 - DEBUG - do_keyword: pos=69767, token=/b'endobj', stack=[(4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (69757, /b'endstream')]
+2025-07-28 09:45:31,909 - DEBUG - add_results: ((4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>), (69757, /b'endstream'))
+2025-07-28 09:45:31,988 - DEBUG - nextobject: (4465, <PDFStream(None): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>)
+2025-07-28 09:45:32,078 - DEBUG - register: objid=13: <PDFStream(13): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:45:32,170 - DEBUG - Processing xobj: <PDFStream(13): raw=65290, {'Subtype': /'Image', 'Length': 65290, 'Filter': /'DCTDecode', 'Name': /'X', 'BitsPerComponent': 8, 'ColorSpace': /'DeviceRGB', 'Width': 1276, 'DecodeParms': {'Columns': 1276, 'Rows': 1652, 'Colors': 3}, 'Height': 1652, 'Type': /'XObject'}>
+2025-07-28 09:45:32,314 - DEBUG - nexttoken: (52, /b'Q')
+2025-07-28 09:45:32,405 - DEBUG - do_keyword: pos=52, token=/b'Q', stack=[]
+2025-07-28 09:45:32,495 - DEBUG - add_results: ((52, /b'Q'),)
+2025-07-28 09:45:32,591 - DEBUG - nextobject: (52, /b'Q')
+2025-07-28 09:45:32,673 - DEBUG - exec: Q
+2025-07-28 09:45:32,755 - DEBUG - nexttoken: (54, /b'q')
+2025-07-28 09:45:32,836 - DEBUG - do_keyword: pos=54, token=/b'q', stack=[]
+2025-07-28 09:45:32,932 - DEBUG - add_results: ((54, /b'q'),)
+2025-07-28 09:45:33,019 - DEBUG - nextobject: (54, /b'q')
+2025-07-28 09:45:33,108 - DEBUG - exec: q
+2025-07-28 09:45:33,202 - DEBUG - nexttoken: (56, 0)
+2025-07-28 09:45:33,292 - DEBUG - add_results: ((56, 0),)
+2025-07-28 09:45:33,372 - DEBUG - nextobject: (56, 0)
+2025-07-28 09:45:33,457 - DEBUG - nexttoken: (58, 0)
+2025-07-28 09:45:33,575 - DEBUG - add_results: ((58, 0),)
+2025-07-28 09:45:33,670 - DEBUG - nextobject: (58, 0)
+2025-07-28 09:45:33,761 - DEBUG - nexttoken: (60, 0)
+2025-07-28 09:45:33,848 - DEBUG - add_results: ((60, 0),)
+2025-07-28 09:45:33,933 - DEBUG - nextobject: (60, 0)
+2025-07-28 09:45:34,023 - DEBUG - nexttoken: (62, /b'rg')
+2025-07-28 09:45:34,121 - DEBUG - do_keyword: pos=62, token=/b'rg', stack=[]
+2025-07-28 09:45:34,215 - DEBUG - add_results: ((62, /b'rg'),)
+2025-07-28 09:45:34,302 - DEBUG - nextobject: (62, /b'rg')
+2025-07-28 09:45:34,391 - DEBUG - exec: rg [0, 0, 0]
+2025-07-28 09:45:34,475 - DEBUG - nexttoken: (65, 612.4799805)
+2025-07-28 09:45:34,572 - DEBUG - add_results: ((65, 612.4799805),)
+2025-07-28 09:45:34,655 - DEBUG - nextobject: (65, 612.4799805)
+2025-07-28 09:45:34,739 - DEBUG - nexttoken: (77, 0)
+2025-07-28 09:45:34,839 - DEBUG - add_results: ((77, 0),)
+2025-07-28 09:45:34,956 - DEBUG - nextobject: (77, 0)
+2025-07-28 09:45:35,045 - DEBUG - nexttoken: (79, 0)
+2025-07-28 09:45:35,138 - DEBUG - add_results: ((79, 0),)
+2025-07-28 09:45:35,219 - DEBUG - nextobject: (79, 0)
+2025-07-28 09:45:35,309 - DEBUG - nexttoken: (81, 792.960022)
+2025-07-28 09:45:35,407 - DEBUG - add_results: ((81, 792.960022),)
+2025-07-28 09:45:35,491 - DEBUG - nextobject: (81, 792.960022)
+2025-07-28 09:45:35,589 - DEBUG - nexttoken: (92, 0)
+2025-07-28 09:45:35,677 - DEBUG - add_results: ((92, 0),)
+2025-07-28 09:45:35,776 - DEBUG - nextobject: (92, 0)
+2025-07-28 09:45:35,857 - DEBUG - nexttoken: (94, -1.4400177)
+2025-07-28 09:45:35,921 - DEBUG - add_results: ((94, -1.4400177),)
+2025-07-28 09:45:36,020 - DEBUG - nextobject: (94, -1.4400177)
+2025-07-28 09:45:36,127 - DEBUG - nexttoken: (105, /b'cm')
+2025-07-28 09:45:36,237 - DEBUG - do_keyword: pos=105, token=/b'cm', stack=[]
+2025-07-28 09:45:36,313 - DEBUG - add_results: ((105, /b'cm'),)
+2025-07-28 09:45:36,404 - DEBUG - nextobject: (105, /b'cm')
+2025-07-28 09:45:36,492 - DEBUG - exec: cm [612.4799805, 0, 0, 792.960022, 0, -1.4400177]
+2025-07-28 09:45:36,589 - DEBUG - nexttoken: (108, /'Im1')
+2025-07-28 09:45:36,679 - DEBUG - add_results: ((108, /'Im1'),)
+2025-07-28 09:45:36,775 - DEBUG - nextobject: (108, /'Im1')
+2025-07-28 09:45:36,857 - DEBUG - nexttoken: (113, /b'Do')
+2025-07-28 09:45:36,957 - DEBUG - do_keyword: pos=113, token=/b'Do', stack=[]
+2025-07-28 09:45:37,045 - DEBUG - add_results: ((113, /b'Do'),)
+2025-07-28 09:45:37,138 - DEBUG - nextobject: (113, /b'Do')
+2025-07-28 09:45:37,238 - DEBUG - exec: Do [/'Im1']
+2025-07-28 09:45:37,319 - DEBUG - getobj: objid=15
+2025-07-28 09:45:37,412 - DEBUG - seek: 69774
+2025-07-28 09:45:37,511 - DEBUG - nexttoken: (69774, 15)
+2025-07-28 09:45:37,605 - DEBUG - nexttoken: (69777, 0)
+2025-07-28 09:45:37,705 - DEBUG - nexttoken: (69779, /b'obj')
+2025-07-28 09:45:37,805 - DEBUG - nexttoken: (69783, /b'<<')
+2025-07-28 09:45:39,420 - DEBUG - start_type: pos=69783, type='d'
+2025-07-28 09:45:39,471 - DEBUG - nexttoken: (69785, /'Subtype')
+2025-07-28 09:45:39,521 - DEBUG - nexttoken: (69793, /'Image')
+2025-07-28 09:45:39,573 - DEBUG - nexttoken: (69799, /'Length')
+2025-07-28 09:45:39,623 - DEBUG - nexttoken: (69807, 27874)
+2025-07-28 09:45:39,683 - DEBUG - nexttoken: (69812, /'Filter')
+2025-07-28 09:45:39,741 - DEBUG - nexttoken: (69819, /'CCITTFaxDecode')
+2025-07-28 09:45:39,806 - DEBUG - nexttoken: (69834, /'Name')
+2025-07-28 09:45:39,863 - DEBUG - nexttoken: (69839, /'X')
+2025-07-28 09:45:39,912 - DEBUG - nexttoken: (69841, /'ImageMask')
+2025-07-28 09:45:39,972 - DEBUG - nexttoken: (69852, True)
+2025-07-28 09:45:40,043 - DEBUG - nexttoken: (69856, /'eCopyMaskColor')
+2025-07-28 09:45:40,101 - DEBUG - nexttoken: (69872, 0)
+2025-07-28 09:45:40,164 - DEBUG - nexttoken: (69873, /'BitsPerComponent')
+2025-07-28 09:45:40,212 - DEBUG - nexttoken: (69891, 1)
+2025-07-28 09:45:40,278 - DEBUG - nexttoken: (69892, /'Width')
+2025-07-28 09:45:40,328 - DEBUG - nexttoken: (69899, 2552)
+2025-07-28 09:45:40,389 - DEBUG - nexttoken: (69903, /'DecodeParms')
+2025-07-28 09:45:40,454 - DEBUG - nexttoken: (69915, /b'<<')
+2025-07-28 09:45:40,509 - DEBUG - start_type: pos=69915, type='d'
+2025-07-28 09:45:40,572 - DEBUG - nexttoken: (69917, /'K')
+2025-07-28 09:45:40,624 - DEBUG - nexttoken: (69920, -1)
+2025-07-28 09:45:40,689 - DEBUG - nexttoken: (69922, /'Columns')
+2025-07-28 09:45:40,755 - DEBUG - nexttoken: (69931, 2552)
+2025-07-28 09:45:40,805 - DEBUG - nexttoken: (69935, /'Rows')
+2025-07-28 09:45:40,869 - DEBUG - nexttoken: (69941, 3304)
+2025-07-28 09:45:40,930 - DEBUG - nexttoken: (69945, /b'>>')
+2025-07-28 09:45:40,989 - DEBUG - end_type: pos=69915, type='d', objs=[/'K', -1, /'Columns', 2552, /'Rows', 3304]
+2025-07-28 09:45:41,058 - DEBUG - nexttoken: (69947, /'Height')
+2025-07-28 09:45:41,113 - DEBUG - nexttoken: (69955, 3304)
+2025-07-28 09:45:41,172 - DEBUG - nexttoken: (69959, /'Type')
+2025-07-28 09:45:41,236 - DEBUG - nexttoken: (69964, /'XObject')
+2025-07-28 09:45:41,293 - DEBUG - nexttoken: (69972, /b'>>')
+2025-07-28 09:45:41,357 - DEBUG - end_type: pos=69783, type='d', objs=[/'Subtype', /'Image', /'Length', 27874, /'Filter', /'CCITTFaxDecode', /'Name', /'X', /'ImageMask', True, /'eCopyMaskColor', 0, /'BitsPerComponent', 1, /'Width', 2552, /'DecodeParms', {'K': -1, 'Columns': 2552, 'Rows': 3304}, /'Height', 3304, /'Type', /'XObject']
+2025-07-28 09:45:41,414 - DEBUG - nexttoken: (69974, /b'stream')
+2025-07-28 09:45:41,472 - DEBUG - do_keyword: pos=69974, token=/b'stream', stack=[(69783, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'})]
+2025-07-28 09:45:41,537 - DEBUG - seek: 69974
+2025-07-28 09:45:41,595 - DEBUG - nextline: 69974, b'stream\r\n'
+2025-07-28 09:45:41,657 - DEBUG - seek: 97856
+2025-07-28 09:45:41,713 - DEBUG - nextline: 97856, b'\r\n'
+2025-07-28 09:45:41,779 - DEBUG - nextline: 97858, b'endstream\r'
+2025-07-28 09:45:41,838 - DEBUG - seek: 97858
+2025-07-28 09:45:41,896 - DEBUG - Stream: pos=69982, objlen=27876, dic={'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}, data=bytearray(b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')...
+2025-07-28 09:45:41,960 - DEBUG - nexttoken: (97858, /b'endstream')
+2025-07-28 09:45:42,012 - DEBUG - do_keyword: pos=97858, token=/b'endstream', stack=[(69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)]
+2025-07-28 09:45:42,079 - DEBUG - nexttoken: (97868, /b'endobj')
+2025-07-28 09:45:42,143 - DEBUG - do_keyword: pos=97868, token=/b'endobj', stack=[(69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (97858, /b'endstream')]
+2025-07-28 09:45:42,258 - DEBUG - add_results: ((69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>), (97858, /b'endstream'))
+2025-07-28 09:45:42,348 - DEBUG - nextobject: (69982, <PDFStream(None): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>)
+2025-07-28 09:45:42,406 - DEBUG - register: objid=15: <PDFStream(15): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:42,479 - DEBUG - Processing xobj: <PDFStream(15): raw=27874, {'Subtype': /'Image', 'Length': 27874, 'Filter': /'CCITTFaxDecode', 'Name': /'X', 'ImageMask': True, 'eCopyMaskColor': 0, 'BitsPerComponent': 1, 'Width': 2552, 'DecodeParms': {'K': -1, 'Columns': 2552, 'Rows': 3304}, 'Height': 3304, 'Type': /'XObject'}>
+2025-07-28 09:45:42,561 - DEBUG - nexttoken: (116, /b'Q')
+2025-07-28 09:45:42,633 - DEBUG - do_keyword: pos=116, token=/b'Q', stack=[]
+2025-07-28 09:45:42,705 - DEBUG - add_results: ((116, /b'Q'),)
+2025-07-28 09:45:42,773 - DEBUG - nextobject: (116, /b'Q')
+2025-07-28 09:45:42,878 - DEBUG - exec: Q
+2025-07-28 09:45:42,977 - DEBUG - getobj: objid=2
+2025-07-28 09:45:43,082 - DEBUG - Pages: Kids=[<PDFObjRef:5>, <PDFObjRef:12>]
+2025-07-28 09:45:43,186 - DEBUG - getobj: objid=5
+2025-07-28 09:45:43,291 - DEBUG - Page: {'Annots': <PDFObjRef:18>, 'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:11>, 'Origin': b'PCL6D9.tmp,0', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:6>, 'Im1': <PDFObjRef:8>, 'Im2': <PDFObjRef:10>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:43,389 - DEBUG - getobj: objid=11
+2025-07-28 09:45:43,490 - DEBUG - getobj: objid=12
+2025-07-28 09:45:43,597 - DEBUG - Page: {'Parent': <PDFObjRef:2>, 'Contents': <PDFObjRef:16>, 'Origin': b'PCL6D9.tmp,1', 'eCopyCompressed': True, 'MediaBox': [0.0, 0.0, 612.0, 792.0], 'Resources': {'XObject': {'Im0': <PDFObjRef:13>, 'Im1': <PDFObjRef:15>}, 'ProcSet': [/'PDF', /'ImageB', /'ImageC']}, 'Type': /'Page'}
+2025-07-28 09:45:43,705 - DEBUG - getobj: objid=16
+2025-07-28 09:45:43,809 - INFO - Error executing 'get tables from PDF': No table found.

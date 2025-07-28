@@ -1,5 +1,5 @@
 
-
+from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
 
 import sys
 import os
@@ -49,6 +49,36 @@ class LoadDataToolItem(ToolBarItemAbstract):
 
 
     
+class getPdfTablePredicate(PredicateBase, QObject):
+    def __init__(self, sentralControl):
+        super().__init__()
+        QObject.__init__(self)
+
+        self.sentralControl = sentralControl
+
+        self.args = {
+
+        }
+
+    def run(self):
+        
+        result = []
+
+        drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
+        tables = drawArea.getAllTables()        
+
+        if not tables:
+            raise ValueError("No table found.")
+            
+        table = tables[0]
+
+        for col_name in table.columns:
+            self.setOutputObject(col_name, result[col_name].tolist())
+            
+        return result
+        
+
+
 class PdfUI(MainUI):
     def __init__(self):
         super().__init__(PLOT_OR_DRAW="PDF")
@@ -60,6 +90,9 @@ class PdfUI(MainUI):
                                                     self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
+
+        pred = getPdfTablePredicate(self.sentralControl)
+        self.all_predicates.addPredicate("PDF", "get tables from PDF", pred)
 
         
 

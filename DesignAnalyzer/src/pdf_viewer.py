@@ -14,6 +14,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPixmap, QImage, QColor, QPainter
 from PyQt5.QtCore import Qt
 
+import logging
+
+logging.getLogger("pdfminer").setLevel(logging.WARNING)
+logging.getLogger("pdfplumber").setLevel(logging.WARNING)
 
 class PDFViewer(QWidget):
     def __init__(self, parent=None):
@@ -50,8 +54,9 @@ class PDFViewer(QWidget):
         # Controls layout (two rows)
         ctrl_layout = QVBoxLayout()
         row1 = QHBoxLayout()
-        self.btn_scroll_top = QPushButton("↑")
-        self.btn_scroll_bottom = QPushButton("↓")
+        # Use Unicode double arrows for up/down
+        self.btn_scroll_top = QPushButton("⇑")
+        self.btn_scroll_bottom = QPushButton("⇓")
         self.search_input = QLineEdit()
         self.btn_search_up = QPushButton("↑")
         self.btn_search_down = QPushButton("↓")
@@ -64,8 +69,10 @@ class PDFViewer(QWidget):
         row2 = QHBoxLayout()
         self.btn_zoom_in = QPushButton("Z+")
         self.btn_zoom_out = QPushButton("Z-")
+        self.btn_zoom_fit = QPushButton("Zf")  # New button for fit/original zoom
         row2.addWidget(self.btn_zoom_in)
         row2.addWidget(self.btn_zoom_out)
+        row2.addWidget(self.btn_zoom_fit)
 
         ctrl_layout.addLayout(row1)
         ctrl_layout.addLayout(row2)
@@ -78,6 +85,16 @@ class PDFViewer(QWidget):
         self.btn_search_down.clicked.connect(lambda: self.search_text(direction='down'))
         self.btn_zoom_in.clicked.connect(self.zoom_in)
         self.btn_zoom_out.clicked.connect(self.zoom_out)
+        self.btn_zoom_fit.clicked.connect(self.zoom_fit)  # Connect new button
+
+    def zoom_fit(self):
+        """Reset zoom to original (fit) size."""
+        self.zoom_factor = 1.0
+        if self.current_pdf_file:
+            self.loadPdf(self.current_pdf_file)
+            # Restore highlights if a search is active
+            if hasattr(self, '_last_search_text') and self._last_search_text and self.matches:
+                self.search_text(direction='down')
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -198,7 +215,6 @@ class PDFViewer(QWidget):
         with pdfplumber.open(self.current_pdf_file) as pdf:
             for page in pdf.pages:
                 for table in page.extract_tables():
-                    import pandas as pd
                     tables.append(pd.DataFrame(table))
         return tables
 
