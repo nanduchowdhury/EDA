@@ -24,6 +24,8 @@ class PDFViewer(QWidget):
         self.matches = []
         self.current_match_index = -1
 
+        self.original_images = []
+
         self.initUI()
 
         self.setLayout(self.layout)
@@ -35,12 +37,12 @@ class PDFViewer(QWidget):
 
         self.content_widget = QWidget()
         self.content_layout = QVBoxLayout(self.content_widget)
-
         self.scroll_area.setWidget(self.content_widget)
         self.layout.addWidget(self.scroll_area)
 
-        # Control box (top-right floating)
+        # Control box (top-right floating, NOT added to layout)
         self.control_box = QFrame(self)
+        self.control_box.setParent(self)  # Explicitly set parent to self
         self.control_box.setFrameShape(QFrame.Box)
         self.control_box.setStyleSheet("background-color: white; border: 1px solid gray;")
         self.control_box.setFixedSize(300, 60)
@@ -60,7 +62,7 @@ class PDFViewer(QWidget):
         ctrl_layout.addWidget(self.btn_search_down)
         self.control_box.setLayout(ctrl_layout)
 
-        self.layout.addWidget(self.control_box, alignment=Qt.AlignTop | Qt.AlignRight)
+        # Do NOT add self.control_box to self.layout
 
         # Connect
         self.btn_scroll_top.clicked.connect(self.scroll_to_top)
@@ -76,6 +78,7 @@ class PDFViewer(QWidget):
         self.current_pdf_file = pdf_file
         self.pdf_doc = fitz.open(pdf_file)
         self.page_images.clear()
+        self.original_images = []
         self.matches.clear()
         self.current_match_index = -1
 
@@ -88,7 +91,6 @@ class PDFViewer(QWidget):
         # Render pages
         for page in self.pdf_doc:
             pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
-            # Choose format based on alpha
             if pix.alpha:
                 img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGBA8888)
             else:
@@ -99,6 +101,7 @@ class PDFViewer(QWidget):
             label.setPixmap(QPixmap.fromImage(img))
             self.content_layout.addWidget(label)
             self.page_images.append((page, label))
+            self.original_images.append(img)  # Store original image for highlighting
 
 
     def scroll_to_top(self):
@@ -113,9 +116,17 @@ class PDFViewer(QWidget):
         if not text or not self.pdf_doc:
             return
 
+        # Always clear previous matches and highlights when the search text changes
+        if not hasattr(self, '_last_search_text') or self._last_search_text != text:
+            self.matches = []
+            self.current_match_index = -1
+            self._last_search_text = text
+            # Restore all pages to original images (remove previous highlights)
+            for i, (page, label) in enumerate(self.page_images):
+                label.setPixmap(QPixmap.fromImage(self.original_images[i]))
+
         if not self.matches:
             # Collect all matches across pages
-            self.matches = []
             for page_num, page in enumerate(self.pdf_doc):
                 text_instances = page.search_for(text, quads=False)
                 for inst in text_instances:
@@ -136,8 +147,8 @@ class PDFViewer(QWidget):
     def highlight_match(self, page_num, rect):
         page, label = self.page_images[page_num]
 
-        pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
-        img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGBA8888)
+        # Start from the original image for this page
+        img = self.original_images[page_num].copy()
 
         # Draw rectangle highlight
         painter = QPainter(img)
