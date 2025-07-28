@@ -880,6 +880,7 @@ class ManageArgs(QWidget):
         - Edit text = default
         - Edit tooltip = example
         """
+        i = 0
         for i, (key, meta) in enumerate(args.items()):
             if i >= self.max_args:
                 break  # ignore excess

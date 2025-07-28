@@ -73,7 +73,7 @@ class getPdfTablePredicate(PredicateBase, QObject):
         table = tables[0]
 
         for col_name in table.columns:
-            self.setOutputObject(col_name, result[col_name].tolist())
+            self.setOutputObject(col_name, table[col_name].tolist())
             
         return result
         
