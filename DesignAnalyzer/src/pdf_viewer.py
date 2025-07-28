@@ -25,9 +25,9 @@ class PDFViewer(QWidget):
         self.current_match_index = -1
 
         self.original_images = []
+        self.zoom_factor = 2.0  # Default zoom
 
         self.initUI()
-
         self.setLayout(self.layout)
 
     def initUI(self):
@@ -42,33 +42,42 @@ class PDFViewer(QWidget):
 
         # Control box (top-right floating, NOT added to layout)
         self.control_box = QFrame(self)
-        self.control_box.setParent(self)  # Explicitly set parent to self
+        self.control_box.setParent(self)
         self.control_box.setFrameShape(QFrame.Box)
         self.control_box.setStyleSheet("background-color: white; border: 1px solid gray;")
-        self.control_box.setFixedSize(300, 60)
+        self.control_box.setFixedSize(340, 100)
 
-        # Controls layout
-        ctrl_layout = QHBoxLayout()
+        # Controls layout (two rows)
+        ctrl_layout = QVBoxLayout()
+        row1 = QHBoxLayout()
         self.btn_scroll_top = QPushButton("↑")
         self.btn_scroll_bottom = QPushButton("↓")
         self.search_input = QLineEdit()
         self.btn_search_up = QPushButton("↑")
         self.btn_search_down = QPushButton("↓")
+        row1.addWidget(self.btn_scroll_top)
+        row1.addWidget(self.btn_scroll_bottom)
+        row1.addWidget(self.search_input)
+        row1.addWidget(self.btn_search_up)
+        row1.addWidget(self.btn_search_down)
 
-        ctrl_layout.addWidget(self.btn_scroll_top)
-        ctrl_layout.addWidget(self.btn_scroll_bottom)
-        ctrl_layout.addWidget(self.search_input)
-        ctrl_layout.addWidget(self.btn_search_up)
-        ctrl_layout.addWidget(self.btn_search_down)
+        row2 = QHBoxLayout()
+        self.btn_zoom_in = QPushButton("Z+")
+        self.btn_zoom_out = QPushButton("Z-")
+        row2.addWidget(self.btn_zoom_in)
+        row2.addWidget(self.btn_zoom_out)
+
+        ctrl_layout.addLayout(row1)
+        ctrl_layout.addLayout(row2)
         self.control_box.setLayout(ctrl_layout)
-
-        # Do NOT add self.control_box to self.layout
 
         # Connect
         self.btn_scroll_top.clicked.connect(self.scroll_to_top)
         self.btn_scroll_bottom.clicked.connect(self.scroll_to_bottom)
         self.btn_search_up.clicked.connect(lambda: self.search_text(direction='up'))
         self.btn_search_down.clicked.connect(lambda: self.search_text(direction='down'))
+        self.btn_zoom_in.clicked.connect(self.zoom_in)
+        self.btn_zoom_out.clicked.connect(self.zoom_out)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -90,7 +99,7 @@ class PDFViewer(QWidget):
 
         # Render pages
         for page in self.pdf_doc:
-            pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
+            pix = page.get_pixmap(matrix=fitz.Matrix(self.zoom_factor, self.zoom_factor))
             if pix.alpha:
                 img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGBA8888)
             else:
@@ -102,6 +111,22 @@ class PDFViewer(QWidget):
             self.content_layout.addWidget(label)
             self.page_images.append((page, label))
             self.original_images.append(img)  # Store original image for highlighting
+
+    def zoom_in(self):
+        self.zoom_factor = min(self.zoom_factor + 0.25, 5.0)
+        if self.current_pdf_file:
+            self.loadPdf(self.current_pdf_file)
+            # Restore highlights if a search is active
+            if hasattr(self, '_last_search_text') and self._last_search_text and self.matches:
+                self.search_text(direction='down')
+
+    def zoom_out(self):
+        self.zoom_factor = max(self.zoom_factor - 0.25, 0.5)
+        if self.current_pdf_file:
+            self.loadPdf(self.current_pdf_file)
+            # Restore highlights if a search is active
+            if hasattr(self, '_last_search_text') and self._last_search_text and self.matches:
+                self.search_text(direction='down')
 
 
     def scroll_to_top(self):
@@ -155,7 +180,7 @@ class PDFViewer(QWidget):
         painter.setPen(Qt.NoPen)
         painter.setBrush(QColor(255, 255, 0, 100))  # Yellow transparent
         r = fitz.Rect(rect)
-        zoom = 2
+        zoom = self.zoom_factor  # Use current zoom factor!
         painter.drawRect(int(r.x0 * zoom), int(r.y0 * zoom), int(r.width * zoom), int(r.height * zoom))
         painter.end()
 
