@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 import json
 import re
 
+from datetime import datetime
 import logging
 
 import sqlite3
@@ -25,6 +26,8 @@ class PredicateBase():
         self.predicate_name = ""  # Name of the predicate
         self.args = {}            # input arguments
         self.outputs = {}         # output data
+
+        self.tableView = None
 
     def setPredicateName(self, name):
         self.predicate_name = name
@@ -108,6 +111,8 @@ class PredicateBase():
         pred_val1_val2...
         Truncates predicate name and values if needed.
         """
+        timestamp = datetime.now().strftime('%d%b_%H%M%S')  # e.g., 05Jul_172302
+    
         short_pred = self.predicate_name[:max_pred_len]
         val_parts = []
         for val in self.args.values():
@@ -115,7 +120,8 @@ class PredicateBase():
             if len(val_str) > max_val_len:
                 val_str = val_str[:max_val_len]
             val_parts.append(val_str)
-        return f"{short_pred}_{'_'.join(val_parts)}..."
+
+        return f"{timestamp}_{short_pred}_{'_'.join(val_parts)}..."
 
     def onPostRun(self):
         pass
@@ -318,7 +324,7 @@ class SqlQueryPredicate(PredicateBase, QObject):
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'SQL query to be executed',
-                'example': 'example : SELECT * FROM table WHERE condition'
+                'example': 'example : SELECT * FROM table WHERE <column_name> LIKE \'I2%\''
             }
         }
 
@@ -329,7 +335,7 @@ class SqlQueryPredicate(PredicateBase, QObject):
         
         result = []
 
-        actual_query = self.args['actual_query']['user_value']
+        actual_query = self.args['sql_query']['user_value']
 
         print(f"Executing SQL query: {actual_query}")
 

@@ -18,8 +18,11 @@ class Session:
         with open(jsonFile, 'w') as f:
             json.dump(self._data, f, indent=4)
 
-    def getAttr(self, key):
-        return self._data.get(key)
+    def getAttr(self, key, subkey=None):
+        value = self._data.get(key)
+        if subkey is not None and isinstance(value, dict):
+            return value.get(subkey)
+        return value
 
     def setAttr(self, key, value):
         self._data[key] = value

@@ -75,11 +75,13 @@ class WriteSessionMenuItem(MenuItemAbstract):
 
         groups = self.inputTab.getAllGroups()
         for group in groups:
+            group_dict = {}
             sources = self.inputTab.getAllGroupSources(group)
             for source in sources:
                 items = self.inputTab.getAllItemsInList(group, source)
-                self.session.setAttr(group, {source: [items]})
-            
+                group_dict[source] = items  # accumulate items for each source
+            self.session.setAttr(group, group_dict)  # set once per group
+
         self.session.dump()
 
         filename, _ = QFileDialog.getSaveFileName(
@@ -523,10 +525,10 @@ class MainUI(QMainWindow):
         outputs = list(predicate.iterateOutputs())
 
         if outputs:
-            unique_tab_name = self.generate_unique_tab_name(predicate.getShortName())
+            unique_tab_name = predicate.getShortName()
 
             self.resultsManager.addNewTab(unique_tab_name, 
-                                        predicate.getCompleteNameWithArgs())
+                                        predicate.getCompleteNameWithArgs(), _tableView=predicate.tableView)
             model = self.resultsManager.setOutputsForTab(unique_tab_name, outputs)
 
             self.sentralControl.addEntryForResults(unique_tab_name)
@@ -545,13 +547,6 @@ class MainUI(QMainWindow):
 
                     self.drawManager.draw_instances(inst_list, QColor("white"))
 
-
-
-
-    def generate_unique_tab_name(self, base_name: str) -> str:
-        """Generate a unique name starting with date-time in 05Jul_HHMMSS format followed by base name."""
-        timestamp = datetime.now().strftime('%d%b_%H%M%S')  # e.g., 05Jul_172302
-        return f"{timestamp}-{base_name}"
 
 
     def updateParamLabels(self):

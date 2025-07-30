@@ -1,5 +1,6 @@
 
 from PyQt5.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+from PyQt5.QtCore import Qt, QVariant
 
 import sys
 import os
@@ -13,6 +14,8 @@ from blue_payload import run_BluePayload
 from main_ui import MainUI
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
+from viewer_manager import ResultsTableView, PandasTableModel
+
 from predicates import Predicates, PredicateBase
 
 from global_name_index import gname_index
@@ -25,6 +28,36 @@ from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
 
+class LefDefPandasTableModel(PandasTableModel):
+    def __init__(self, df=None):
+        super().__init__(df)
+
+
+    def data(self, index, role=Qt.DisplayRole):
+
+        if not index.isValid() or self._df is None:
+            return QVariant()
+
+        row, col = index.row(), index.column()
+        col_name = self._df.columns[col]
+
+        # Call parent data() first
+        base_result = super().data(index, role)
+
+        ##############################################
+        # Do something extra on data here.
+        ##############################################
+
+        return base_result
+    
+
+class LefDefTableView(ResultsTableView):
+    def __init__(self, parent=None):
+        super().__init__(LefDefPandasTableModel(), parent)
+
+    
+
+
 class LefDefPredicate(PredicateBase):
     def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
         super().__init__()
@@ -33,6 +66,9 @@ class LefDefPredicate(PredicateBase):
         self.lefParserImplement = _lefParserImplement
         self.drawManager = _drawManager
         self.sentralControl = _sentralControl
+
+        self.tableView = LefDefTableView()
+
 
 
 class GetViasForLayer(LefDefPredicate):
@@ -77,11 +113,12 @@ class GetInstanceCoords(LefDefPredicate):
 
         # all_inst = list(design_data.instData.instance_data)
     
-        result = self.defParserImplement.get_components_by_name(name_regex)
+        df = self.defParserImplement.get_components_by_name(name_regex)
 
-        self.setOutputObject("name", result)
-        
-        return result
+        for col_name in df.columns:
+            self.setOutputObject(col_name, df[col_name].tolist())
+
+        return True
     
     def onPostRun(self):
 

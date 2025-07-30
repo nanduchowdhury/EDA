@@ -320,6 +320,9 @@ class TimeKeeper:
         self._start_time = None
         self._start_timestamp = None
 
+    def isStarted(self):
+        return self._start_time
+    
     def start(self):
         """Start the timer and return current date-time in short format."""
         self._start_time = time.time()
@@ -335,6 +338,8 @@ class TimeKeeper:
         end_timestamp = datetime.now()
         elapsed = int(end_time - self._start_time)
         
+        self._start_time = None
+
         return {
             "current": self._format_datetime(end_timestamp),
             "elapsed": self._format_elapsed(elapsed)

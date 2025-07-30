@@ -493,7 +493,7 @@ class AssistantManager(QObject):
         sql_query = result.get("sql_query", "")
 
         command = "execute sql query"
-        args = {"actual_query": sql_query}
+        args = {"sql_query": sql_query}
 
         self.signal_update_command.emit(command, args)
 
@@ -501,11 +501,12 @@ class AssistantManager(QObject):
     @pyqtSlot(dict)
     def on_signal_update_sql_run_status(self, result):
         
-        elapsed_time = self.getCurrentAndElapsedTimeStr()
+        if self.timeKeeer.isStarted():
+            elapsed_time = self.getCurrentAndElapsedTimeStr()
 
-        self.assistantOutput.append(f"{elapsed_time} <b>Assistant:</b> {result.get('message')}")
-        if result.get("result") is not None:
-            self.assistantOutput.append(f" {result.get('result')}")
+            self.assistantOutput.append(f"{elapsed_time} <b>Assistant:</b> {result.get('message')}")
+            if result.get("result") is not None:
+                self.assistantOutput.append(f" {result.get('result')}")
         
 
     def _handleCommandOrActionRun(self, output):

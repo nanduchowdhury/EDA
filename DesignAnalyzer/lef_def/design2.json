@@ -1,8 +1,11 @@
 {
-    "LEF": [
-        "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/nangate45.lef"
-    ],
-    "DEF": [
-        "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/ac97_ctrl.def"
-    ]
+    "Files": {
+        "LEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/nangate45.lef"
+        ],
+        "DEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/ac97_ctrl.def"
+        ]
+    },
+    "Cloud": {}
 }

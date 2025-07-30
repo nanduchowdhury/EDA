@@ -468,7 +468,34 @@ class DefParserImplement(QObject):
 
         self.def_parser_finished_signal.emit("DEF parser finished.")
 
+        self.createComponentsDf()
+
     
+    def createComponentsDf(self):
+        # Create a data-frame containing all fields (as columns) of Component @dataClass.
+        import pandas as pd
+
+        all_rows = []
+        columns = [field.name for field in Component.__dataclass_fields__.values()]
+
+        for d, parser in self.parser_dict.items():
+            components = parser.def_data.components
+            for comp in components:
+                row = {}
+                for col in columns:
+                    value = getattr(comp, col)
+                    if col == "inst_name_id" or col == "cell_name_id" or col == "type_id":
+                        value = gname_index.getName(value)
+                    elif col == "location":
+                        (x, y) = value
+                        (x_um, y_um) = self.convert_to_design_unit(x, y)
+                        value = f'{x_um}, {y_um}'
+                    row[col] = value
+                all_rows.append(row)
+
+        self.componentsDf = pd.DataFrame(all_rows, columns=columns)
+
+
     def get_via_names(self, layer):
 
         vnames = []
@@ -496,6 +523,16 @@ class DefParserImplement(QObject):
             unit = parser.def_data.units.microns
 
         return unit
+    
+    def convert_to_design_unit(self, x, y):
+
+        unit = self.get_unit()
+        x = int(x)
+        x_um = x / unit
+        y = int(y)
+        y_um = y / unit
+
+        return (x_um, y_um)
 
     def get_components(self):
 
@@ -508,15 +545,7 @@ class DefParserImplement(QObject):
         return all_components
     
     def get_components_by_name(self, name_regex):
-        result = []
-        compiled_regex = re.compile(name_regex)
-        components = self.get_components()
-        for comp in components:
-            instance_name = gname_index.getName(comp.inst_name_id)
-            if compiled_regex.search(instance_name):
-                result.append(instance_name)
-
-        return result
+        return self.componentsDf
 
 
     def get_instances_coords(self):

@@ -35,7 +35,7 @@ class ManageResultsTabs:
 
         self.addNewTab(self.defaultResultsTabName, "Default analysis command")
 
-    def addNewTab(self, tabName, analysisCommand):
+    def addNewTab(self, tabName, analysisCommand, _tableView=None):
         if tabName in self.tables:
             return  # avoid duplicates
 
@@ -44,7 +44,11 @@ class ManageResultsTabs:
         tab = QWidget()
         layout = QVBoxLayout()
 
-        tableView = ResultsTableView()
+        tableView = _tableView
+
+        if _tableView == None:
+            tableView = ResultsTableView()
+
         layout.addWidget(tableView)
         tab.setLayout(layout)
 
@@ -93,9 +97,13 @@ class ManageResultsTabs:
 
 
 class TableView(QTableView):
-    def __init__(self, parent=None):
+    def __init__(self, _model=None, parent=None):
         super().__init__(parent)
-        self.model = PandasTableModel()
+        
+        self.model = _model
+        if _model == None:
+            self.model = PandasTableModel()
+
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.model)
         self.setModel(self.proxy_model)
@@ -300,8 +308,8 @@ class TableView(QTableView):
 
 
 class ResultsTableView(TableView):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, _model=None, parent=None):
+        super().__init__(_model, parent)
 
     def setOutputs(self, outputs):
         """
