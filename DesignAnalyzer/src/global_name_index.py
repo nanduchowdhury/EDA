@@ -29,6 +29,9 @@ class NameIndex:
 
     def getName(self, id_: int) -> str:
         """Return name associated with ID, else raise KeyError."""
+        if not id_:
+            return None
+
         with self._lock:
             if id_ not in self.id_to_name:
                 raise KeyError(f"ID {id_} not found in NameIndex")

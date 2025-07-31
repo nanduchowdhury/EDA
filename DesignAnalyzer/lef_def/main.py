@@ -111,9 +111,7 @@ class GetInstanceCoords(LefDefPredicate):
     def run(self):
         name_regex = self.args["instance_name"]["user_value"]
 
-        # all_inst = list(design_data.instData.instance_data)
-    
-        df = self.defParserImplement.get_components_by_name(name_regex)
+        df = self.defParserImplement.query_components(name_regex)
 
         for col_name in df.columns:
             self.setOutputObject(col_name, df[col_name].tolist())
@@ -176,7 +174,7 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         design_data.resolveCompToInst()
         
         self.drawManager.load_design_instances(design_data.inst_rtree, 
-                            design_data.instData)
+                        design_data.instData)
         
 
 class LefDefUI(MainUI):
