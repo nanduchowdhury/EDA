@@ -60,8 +60,16 @@ class DesignData:
             type = gname_index.getName(comp.type_id)
             location = comp.location
 
-            if not instance_name or not cell_name or not location:
-                logging.warning(f"Invalid component entry: {comp}")
+            if not instance_name:
+                logging.warning(f"Instance name is missing for component: {comp}")
+                continue
+
+            if not cell_name:
+                logging.warning(f"Cell name is missing for component {instance_name} in DEF...skipping.")
+                continue
+
+            if not location:
+                logging.warning(f"Location is missing for instance {instance_name} in DEF...skipping.")
                 continue
 
             x_dbu, y_dbu = location
@@ -73,7 +81,7 @@ class DesignData:
 
             macro = self.lefParserImplement.get_macro(cell_name)
             if not macro:
-                logging.warning(f"Macro {cell_name} not found in LEF for instance {instance_name}.")
+                logging.warning(f"Macro {cell_name} not found in LEF for instance {instance_name}...skipping.")
                 continue
 
             width, height = macro.size

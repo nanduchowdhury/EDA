@@ -176,7 +176,7 @@ class PinAntenna:
 @dataclass
 class Pin:
     name_id: int
-    net_id: int
+    net_id: Optional[int] = None
     special: bool = False
     direction_id: Optional[int] = None
     netexpr: Optional[str] = None
@@ -264,119 +264,136 @@ class DefParser:
             self.def_data.units = Units(distance_id=distance_id, microns=int(parts[-1]))
 
     def parse_diearea(self, line: str):
-        # Example: DIEAREA ( 0 0 ) ( 1000 2000 ) ;
-        coords = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-        points = [tuple(map(int, pt)) for pt in coords]
-        self.def_data.diearea = DieArea(points=points)
+        try:
+            # Example: DIEAREA ( 0 0 ) ( 1000 2000 ) ;
+            coords = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+            points = [tuple(map(int, pt)) for pt in coords]
+            self.def_data.diearea = DieArea(points=points)
+        except Exception as e:
+            print(f"Error DEF parsing diearea: line: {line} error: {e}")
 
 
     def parse_row(self, line: str):
+        try:
+            # Remove trailing ';' if present
+            line = line.rstrip(';').strip()
+            parts = line.split()
+            name_id = gname_index.set(parts[1])
+            site_id = gname_index.set(parts[2])
+            orig_x = int(parts[3])
+            orig_y = int(parts[4])
+            site_orient_id = gname_index.set(parts[5])
 
-        # Remove trailing ';' if present
-        line = line.rstrip(';').strip()
-        parts = line.split()
-        name_id = gname_index.set(parts[1])
-        site_id = gname_index.set(parts[2])
-        orig_x = int(parts[3])
-        orig_y = int(parts[4])
-        site_orient_id = gname_index.set(parts[5])
+            do_x = by_y = step_x = step_y = None
+            properties = {}
 
-        do_x = by_y = step_x = step_y = None
-        properties = {}
+            # Look for DO ... BY ... [STEP ...]
+            if "DO" in parts:
+                do_idx = parts.index("DO")
+                do_x = int(parts[do_idx + 1])
+                by_y = int(parts[do_idx + 3])
+                if "STEP" in parts:
+                    step_idx = parts.index("STEP")
+                    step_x = int(parts[step_idx + 1])
+                    step_y = int(parts[step_idx + 2])
 
-        # Look for DO ... BY ... [STEP ...]
-        if "DO" in parts:
-            do_idx = parts.index("DO")
-            do_x = int(parts[do_idx + 1])
-            by_y = int(parts[do_idx + 3])
-            if "STEP" in parts:
-                step_idx = parts.index("STEP")
-                step_x = int(parts[step_idx + 1])
-                step_y = int(parts[step_idx + 2])
+            # Look for + PROPERTY
+            if "+PROPERTY" in line or "+ PROPERTY" in line:
+                prop_parts = line.split("+ PROPERTY")
+                if len(prop_parts) > 1:
+                    props = prop_parts[1].strip().split()
+                    for i in range(0, len(props), 2):
+                        if i+1 < len(props):
+                            properties[props[i]] = props[i+1]
 
-        # Look for + PROPERTY
-        if "+PROPERTY" in line or "+ PROPERTY" in line:
-            prop_parts = line.split("+ PROPERTY")
-            if len(prop_parts) > 1:
-                props = prop_parts[1].strip().split()
-                for i in range(0, len(props), 2):
-                    if i+1 < len(props):
-                        properties[props[i]] = props[i+1]
+            self.def_data.rows.append(Row(
+                name_id=name_id,
+                site_id=site_id,
+                orig_x=orig_x,
+                orig_y=orig_y,
+                site_orient_id=site_orient_id,
+                do_x=do_x,
+                by_y=by_y,
+                step_x=step_x,
+                step_y=step_y,
+                properties=properties
+            ))
 
-        self.def_data.rows.append(Row(
-            name_id=name_id,
-            site_id=site_id,
-            orig_x=orig_x,
-            orig_y=orig_y,
-            site_orient_id=site_orient_id,
-            do_x=do_x,
-            by_y=by_y,
-            step_x=step_x,
-            step_y=step_y,
-            properties=properties
-        ))
-
+        except Exception as e:
+            print(f"Error DEF parsing row: line: {line} error: {e}")
 
     def parse_track(self, line: str):
-        parts = line.split()
-        direction_id = gname_index.set(parts[1])
-        step = int(parts[6])
-        layer_id = gname_index.set(parts[-1])
-        self.def_data.tracks.append(Track(direction_id, step, layer_id))
+        try:
+            parts = line.split()
+            direction_id = gname_index.set(parts[1])
+            step = int(parts[6])
+            layer_id = gname_index.set(parts[-1])
+            self.def_data.tracks.append(Track(direction_id, step, layer_id))
+
+        except Exception as e:
+            print(f"Error DEF parsing track: line: {line} error: {e}")
 
     def parse_via(self, lines: List[str]):
-        name_id = gname_index.set(lines[0].split()[1])
-        via = Via(name_id=name_id)
-        for line in lines[1:]:
-            line = line.strip()
-            if line.startswith("+ VIARULE"):
-                via.via_rule_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ CUTSIZE"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 2:
-                    via.cut_size = tuple(nums)
-            elif line.startswith("+ LAYERS"):
-                tokens = line.split()
-                # skip "+ LAYERS", then get all layer names
-                via.layer_ids = [gname_index.set(t) for t in tokens[2:]]
-            elif line.startswith("+ CUTSPACING"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 2:
-                    via.cut_spacing = tuple(nums)
-            elif line.startswith("+ ENCLOSURE"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 4:
-                    via.enclosure = tuple(nums)
-            elif line.startswith("+ ROWCOL"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 2:
-                    via.row_col = tuple(nums)
-            elif line.startswith("+ ORIGIN"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 2:
-                    via.origin = tuple(nums)
-            elif line.startswith("+ OFFSET"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 4:
-                    via.offset = tuple(nums)
-            elif line.startswith("+ PATTERN"):
-                via.pattern = line.split()[2]
-            elif line.startswith("+ RECT"):
-                tokens = line.split()
-                layer_name_id = gname_index.set(tokens[2])
-                pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-                if len(pts) == 2:
-                    pt1 = tuple(map(int, pts[0]))
-                    pt2 = tuple(map(int, pts[1]))
-                    via.rects.append(ViaRect(layer_name_id=layer_name_id, pt1=pt1, pt2=pt2))
-            elif line.startswith("+ POLYGON"):
-                tokens = line.split()
-                layer_name_id = gname_index.set(tokens[2])
-                pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-                points = [tuple(map(int, pt)) for pt in pts]
-                if points:
-                    via.polygons.append(ViaPolygon(layer_name_id=layer_name_id, points=points))
-        self.def_data.vias.append(via)
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
+
+
+            name_id = gname_index.set(header.split()[0])
+            via = Via(name_id=name_id)
+            for line in lines:
+                line = line.strip()
+                if line.startswith("+ VIARULE"):
+                    via.via_rule_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ CUTSIZE"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 2:
+                        via.cut_size = tuple(nums)
+                elif line.startswith("+ LAYERS"):
+                    tokens = line.split()
+                    # skip "+ LAYERS", then get all layer names
+                    via.layer_ids = [gname_index.set(t) for t in tokens[2:]]
+                elif line.startswith("+ CUTSPACING"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 2:
+                        via.cut_spacing = tuple(nums)
+                elif line.startswith("+ ENCLOSURE"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 4:
+                        via.enclosure = tuple(nums)
+                elif line.startswith("+ ROWCOL"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 2:
+                        via.row_col = tuple(nums)
+                elif line.startswith("+ ORIGIN"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 2:
+                        via.origin = tuple(nums)
+                elif line.startswith("+ OFFSET"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 4:
+                        via.offset = tuple(nums)
+                elif line.startswith("+ PATTERN"):
+                    via.pattern = line.split()[2]
+                elif line.startswith("+ RECT"):
+                    tokens = line.split()
+                    layer_name_id = gname_index.set(tokens[2])
+                    pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+                    if len(pts) == 2:
+                        pt1 = tuple(map(int, pts[0]))
+                        pt2 = tuple(map(int, pts[1]))
+                        via.rects.append(ViaRect(layer_name_id=layer_name_id, pt1=pt1, pt2=pt2))
+                elif line.startswith("+ POLYGON"):
+                    tokens = line.split()
+                    layer_name_id = gname_index.set(tokens[2])
+                    pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+                    points = [tuple(map(int, pt)) for pt in pts]
+                    if points:
+                        via.polygons.append(ViaPolygon(layer_name_id=layer_name_id, points=points))
+            self.def_data.vias.append(via)
+
+        except Exception as e:
+            print(f"Error DEF parsing via: lines: {lines} error: {e}")
 
     def clean_lines(self, lines: list) -> list:
         """
@@ -481,403 +498,442 @@ class DefParser:
             print(f"Error DEF parsing component: lines: {lines} error: {e}")
 
     def parse_pin(self, lines: List[str]):
-        # Header: - pinName + NET netName
-        header = lines[0].strip()
-        parts = header.split()
-        name_id = gname_index.set(parts[1])
-        net_id = gname_index.set(parts[3]) if "+NET" in header or "+NET" in parts else 0
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
 
-        pin = Pin(name_id=name_id, net_id=net_id)
+        
+            parts = header.split()
+            name_id = gname_index.set(parts[0])
+            net_id = gname_index.set(parts[3]) if "+NET" in header or "+NET" in parts else 0
 
-        current_port = None
-        current_layer = None
+            pin = Pin(name_id=name_id)
 
-        for line in lines[1:]:
-            line = line.strip()
-            if line.startswith("+ SPECIAL"):
-                pin.special = True
-            elif line.startswith("+ DIRECTION"):
-                pin.direction_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ NETEXPR"):
-                pin.netexpr = line.split('"')[1] if '"' in line else None
-            elif line.startswith("+ SUPPLYSENSITIVITY"):
-                pin.supply_sensitivity = gname_index.set(line.split()[2])
-            elif line.startswith("+ GROUNDSENSITIVITY"):
-                pin.ground_sensitivity = gname_index.set(line.split()[2])
-            elif line.startswith("+ USE"):
-                pin.use_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ ANTENNAMODEL"):
-                pin.antenna_model = line.split()[2]
-            elif line.startswith("+ ANTENNA"):
-                tokens = line.split()
-                ant_type = tokens[1]
-                value = float(tokens[2])
-                layer_name_id = None
-                if "LAYER" in tokens:
-                    layer_name_id = gname_index.set(tokens[-1])
-                pin.antenna.append(PinAntenna(type=ant_type, value=value, layer_name_id=layer_name_id))
-            elif line.startswith("+ PORT"):
-                current_port = PinPort()
-                pin.ports.append(current_port)
-            elif line.startswith("+ LAYER"):
-                tokens = line.split()
-                layer_name_id = gname_index.set(tokens[2])
-                current_layer = PinPortLayer(layer_name_id=layer_name_id)
-                if current_port is not None:
-                    current_port.layers.append(current_layer)
-            elif line.startswith("SPACING"):
-                if current_layer:
-                    current_layer.spacing = int(line.split()[1])
-            elif line.startswith("DESIGNRULEWIDTH"):
-                if current_layer:
-                    current_layer.designrulewidth = int(line.split()[1])
-            elif re.match(r'^\(\s*-?\d+', line):  # RECT or point
-                coords = tuple(map(int, re.findall(r'-?\d+', line)))
-                if current_layer:
-                    current_layer.rects.append(coords)
-            elif line.startswith("+ POLYGON"):
-                tokens = line.split()
-                layer_name_id = gname_index.set(tokens[2])
-                pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-                if pts and current_layer:
-                    current_layer.polygons.append([tuple(map(int, pt)) for pt in pts])
-            elif line.startswith("+ VIA"):
-                tokens = line.split()
-                via_id = gname_index.set(tokens[2])
-                pt = tuple(map(int, re.findall(r'-?\d+', line)))
-                if current_layer:
-                    current_layer.vias.append({'via_id': via_id, 'pt': pt})
-            elif line.startswith("+ COVER"):
-                tokens = line.split()
-                pt = tuple(map(int, re.findall(r'-?\d+', line)))
-                orient = tokens[-1]
-                if current_port:
-                    current_port.cover = (*pt, orient)
-            elif line.startswith("+ FIXED"):
-                tokens = line.split()
-                pt = tuple(map(int, re.findall(r'-?\d+', line)))
-                orient = tokens[-1]
-                if current_port:
-                    current_port.fixed = (*pt, orient)
-            elif line.startswith("+ PLACED"):
-                tokens = line.split()
-                pt = tuple(map(int, re.findall(r'-?\d+', line)))
-                orient = tokens[-1]
-                if current_port:
-                    current_port.placed = (*pt, orient)
-            # ... handle other attributes as needed
+            current_port = None
+            current_layer = None
 
-        self.def_data.pins.append(pin)
+            for line in lines:
+                line = line.strip()
+                if line.startswith("+ NET"):
+                    pin.net_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ SPECIAL"):
+                    pin.special = True
+                elif line.startswith("+ DIRECTION"):
+                    pin.direction_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ NETEXPR"):
+                    pin.netexpr = line.split('"')[1] if '"' in line else None
+                elif line.startswith("+ SUPPLYSENSITIVITY"):
+                    pin.supply_sensitivity = gname_index.set(line.split()[2])
+                elif line.startswith("+ GROUNDSENSITIVITY"):
+                    pin.ground_sensitivity = gname_index.set(line.split()[2])
+                elif line.startswith("+ USE"):
+                    pin.use_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ ANTENNAMODEL"):
+                    pin.antenna_model = line.split()[2]
+                elif line.startswith("+ ANTENNA"):
+                    tokens = line.split()
+                    ant_type = tokens[1]
+                    value = float(tokens[2])
+                    layer_name_id = None
+                    if "LAYER" in tokens:
+                        layer_name_id = gname_index.set(tokens[-1])
+                    pin.antenna.append(PinAntenna(type=ant_type, value=value, layer_name_id=layer_name_id))
+                elif line.startswith("+ PORT"):
+                    current_port = PinPort()
+                    pin.ports.append(current_port)
+                elif line.startswith("+ LAYER"):
+                    tokens = line.split()
+                    layer_name_id = gname_index.set(tokens[2])
+                    current_layer = PinPortLayer(layer_name_id=layer_name_id)
+                    if current_port is not None:
+                        current_port.layers.append(current_layer)
+                elif line.startswith("SPACING"):
+                    if current_layer:
+                        current_layer.spacing = int(line.split()[1])
+                elif line.startswith("DESIGNRULEWIDTH"):
+                    if current_layer:
+                        current_layer.designrulewidth = int(line.split()[1])
+                elif re.match(r'^\(\s*-?\d+', line):  # RECT or point
+                    coords = tuple(map(int, re.findall(r'-?\d+', line)))
+                    if current_layer:
+                        current_layer.rects.append(coords)
+                elif line.startswith("+ POLYGON"):
+                    tokens = line.split()
+                    layer_name_id = gname_index.set(tokens[2])
+                    pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+                    if pts and current_layer:
+                        current_layer.polygons.append([tuple(map(int, pt)) for pt in pts])
+                elif line.startswith("+ VIA"):
+                    tokens = line.split()
+                    via_id = gname_index.set(tokens[2])
+                    pt = tuple(map(int, re.findall(r'-?\d+', line)))
+                    if current_layer:
+                        current_layer.vias.append({'via_id': via_id, 'pt': pt})
+                elif line.startswith("+ COVER"):
+                    tokens = line.split()
+                    pt = tuple(map(int, re.findall(r'-?\d+', line)))
+                    orient = tokens[-1]
+                    if current_port:
+                        current_port.cover = (*pt, orient)
+                elif line.startswith("+ FIXED"):
+                    tokens = line.split()
+                    pt = tuple(map(int, re.findall(r'-?\d+', line)))
+                    orient = tokens[-1]
+                    if current_port:
+                        current_port.fixed = (*pt, orient)
+                elif line.startswith("+ PLACED"):
+                    tokens = line.split()
+                    pt = tuple(map(int, re.findall(r'-?\d+', line)))
+                    orient = tokens[-1]
+                    if current_port:
+                        current_port.placed = (*pt, orient)
+                # ... handle other attributes as needed
+
+            self.def_data.pins.append(pin)
+
+        except Exception as e:
+            print(f"Error DEF parsing pin: lines: {lines} error: {e}")
 
     def parse_blockage(self, lines: List[str]):
-        # The first line will be "- LAYER ..." or "- PLACEMENT"
-        header = lines[0].strip("- ").split()
-        blockage_type = header[0]
-        blockage = Blockage(blockage_type=blockage_type)
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
+            
+        
+            blockage_type = header[0]
+            blockage = Blockage(blockage_type=blockage_type)
 
-        if blockage_type == "LAYER":
-            blockage.layer_name_id = gname_index.set(header[1])
-        elif blockage_type == "PLACEMENT":
-            pass  # No layer for PLACEMENT
+            if blockage_type == "LAYER":
+                blockage.layer_name_id = gname_index.set(header[1])
+            elif blockage_type == "PLACEMENT":
+                pass  # No layer for PLACEMENT
 
-        for line in lines[1:]:
-            line = line.strip()
-            if line.startswith("+ COMPONENT"):
-                blockage.component_name_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ SLOTS"):
-                blockage.slots = True
-            elif line.startswith("+ FILLS"):
-                blockage.fills = True
-            elif line.startswith("+ PUSHDOWN"):
-                blockage.pushdown = True
-            elif line.startswith("+ EXCEPTPGNET"):
-                blockage.exceptpgnet = True
-            elif line.startswith("+ SPACING"):
-                blockage.spacing = int(re.findall(r'\d+', line)[0])
-            elif line.startswith("+ DESIGNRULEWIDTH"):
-                blockage.designrulewidth = int(re.findall(r'\d+', line)[0])
-            elif line.startswith("+ SOFT"):
-                blockage.soft = True
-            elif line.startswith("+ PARTIAL"):
-                blockage.partial_max_density = float(line.split()[2])
-            elif line.startswith("RECT"):
-                nums = list(map(int, re.findall(r'-?\d+', line)))
-                if len(nums) == 4:
-                    blockage.rects.append(tuple(nums))
-            elif line.startswith("POLYGON"):
-                pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-                if pts:
-                    blockage.polygons.append([tuple(map(int, pt)) for pt in pts])
+            for line in lines:
+                line = line.strip()
+                if line.startswith("+ COMPONENT"):
+                    blockage.component_name_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ SLOTS"):
+                    blockage.slots = True
+                elif line.startswith("+ FILLS"):
+                    blockage.fills = True
+                elif line.startswith("+ PUSHDOWN"):
+                    blockage.pushdown = True
+                elif line.startswith("+ EXCEPTPGNET"):
+                    blockage.exceptpgnet = True
+                elif line.startswith("+ SPACING"):
+                    blockage.spacing = int(re.findall(r'\d+', line)[0])
+                elif line.startswith("+ DESIGNRULEWIDTH"):
+                    blockage.designrulewidth = int(re.findall(r'\d+', line)[0])
+                elif line.startswith("+ SOFT"):
+                    blockage.soft = True
+                elif line.startswith("+ PARTIAL"):
+                    blockage.partial_max_density = float(line.split()[2])
+                elif line.startswith("RECT"):
+                    nums = list(map(int, re.findall(r'-?\d+', line)))
+                    if len(nums) == 4:
+                        blockage.rects.append(tuple(nums))
+                elif line.startswith("POLYGON"):
+                    pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+                    if pts:
+                        blockage.polygons.append([tuple(map(int, pt)) for pt in pts])
 
-        self.def_data.blockages.append(blockage)
+            self.def_data.blockages.append(blockage)
+
+        except Exception as e:
+            print(f"Error DEF parsing blockage: lines: {lines} error: {e}")
 
     def parse_property_definition(self, lines: List[str]):
         """
         Parses PROPERTYDEFINITIONS section from DEF.
         Stores results in self.def_data.property_definitions as a list of PropertyDefinition.
         """
-        self.def_data.property_definitions = []
 
-        for line in lines:
-            line = line.strip().rstrip(';')
-            if not line or line.startswith("PROPERTYDEFINITIONS") or line.startswith("END PROPERTYDEFINITIONS"):
-                continue
+        try:
+            self.def_data.property_definitions = []
 
-            # Example: DESIGN strprop STRING "aString"
-            # Example: DESIGN intrangeprop INTEGER RANGE 1 100 25
-            tokens = line.split()
-            obj_type = tokens[0]
-            prop_name = tokens[1]
-            data_type = tokens[2]
-            prop_range = None
-            default = None
+            for line in lines:
+                line = line.strip().rstrip(';')
+                if not line or line.startswith("PROPERTYDEFINITIONS") or line.startswith("END PROPERTYDEFINITIONS"):
+                    continue
 
-            if "RANGE" in tokens:
-                idx = tokens.index("RANGE")
-                min_val = float(tokens[idx+1])
-                max_val = float(tokens[idx+2])
-                prop_range = (min_val, max_val)
-                # Default value may follow
-                if len(tokens) > idx+3:
-                    default = tokens[idx+3]
-            elif len(tokens) > 3:
-                # Default value for STRING, INTEGER, REAL
-                default = tokens[3].strip('"')
+                # Example: DESIGN strprop STRING "aString"
+                # Example: DESIGN intrangeprop INTEGER RANGE 1 100 25
+                tokens = line.split()
+                obj_type = tokens[0]
+                prop_name = tokens[1]
+                data_type = tokens[2]
+                prop_range = None
+                default = None
 
-            self.def_data.property_definitions.append(
-                PropertyDefinition(
-                    obj_type=obj_type,
-                    prop_name=prop_name,
-                    data_type=data_type,
-                    range=prop_range,
-                    default=default
+                if "RANGE" in tokens:
+                    idx = tokens.index("RANGE")
+                    min_val = float(tokens[idx+1])
+                    max_val = float(tokens[idx+2])
+                    prop_range = (min_val, max_val)
+                    # Default value may follow
+                    if len(tokens) > idx+3:
+                        default = tokens[idx+3]
+                elif len(tokens) > 3:
+                    # Default value for STRING, INTEGER, REAL
+                    default = tokens[3].strip('"')
+
+                self.def_data.property_definitions.append(
+                    PropertyDefinition(
+                        obj_type=obj_type,
+                        prop_name=prop_name,
+                        data_type=data_type,
+                        range=prop_range,
+                        default=default
+                    )
                 )
-            )
+            
+        except Exception as e:
+            print(f"Error DEF parsing property definitions: lines: {lines} error: {e}")
 
     def parse_specialnet(self, lines: List[str]):
-        # Header: - netName
-        header = lines[0].strip()
-        name_id = gname_index.set(header.split()[1])
-        specialnet = SpecialNet(name_id=name_id)
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
 
-        for line in lines[1:]:
-            line = line.strip()
-            # Connections: ( compName pinName ) or ( PIN pinName )
-            conn_match = re.findall(r'\(\s*(.*?)\s*\)', line)
-            for conn in conn_match:
-                tokens = conn.split()
-                if not tokens:
-                    continue
-                if tokens[0] == "PIN":
-                    pin_name_id = gname_index.set(tokens[1])
-                    synthesized = "+ SYNTHESIZED" in line
-                    specialnet.connections.append(SpecialNetConnection(
-                        comp_name_id=None, pin_name_id=pin_name_id, is_pin=True, synthesized=synthesized
-                    ))
-                else:
-                    comp_name_id = gname_index.set(tokens[0])
-                    pin_name_id = gname_index.set(tokens[1])
-                    synthesized = "+ SYNTHESIZED" in line
-                    specialnet.connections.append(SpecialNetConnection(
-                        comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False, synthesized=synthesized
-                    ))
-            if line.startswith("+ VOLTAGE"):
-                specialnet.voltage = float(line.split()[2])
-            elif line.startswith("+ SOURCE"):
-                specialnet.source = line.split()[2]
-            elif line.startswith("+ FIXEDBUMP"):
-                specialnet.fixedbump = True
-            elif line.startswith("+ ORIGINAL"):
-                specialnet.original_net_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ USE"):
-                specialnet.use = line.split()[2]
-            elif line.startswith("+ PATTERN"):
-                specialnet.pattern = line.split()[2]
-            elif line.startswith("+ ESTCAP"):
-                specialnet.estcap = float(line.split()[2])
-            elif line.startswith("+ WEIGHT"):
-                specialnet.weight = float(line.split()[2])
-            elif line.startswith("+ PROPERTY"):
-                # Handles multiple properties in one line
-                props = line.split()[2:]
-                for i in range(0, len(props), 2):
-                    if i+1 < len(props):
-                        specialnet.properties[props[i]] = props[i+1]
-            # You can add parsing for specialWiring here if needed
+        
+            name_id = gname_index.set(header.split()[0])
+            specialnet = SpecialNet(name_id=name_id)
 
-        self.def_data.specialnets.append(specialnet)
+            lines = [header] + lines  # Include header in lines for processing
+
+            for line in lines:
+                line = line.strip()
+                # Connections: ( compName pinName ) or ( PIN pinName )
+                conn_match = re.findall(r'\(\s*(.*?)\s*\)', line)
+                for conn in conn_match:
+                    tokens = conn.split()
+                    if not tokens:
+                        continue
+                    if tokens[0] == "PIN":
+                        pin_name_id = gname_index.set(tokens[1])
+                        synthesized = "+ SYNTHESIZED" in line
+                        specialnet.connections.append(SpecialNetConnection(
+                            comp_name_id=None, pin_name_id=pin_name_id, is_pin=True, synthesized=synthesized
+                        ))
+                    else:
+                        comp_name_id = gname_index.set(tokens[0])
+                        pin_name_id = gname_index.set(tokens[1])
+                        synthesized = "+ SYNTHESIZED" in line
+                        specialnet.connections.append(SpecialNetConnection(
+                            comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False, synthesized=synthesized
+                        ))
+                if line.startswith("+ VOLTAGE"):
+                    specialnet.voltage = float(line.split()[2])
+                elif line.startswith("+ SOURCE"):
+                    specialnet.source = line.split()[2]
+                elif line.startswith("+ FIXEDBUMP"):
+                    specialnet.fixedbump = True
+                elif line.startswith("+ ORIGINAL"):
+                    specialnet.original_net_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ USE"):
+                    specialnet.use = line.split()[2]
+                elif line.startswith("+ PATTERN"):
+                    specialnet.pattern = line.split()[2]
+                elif line.startswith("+ ESTCAP"):
+                    specialnet.estcap = float(line.split()[2])
+                elif line.startswith("+ WEIGHT"):
+                    specialnet.weight = float(line.split()[2])
+                elif line.startswith("+ PROPERTY"):
+                    # Handles multiple properties in one line
+                    props = line.split()[2:]
+                    for i in range(0, len(props), 2):
+                        if i+1 < len(props):
+                            specialnet.properties[props[i]] = props[i+1]
+                # You can add parsing for specialWiring here if needed
+
+            self.def_data.specialnets.append(specialnet)
+
+        except Exception as e:
+            print(f"Error DEF parsing specialnet: lines: {lines} error: {e}")
 
     def parse_region(self, lines: List[str]):
-        # Header: - regionName {pt pt} ...
-        header = lines[0].strip()
-        parts = header.split()
-        name_id = gname_index.set(parts[1])
-        coords = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', header)
-        coordinates = [tuple(map(int, pt)) for pt in coords]
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
 
-        region = Region(name_id=name_id, coordinates=coordinates)
 
-        for line in lines[1:]:
-            line = line.strip()
-            if line.startswith("+ TYPE"):
-                region.region_type = line.split()[2]
-            elif line.startswith("+ PROPERTY"):
-                props = line.split()[2:]
-                for i in range(0, len(props), 2):
-                    if i+1 < len(props):
-                        region.properties[props[i]] = props[i+1]
+            parts = header.split()
+            name_id = gname_index.set(parts[0])
+            coords = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', header)
+            coordinates = [tuple(map(int, pt)) for pt in coords]
 
-        self.def_data.regions.append(region)
+            region = Region(name_id=name_id, coordinates=coordinates)
+
+            for line in lines:
+                line = line.strip()
+                if line.startswith("+ TYPE"):
+                    region.region_type = line.split()[2]
+                elif line.startswith("+ PROPERTY"):
+                    props = line.split()[2:]
+                    for i in range(0, len(props), 2):
+                        if i+1 < len(props):
+                            region.properties[props[i]] = props[i+1]
+
+            self.def_data.regions.append(region)
+
+        except Exception as e:
+            print(f"Error DEF parsing region: lines: {lines} error: {e}")
 
 
     def parse_net(self, lines: List[str]):
-        header = lines[0].strip()
-        name_id = gname_index.set(header.split()[1])
-        net = Net(name_id=name_id)
+        try:
+            lines = self.clean_lines(lines)
+            (header, lines) = self.create_new_lines_list(lines)
 
-        i = 1
-        n = len(lines)
-        while i < n:
-            line = lines[i].strip()
+            name_id = gname_index.set(header.split()[0])
+            net = Net(name_id=name_id)
 
-            # Connections: ( compName pinName ) or ( PIN pinName ) or ( VPIN vpinName )
-            conn_match = re.findall(r'\(\s*(.*?)\s*\)', line)
-            for conn in conn_match:
-                tokens = conn.split()
-                if not tokens:
-                    continue
-                if tokens[0] == "PIN":
-                    pin_name_id = gname_index.set(tokens[1])
-                    synthesized = "+ SYNTHESIZED" in line
-                    net.connections.append(NetConnection(
-                        comp_name_id=None, pin_name_id=pin_name_id, is_pin=True, synthesized=synthesized
+            i = 0
+            n = len(lines)
+            while i < n:
+                line = lines[i].strip()
+
+                # Connections: ( compName pinName ) or ( PIN pinName ) or ( VPIN vpinName )
+                conn_match = re.findall(r'\(\s*(.*?)\s*\)', line)
+                for conn in conn_match:
+                    tokens = conn.split()
+                    if not tokens:
+                        continue
+                    if tokens[0] == "PIN":
+                        pin_name_id = gname_index.set(tokens[1])
+                        synthesized = "+ SYNTHESIZED" in line
+                        net.connections.append(NetConnection(
+                            comp_name_id=None, pin_name_id=pin_name_id, is_pin=True, synthesized=synthesized
+                        ))
+                    elif tokens[0] == "VPIN":
+                        vpin_name_id = gname_index.set(tokens[1])
+                        net.connections.append(NetConnection(
+                            comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
+                        ))
+                    else:
+                        comp_name_id = gname_index.set(tokens[0])
+                        pin_name_id = gname_index.set(tokens[1])
+                        synthesized = "+ SYNTHESIZED" in line
+                        net.connections.append(NetConnection(
+                            comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False, synthesized=synthesized
+                        ))
+                if "MUSTJOIN" in line:
+                    mj_match = re.findall(r'MUSTJOIN\s*\(\s*(\S+)\s+(\S+)\s*\)', line)
+                    for comp, pin in mj_match:
+                        comp_id = gname_index.set(comp)
+                        pin_id = gname_index.set(pin)
+                        net.mustjoin.append((comp_id, pin_id))
+                elif line.startswith("+ SHIELDNET"):
+                    net.shieldnets.append(gname_index.set(line.split()[2]))
+                elif line.startswith("+ VPIN"):
+                    # Example: + VPIN N1_VP0 LAYER M3 ( -333 -333 ) ( 333 333 ) PLACED ( 189560 27300 ) N
+                    tokens = line.split()
+                    vpin_name_id = gname_index.set(tokens[2])
+                    layer_name_id = None
+                    pt1 = pt2 = None
+                    placed = fixed = cover = None
+
+                    # LAYER
+                    m = re.search(r'LAYER\s+(\S+)', line)
+                    if m:
+                        layer_name_id = gname_index.set(m.group(1))
+
+                    # Points
+                    pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
+                    if len(pts) >= 2:
+                        pt1 = tuple(map(int, pts[0]))
+                        pt2 = tuple(map(int, pts[1]))
+                    elif len(pts) == 1:
+                        pt1 = tuple(map(int, pts[0]))
+
+                    # PLACED, FIXED, COVER (with orientation)
+                    m = re.search(r'PLACED\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
+                    if m:
+                        placed = (int(m.group(1)), int(m.group(2)), m.group(3))
+                    m = re.search(r'FIXED\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
+                    if m:
+                        fixed = (int(m.group(1)), int(m.group(2)), m.group(3))
+                    m = re.search(r'COVER\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
+                    if m:
+                        cover = (int(m.group(1)), int(m.group(2)), m.group(3))
+
+                    net.vpins.append(NetVPin(
+                        vpin_name_id=vpin_name_id,
+                        layer_name_id=layer_name_id,
+                        pt1=pt1,
+                        pt2=pt2,
+                        placed=placed,
+                        fixed=fixed,
+                        cover=cover
                     ))
-                elif tokens[0] == "VPIN":
-                    vpin_name_id = gname_index.set(tokens[1])
-                    net.connections.append(NetConnection(
-                        comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
-                    ))
-                else:
-                    comp_name_id = gname_index.set(tokens[0])
-                    pin_name_id = gname_index.set(tokens[1])
-                    synthesized = "+ SYNTHESIZED" in line
-                    net.connections.append(NetConnection(
-                        comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False, synthesized=synthesized
-                    ))
-            if "MUSTJOIN" in line:
-                mj_match = re.findall(r'MUSTJOIN\s*\(\s*(\S+)\s+(\S+)\s*\)', line)
-                for comp, pin in mj_match:
-                    comp_id = gname_index.set(comp)
-                    pin_id = gname_index.set(pin)
-                    net.mustjoin.append((comp_id, pin_id))
-            elif line.startswith("+ SHIELDNET"):
-                net.shieldnets.append(gname_index.set(line.split()[2]))
-            elif line.startswith("+ VPIN"):
-                # Example: + VPIN N1_VP0 LAYER M3 ( -333 -333 ) ( 333 333 ) PLACED ( 189560 27300 ) N
-                tokens = line.split()
-                vpin_name_id = gname_index.set(tokens[2])
-                layer_name_id = None
-                pt1 = pt2 = None
-                placed = fixed = cover = None
-
-                # LAYER
-                m = re.search(r'LAYER\s+(\S+)', line)
-                if m:
-                    layer_name_id = gname_index.set(m.group(1))
-
-                # Points
-                pts = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-                if len(pts) >= 2:
-                    pt1 = tuple(map(int, pts[0]))
-                    pt2 = tuple(map(int, pts[1]))
-                elif len(pts) == 1:
-                    pt1 = tuple(map(int, pts[0]))
-
-                # PLACED, FIXED, COVER (with orientation)
-                m = re.search(r'PLACED\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
-                if m:
-                    placed = (int(m.group(1)), int(m.group(2)), m.group(3))
-                m = re.search(r'FIXED\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
-                if m:
-                    fixed = (int(m.group(1)), int(m.group(2)), m.group(3))
-                m = re.search(r'COVER\s*\(\s*(-?\d+)\s+(-?\d+)\s*\)\s*([A-Z]+)', line)
-                if m:
-                    cover = (int(m.group(1)), int(m.group(2)), m.group(3))
-
-                net.vpins.append(NetVPin(
-                    vpin_name_id=vpin_name_id,
-                    layer_name_id=layer_name_id,
-                    pt1=pt1,
-                    pt2=pt2,
-                    placed=placed,
-                    fixed=fixed,
-                    cover=cover
-                ))
-            elif line.startswith("+ SUBNET"):
-                subnet_name_id = gname_index.set(line.split()[2])
-                subnet = NetSubnet(subnet_name_id=subnet_name_id)
-                i += 1
-                while i < n:
-                    subline = lines[i].strip()
-                    if subline.startswith("+ NONDEFAULTRULE"):
-                        subnet.nondefaultrule = subline.split()[1]
-                    elif re.match(r'\(\s*(.*?)\s*\)', subline):
-                        conn_match = re.findall(r'\(\s*(.*?)\s*\)', subline)
-                        for conn in conn_match:
-                            tokens = conn.split()
-                            if not tokens:
-                                continue
-                            if tokens[0] == "PIN":
-                                pin_name_id = gname_index.set(tokens[1])
-                                subnet.connections.append(NetConnection(
-                                    comp_name_id=None, pin_name_id=pin_name_id, is_pin=True
-                                ))
-                            elif tokens[0] == "VPIN":
-                                vpin_name_id = gname_index.set(tokens[1])
-                                subnet.connections.append(NetConnection(
-                                    comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
-                                ))
-                            else:
-                                comp_name_id = gname_index.set(tokens[0])
-                                pin_name_id = gname_index.set(tokens[1])
-                                subnet.connections.append(NetConnection(
-                                    comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False
-                                ))
-                    elif subline.startswith("+ NONDEFAULTRULE"):
-                        subnet.nondefaultrule = subline.split()[1]
-                    elif subline.startswith("+") or subline == ";":
-                        break
+                elif line.startswith("+ SUBNET"):
+                    subnet_name_id = gname_index.set(line.split()[2])
+                    subnet = NetSubnet(subnet_name_id=subnet_name_id)
                     i += 1
-                net.subnets.append(subnet)
-            elif line.startswith("+ XTALK"):
-                net.xtalk_class = line.split()[2]
-            elif line.startswith("+ NONDEFAULTRULE"):
-                net.nondefaultrule = line.split()[2]
-            elif line.startswith("+ SOURCE"):
-                net.source = line.split()[2]
-            elif line.startswith("+ FIXEDBUMP"):
-                net.fixedbump = True
-            elif line.startswith("+ FREQUENCY"):
-                net.frequency = float(line.split()[2])
-            elif line.startswith("+ ORIGINAL"):
-                net.original_net_id = gname_index.set(line.split()[2])
-            elif line.startswith("+ USE"):
-                net.use = line.split()[2]
-            elif line.startswith("+ PATTERN"):
-                net.pattern = line.split()[2]
-            elif line.startswith("+ ESTCAP"):
-                net.estcap = float(line.split()[2])
-            elif line.startswith("+ WEIGHT"):
-                net.weight = float(line.split()[2])
-            elif line.startswith("+ PROPERTY"):
-                props = line.split()[2:]
-                for j in range(0, len(props), 2):
-                    if j+1 < len(props):
-                        net.properties[props[j]] = props[j+1]
-            # ... handle regularWiring as needed
-            i += 1
+                    while i < n:
+                        subline = lines[i].strip()
+                        if subline.startswith("+ NONDEFAULTRULE"):
+                            subnet.nondefaultrule = subline.split()[1]
+                        elif re.match(r'\(\s*(.*?)\s*\)', subline):
+                            conn_match = re.findall(r'\(\s*(.*?)\s*\)', subline)
+                            for conn in conn_match:
+                                tokens = conn.split()
+                                if not tokens:
+                                    continue
+                                if tokens[0] == "PIN":
+                                    pin_name_id = gname_index.set(tokens[1])
+                                    subnet.connections.append(NetConnection(
+                                        comp_name_id=None, pin_name_id=pin_name_id, is_pin=True
+                                    ))
+                                elif tokens[0] == "VPIN":
+                                    vpin_name_id = gname_index.set(tokens[1])
+                                    subnet.connections.append(NetConnection(
+                                        comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
+                                    ))
+                                else:
+                                    comp_name_id = gname_index.set(tokens[0])
+                                    pin_name_id = gname_index.set(tokens[1])
+                                    subnet.connections.append(NetConnection(
+                                        comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False
+                                    ))
+                        elif subline.startswith("+ NONDEFAULTRULE"):
+                            subnet.nondefaultrule = subline.split()[1]
+                        elif subline.startswith("+") or subline == ";":
+                            break
+                        i += 1
+                    net.subnets.append(subnet)
+                elif line.startswith("+ XTALK"):
+                    net.xtalk_class = line.split()[2]
+                elif line.startswith("+ NONDEFAULTRULE"):
+                    net.nondefaultrule = line.split()[2]
+                elif line.startswith("+ SOURCE"):
+                    net.source = line.split()[2]
+                elif line.startswith("+ FIXEDBUMP"):
+                    net.fixedbump = True
+                elif line.startswith("+ FREQUENCY"):
+                    net.frequency = float(line.split()[2])
+                elif line.startswith("+ ORIGINAL"):
+                    net.original_net_id = gname_index.set(line.split()[2])
+                elif line.startswith("+ USE"):
+                    net.use = line.split()[2]
+                elif line.startswith("+ PATTERN"):
+                    net.pattern = line.split()[2]
+                elif line.startswith("+ ESTCAP"):
+                    net.estcap = float(line.split()[2])
+                elif line.startswith("+ WEIGHT"):
+                    net.weight = float(line.split()[2])
+                elif line.startswith("+ PROPERTY"):
+                    props = line.split()[2:]
+                    for j in range(0, len(props), 2):
+                        if j+1 < len(props):
+                            net.properties[props[j]] = props[j+1]
+                # ... handle regularWiring as needed
+                i += 1
 
-        self.def_data.nets.append(net)
+            self.def_data.nets.append(net)
+
+        except Exception as e:
+            print(f"Error parsing net definition: {e}")
 
     def parse(self, def_file_content: str):
         lines = def_file_content.splitlines()

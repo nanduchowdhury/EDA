@@ -317,7 +317,7 @@ END REGIONS
 COMPONENTMASKSHIFT M3 M2 V1 M1 ;
 
 COMPONENTS 13 ;
-- I1 INV_B
+- I1 B
   + EEQMASTER A
   + GENERATE generator 
   + SOURCE NETLIST
@@ -334,34 +334,34 @@ COMPONENTS 13 ;
   + PROPERTY realprop 1.1 
   + PROPERTY intrangeprop 25
   + PROPERTY realrangeprop 25.25 ;
-- I2 INV
+- I2 A
   + SOURCE DIST
   + ROUTEHALO 100 M2 M3
   + PLACED ( 200 200 ) S ;
-- I3 INV
+- I3 A
   + SOURCE USER
   + PLACED ( 300 300 ) E ;
-- I4 INV
+- I4 A
   + SOURCE TIMING
   + PLACED ( 400 400 ) W ;
-- I5 INV
+- I5 A
   + PLACED ( 500 500 ) FN ;
-- I6 INV
+- I6 A
   + PLACED ( 600 600 ) FS ;
-- I7 INV
+- I7 A
   + PLACED ( 700 700 ) FE ;
-- I8 INV
+- I8 A
   + PLACED ( 800 800 ) FW ;
-- I9 INV
+- I9 A
   + FIXED ( 900 900 ) N ;
-- I10 INV
+- I10 A
   + COVER ( 1000 1000 ) N ;
-- I11 INV
+- I11 A
   + UNPLACED ;
-- I12[0] INV ;
-- I12[1] INV ;
-- I13[0][10] INV ;
-- I14\[1\] INV ;
+- I12[0] A ;
+- I12[1] A ;
+- I13[0][10] A ;
+- I14\[1\] A ;
 - vectormodule[1]/scalarname A ;
 - vectormodule[1]/vectorname[1] A ;
 - scancell1 CHK3A ;
@@ -376,20 +376,20 @@ COMPONENTS 13 ;
 - scancell10 CHK3A ;
 - scancell11 CHK3A ;
 - scancell12 CHK3A ;
-- nobrackets INV ;
-- somethingwith[1] INV ;
-- more[]brackets INV ;
-- more[1]brackets INV ;
-- more\[1\]brackets INV ;
-- more[1][2] INV ;
-- more\[1\]\[2\] INV ;
-- more\[2\] INV ;
-- foo\[1\]\[2\]/haha\[3\]\[4\] INV ;
-- foo[2][3]/haha[4][5] INV ;
-- foo\[3\]\[4\]/haha[5][6] INV ;
-- foo[4][5]/haha\[6\]\[7\] INV ;
-- foo[5][6]bar/haha\[7\]\[8\] INV ;
-- foo[6][7]bar/haha[8][9] INV ;
+- nobrackets A ;
+- somethingwith[1] A ;
+- more[]brackets A ;
+- more[1]brackets A ;
+- more\[1\]brackets A ;
+- more[1][2] A ;
+- more\[1\]\[2\] A ;
+- more\[2\] A ;
+- foo\[1\]\[2\]/haha\[3\]\[4\] A ;
+- foo[2][3]/haha[4][5] A ;
+- foo\[3\]\[4\]/haha[5][6] A ;
+- foo[4][5]/haha\[6\]\[7\] A ;
+- foo[5][6]bar/haha\[7\]\[8\] A ;
+- foo[6][7]bar/haha[8][9] A ;
 END COMPONENTS
 
 

@@ -1,0 +1,16 @@
+{
+    "Files": {
+        "LEF": [
+            "C:/Users/nandu/Downloads/cs202_pgpsw.lef",
+            "C:/Users/nandu/Downloads/io.lef",
+            "C:/Users/nandu/Downloads/RAMROM.lef",
+            "C:/Users/nandu/Downloads/tech.lef",
+            "C:/Users/nandu/Downloads/uc_lp.lef",
+            "C:/Users/nandu/Downloads/uc.lef"
+        ],
+        "DEF": [
+            "C:/Users/nandu/Downloads/power3 (1).def"
+        ]
+    },
+    "Cloud": {}
+}
