@@ -1,204 +1,757 @@
-import json
 
+from collections import defaultdict
+
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
+
+import json
+import re
+
+import os
+import threading
 import logging
 
+
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional, Dict
 import re
-from collections import defaultdict
 
-from collections import defaultdict
-import re
+from global_name_index import gname_index
 
-# Define compact __slots__ structs
+@dataclass
+class LefUnits:
+    time: Optional[Tuple[int, int]] = None           # (unit_id, value)
+    capacitance: Optional[Tuple[int, int]] = None    # (unit_id, value)
+    resistance: Optional[Tuple[int, int]] = None     # (unit_id, value)
+    power: Optional[Tuple[int, int]] = None          # (unit_id, value)
+    current: Optional[Tuple[int, int]] = None        # (unit_id, value)
+    voltage: Optional[Tuple[int, int]] = None        # (unit_id, value)
+    database: Optional[Tuple[int, int]] = None       # (unit_id, value)
+    frequency: Optional[Tuple[int, int]] = None      # (unit_id, value)
 
-class Foreign:
-    __slots__ = ('name', 'coords')
-    def __init__(self, name, coords):
-        self.name = name
-        self.coords = coords
+@dataclass
+class LefPropertyDefinition:
+    obj_type: str                # e.g., LIBRARY, LAYER, VIA, etc.
+    prop_name: str               # e.g., NAME, intNum, etc.
+    data_type: str               # STRING, INTEGER, REAL
+    range: Optional[Tuple[float, float]] = None  # (min, max) if RANGE present
+    default: Optional[str] = None                # Default value if present
 
-class PinPort:
-    __slots__ = ('layer_rects',)
-    def __init__(self, layer_rects):
-        self.layer_rects = layer_rects
+@dataclass
+class LefLayer:
+    name_id: int
+    type: Optional[str] = None
+    direction: Optional[str] = None
+    pitch: Optional[List[float]] = None
+    width: Optional[float] = None
+    minwidth: Optional[float] = None
+    maxwidth: Optional[float] = None
+    spacing: List[str] = field(default_factory=list)
+    properties: Dict[str, str] = field(default_factory=dict)
+    raw_lines: List[str] = field(default_factory=list)  # Store all lines for advanced/rare features
 
-class Antenna:
-    __slots__ = ('type', 'value', 'layer')
-    def __init__(self, type, value, layer):
-        self.type = type
-        self.value = value
-        self.layer = layer
+@dataclass
+class LefViaLayerRect:
+    layer_id: int
+    rects: List[Tuple[float, float, float, float]] = field(default_factory=list)
 
-class Pin:
-    __slots__ = ('direction', 'use', 'antenna', 'groundsensitivity', 'supplysensitivity', 'ports')
-    def __init__(self):
-        self.direction = None
-        self.use = None
-        self.antenna = []
-        self.groundsensitivity = None
-        self.supplysensitivity = None
-        self.ports = []
+@dataclass
+class LefVia:
+    name_id: int
+    generated: bool = False
+    resistance: Optional[float] = None
+    layers: List[LefViaLayerRect] = field(default_factory=list)
+    raw_lines: List[str] = field(default_factory=list)
 
-class Macro:
-    __slots__ = ('name', 'raw', 'class_', 'origin', 'foreign', 'size', 'symmetry', 'site', 'pins', 'obs')
-    def __init__(self, name, raw):
-        self.name = name
-        self.raw = raw
-        self.class_ = None
-        self.origin = []
-        self.foreign = None
-        self.size = []
-        self.symmetry = []
-        self.site = None
-        self.pins = {}  # pin_name -> Pin
-        self.obs = {}  # layer -> list of rects
+@dataclass
+class LefSite:
+    name_id: int
+    class_type: Optional[str] = None
+    symmetry: List[str] = field(default_factory=list)
+    size: Optional[Tuple[float, float]] = None
+    rowpattern: Optional[str] = None
+    properties: Dict[str, str] = field(default_factory=dict)
+    raw_lines: List[str] = field(default_factory=list)
+
+@dataclass
+class LefPort:
+    layers: List[Dict] = field(default_factory=list)  # Each dict: {'layer': ..., 'geometry': ...}
+
+@dataclass
+class LefPin:
+    name_id: int
+    direction: Optional[str] = None
+    use: Optional[str] = None
+    shape: Optional[str] = None
+    properties: Dict[str, str] = field(default_factory=dict)
+    electrical: Dict[str, float] = field(default_factory=dict)
+    antenna: List[str] = field(default_factory=list)
+    ports: List[LefPort] = field(default_factory=list)
+    raw_lines: List[str] = field(default_factory=list)
+
+@dataclass
+class LefMacro:
+    name_id: int
+    class_type: Optional[str] = None
+    source: Optional[str] = None
+    foreign: Optional[str] = None
+    power: Optional[float] = None
+    size: Optional[Tuple[float, float]] = None
+    symmetry: List[str] = field(default_factory=list)
+    site: Optional[str] = None
+    pins: List[LefPin] = field(default_factory=list)
+    obs: List[str] = field(default_factory=list)
+    density: List[str] = field(default_factory=list)
+    timing: List[str] = field(default_factory=list)
+    properties: Dict[str, str] = field(default_factory=dict)
+    raw_lines: List[str] = field(default_factory=list)
+
+@dataclass
+class LefViaruleLayer:
+    layer_id: int
+    direction: Optional[str] = None
+    width: Optional[Tuple[float, float]] = None  # (min, max) if "TO" present, else (val, val)
+    overhang: Optional[float] = None
+    metaloverhang: Optional[float] = None
+    rects: List[Tuple[float, float, float, float]] = field(default_factory=list)
+    spacing: Optional[Tuple[float, float]] = None
+    resistance: Optional[float] = None
+    properties: Dict[str, str] = field(default_factory=dict)
+    raw_lines: List[str] = field(default_factory=list)
+
+@dataclass
+class LefViarule:
+    name_id: int
+    generate: bool = False
+    layers: List[LefViaruleLayer] = field(default_factory=list)
+    properties: Dict[str, str] = field(default_factory=dict)
+    raw_lines: List[str] = field(default_factory=list)
+
+@dataclass
+class LefData:
+    version_id: Optional[int] = None
+    namescasesensitive: Optional[bool] = None
+    fixedmask: Optional[bool] = None
+    nowireextensionatpin: Optional[bool] = None
+    busbitchars_id: Optional[int] = None
+    dividerchar_id: Optional[int] = None
+    useminspacing: Dict[str, bool] = field(default_factory=dict)
+    clearancemeasure: List[int] = field(default_factory=list)
+    manufacturinggrid: Optional[float] = None
+    units: Optional[LefUnits] = None
+    property_definitions: List[LefPropertyDefinition] = field(default_factory=list)
+    layers: List[LefLayer] = field(default_factory=list)
+    vias: List[LefVia] = field(default_factory=list)
+    sites: List[LefSite] = field(default_factory=list)
+    macros: Dict[int, LefMacro] = field(default_factory=dict)
+    viarules: List[LefViarule] = field(default_factory=list)
 
 class LefParser:
-    def __init__(self, lef_text):
-        self.text = lef_text
-        self.sites = {}  # site_name -> raw block
-        self.macros = {}  # macro_name -> Macro
-        self.layers = {}  # layer_name -> raw block
-        self.vias = {}  # via_name -> {raw, layers}
-        self.via_rules = {}  # rule_name -> raw block
-        self.property_definitions = {}
-        self._parse()
+    def __init__(self):
+        self.lef_data = LefData()
 
-    def _parse(self):
-        self._parse_sites()
-        self._parse_macros()
-        self._parse_layers()
-        self._parse_vias()
-        self._parse_via_rules()
-        self._parse_property_definitions()
+    def parse_version(self, line: str):
+        if line.startswith("VERSION"):
+            version = line.split()[1]
+            self.lef_data.version_id = gname_index.set(version)
 
-    def _extract_blocks(self, keyword):
-        pattern = re.compile(rf'{keyword} .*?END {keyword}', re.DOTALL | re.IGNORECASE)
-        return pattern.findall(self.text)
+    def parse_namescasesensitive(self, line: str):
+        # NAMESCASESENSITIVE ON ;
+        value = line.split()[1].strip(";")
+        self.lef_data.namescasesensitive = (value == "ON")
 
-    def _parse_sites(self):
-        for block in self._extract_blocks("SITE"):
-            site_name = block.strip().splitlines()[0].split()[1]
-            self.sites[site_name] = block
+    def parse_fixedmask(self, line: str):
+        # FIXEDMASK ;
+        self.lef_data.fixedmask = True
 
-    def _parse_macros(self):
-        pattern = re.compile(r'MACRO (.*?)\n(.*?)END\s+\1', re.DOTALL | re.IGNORECASE)
-        for match in pattern.finditer(self.text):
-            name, content = match.group(1).strip(), match.group(2).strip()
-            macro = Macro(name, content)
-            macro.class_ = self._extract_macro_field(content, "CLASS")
-            macro.origin = self._extract_macro_coords(content, "ORIGIN")
-            macro.foreign = self._extract_macro_foreign(content)
-            macro.size = self._extract_macro_size(content)
-            macro.symmetry = self._extract_macro_list_field(content, "SYMMETRY")
-            macro.site = self._extract_macro_field(content, "SITE")
-            macro.pins = self._parse_macro_pins(content)
-            macro.obs = self._parse_macro_obs(content)
-            self.macros[name] = macro
+    def parse_nowireextensionatpin(self, line: str):
+        # NOWIREEXTENSIONATPIN ON ;
+        value = line.split()[1].strip(";")
+        self.lef_data.nowireextensionatpin = (value == "ON")
 
-    def _extract_macro_field(self, content, keyword):
-        match = re.search(rf'{keyword} (.*?);', content)
-        return match.group(1).strip() if match else None
+    def parse_busbitchars(self, line: str):
+        # BUSBITCHARS "<>" ;
+        m = re.search(r'BUSBITCHARS\s+"([^"]+)"', line)
+        if m:
+            self.lef_data.busbitchars_id = gname_index.set(m.group(1))
 
-    def _extract_macro_coords(self, content, keyword):
-        match = re.search(rf'{keyword} (-?\d+\.?\d*) (-?\d+\.?\d*) ;', content)
-        return list(map(float, match.groups())) if match else []
+    def parse_dividerchar(self, line: str):
+        # DIVIDERCHAR ":" ;
+        m = re.search(r'DIVIDERCHAR\s+"?([^";]+)"?', line)
+        if m:
+            self.lef_data.dividerchar_id = gname_index.set(m.group(1).strip())
 
-    def _extract_macro_foreign(self, content):
-        match = re.search(r'FOREIGN (\S+) (-?\d+\.?\d*) (-?\d+\.?\d*) ;', content)
-        if match:
-            return Foreign(match.group(1), [float(match.group(2)), float(match.group(3))])
-        return None
+    def parse_useminspacing(self, line: str):
+        # USEMINSPACING OBS OFF ; or USEMINSPACING PIN ON ;
+        parts = line.split()
+        if len(parts) >= 3:
+            if not hasattr(self.lef_data, "useminspacing"):
+                self.lef_data.useminspacing = {}
+            self.lef_data.useminspacing[parts[1]] = (parts[2] == "ON")
 
-    def _extract_macro_size(self, content):
-        match = re.search(r'SIZE (-?\d+\.?\d*) BY (-?\d+\.?\d*) ;', content)
-        return list(map(float, match.groups())) if match else []
-
-    def _extract_macro_list_field(self, content, keyword):
-        match = re.search(rf'{keyword} (.*?);', content)
-        return match.group(1).strip().split() if match else []
-
-    def _parse_macro_pins(self, content):
-        pins = {}
-        pin_pattern = re.compile(r'PIN (.*?)\n(.*?)END\s+\1', re.DOTALL | re.IGNORECASE)
-        for match in pin_pattern.finditer(content):
-            pin_name, pin_content = match.group(1).strip(), match.group(2).strip()
-            pin = self._parse_pin_block(pin_content)
-            pins[pin_name] = pin
-        return pins
-
-    def _parse_pin_block(self, content):
-        pin = Pin()
-        pin.direction = self._extract_macro_field(content, "DIRECTION")
-        pin.use = self._extract_macro_field(content, "USE")
-        pin.groundsensitivity = self._extract_macro_field(content, "GROUNDSENSITIVITY")
-        pin.supplysensitivity = self._extract_macro_field(content, "SUPPLYSENSITIVITY")
-
-        for line in content.splitlines():
-            if line.startswith("ANTENNA"):
-                tokens = line.strip(';').split()
-                if len(tokens) >= 3:
-                    pin.antenna.append(Antenna(tokens[0], float(tokens[1]), tokens[-1]))
-
-        port_pattern = re.compile(r'PORT\s*(.*?)END', re.DOTALL | re.IGNORECASE)
-        for port_match in port_pattern.finditer(content):
-            port_data = self._extract_layer_rects(port_match.group(1))
-            pin.ports.append(PinPort(port_data))
-
-        return pin
-
-    def _parse_macro_obs(self, content):
-        match = re.search(r'OBS\s*(.*?)END', content, re.DOTALL | re.IGNORECASE)
-        return self._extract_layer_rects(match.group(1).strip()) if match else {}
-
-    def _extract_layer_rects(self, content):
-        layer_blocks = defaultdict(list)
-        current_layer = None
-        for line in content.splitlines():
-            if line.startswith("LAYER"):
-                current_layer = line.split()[1]
-            elif line.startswith("RECT") and current_layer:
-                coords = list(map(float, re.findall(r'-?\d+\.?\d*', line)))
-                layer_blocks[current_layer].append(coords)
-        return dict(layer_blocks)
-
-    def _parse_layers(self):
-        for block in self._extract_blocks("LAYER"):
-            layer_name = block.strip().splitlines()[0].split()[1]
-            self.layers[layer_name] = block
-
-    def _parse_vias(self):
-        for block in self._extract_blocks("VIA"):
-            lines = block.strip().splitlines()
-            via_name = lines[0].split()[1]
-            self.vias[via_name] = {
-                "raw": block,
-                "layers": self._extract_layer_rects("\n".join(lines[1:]))
-            }
-
-    def _parse_via_rules(self):
-        for block in self._extract_blocks("VIARULE"):
-            rule_name = block.strip().splitlines()[0].split()[1]
-            self.via_rules[rule_name] = block
-
-    def _parse_property_definitions(self):
-        match = re.search(r'PROPERTYDEFINITIONS(.*?)END PROPERTYDEFINITIONS', self.text, re.DOTALL | re.IGNORECASE)
-        if match:
-            for line in match.group(1).strip().splitlines():
-                tokens = line.strip().split()
-                if len(tokens) >= 3:
-                    key = f"{tokens[0]} {tokens[1]}"
-                    value = " ".join(tokens[2:])
-                    self.property_definitions[key] = value
-
-    # Accessors
-    def get_sites(self): return self.sites
-    def get_macros(self): return self.macros
-    def get_layers(self): return self.layers
-    def get_vias(self): return self.vias
-    def get_via_rules(self): return self.via_rules
-    def get_property_definitions(self): return self.property_definitions
+    def parse_clearancemeasure(self, line: str):
+        # CLEARANCEMEASURE EUCLIDEAN ; or CLEARANCEMEASURE MAXXY ;
+        value = line.split()[1].strip(";")
+        if not hasattr(self.lef_data, "clearancemeasure"):
+            self.lef_data.clearancemeasure = []
+        self.lef_data.clearancemeasure.append(gname_index.set(value))
 
     
+    def parse_units(self, lines: list):
+        """
+        Parses the UNITS section of a LEF file.
+        """
+        units = LefUnits()
+        for line in lines:
+            line = line.strip().rstrip(';')
+            if line.startswith("TIME"):
+                parts = line.split()
+                units.time = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("CAPACITANCE"):
+                parts = line.split()
+                units.capacitance = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("RESISTANCE"):
+                parts = line.split()
+                units.resistance = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("POWER"):
+                parts = line.split()
+                units.power = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("CURRENT"):
+                parts = line.split()
+                units.current = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("VOLTAGE"):
+                parts = line.split()
+                units.voltage = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("DATABASE"):
+                parts = line.split()
+                units.database = (gname_index.set(parts[1]), int(parts[2]))
+            elif line.startswith("FREQUENCY"):
+                parts = line.split()
+                units.frequency = (gname_index.set(parts[1]), int(parts[2]))
+        self.lef_data.units = units
+
+
+    def parse_property_definitions(self, lines: list):
+        """
+        Parses the PROPERTYDEFINITIONS section of a LEF file.
+        Stores results in self.lef_data.property_definitions as a list of LefPropertyDefinition.
+        """
+        if not hasattr(self.lef_data, "property_definitions"):
+            self.lef_data.property_definitions = []
+
+        for line in lines:
+            line = line.strip().rstrip(';')
+            if not line or line.startswith("PROPERTYDEFINITIONS") or line.startswith("END PROPERTYDEFINITIONS"):
+                continue
+
+            tokens = line.split()
+            if len(tokens) < 4:
+                continue  # Not a valid property definition
+
+            obj_type = tokens[0]
+            prop_name = tokens[1]
+            data_type = tokens[2]
+            prop_range = None
+            default = None
+
+            if "RANGE" in tokens:
+                idx = tokens.index("RANGE")
+                min_val = float(tokens[idx+1])
+                max_val = float(tokens[idx+2])
+                prop_range = (min_val, max_val)
+                # Default value may follow
+                if len(tokens) > idx+3:
+                    default = tokens[idx+3].strip('"')
+            elif len(tokens) > 3:
+                # Default value for STRING, INTEGER, REAL
+                default = tokens[3].strip('"')
+
+            self.lef_data.property_definitions.append(
+                LefPropertyDefinition(
+                    obj_type=obj_type,
+                    prop_name=prop_name,
+                    data_type=data_type,
+                    range=prop_range,
+                    default=default
+                )
+            )
+
+
+    def parse_layer(self, lines: list):
+        """
+        Parses a LAYER section (CUT or ROUTING) from LEF.
+        Stores all lines for advanced/rare features in raw_lines.
+        """
+        # First line: LAYER layerName
+        header = lines[0].strip()
+        parts = header.split()
+        name_id = gname_index.set(parts[1])
+        layer = LefLayer(name_id=name_id)
+        layer.raw_lines = lines[:]  # Save all lines for advanced/rare features
+
+        for line in lines[1:]:
+            line = line.strip().rstrip(";")
+            if not line or line.startswith("END"):
+                continue
+            if line.startswith("TYPE"):
+                layer.type = line.split()[1]
+            elif line.startswith("DIRECTION"):
+                layer.direction = line.split()[1]
+            elif line.startswith("PITCH"):
+                nums = [float(x) for x in line.split()[1:]]
+                layer.pitch = nums
+            elif line.startswith("WIDTH"):
+                layer.width = float(line.split()[1])
+            elif line.startswith("MINWIDTH"):
+                layer.minwidth = float(line.split()[1])
+            elif line.startswith("MAXWIDTH"):
+                layer.maxwidth = float(line.split()[1])
+            elif line.startswith("SPACING"):
+                layer.spacing.append(line)
+            elif line.startswith("PROPERTY"):
+                # PROPERTY propName propVal ;
+                tokens = line.split(None, 2)
+                if len(tokens) == 3:
+                    prop_name = tokens[1]
+                    prop_val = tokens[2].strip('"')
+                    layer.properties[prop_name] = prop_val
+            # You can add more elifs for other fields as needed
+
+        if not hasattr(self.lef_data, "layers"):
+            self.lef_data.layers = []
+        self.lef_data.layers.append(layer)
+
+
+    def parse_via(self, lines: list):
+        try:
+
+            """
+            Parses a VIA section from LEF.
+            """
+            header = lines[0].strip()
+            parts = header.split()
+            name_id = gname_index.set(parts[1])
+            generated = "GENERATED" in header
+            via = LefVia(name_id=name_id, generated=generated)
+            via.raw_lines = lines[:]
+
+            current_layer = None
+
+            for line in lines[1:]:
+                line = line.strip().rstrip(";")
+                if not line or line.startswith("END"):
+                    continue
+                if line.startswith("RESISTANCE"):
+                    via.resistance = float(line.split()[1])
+                elif line.startswith("LAYER"):
+                    layer_id = gname_index.set(line.split()[1])
+                    current_layer = LefViaLayerRect(layer_id=layer_id)
+                    via.layers.append(current_layer)
+                elif line.startswith("RECT") and current_layer is not None:
+                    nums = list(map(float, line.split()[1:]))
+                    if len(nums) == 4:
+                        current_layer.rects.append(tuple(nums))
+                # You can add more elifs for POLYGON, etc. if needed
+
+            if not hasattr(self.lef_data, "vias"):
+                self.lef_data.vias = []
+            self.lef_data.vias.append(via)
+        
+        except Exception as e:
+            print(f"Error LEF parsing VIA: lines: {lines} error: {e}")
+
+
+
+    def parse_site(self, lines: list):
+        """
+        Parses a SITE section from LEF.
+        """
+        header = lines[0].strip()
+        parts = header.split()
+        name_id = gname_index.set(parts[1])
+        site = LefSite(name_id=name_id)
+        site.raw_lines = lines[:]
+
+        for line in lines[1:]:
+            line = line.strip().rstrip(";")
+            if not line or line.startswith("END"):
+                continue
+            if line.startswith("CLASS"):
+                site.class_type = line.split()[1]
+            elif line.startswith("SYMMETRY"):
+                site.symmetry = line.split()[1:]
+            elif line.startswith("SIZE"):
+                # SIZE 67.2 BY 6
+                m = re.match(r'SIZE\s+([0-9.]+)\s+BY\s+([0-9.]+)', line)
+                if m:
+                    site.size = (float(m.group(1)), float(m.group(2)))
+            elif line.startswith("ROWPATTERN"):
+                site.rowpattern = line[len("ROWPATTERN"):].strip()
+            elif line.startswith("PROPERTY"):
+                tokens = line.split(None, 2)
+                if len(tokens) == 3:
+                    prop_name = tokens[1]
+                    prop_val = tokens[2].strip('"')
+                    site.properties[prop_name] = prop_val
+
+        if not hasattr(self.lef_data, "sites"):
+            self.lef_data.sites = []
+        self.lef_data.sites.append(site)
+
+
+    def parse_macro(self, lines: list):
+        """
+        Parses a MACRO section from LEF.
+        """
+        header = lines[0].strip()
+        name_id = gname_index.set(header.split()[1])
+        macro = LefMacro(name_id=name_id)
+        macro.raw_lines = lines[:]
+
+        i = 1
+        n = len(lines)
+        while i < n:
+            line = lines[i].strip().rstrip(";")
+            if not line or line.startswith("END"):
+                i += 1
+                continue
+            if line.startswith("CLASS"):
+                macro.class_type = line.split()[1]
+            elif line.startswith("SOURCE"):
+                macro.source = line.split()[1]
+            elif line.startswith("FOREIGN"):
+                macro.foreign = line.split()[1]
+            elif line.startswith("POWER"):
+                macro.power = float(line.split()[1])
+            elif line.startswith("SIZE"):
+                m = re.match(r'SIZE\s+([0-9.]+)\s+BY\s+([0-9.]+)', line)
+                if m:
+                    macro.size = (float(m.group(1)), float(m.group(2)))
+            elif line.startswith("SYMMETRY"):
+                macro.symmetry = line.split()[1:]
+            elif line.startswith("SITE"):
+                macro.site = line.split()[1]
+            elif line.startswith("PROPERTY"):
+                tokens = line.split(None, 2)
+                if len(tokens) == 3:
+                    prop_name = tokens[1]
+                    prop_val = tokens[2].strip('"')
+                    macro.properties[prop_name] = prop_val
+            elif line.startswith("PIN"):
+                # Parse PIN block
+                pin_lines = [line]
+                i += 1
+                while i < n and not lines[i].strip().startswith("END"):
+                    pin_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    pin_lines.append(lines[i])  # Add END line
+                macro.pins.append(self.parse_pin(pin_lines))
+            elif line.startswith("OBS"):
+                # Parse OBS block
+                obs_lines = [line]
+                i += 1
+                while i < n and not lines[i].strip().startswith("END"):
+                    obs_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    obs_lines.append(lines[i])
+                macro.obs.extend(obs_lines)
+            elif line.startswith("DENSITY"):
+                # Parse DENSITY block
+                density_lines = [line]
+                i += 1
+                while i < n and not lines[i].strip().startswith("END"):
+                    density_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    density_lines.append(lines[i])
+                macro.density.extend(density_lines)
+            elif line.startswith("TIMING"):
+                # Parse TIMING block
+                timing_lines = [line]
+                i += 1
+                while i < n and not lines[i].strip().startswith("END"):
+                    timing_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    timing_lines.append(lines[i])
+                macro.timing.extend(timing_lines)
+            i += 1
+
+        if not hasattr(self.lef_data, "macros"):
+            self.lef_data.macros = {}
+        self.lef_data.macros[macro.name_id] = macro
+
+    def parse_pin(self, lines: list) -> LefPin:
+        """
+        Parses a PIN block from LEF.
+        """
+        header = lines[0].strip()
+        name_id = gname_index.set(header.split()[1])
+        pin = LefPin(name_id=name_id)
+        pin.raw_lines = lines[:]
+        i = 1
+        n = len(lines)
+        while i < n:
+            line = lines[i].strip().rstrip(";")
+            if not line or line.startswith("END"):
+                i += 1
+                continue
+            if line.startswith("DIRECTION"):
+                pin.direction = line.split()[1]
+            elif line.startswith("USE"):
+                pin.use = line.split()[1]
+            elif line.startswith("SHAPE"):
+                pin.shape = line.split()[1]
+            elif line.startswith("PROPERTY"):
+                tokens = line.split(None, 2)
+                if len(tokens) == 3:
+                    prop_name = tokens[1]
+                    prop_val = tokens[2].strip('"')
+                    pin.properties[prop_name] = prop_val
+            elif line.startswith("PORT"):
+                # Parse PORT block
+                port_lines = [line]
+                i += 1
+                while i < n and not lines[i].strip().startswith("END"):
+                    port_lines.append(lines[i])
+                    i += 1
+                if i < n:
+                    port_lines.append(lines[i])
+                pin.ports.append(self.parse_port(port_lines))
+            else:
+                # Try to parse electrical/antenna fields
+                tokens = line.split()
+                if len(tokens) == 2:
+                    try:
+                        pin.electrical[tokens[0]] = float(tokens[1])
+                    except Exception:
+                        pass
+                elif "ANTENNA" in line:
+                    pin.antenna.append(line)
+            i += 1
+        return pin
+
+
+    def parse_port(self, lines: list) -> LefPort:
+        """
+        Parses a PORT block from LEF.
+        """
+        port = LefPort()
+        i = 1
+        n = len(lines)
+        current_layer = None
+        for i in range(1, n):
+            line = lines[i].strip().rstrip(";")
+            if not line or line.startswith("END"):
+                continue
+            if line.startswith("LAYER"):
+                current_layer = {'layer': line.split()[1], 'geometry': []}
+                port.layers.append(current_layer)
+            elif current_layer is not None:
+                current_layer['geometry'].append(line)
+        return port
+
+
+    def parse_viarule(self, lines: list):
+        """
+        Parses a VIARULE section from LEF.
+        """
+        header = lines[0].strip()
+        parts = header.split()
+        name_id = gname_index.set(parts[1])
+        generate = "GENERATE" in header.upper()
+        viarule = LefViarule(name_id=name_id, generate=generate)
+        viarule.raw_lines = lines[:]
+
+        current_layer = None
+
+        i = 1
+        n = len(lines)
+        while i < n:
+            line = lines[i].strip().rstrip(";")
+            if not line or line.startswith("END"):
+                i += 1
+                continue
+            if line.startswith("LAYER"):
+                layer_id = gname_index.set(line.split()[1])
+                current_layer = LefViaruleLayer(layer_id=layer_id)
+                viarule.layers.append(current_layer)
+            elif current_layer is not None:
+                if line.startswith("DIRECTION"):
+                    current_layer.direction = line.split()[1]
+                elif line.startswith("WIDTH"):
+                    tokens = line.split()
+                    if "TO" in tokens:
+                        idx = tokens.index("TO")
+                        minw = float(tokens[1])
+                        maxw = float(tokens[idx+1])
+                        current_layer.width = (minw, maxw)
+                    else:
+                        val = float(tokens[1])
+                        current_layer.width = (val, val)
+                elif line.startswith("OVERHANG"):
+                    current_layer.overhang = float(line.split()[1])
+                elif line.startswith("METALOVERHANG"):
+                    current_layer.metaloverhang = float(line.split()[1])
+                elif line.startswith("RECT"):
+                    nums = list(map(float, line.split()[1:]))
+                    if len(nums) == 4:
+                        current_layer.rects.append(tuple(nums))
+                elif line.startswith("SPACING"):
+                    tokens = line.split()
+                    if "BY" in tokens:
+                        idx = tokens.index("BY")
+                        val1 = float(tokens[1])
+                        val2 = float(tokens[idx+1])
+                        current_layer.spacing = (val1, val2)
+                elif line.startswith("RESISTANCE"):
+                    current_layer.resistance = float(line.split()[1])
+                elif line.startswith("PROPERTY"):
+                    tokens = line.split(None, 2)
+                    if len(tokens) == 3:
+                        prop_name = tokens[1]
+                        prop_val = tokens[2].strip('"')
+                        current_layer.properties[prop_name] = prop_val
+                current_layer.raw_lines.append(line)
+            elif line.startswith("PROPERTY"):
+                # Top-level VIARULE properties
+                tokens = line.split()
+                for j in range(1, len(tokens)-1, 2):
+                    prop_name = tokens[j]
+                    prop_val = tokens[j+1].strip('"')
+                    viarule.properties[prop_name] = prop_val
+            i += 1
+
+        if not hasattr(self.lef_data, "viarules"):
+            self.lef_data.viarules = []
+        self.lef_data.viarules.append(viarule)
+
+    def parse(self, lef_file_content: str):
+        lines = lef_file_content.splitlines()
+        i = 0
+        n = len(lines)
+        while i < n:
+            line = lines[i].strip()
+            if not line or line.startswith("#"):
+                i += 1
+                continue
+
+            # One-liner sections
+            if line.startswith("VERSION"):
+                self.parse_version(line)
+                i += 1
+            elif line.startswith("NAMESCASESENSITIVE"):
+                self.parse_namescasesensitive(line)
+                i += 1
+            elif line.startswith("FIXEDMASK"):
+                self.parse_fixedmask(line)
+                i += 1
+            elif line.startswith("NOWIREEXTENSIONATPIN"):
+                self.parse_nowireextensionatpin(line)
+                i += 1
+            elif line.startswith("BUSBITCHARS"):
+                self.parse_busbitchars(line)
+                i += 1
+            elif line.startswith("DIVIDERCHAR"):
+                self.parse_dividerchar(line)
+                i += 1
+            elif line.startswith("USEMINSPACING"):
+                self.parse_useminspacing(line)
+                i += 1
+            elif line.startswith("CLEARANCEMEASURE"):
+                self.parse_clearancemeasure(line)
+                i += 1
+
+            # Multi-line sections
+            elif line.startswith("UNITS"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END UNITS"):
+                        break
+                    i += 1
+                self.parse_units(block_lines)
+                i += 1
+
+            elif line.startswith("PROPERTYDEFINITIONS"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END PROPERTYDEFINITIONS"):
+                        break
+                    i += 1
+                self.parse_property_definitions(block_lines)
+                i += 1
+
+            elif line.startswith("LAYER"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_layer(block_lines)
+                i += 1
+
+            elif line.startswith("VIA"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_via(block_lines)
+                i += 1
+
+            elif line.startswith("SITE"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_site(block_lines)
+                i += 1
+
+            elif line.startswith("MACRO"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_macro(block_lines)
+                i += 1
+
+            elif line.startswith("VIARULE"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_viarule(block_lines)
+                i += 1
+
+            else:
+                i += 1
+
+
 
 class LefParserImplement:
     def __init__(self):
@@ -209,15 +762,20 @@ class LefParserImplement:
         if file_path:
             with open(file_path, 'r') as f:
                 lef_text = f.read()
-                lefParser = LefParser(lef_text)
+                lefParser = LefParser()
+                lefParser.parse(lef_text)
                 self.parser_dict[file_path] = lefParser
 
     def get_macro(self, cell_name):
         for l, parser in self.parser_dict.items():
-            macros = parser.get_macros()
-            if cell_name in macros:
-                return macros[cell_name]
-            
+
+            cell_name_id = gname_index.set(cell_name)
+            if cell_name_id not in parser.lef_data.macros:
+                continue
+            macro = parser.lef_data.macros.get(cell_name_id)
+            if macro:
+                return macro
+
         return None
     
 

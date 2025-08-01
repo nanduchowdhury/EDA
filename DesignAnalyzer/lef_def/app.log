@@ -1142,3 +1142,77 @@
 2025-07-31 14:42:14,197 - WARNING - Invalid component entry: Component(inst_name_id=103, cell_name_id=63, eeqmaster_id=None, source=None, placed=None, fixed=None, cover=None, unplaced=False, halo=None, routehalo=None, weight=None, region_id=None, properties={}, type_id=None, location=None)
 2025-07-31 14:42:14,200 - WARNING - Invalid component entry: Component(inst_name_id=104, cell_name_id=63, eeqmaster_id=None, source=None, placed=None, fixed=None, cover=None, unplaced=False, halo=None, routehalo=None, weight=None, region_id=None, properties={}, type_id=None, location=None)
 2025-07-31 14:42:14,201 - WARNING - Invalid component entry: Component(inst_name_id=105, cell_name_id=63, eeqmaster_id=None, source=None, placed=None, fixed=None, cover=None, unplaced=False, halo=None, routehalo=None, weight=None, region_id=None, properties={}, type_id=None, location=None)
+2025-07-31 19:14:58,422 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-07-31 19:14:58,445 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-07-31 19:14:58,453 - WARNING - Location is missing for instance I11 in DEF...skipping.
+2025-07-31 19:14:58,455 - WARNING - Location is missing for instance I12[0] in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance I12[1] in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance I13[0][10] in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance I14\[1\] in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance vectormodule[1]/scalarname in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance vectormodule[1]/vectorname[1] in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance scancell1 in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance scancell2 in DEF...skipping.
+2025-07-31 19:14:58,456 - WARNING - Location is missing for instance scancell3 in DEF...skipping.
+2025-07-31 19:14:58,462 - WARNING - Location is missing for instance scancell4 in DEF...skipping.
+2025-07-31 19:14:58,463 - WARNING - Location is missing for instance scancell5 in DEF...skipping.
+2025-07-31 19:14:58,463 - WARNING - Location is missing for instance scancell6 in DEF...skipping.
+2025-07-31 19:14:58,464 - WARNING - Location is missing for instance scancell7 in DEF...skipping.
+2025-07-31 19:14:58,464 - WARNING - Location is missing for instance scancell8 in DEF...skipping.
+2025-07-31 19:14:58,464 - WARNING - Location is missing for instance scancell9 in DEF...skipping.
+2025-07-31 19:14:58,467 - WARNING - Location is missing for instance scancell10 in DEF...skipping.
+2025-07-31 19:14:58,469 - WARNING - Location is missing for instance scancell11 in DEF...skipping.
+2025-07-31 19:14:58,470 - WARNING - Location is missing for instance scancell12 in DEF...skipping.
+2025-07-31 19:14:58,470 - WARNING - Location is missing for instance nobrackets in DEF...skipping.
+2025-07-31 19:14:58,474 - WARNING - Location is missing for instance somethingwith[1] in DEF...skipping.
+2025-07-31 19:14:58,475 - WARNING - Location is missing for instance more[]brackets in DEF...skipping.
+2025-07-31 19:14:58,475 - WARNING - Location is missing for instance more[1]brackets in DEF...skipping.
+2025-07-31 19:14:58,475 - WARNING - Location is missing for instance more\[1\]brackets in DEF...skipping.
+2025-07-31 19:14:58,475 - WARNING - Location is missing for instance more[1][2] in DEF...skipping.
+2025-07-31 19:14:58,480 - WARNING - Location is missing for instance more\[1\]\[2\] in DEF...skipping.
+2025-07-31 19:14:58,481 - WARNING - Location is missing for instance more\[2\] in DEF...skipping.
+2025-07-31 19:14:58,481 - WARNING - Location is missing for instance foo\[1\]\[2\]/haha\[3\]\[4\] in DEF...skipping.
+2025-07-31 19:14:58,481 - WARNING - Location is missing for instance foo[2][3]/haha[4][5] in DEF...skipping.
+2025-07-31 19:14:58,486 - WARNING - Location is missing for instance foo\[3\]\[4\]/haha[5][6] in DEF...skipping.
+2025-07-31 19:14:58,487 - WARNING - Location is missing for instance foo[4][5]/haha\[6\]\[7\] in DEF...skipping.
+2025-07-31 19:14:58,489 - WARNING - Location is missing for instance foo[5][6]bar/haha\[7\]\[8\] in DEF...skipping.
+2025-07-31 19:14:58,489 - WARNING - Location is missing for instance foo[6][7]bar/haha[8][9] in DEF...skipping.
+2025-07-31 19:16:06,436 - INFO - Parse DEF C:/Users/nandu/Downloads/power3 (1).def started...
+2025-07-31 19:17:52,112 - INFO - Parse DEF C:/Users/nandu/Downloads/power3 (1).def finished.
+2025-07-31 21:44:05,435 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-07-31 21:44:05,450 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-07-31 21:44:05,450 - WARNING - Location is missing for instance I11 in DEF...skipping.
+2025-07-31 21:44:05,456 - WARNING - Location is missing for instance I12[0] in DEF...skipping.
+2025-07-31 21:44:05,457 - WARNING - Location is missing for instance I12[1] in DEF...skipping.
+2025-07-31 21:44:05,457 - WARNING - Location is missing for instance I13[0][10] in DEF...skipping.
+2025-07-31 21:44:05,458 - WARNING - Location is missing for instance I14\[1\] in DEF...skipping.
+2025-07-31 21:44:05,459 - WARNING - Location is missing for instance vectormodule[1]/scalarname in DEF...skipping.
+2025-07-31 21:44:05,459 - WARNING - Location is missing for instance vectormodule[1]/vectorname[1] in DEF...skipping.
+2025-07-31 21:44:05,460 - WARNING - Location is missing for instance scancell1 in DEF...skipping.
+2025-07-31 21:44:05,461 - WARNING - Location is missing for instance scancell2 in DEF...skipping.
+2025-07-31 21:44:05,461 - WARNING - Location is missing for instance scancell3 in DEF...skipping.
+2025-07-31 21:44:05,462 - WARNING - Location is missing for instance scancell4 in DEF...skipping.
+2025-07-31 21:44:05,462 - WARNING - Location is missing for instance scancell5 in DEF...skipping.
+2025-07-31 21:44:05,463 - WARNING - Location is missing for instance scancell6 in DEF...skipping.
+2025-07-31 21:44:05,464 - WARNING - Location is missing for instance scancell7 in DEF...skipping.
+2025-07-31 21:44:05,465 - WARNING - Location is missing for instance scancell8 in DEF...skipping.
+2025-07-31 21:44:05,465 - WARNING - Location is missing for instance scancell9 in DEF...skipping.
+2025-07-31 21:44:05,467 - WARNING - Location is missing for instance scancell10 in DEF...skipping.
+2025-07-31 21:44:05,469 - WARNING - Location is missing for instance scancell11 in DEF...skipping.
+2025-07-31 21:44:05,471 - WARNING - Location is missing for instance scancell12 in DEF...skipping.
+2025-07-31 21:44:05,472 - WARNING - Location is missing for instance nobrackets in DEF...skipping.
+2025-07-31 21:44:05,473 - WARNING - Location is missing for instance somethingwith[1] in DEF...skipping.
+2025-07-31 21:44:05,474 - WARNING - Location is missing for instance more[]brackets in DEF...skipping.
+2025-07-31 21:44:05,475 - WARNING - Location is missing for instance more[1]brackets in DEF...skipping.
+2025-07-31 21:44:05,476 - WARNING - Location is missing for instance more\[1\]brackets in DEF...skipping.
+2025-07-31 21:44:05,476 - WARNING - Location is missing for instance more[1][2] in DEF...skipping.
+2025-07-31 21:44:05,478 - WARNING - Location is missing for instance more\[1\]\[2\] in DEF...skipping.
+2025-07-31 21:44:05,479 - WARNING - Location is missing for instance more\[2\] in DEF...skipping.
+2025-07-31 21:44:05,480 - WARNING - Location is missing for instance foo\[1\]\[2\]/haha\[3\]\[4\] in DEF...skipping.
+2025-07-31 21:44:05,481 - WARNING - Location is missing for instance foo[2][3]/haha[4][5] in DEF...skipping.
+2025-07-31 21:44:05,484 - WARNING - Location is missing for instance foo\[3\]\[4\]/haha[5][6] in DEF...skipping.
+2025-07-31 21:44:05,487 - WARNING - Location is missing for instance foo[4][5]/haha\[6\]\[7\] in DEF...skipping.
+2025-07-31 21:44:05,490 - WARNING - Location is missing for instance foo[5][6]bar/haha\[7\]\[8\] in DEF...skipping.
+2025-07-31 21:44:05,492 - WARNING - Location is missing for instance foo[6][7]bar/haha[8][9] in DEF...skipping.
+2025-07-31 21:45:55,718 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/ac97_ctrl.def started...
+2025-07-31 21:45:55,952 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/design_2/ac97_ctrl.def finished.
