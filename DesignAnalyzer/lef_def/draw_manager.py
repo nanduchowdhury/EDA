@@ -8,8 +8,9 @@ from rtree import index
 
 
 class DrawManager:
-    def __init__(self, drawArea):
+    def __init__(self, drawArea, design_data):
         self.drawArea = drawArea
+        self.design_data = design_data
 
         self.view = self.drawArea.view
 
@@ -40,30 +41,71 @@ class DrawManager:
         self._current_scale = 1.0
 
 
-    def load_design_instances(self, rtree, designInstances):
+    def draw_nets(self, net_name=None, layer_name=None):
 
-        self.designInstances = designInstances
+        rects = []
+
+        net_id = gname_index.get_id(net_name) if net_name else None
+        layer_id = gname_index.get_id(layer_name) if layer_name else None
+
+        nets = self.design_data.defParserImplement.get_nets()
+
+        if len(nets) != 0:
+            print(f'Number of nets: {len(nets)}')
+
+        for nid in nets:
+            if net_id is not None and nid != net_id:
+                continue
+            
+            wires = self.design_data.defParserImplement.get_wires_of_net(net_name, layer_id)
+
+            if len(wires) != 0:
+                print(f'Number of wires in net {nid}: {len(wires)}')
+
+            for wire in wires:
+                wire_rects = self.design_data.defParserImplement.get_wire_rects(wire)
+
+                if len(wire_rects) != 0:
+                    print(f'Number of rects in wire: {len(wire_rects)}')
+
+                rects.extend(wire_rects)
+
+        self.drawArea.drawRects(rects, QColor("red"))
 
 
-        visible_bbox = rtree.get_bounds()
+    def draw_inst_names(self, name_list):
 
-        visible_ids = list(rtree.intersection(visible_bbox))
+        id_list = []
 
-        self.draw_instances(visible_ids, QColor("red"))
+        for name in name_list:
+            inst_id = gname_index.get_id(name)
+            if inst_id is None:
+                continue
 
+            id_list.append(inst_id)
 
-    # instList can have name or id
-    def draw_instances(self, instList, color):
+        rects = self.get_instance_rects(id_list)
+        self.drawArea.drawRects(rects, QColor("white"))
 
+    def draw_instances_rtree(self, bbox=None):
+
+        if bbox is None:
+            bbox = self.design_data.inst_rtree.get_bounds()
+
+        visible_ids = list(self.design_data.inst_rtree.intersection(bbox))
+
+        rects = self.get_instance_rects(visible_ids)
+        self.drawArea.drawRects(rects, QColor("red"))
+
+    def get_instance_rects(self, instList):
         rect_list = []
 
         for i in instList:
-
             id = i
             if isinstance(id, str):
                 id = gname_index.get_id(i)
 
-            inst = self.designInstances.instance_data[id]
+            inst = self.design_data.instData.instance_data[id]
             x1, y1, x2, y2 = inst.location
 
             x = min(x1, x2)
@@ -73,7 +115,8 @@ class DrawManager:
 
             rect_list.append((x, y, w, h))
 
-        self.drawArea.drawRects(rect_list, color)
+        return rect_list
+
 
     def draw_instances_1(self, instList, color):
 

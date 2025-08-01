@@ -12,6 +12,9 @@ from sklearn.cluster import KMeans
 import numpy as np
 import random
 
+import pandas as pd
+import re
+
 from def_parser import DefParserImplement
 from lef_parser import LefParserImplement
 
@@ -36,6 +39,39 @@ class DesignData:
         self.instData = InstanceMap()
 
 
+
+    def query_instances(self, inst_regex, cell_regex):
+        """
+        Query instances by instance and cell regex.
+        Returns a pandas DataFrame with inst_name, cell_name, type, location.
+        """
+        data = []
+        inst_pattern = re.compile(inst_regex) if inst_regex else None
+        cell_pattern = re.compile(cell_regex) if cell_regex else None
+
+        for inst_id, inst in self.instData.instance_data.items():
+            inst_name = gname_index.getName(inst_id)
+            cell_name = gname_index.getName(inst.cell_name_id)
+            type_name = gname_index.getName(inst.type_id)
+            location = inst.location
+
+            # Apply regex filters
+            inst_match = True if not inst_pattern else (inst_pattern.search(inst_name) if inst_name else False)
+            cell_match = True if not cell_pattern else (cell_pattern.search(cell_name) if cell_name else False)
+
+            if inst_match and cell_match:
+                data.append({
+                    "inst_name": inst_name,
+                    "cell_name": cell_name,
+                    "type": type_name,
+                    "location": location
+                })
+
+        df = pd.DataFrame(data)
+        return df
+
+
+
     def resolveCompToInst(self):
         if not self.defParserImplement or not self.lefParserImplement:
             logging.error("Missing DEF or LEF parser.")
@@ -46,38 +82,28 @@ class DesignData:
         design_units = int(design_units)
 
         components = self.defParserImplement.get_components()
-        if not isinstance(components, list):
-            logging.error(f"'components' should be a list, got {type(components)}")
-            return
 
         self.inst_rtree = index.Index()
 
-        # Step 2: Get LEF macro data
-        for comp in components:
+        location_missing_warning = 0
 
-            instance_name = gname_index.getName(comp.inst_name_id)
+        # Step 2: Get LEF macro data
+        for comp_id in components:
+
+            comp = components[comp_id]
+
+            instance_name = gname_index.getName(comp_id)
             cell_name = gname_index.getName(comp.cell_name_id)
             type = gname_index.getName(comp.type_id)
             location = comp.location
 
-            if not instance_name:
-                logging.warning(f"Instance name is missing for component: {comp}")
-                continue
-
-            if not cell_name:
-                logging.warning(f"Cell name is missing for component {instance_name} in DEF...skipping.")
-                continue
-
             if not location:
-                logging.warning(f"Location is missing for instance {instance_name} in DEF...skipping.")
+                location_missing_warning += 1
                 continue
 
             x_dbu, y_dbu = location
-            x_dbu = int(x_dbu)
-            y_dbu = int(y_dbu)
 
-            x_um = x_dbu / design_units
-            y_um = y_dbu / design_units
+            (x_um, y_um) = self.defParserImplement.convert_to_micron(x_dbu, y_dbu)
 
             macro = self.lefParserImplement.get_macro(cell_name)
             if not macro:
@@ -91,13 +117,16 @@ class DesignData:
             inst = Instance(cell_name_id=comp.cell_name_id, 
                                     type_id=comp.type_id, 
                                     location=bbox)
-            self.instData.instance_data[comp.inst_name_id] = inst
+            self.instData.instance_data[comp_id] = inst
 
-            self.inst_rtree.insert(comp.inst_name_id, bbox)
+            self.inst_rtree.insert(comp_id, bbox)
 
         self.inst_bbox = self.inst_rtree.get_bounds()
 
         print(f"Resolved {len(self.instData.instance_data)} instances")
+
+        if location_missing_warning > 0:
+            logging.warning(f"Skipped {location_missing_warning} instances due to missing location data.")
 
 
     def iterate_pruned_rtrees(original_rtree, numIter):

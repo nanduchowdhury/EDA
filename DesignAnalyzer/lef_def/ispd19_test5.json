@@ -1,0 +1,11 @@
+{
+    "Files": {
+        "LEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/ispd19_test5/ispd19_test5.lef"
+        ],
+        "DEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/ispd19_test5/ispd19_test5.input_unplaced.def"
+        ]
+    },
+    "Cloud": {}
+}

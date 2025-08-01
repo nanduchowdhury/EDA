@@ -347,9 +347,21 @@ class LefParser:
                     current_layer = LefViaLayerRect(layer_id=layer_id)
                     via.layers.append(current_layer)
                 elif line.startswith("RECT") and current_layer is not None:
-                    nums = list(map(float, line.split()[1:]))
-                    if len(nums) == 4:
-                        current_layer.rects.append(tuple(nums))
+                    tokens = line.split()
+                    idx = 1
+                    mask = None
+                    # Check for optional MASK
+                    if idx < len(tokens) and tokens[idx] == "MASK":
+                        mask = int(tokens[idx + 1])
+                        idx += 2
+                    # Next 4 tokens are the rectangle coordinates
+                    if idx + 3 < len(tokens):
+                        rect = tuple(map(float, tokens[idx:idx + 4]))
+                        # Store as (mask, rect) if mask present, else just rect
+                        if mask is not None:
+                            current_layer.rects.append((mask, rect))
+                        else:
+                            current_layer.rects.append(rect)
                 # You can add more elifs for POLYGON, etc. if needed
 
             if not hasattr(self.lef_data, "vias"):
@@ -554,78 +566,88 @@ class LefParser:
 
 
     def parse_viarule(self, lines: list):
-        """
-        Parses a VIARULE section from LEF.
-        """
-        header = lines[0].strip()
-        parts = header.split()
-        name_id = gname_index.set(parts[1])
-        generate = "GENERATE" in header.upper()
-        viarule = LefViarule(name_id=name_id, generate=generate)
-        viarule.raw_lines = lines[:]
+        try:
+            """
+            Parses a VIARULE section from LEF.
+            """
+            header = lines[0].strip()
+            parts = header.split()
+            name_id = gname_index.set(parts[1])
+            generate = "GENERATE" in header.upper()
+            viarule = LefViarule(name_id=name_id, generate=generate)
+            viarule.raw_lines = lines[:]
 
-        current_layer = None
+            current_layer = None
 
-        i = 1
-        n = len(lines)
-        while i < n:
-            line = lines[i].strip().rstrip(";")
-            if not line or line.startswith("END"):
-                i += 1
-                continue
-            if line.startswith("LAYER"):
-                layer_id = gname_index.set(line.split()[1])
-                current_layer = LefViaruleLayer(layer_id=layer_id)
-                viarule.layers.append(current_layer)
-            elif current_layer is not None:
-                if line.startswith("DIRECTION"):
-                    current_layer.direction = line.split()[1]
-                elif line.startswith("WIDTH"):
-                    tokens = line.split()
-                    if "TO" in tokens:
-                        idx = tokens.index("TO")
-                        minw = float(tokens[1])
-                        maxw = float(tokens[idx+1])
-                        current_layer.width = (minw, maxw)
-                    else:
-                        val = float(tokens[1])
-                        current_layer.width = (val, val)
-                elif line.startswith("OVERHANG"):
-                    current_layer.overhang = float(line.split()[1])
-                elif line.startswith("METALOVERHANG"):
-                    current_layer.metaloverhang = float(line.split()[1])
-                elif line.startswith("RECT"):
-                    nums = list(map(float, line.split()[1:]))
-                    if len(nums) == 4:
-                        current_layer.rects.append(tuple(nums))
-                elif line.startswith("SPACING"):
-                    tokens = line.split()
-                    if "BY" in tokens:
-                        idx = tokens.index("BY")
-                        val1 = float(tokens[1])
-                        val2 = float(tokens[idx+1])
-                        current_layer.spacing = (val1, val2)
-                elif line.startswith("RESISTANCE"):
-                    current_layer.resistance = float(line.split()[1])
+            i = 1
+            n = len(lines)
+            while i < n:
+                line = self.clean_semicolon_and_beyond(lines[i].strip())
+                if not line or line.startswith("END"):
+                    i += 1
+                    continue
+                if line.startswith("LAYER"):
+                    layer_id = gname_index.set(line.split()[1])
+                    current_layer = LefViaruleLayer(layer_id=layer_id)
+                    viarule.layers.append(current_layer)
+                elif current_layer is not None:
+                    if line.startswith("DIRECTION"):
+                        current_layer.direction = line.split()[1]
+                    elif line.startswith("WIDTH"):
+                        tokens = line.split()
+                        if "TO" in tokens:
+                            idx = tokens.index("TO")
+                            minw = float(tokens[1])
+                            maxw = float(tokens[idx+1])
+                            current_layer.width = (minw, maxw)
+                        else:
+                            val = float(tokens[1])
+                            current_layer.width = (val, val)
+                    elif line.startswith("OVERHANG"):
+                        current_layer.overhang = float(line.split()[1])
+                    elif line.startswith("METALOVERHANG"):
+                        current_layer.metaloverhang = float(line.split()[1])
+                    elif line.startswith("RECT"):
+                        line = line.replace('(', '').replace(')', '')
+                        nums = list(map(float, line.split()[1:]))
+                        if len(nums) == 4:
+                            current_layer.rects.append(tuple(nums))
+                    elif line.startswith("SPACING"):
+                        tokens = line.split()
+                        if "BY" in tokens:
+                            idx = tokens.index("BY")
+                            val1 = float(tokens[1])
+                            val2 = float(tokens[idx+1])
+                            current_layer.spacing = (val1, val2)
+                    elif line.startswith("RESISTANCE"):
+                        current_layer.resistance = float(line.split()[1])
+                    elif line.startswith("PROPERTY"):
+                        tokens = line.split(None, 2)
+                        if len(tokens) == 3:
+                            prop_name = tokens[1]
+                            prop_val = tokens[2].strip('"')
+                            current_layer.properties[prop_name] = prop_val
+                    current_layer.raw_lines.append(line)
                 elif line.startswith("PROPERTY"):
-                    tokens = line.split(None, 2)
-                    if len(tokens) == 3:
-                        prop_name = tokens[1]
-                        prop_val = tokens[2].strip('"')
-                        current_layer.properties[prop_name] = prop_val
-                current_layer.raw_lines.append(line)
-            elif line.startswith("PROPERTY"):
-                # Top-level VIARULE properties
-                tokens = line.split()
-                for j in range(1, len(tokens)-1, 2):
-                    prop_name = tokens[j]
-                    prop_val = tokens[j+1].strip('"')
-                    viarule.properties[prop_name] = prop_val
-            i += 1
+                    # Top-level VIARULE properties
+                    tokens = line.split()
+                    for j in range(1, len(tokens)-1, 2):
+                        prop_name = tokens[j]
+                        prop_val = tokens[j+1].strip('"')
+                        viarule.properties[prop_name] = prop_val
+                i += 1
 
-        if not hasattr(self.lef_data, "viarules"):
-            self.lef_data.viarules = []
-        self.lef_data.viarules.append(viarule)
+            if not hasattr(self.lef_data, "viarules"):
+                self.lef_data.viarules = []
+            self.lef_data.viarules.append(viarule)
+
+        except Exception as e:
+            print(f"Error LEF parsing VIARULE: lines: {lines} error: {e}")
+
+
+    def clean_semicolon_and_beyond(self, line: str) -> str:
+        cleaned = line.split(';', 1)[0].strip()
+        return cleaned
 
     def parse(self, lef_file_content: str):
         lines = lef_file_content.splitlines()
@@ -700,6 +722,18 @@ class LefParser:
                 self.parse_layer(block_lines)
                 i += 1
 
+            elif line.startswith("VIARULE"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_viarule(block_lines)
+                i += 1
+
             elif line.startswith("VIA"):
                 block_lines = [line]
                 i += 1
@@ -735,19 +769,6 @@ class LefParser:
                     i += 1
                 self.parse_macro(block_lines)
                 i += 1
-
-            elif line.startswith("VIARULE"):
-                block_lines = [line]
-                i += 1
-                while i < n:
-                    l = lines[i].strip()
-                    block_lines.append(l)
-                    if l.startswith("END"):
-                        break
-                    i += 1
-                self.parse_viarule(block_lines)
-                i += 1
-
             else:
                 i += 1
 

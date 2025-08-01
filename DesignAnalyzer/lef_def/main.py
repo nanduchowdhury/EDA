@@ -59,9 +59,10 @@ class LefDefTableView(ResultsTableView):
 
 
 class LefDefPredicate(PredicateBase):
-    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+    def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
         super().__init__()
 
+        self.design_data = _design_data
         self.defParserImplement = _defParserImplement
         self.lefParserImplement = _lefParserImplement
         self.drawManager = _drawManager
@@ -72,8 +73,8 @@ class LefDefPredicate(PredicateBase):
 
 
 class GetViasForLayer(LefDefPredicate):
-    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
-        super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+    def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
         self.args = {
             'layer': {
@@ -95,23 +96,35 @@ class GetViasForLayer(LefDefPredicate):
         return result
 
 class GetInstanceCoords(LefDefPredicate):
-    def __init__(self, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
-        super().__init__(_defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+    def __init__(self, _design_data,
+                 _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.arg_inst_name = "instance name"
+        self.arg_cell_name = "cell name"
 
         self.args = {
-            'instance_name': {
+            self.arg_inst_name: {
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'Name of the instance to search for',
-                'example': 'example : U1*'
+                'example': 'example : INST*'
+            },
+            self.arg_cell_name: {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the cell to search for',
+                'example': 'example : BUFF*'
             }
         }
 
 
     def run(self):
-        name_regex = self.args["instance_name"]["user_value"]
 
-        df = self.defParserImplement.query_components(name_regex)
+        inst_regex = self.args[self.arg_inst_name]["user_value"]
+        cell_regex = self.args[self.arg_cell_name]["user_value"]
+
+        df = self.design_data.query_instances(inst_regex, cell_regex)
 
         for col_name in df.columns:
             self.setOutputObject(col_name, df[col_name].tolist())
@@ -129,17 +142,19 @@ class GetInstanceCoords(LefDefPredicate):
         print("🟢 Cell clicked:")
 
         for column, values in data_dict.items():
-            self.drawManager.draw_instances(values, QColor("white"))
+            self.drawManager.draw_inst_names(values)
 
 
 
 class LoadDesignToolItem(ToolBarItemAbstract):
-    def __init__(self, inputTab,
+    def __init__(self, inputTab, design_data,
                     defParserImplement, lefParserImplement, _sentralControl,
                     drawManager):
         super().__init__("Load Design")
 
         self.inputTab = inputTab
+
+        self.design_data = design_data
 
         self.lefParserImplement = lefParserImplement
         self.defParserImplement = defParserImplement
@@ -169,12 +184,10 @@ class LoadDesignToolItem(ToolBarItemAbstract):
 
     def slotDefParserFinished(self, message):
 
-        design_data = DesignData(self.lefParserImplement, self.defParserImplement)
-
-        design_data.resolveCompToInst()
+        self.design_data.resolveCompToInst()
         
-        self.drawManager.load_design_instances(design_data.inst_rtree, 
-                        design_data.instData)
+        self.drawManager.draw_instances_rtree()
+        self.drawManager.draw_nets()
         
 
 class LefDefUI(MainUI):
@@ -183,15 +196,19 @@ class LefDefUI(MainUI):
         
         self.setWindowTitle("Post-layout Analyzerr")
 
-        self.drawManager = DrawManager(self.drawArea)
-
         self.bottomArea.create_input_tab("LEF")
         self.bottomArea.create_input_tab("DEF")
 
         self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
 
+        self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
+
+        self.drawManager = DrawManager(self.drawArea, self.design_data)
+
+
         self.loadDesignToolbarItem = LoadDesignToolItem(self.bottomArea.inputTab,
+                                                        self.design_data,
                                 self.defParserImplement, self.lefParserImplement,
                                 self.sentralControl,
                                 self.drawManager)
@@ -203,11 +220,13 @@ class LefDefUI(MainUI):
 
     def registerLefDefPredicates(self):
 
-        viaObj = GetViasForLayer(self.defParserImplement, self.lefParserImplement, self.drawManager,
+        viaObj = GetViasForLayer(self.design_data,
+                                 self.defParserImplement, self.lefParserImplement, self.drawManager,
                                  self.sentralControl)
         self.all_predicates.addPredicate("design analysis", "search vias based on layer etc", viaObj)
 
-        instObj = GetInstanceCoords(self.defParserImplement, self.lefParserImplement, self.drawManager,
+        instObj = GetInstanceCoords(self.design_data,
+                                    self.defParserImplement, self.lefParserImplement, self.drawManager,
                                     self.sentralControl)
         self.all_predicates.addPredicate("design analysis", "search instances by name regexp, location etc", instObj)
 

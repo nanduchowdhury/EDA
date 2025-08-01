@@ -8,6 +8,7 @@ import os
 import threading
 import logging
 
+import pandas as pd
 
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict
@@ -72,15 +73,25 @@ class NetVPin:
     cover: Optional[Tuple[int, int, str]] = None
 
 @dataclass
+class NetWire:
+    wire_type: str  # e.g. "ROUTED", "FIXED", "COVER", "NOSHIELD"
+    layer: Optional[int] = None
+    points: List[Tuple[int, int]] = field(default_factory=list)
+    vias: List[str] = field(default_factory=list)
+    mask: Optional[int] = None
+    rects: List[Tuple[int, int, int, int]] = field(default_factory=list)
+    raw: str = ""  # Store the raw line for advanced/rare features
+
+@dataclass
 class NetSubnet:
     subnet_name_id: int
     connections: List[NetConnection] = field(default_factory=list)
+    wires: List[NetWire] = field(default_factory=list)
     nondefaultrule: Optional[str] = None
     # Add regularWiring fields as needed
 
 @dataclass
 class Net:
-    name_id: int
     connections: List[NetConnection] = field(default_factory=list)
     mustjoin: List[Tuple[int, int]] = field(default_factory=list)  # List of (comp_name_id, pin_name_id)
     shieldnets: List[int] = field(default_factory=list)
@@ -90,6 +101,7 @@ class Net:
     nondefaultrule: Optional[str] = None
     source: Optional[str] = None
     fixedbump: bool = False
+    wires: List[NetWire] = field(default_factory=list)
     frequency: Optional[float] = None
     original_net_id: Optional[int] = None
     use: Optional[str] = None
@@ -112,7 +124,6 @@ class ViaPolygon:
 
 @dataclass
 class Via:
-    name_id: int
     via_rule_id: Optional[int] = None
     cut_size: Optional[Tuple[int, int]] = None
     layer_ids: List[int] = field(default_factory=list)
@@ -134,7 +145,6 @@ class Region:
 
 @dataclass
 class Component:
-    inst_name_id: int
     cell_name_id: int
     eeqmaster_id: Optional[int] = None
     source: Optional[str] = None
@@ -175,7 +185,6 @@ class PinAntenna:
 
 @dataclass
 class Pin:
-    name_id: int
     net_id: Optional[int] = None
     special: bool = False
     direction_id: Optional[int] = None
@@ -212,7 +221,6 @@ class SpecialNetConnection:
 
 @dataclass
 class SpecialNet:
-    name_id: int
     connections: List[SpecialNetConnection] = field(default_factory=list)
     voltage: Optional[float] = None
     source: Optional[str] = None
@@ -233,13 +241,13 @@ class DefData:
     diearea: Optional[DieArea] = None
     rows: List[Row] = field(default_factory=list)
     tracks: List[Track] = field(default_factory=list)
-    nets: List[Net] = field(default_factory=list)
-    vias: List[Via] = field(default_factory=list)
+    nets: Dict[int, Net] = field(default_factory=dict)
+    vias: Dict[int, Via] = field(default_factory=dict)
     regions: List[Region] = field(default_factory=list)
-    components: List[Component] = field(default_factory=list)
-    pins: List[Pin] = field(default_factory=list)
+    components: Dict[int, Component] = field(default_factory=dict)
+    pins: Dict[int, Pin] = field(default_factory=dict)
     blockages: List[Blockage] = field(default_factory=list)
-    specialnets: List[SpecialNet] = field(default_factory=list)
+    specialnets: Dict[int, SpecialNet] = field(default_factory=dict)
     property_definitions: Dict[int, int] = field(default_factory=dict)
 
 class DefParser:
@@ -340,7 +348,7 @@ class DefParser:
 
 
             name_id = gname_index.set(header.split()[0])
-            via = Via(name_id=name_id)
+            via = Via()
             for line in lines:
                 line = line.strip()
                 if line.startswith("+ VIARULE"):
@@ -390,7 +398,8 @@ class DefParser:
                     points = [tuple(map(int, pt)) for pt in pts]
                     if points:
                         via.polygons.append(ViaPolygon(layer_name_id=layer_name_id, points=points))
-            self.def_data.vias.append(via)
+            
+            self.def_data.vias[name_id] = via
 
         except Exception as e:
             print(f"Error DEF parsing via: lines: {lines} error: {e}")
@@ -441,7 +450,7 @@ class DefParser:
             inst_id = gname_index.set(parts[0])
             cell_id = gname_index.set(parts[1])
 
-            comp = Component(inst_name_id=inst_id, cell_name_id=cell_id)
+            comp = Component(cell_name_id=cell_id)
 
             for line in lines:
                 line = line.strip()
@@ -492,7 +501,7 @@ class DefParser:
                         if i+1 < len(props):
                             comp.properties[props[i]] = props[i+1]
 
-            self.def_data.components.append(comp)
+            self.def_data.components[inst_id] = comp
 
         except Exception as e:
             print(f"Error DEF parsing component: lines: {lines} error: {e}")
@@ -507,7 +516,7 @@ class DefParser:
             name_id = gname_index.set(parts[0])
             net_id = gname_index.set(parts[3]) if "+NET" in header or "+NET" in parts else 0
 
-            pin = Pin(name_id=name_id)
+            pin = Pin()
 
             current_port = None
             current_layer = None
@@ -589,7 +598,7 @@ class DefParser:
                         current_port.placed = (*pt, orient)
                 # ... handle other attributes as needed
 
-            self.def_data.pins.append(pin)
+            self.def_data.pins[name_id] = pin
 
         except Exception as e:
             print(f"Error DEF parsing pin: lines: {lines} error: {e}")
@@ -697,7 +706,7 @@ class DefParser:
 
         
             name_id = gname_index.set(header.split()[0])
-            specialnet = SpecialNet(name_id=name_id)
+            specialnet = SpecialNet()
 
             lines = [header] + lines  # Include header in lines for processing
 
@@ -746,7 +755,7 @@ class DefParser:
                             specialnet.properties[props[i]] = props[i+1]
                 # You can add parsing for specialWiring here if needed
 
-            self.def_data.specialnets.append(specialnet)
+            self.def_data.specialnets[name_id] = specialnet
 
         except Exception as e:
             print(f"Error DEF parsing specialnet: lines: {lines} error: {e}")
@@ -781,52 +790,47 @@ class DefParser:
 
 
     def parse_net(self, lines: List[str]):
-        try:
+        #try:
             lines = self.clean_lines(lines)
-            (header, lines) = self.create_new_lines_list(lines)
+            header, attr_lines = self.create_new_lines_list(lines)
 
             name_id = gname_index.set(header.split()[0])
-            net = Net(name_id=name_id)
+            net = Net()
+
+            # Parse connections from header
+            conn_match = re.findall(r'\(\s*(.*?)\s*\)', header)
+            for conn in conn_match:
+                tokens = conn.split()
+                if not tokens:
+                    continue
+                if tokens[0] == "PIN":
+                    pin_name_id = gname_index.set(tokens[1])
+                    net.connections.append(NetConnection(
+                        comp_name_id=None, pin_name_id=pin_name_id, is_pin=True
+                    ))
+                elif tokens[0] == "VPIN":
+                    vpin_name_id = gname_index.set(tokens[1])
+                    net.connections.append(NetConnection(
+                        comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
+                    ))
+                else:
+                    comp_name_id = gname_index.set(tokens[0])
+                    pin_name_id = gname_index.set(tokens[1])
+                    net.connections.append(NetConnection(
+                        comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False
+                    ))
 
             i = 0
-            n = len(lines)
+            n = len(attr_lines)
             while i < n:
-                line = lines[i].strip()
+                line = attr_lines[i].strip()
 
-                # Connections: ( compName pinName ) or ( PIN pinName ) or ( VPIN vpinName )
-                conn_match = re.findall(r'\(\s*(.*?)\s*\)', line)
-                for conn in conn_match:
-                    tokens = conn.split()
-                    if not tokens:
-                        continue
-                    if tokens[0] == "PIN":
-                        pin_name_id = gname_index.set(tokens[1])
-                        synthesized = "+ SYNTHESIZED" in line
-                        net.connections.append(NetConnection(
-                            comp_name_id=None, pin_name_id=pin_name_id, is_pin=True, synthesized=synthesized
-                        ))
-                    elif tokens[0] == "VPIN":
-                        vpin_name_id = gname_index.set(tokens[1])
-                        net.connections.append(NetConnection(
-                            comp_name_id=None, pin_name_id=None, is_pin=False, is_vpin=True, vpin_name_id=vpin_name_id
-                        ))
-                    else:
-                        comp_name_id = gname_index.set(tokens[0])
-                        pin_name_id = gname_index.set(tokens[1])
-                        synthesized = "+ SYNTHESIZED" in line
-                        net.connections.append(NetConnection(
-                            comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False, synthesized=synthesized
-                        ))
-                if "MUSTJOIN" in line:
-                    mj_match = re.findall(r'MUSTJOIN\s*\(\s*(\S+)\s+(\S+)\s*\)', line)
-                    for comp, pin in mj_match:
-                        comp_id = gname_index.set(comp)
-                        pin_id = gname_index.set(pin)
-                        net.mustjoin.append((comp_id, pin_id))
-                elif line.startswith("+ SHIELDNET"):
+                # Shieldnets
+                if line.startswith("+ SHIELDNET"):
                     net.shieldnets.append(gname_index.set(line.split()[2]))
+
+                # VPINs
                 elif line.startswith("+ VPIN"):
-                    # Example: + VPIN N1_VP0 LAYER M3 ( -333 -333 ) ( 333 333 ) PLACED ( 189560 27300 ) N
                     tokens = line.split()
                     vpin_name_id = gname_index.set(tokens[2])
                     layer_name_id = None
@@ -866,12 +870,14 @@ class DefParser:
                         fixed=fixed,
                         cover=cover
                     ))
+
+                # Subnets
                 elif line.startswith("+ SUBNET"):
                     subnet_name_id = gname_index.set(line.split()[2])
                     subnet = NetSubnet(subnet_name_id=subnet_name_id)
                     i += 1
                     while i < n:
-                        subline = lines[i].strip()
+                        subline = attr_lines[i].strip()
                         if subline.startswith("+ NONDEFAULTRULE"):
                             subnet.nondefaultrule = subline.split()[1]
                         elif re.match(r'\(\s*(.*?)\s*\)', subline):
@@ -896,44 +902,174 @@ class DefParser:
                                     subnet.connections.append(NetConnection(
                                         comp_name_id=comp_name_id, pin_name_id=pin_name_id, is_pin=False
                                     ))
-                        elif subline.startswith("+ NONDEFAULTRULE"):
+                        elif subline.startswith("NONDEFAULTRULE"):
                             subnet.nondefaultrule = subline.split()[1]
+                        elif subline.startswith("ROUTED") or subline.startswith("FIXED") or subline.startswith("COVER"):
+                            # Use similar logic as above to parse and append to subnet.wires
+                            tokens = subline.split()
+                            wire_type = tokens[0]
+                            idx = 1
+                            layer_id = None
+                            mask = None
+                            points = []
+                            vias = []
+                            rects = []
+                            if idx < len(tokens) and tokens[idx] == "MASK":
+                                mask = int(tokens[idx+1])
+                                idx += 2
+                            if idx < len(tokens):
+                                layer_id = gname_index.set(tokens[idx])
+                                idx += 1
+                            while idx < len(tokens):
+                                t = tokens[idx]
+                                if t == "MASK":
+                                    mask = int(tokens[idx+1])
+                                    idx += 2
+                                elif t == "RECT":
+                                    rect = tuple(map(int, tokens[idx+1:idx+5]))
+                                    rects.append(rect)
+                                    idx += 5
+                                elif re.match(r'^-?\d+$', t) and idx+1 < len(tokens) and re.match(r'^-?\d+$', tokens[idx+1]):
+                                    pt = (int(tokens[idx]), int(tokens[idx+1]))
+                                    points.append(pt)
+                                    idx += 2
+                                elif t.isidentifier():
+                                    vias.append(t)
+                                    idx += 1
+                                else:
+                                    idx += 1
+                            subnet.wires.append(NetWire(
+                                wire_type=wire_type,
+                                layer=layer_id,
+                                points=points,
+                                vias=vias,
+                                mask=mask,
+                                rects=rects,
+                                raw=subline
+                            ))
                         elif subline.startswith("+") or subline == ";":
                             break
                         i += 1
                     net.subnets.append(subnet)
+
+                # MUSTJOIN
+                elif "MUSTJOIN" in line:
+                    mj_match = re.findall(r'MUSTJOIN\s*\(\s*(\S+)\s+(\S+)\s*\)', line)
+                    for comp, pin in mj_match:
+                        comp_id = gname_index.set(comp)
+                        pin_id = gname_index.set(pin)
+                        net.mustjoin.append((comp_id, pin_id))
+
+                # XTALK
                 elif line.startswith("+ XTALK"):
                     net.xtalk_class = line.split()[2]
+
+                # NONDEFAULTRULE
                 elif line.startswith("+ NONDEFAULTRULE"):
                     net.nondefaultrule = line.split()[2]
+
+                # SOURCE
                 elif line.startswith("+ SOURCE"):
                     net.source = line.split()[2]
+
+                # FIXEDBUMP
                 elif line.startswith("+ FIXEDBUMP"):
                     net.fixedbump = True
+
+                # FREQUENCY
                 elif line.startswith("+ FREQUENCY"):
                     net.frequency = float(line.split()[2])
+
+                # ORIGINAL
                 elif line.startswith("+ ORIGINAL"):
                     net.original_net_id = gname_index.set(line.split()[2])
+
+                # USE
                 elif line.startswith("+ USE"):
                     net.use = line.split()[2]
+
+                # PATTERN
                 elif line.startswith("+ PATTERN"):
                     net.pattern = line.split()[2]
+
+                # ESTCAP
                 elif line.startswith("+ ESTCAP"):
                     net.estcap = float(line.split()[2])
+
+                # WEIGHT
                 elif line.startswith("+ WEIGHT"):
                     net.weight = float(line.split()[2])
+
+                # PROPERTY (can be multiple in one line)
                 elif line.startswith("+ PROPERTY"):
                     props = line.split()[2:]
                     for j in range(0, len(props), 2):
                         if j+1 < len(props):
                             net.properties[props[j]] = props[j+1]
-                # ... handle regularWiring as needed
+
+                # ROUTED, FIXED, COVER, NOSHIELD, etc. (wiring info)
+                elif line.startswith("+ ROUTED") or \
+                    line.startswith("+ FIXED") or \
+                    line.startswith("+ COVER") or \
+                    line.startswith("+ NOSHIELD"):
+                    # Parse wiring segment
+                    tokens = line[1:].strip().split()  # Remove leading '+'
+                    wire_type = tokens[0]
+                    idx = 1
+                    layer_id = None
+                    mask = None
+                    points = []
+                    vias = []
+                    rects = []
+                    # Parse optional MASK
+                    if idx < len(tokens) and tokens[idx] == "MASK":
+                        mask = int(tokens[idx+1])
+                        idx += 2
+                    # Parse layer
+                    if idx < len(tokens):
+                        layer_id = gname_index.set(tokens[idx])
+                        idx += 1
+                    # Parse rest: points, vias, rects
+                    while idx < len(tokens):
+                        t = tokens[idx]
+                        if t == "MASK":
+                            mask = int(tokens[idx+1])
+                            idx += 2
+                        elif t == "RECT":
+                            # RECT x1 y1 x2 y2
+                            # Remove parentheses from tokens before converting to int
+                            rect_tokens = [t for t in tokens[idx+1:idx+5] if t not in ('(', ')')]
+                            rect = tuple(map(int, rect_tokens))
+                            rects.append(rect)
+                            idx += 5
+                        elif re.match(r'^-?\d+$', t) and idx+1 < len(tokens) and re.match(r'^-?\d+$', tokens[idx+1]):
+                            # Point (x y)
+                            pt = (int(tokens[idx]), int(tokens[idx+1]))
+                            points.append(pt)
+                            idx += 2
+                        elif t.isidentifier():
+                            # VIA or VIRTUAL or other keyword
+                            vias.append(t)
+                            idx += 1
+                        else:
+                            idx += 1
+                    net.wires.append(NetWire(
+                        wire_type=wire_type,
+                        layer=layer_id,
+                        points=points,
+                        vias=vias,
+                        mask=mask,
+                        rects=rects,
+                        raw=line
+                    ))
+
                 i += 1
 
-            self.def_data.nets.append(net)
+            self.def_data.nets[name_id] = net
 
-        except Exception as e:
-            print(f"Error parsing net definition: {e}")
+        #except Exception as e:
+        #    print(f"Error parsing net definition: {e}")
+
 
     def parse(self, def_file_content: str):
         lines = def_file_content.splitlines()
@@ -1262,33 +1398,6 @@ class DefParserImplement(QObject):
 
         self.def_parser_finished_signal.emit("DEF parser finished.")
 
-        # self.createComponentsDf()
-
-    
-    def createComponentsDf(self):
-        # Create a data-frame containing all fields (as columns) of Component @dataClass.
-        import pandas as pd
-
-        all_rows = []
-        columns = [field.name for field in Component.__dataclass_fields__.values()]
-
-        for d, parser in self.parser_dict.items():
-            components = parser.def_data.components
-            for comp in components:
-                row = {}
-                for col in columns:
-                    value = getattr(comp, col)
-                    if col == "inst_name_id" or col == "cell_name_id" or col == "type_id":
-                        value = gname_index.getName(value)
-                    elif col == "location":
-                        (x, y) = value
-                        (x_um, y_um) = self.convert_to_design_unit(x, y)
-                        value = f'{x_um}, {y_um}'
-                    row[col] = value
-                all_rows.append(row)
-
-        self.componentsDf = pd.DataFrame(all_rows, columns=columns)
-
 
     def get_via_names(self, layer):
 
@@ -1318,7 +1427,7 @@ class DefParserImplement(QObject):
 
         return unit
     
-    def convert_to_design_unit(self, x, y):
+    def convert_to_micron(self, x, y):
 
         unit = self.get_unit()
         x = int(x)
@@ -1329,61 +1438,51 @@ class DefParserImplement(QObject):
         return (x_um, y_um)
 
     def get_components(self):
-
-        all_components = []
+        all_components = {}
         for d, parser in self.parser_dict.items():
             components = parser.def_data.components
-
-            all_components.extend(components)
-
+            all_components.update(components)
         return all_components
     
-    def query_components(self, inst_name_regex):
-        """
-        Returns a DataFrame with columns: inst-name, cell-name, location
-        for all components whose instance name matches the given regex.
-        """
-        import pandas as pd
-
-        pattern = re.compile(inst_name_regex)
-        rows = []
-
+    def get_nets(self):
+        all_nets = {}
         for d, parser in self.parser_dict.items():
-            components = parser.def_data.components
-            for comp in components:
-                inst_name = gname_index.getName(comp.inst_name_id)
-                cell_name = gname_index.getName(comp.cell_name_id)
-                location = comp.location if comp.location else (None, None)
-                if pattern.search(inst_name):
-                    rows.append({
-                        "inst-name": inst_name,
-                        "cell-name": cell_name,
-                        "location": location
-                    })
+            nets = parser.def_data.nets
+            all_nets.update(nets)
+        return all_nets
 
-        return pd.DataFrame(rows, columns=["inst-name", "cell-name", "location"])
-
-        
-
-    def get_instances_coords(self):
-
-        inst_list = []
-        coord_list = []
-
+    def get_wires_of_net(self, net_name, layer_id=None):
+        wires = []
         for d, parser in self.parser_dict.items():
-            components = parser.def_data.components
+            net = parser.def_data.nets.get(net_name)
+            if net:
+                for wire in net.wires:
+                    if layer_id is None or wire.layer == layer_id:
+                        wires.append(wire)
+        return wires
 
-            i_list = [gname_index.getName(comp.inst_name_id) for comp in components]
-            c_list = [f"({comp.location[0]} {comp.location[1]})" for comp in components]
 
-            inst_list.extend(i_list)
-            coord_list.extend(c_list)
-            
+    def get_layers_of_net(self, net_name):
+        layers = set()
+        for d, parser in self.parser_dict.items():
+            net = parser.def_data.nets.get(net_name)
+            if net:
+                for wire in net.wires:
+                    if wire.layer is not None:
+                        layers.add(wire.layer)
+        return list(layers)
 
-        return {
-            "inst": inst_list,
-            "coords": coord_list
-        }
+    def get_wire_rects(self, wire):
+        rects = []
+        rects.extend(wire.rects)
 
+        #for rect in rects:
+        #    (x1, y1, x2, y2) = rect
+        #    x1, y1 = self.convert_to_micron(x1, y1)
+        #    x2, y2 = self.convert_to_micron(x2, y2)
+        #    rects[rects.index(rect)] = (x1, y1, x2, y2)
+
+        return rects
+    
 
 

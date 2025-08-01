@@ -538,15 +538,6 @@ class MainUI(QMainWindow):
 
             predicate.onPostRun()
 
-            inst_list = None
-
-            for name, values in outputs:
-                if name == "inst":
-                    inst_list = values
-                    print(f"inst list len : {len(inst_list)}")
-
-                    self.drawManager.draw_instances(inst_list, QColor("white"))
-
 
 
     def updateParamLabels(self):

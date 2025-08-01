@@ -1,15 +1,15 @@
 {
     "Files": {
         "LEF": [
-            "C:/Users/nandu/Downloads/cs202_pgpsw.lef",
-            "C:/Users/nandu/Downloads/io.lef",
-            "C:/Users/nandu/Downloads/RAMROM.lef",
-            "C:/Users/nandu/Downloads/tech.lef",
-            "C:/Users/nandu/Downloads/uc_lp.lef",
-            "C:/Users/nandu/Downloads/uc.lef"
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/cs202_pgpsw.lef",
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/io.lef",
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/RAMROM.lef",
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/tech.lef",
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/uc.lef",
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/uc_lp.lef"
         ],
         "DEF": [
-            "C:/Users/nandu/Downloads/power3 (1).def"
+            "C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/power3 (1).def"
         ]
     },
     "Cloud": {}
