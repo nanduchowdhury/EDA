@@ -43,8 +43,6 @@ class DrawManager:
 
     def draw_nets(self, net_name=None, layer_name=None):
 
-        rects = []
-
         net_id = gname_index.get_id(net_name) if net_name else None
         layer_id = gname_index.get_id(layer_name) if layer_name else None
 
@@ -57,7 +55,7 @@ class DrawManager:
             if net_id is not None and nid != net_id:
                 continue
             
-            wires = self.design_data.defParserImplement.get_wires_of_net(net_name, layer_id)
+            wires = self.design_data.defParserImplement.get_wires_of_net(nid, layer_id)
 
             if len(wires) != 0:
                 print(f'Number of wires in net {nid}: {len(wires)}')
@@ -68,9 +66,14 @@ class DrawManager:
                 if len(wire_rects) != 0:
                     print(f'Number of rects in wire: {len(wire_rects)}')
 
-                rects.extend(wire_rects)
+                self.drawArea.drawRects(wire_rects, QColor("blue"))
 
-        self.drawArea.drawRects(rects, QColor("red"))
+                wire_points = self.design_data.defParserImplement.get_wire_points(wire)
+                
+                if len(wire_points) != 0:
+                    print(f'Number of points in wire: {len(wire_points)}')
+
+                self.drawArea.drawConnectingPoints(wire_points, QColor("yellow"))
 
 
     def draw_inst_names(self, name_list):

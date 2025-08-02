@@ -412,8 +412,8 @@ class DefParser:
         cleaned = []
         for line in lines:
             line = line.strip()
-            if line.endswith(";"):
-                line = line[:-1].strip()
+            if ";" in line:
+                line = line.split(";", 1)[0].strip()
             if line.startswith("-"):
                 line = line[1:].strip()
             if line:  # skip empty lines
@@ -794,6 +794,10 @@ class DefParser:
             lines = self.clean_lines(lines)
             header, attr_lines = self.create_new_lines_list(lines)
 
+            print(f'Parsing net header: {header}')
+            print(f'Parsing net attributes: {attr_lines}')
+
+
             name_id = gname_index.set(header.split()[0])
             net = Net()
 
@@ -1012,56 +1016,10 @@ class DefParser:
                     line.startswith("+ FIXED") or \
                     line.startswith("+ COVER") or \
                     line.startswith("+ NOSHIELD"):
-                    # Parse wiring segment
-                    tokens = line[1:].strip().split()  # Remove leading '+'
-                    wire_type = tokens[0]
-                    idx = 1
-                    layer_id = None
-                    mask = None
-                    points = []
-                    vias = []
-                    rects = []
-                    # Parse optional MASK
-                    if idx < len(tokens) and tokens[idx] == "MASK":
-                        mask = int(tokens[idx+1])
-                        idx += 2
-                    # Parse layer
-                    if idx < len(tokens):
-                        layer_id = gname_index.set(tokens[idx])
-                        idx += 1
-                    # Parse rest: points, vias, rects
-                    while idx < len(tokens):
-                        t = tokens[idx]
-                        if t == "MASK":
-                            mask = int(tokens[idx+1])
-                            idx += 2
-                        elif t == "RECT":
-                            # RECT x1 y1 x2 y2
-                            # Remove parentheses from tokens before converting to int
-                            rect_tokens = [t for t in tokens[idx+1:idx+5] if t not in ('(', ')')]
-                            rect = tuple(map(int, rect_tokens))
-                            rects.append(rect)
-                            idx += 5
-                        elif re.match(r'^-?\d+$', t) and idx+1 < len(tokens) and re.match(r'^-?\d+$', tokens[idx+1]):
-                            # Point (x y)
-                            pt = (int(tokens[idx]), int(tokens[idx+1]))
-                            points.append(pt)
-                            idx += 2
-                        elif t.isidentifier():
-                            # VIA or VIRTUAL or other keyword
-                            vias.append(t)
-                            idx += 1
-                        else:
-                            idx += 1
-                    net.wires.append(NetWire(
-                        wire_type=wire_type,
-                        layer=layer_id,
-                        points=points,
-                        vias=vias,
-                        mask=mask,
-                        rects=rects,
-                        raw=line
-                    ))
+
+                    self.handle_wires(net, line)
+                    
+                    print(f'Appended wire: {net.wires[-1]}')
 
                 i += 1
 
@@ -1070,6 +1028,158 @@ class DefParser:
         #except Exception as e:
         #    print(f"Error parsing net definition: {e}")
 
+
+    def handle_wires(self, net, line):
+        """
+        Parses DEF wire statement into NetWire objects.
+        1. Break line into tokens.
+        2. First token is wire-type.
+        3. Next all tokens up to '(' are appended to 'vias'.
+        4. If 'RECT' followed by '(': parse rectangle (4 points). Else: parse points up to last ')'.
+        5. Store each wire segment (vias, points/rects) as a NetWire.
+        6. Repeat until all tokens are processed.
+        """
+        tokens = line[1:].strip().split()  # Remove leading '+'
+        wire_type = tokens[0]
+        idx = 1
+        n = len(tokens)
+
+        while idx < n:
+            # Step 3: Collect all keywords up to '('
+            vias = []
+            while idx < n and tokens[idx] != '(':
+                vias.append(tokens[idx])
+                idx += 1
+
+            # Step 4: Parse geometry
+            points = []
+            rects = []
+            # If we have a RECT followed by '(', parse rectangle
+            if vias and vias[-1] == "RECT" and idx < n and tokens[idx] == '(':
+                # Remove 'RECT' from vias
+                vias.pop()
+                # Parse four points (RECT (x1 y1) (x2 y2))
+                rect_nums = []
+                for _ in range(2):  # Two points
+                    if idx < n and tokens[idx] == '(':
+                        pt = []
+                        idx += 1
+                        while idx < n and tokens[idx] != ')':
+                            if tokens[idx] != '(':
+                                try:
+                                    pt.append(int(tokens[idx]))
+                                except ValueError:
+                                    pass
+                            idx += 1
+                        idx += 1  # skip ')'
+                        if len(pt) == 2:
+                            rect_nums.extend(pt)
+                if len(rect_nums) == 4:
+                    rects.append(tuple(rect_nums))
+            # Else, parse points up to last ')'
+            elif idx < n and tokens[idx] == '(':
+                while idx < n and tokens[idx] == '(':
+                    pt = []
+                    idx += 1
+                    while idx < n and tokens[idx] != ')':
+                        if tokens[idx] != '(':
+                            if tokens[idx] == '*':
+                                pt.append('*')
+                            else:
+                                try:
+                                    pt.append(int(tokens[idx]))
+                                except ValueError:
+                                    pass
+                        idx += 1
+                    idx += 1  # skip ')'
+                    if len(pt) == 2:
+                        points.append(tuple(pt))
+                points = self.massage_points(points)
+
+            # Store this wire segment
+            if vias or points or rects:
+                net.wires.append(NetWire(
+                    wire_type=wire_type,
+                    vias=vias,
+                    points=points,
+                    rects=rects,
+                    raw=line
+                ))
+
+            # Continue with next segment
+            # Skip any non-keyword tokens until next keyword or '('
+            while idx < n and tokens[idx] not in ('(', 'RECT') and not tokens[idx].isidentifier():
+                idx += 1
+
+            # If next token is a keyword, continue loop (vias will be collected again)
+            # If next token is 'RECT', let the loop collect
+
+    def massage_points(self, points):
+        """
+        Takes a list of points (tuples), where each coordinate may be int or '*'.
+        Returns a new list where '*' is replaced by previous point's x or y value.
+        Example:
+            Input: [(14000, 341440), (9600, '*'), ('*', 282400)]
+            Output: [(14000, 341440), (9600, 341440), (9600, 282400)]
+        """
+        result = []
+        for i, pt in enumerate(points):
+            if i == 0:
+                # First point: replace '*' with 0 if present
+                x = pt[0] if pt[0] != '*' else 0
+                y = pt[1] if pt[1] != '*' else 0
+                result.append((x, y))
+            else:
+                prev_x, prev_y = result[-1]
+                x = pt[0] if pt[0] != '*' else prev_x
+                y = pt[1] if pt[1] != '*' else prev_y
+                result.append((x, y))
+        return result
+
+    def extract_point(self, tokens, idx):
+        """
+        Extracts a point (x, y) from tokens starting at idx.
+        Handles cases like ( 100 200 ), 100 200, ( * 200 ), ( 100 * ), etc.
+        Returns (new_idx, point_tuple) where point_tuple may contain int or str('*').
+        If not found, returns (idx, None)
+        """
+        pt = []
+        i = idx
+        while len(pt) < 2 and i < len(tokens):
+            token = tokens[i]
+            if token not in ('(', ')'):
+                if token == '*':
+                    pt.append('*')
+                else:
+                    try:
+                        pt.append(int(token))
+                    except ValueError:
+                        break
+            i += 1
+        if len(pt) == 2:
+            return i, tuple(pt)
+        return idx, None
+
+
+    def extract_rects(self, tokens, idx=0):
+        """
+        Extracts a rectangle from tokens starting at idx.
+        Handles both RECT (x1 y1) (x2 y2) and RECT x1 y1 x2 y2 formats.
+        Returns (new_idx, rect_tuple)
+        """
+        # Find next 4 integer values, skipping parentheses
+        rect_nums = []
+        i = idx + 1
+        while len(rect_nums) < 4 and i < len(tokens):
+            token = tokens[i]
+            if token not in ('(', ')'):
+                try:
+                    rect_nums.append(int(token))
+                except ValueError:
+                    pass
+            i += 1
+        rect = tuple(rect_nums) if len(rect_nums) == 4 else None
+        return i, rect
 
     def parse(self, def_file_content: str):
         lines = def_file_content.splitlines()
@@ -1451,10 +1561,10 @@ class DefParserImplement(QObject):
             all_nets.update(nets)
         return all_nets
 
-    def get_wires_of_net(self, net_name, layer_id=None):
+    def get_wires_of_net(self, net_id, layer_id=None):
         wires = []
         for d, parser in self.parser_dict.items():
-            net = parser.def_data.nets.get(net_name)
+            net = parser.def_data.nets.get(net_id)
             if net:
                 for wire in net.wires:
                     if layer_id is None or wire.layer == layer_id:
@@ -1462,27 +1572,42 @@ class DefParserImplement(QObject):
         return wires
 
 
-    def get_layers_of_net(self, net_name):
+    def get_layers_of_net(self, net_id):
         layers = set()
         for d, parser in self.parser_dict.items():
-            net = parser.def_data.nets.get(net_name)
+            net = parser.def_data.nets.get(net_id)
             if net:
                 for wire in net.wires:
                     if wire.layer is not None:
                         layers.add(wire.layer)
         return list(layers)
 
-    def get_wire_rects(self, wire):
+    def get_wire_rects(self, wire, inMicron=False):
         rects = []
         rects.extend(wire.rects)
 
-        #for rect in rects:
-        #    (x1, y1, x2, y2) = rect
-        #    x1, y1 = self.convert_to_micron(x1, y1)
-        #    x2, y2 = self.convert_to_micron(x2, y2)
-        #    rects[rects.index(rect)] = (x1, y1, x2, y2)
+        if inMicron:
+            for rect in rects:
+                (x1, y1, x2, y2) = rect
+                x1, y1 = self.convert_to_micron(x1, y1)
+                x2, y2 = self.convert_to_micron(x2, y2)
+                rects[rects.index(rect)] = (x1, y1, x2, y2)
 
         return rects
     
+
+    def get_wire_points(self, wire, inMicron=False):
+        points = []
+        points.extend(wire.points)
+
+        if inMicron:
+            for pt in points:
+                x, y = pt
+                x, y = self.convert_to_micron(x, y)
+                points[points.index(pt)] = (x, y)
+
+        return points
+
+
 
 

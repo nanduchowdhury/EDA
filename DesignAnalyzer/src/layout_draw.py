@@ -172,6 +172,23 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.updateRulers()
 
 
+    def drawConnectingPoints(self, points, color='white'):
+        """
+        Draws lines connecting the given points in order.
+        Each point should be a tuple (x, y).
+        """
+        if not points or len(points) < 2:
+            return
+
+        pen = pg.mkPen(color=color, width=2)
+        path = pg.QtGui.QPainterPath()
+        path.moveTo(points[0][0], points[0][1])
+        for pt in points[1:]:
+            path.lineTo(pt[0], pt[1])
+
+        item = pg.QtWidgets.QGraphicsPathItem(path)
+        item.setPen(pen)
+        self.view.addItem(item)
 
 
     def updateRulers(self):
