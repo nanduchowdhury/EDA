@@ -698,6 +698,24 @@ class LefParser:
                 self.parse_units(block_lines)
                 i += 1
 
+            elif line.startswith("NONDEFAULTRULE"):
+                
+                tokens = line.split()
+                if len(tokens) > 1:
+                    nondefaultrule_name = tokens[1]
+
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i]   # Do not strip here. Some nondefaultrules do not END with the rule-name.
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        print(f"Found END {nondefaultrule_name} in line: {l}")
+                        break
+                    i += 1
+                # Handle NONDEFAULTRULE parsing if needed
+                i += 1
+
             elif line.startswith("PROPERTYDEFINITIONS"):
                 block_lines = [line]
                 i += 1
@@ -710,17 +728,6 @@ class LefParser:
                 self.parse_property_definitions(block_lines)
                 i += 1
 
-            elif line.startswith("LAYER"):
-                block_lines = [line]
-                i += 1
-                while i < n:
-                    l = lines[i].strip()
-                    block_lines.append(l)
-                    if l.startswith("END"):
-                        break
-                    i += 1
-                self.parse_layer(block_lines)
-                i += 1
 
             elif line.startswith("VIARULE"):
                 block_lines = [line]
@@ -769,6 +776,20 @@ class LefParser:
                     i += 1
                 self.parse_macro(block_lines)
                 i += 1
+
+            # Keep LAYER at the very end - LAYER shows up in other blocks too.
+            elif line.startswith("LAYER"):
+                block_lines = [line]
+                i += 1
+                while i < n:
+                    l = lines[i].strip()
+                    block_lines.append(l)
+                    if l.startswith("END"):
+                        break
+                    i += 1
+                self.parse_layer(block_lines)
+                i += 1
+
             else:
                 i += 1
 
@@ -787,17 +808,48 @@ class LefParserImplement:
                 lefParser.parse(lef_text)
                 self.parser_dict[file_path] = lefParser
 
-    def get_macro(self, cell_name):
+    def get_macros(self, cell_name=None):
+
+        macros = []
+
         for l, parser in self.parser_dict.items():
 
+            if cell_name is None:
+                macros.extend(parser.lef_data.macros.values())
+                continue
+
+            # If cell_name is provided, filter macros by name
             cell_name_id = gname_index.set(cell_name)
             if cell_name_id not in parser.lef_data.macros:
                 continue
             macro = parser.lef_data.macros.get(cell_name_id)
             if macro:
-                return macro
+                macros.append(macro)
 
-        return None
+        return macros
+
     
+    def get_layers(self, metal_or_via=None):
+        layers = []
+        for l, parser in self.parser_dict.items():
+            for layer in parser.lef_data.layers:
+                # if metal_or_via is None or layer.type.upper() == metal_or_via.upper():
+                    layers.append(layer)
+        return layers
+    
+    def get_layer(self, layer_name):
+        layer_name_id = gname_index.set(layer_name)
+        for l, parser in self.parser_dict.items():
+            for layer in parser.lef_data.layers:
+                if layer.name_id == layer_name_id:
+                    return layer
+        return None
 
+    def get_vias(self):
+        vias = []
+        for l, parser in self.parser_dict.items():
+            if hasattr(parser.lef_data, "vias"):
+                vias.extend(parser.lef_data.vias)
+        return vias
+    
 

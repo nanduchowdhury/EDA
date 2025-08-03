@@ -1249,3 +1249,112 @@
 2025-08-02 18:55:06,514 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
 2025-08-02 18:55:06,544 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
 2025-08-02 18:55:06,544 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-02 21:53:22,043 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-02 21:53:22,071 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-02 21:53:22,071 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 09:46:07,423 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 09:46:07,466 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 09:46:07,466 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 09:46:38,619 - INFO - Error executing 'search layers based on metal or via': 'NoneType' object has no attribute 'upper'
+2025-08-03 09:47:42,021 - INFO - Error executing 'search layers based on metal or via': 'NoneType' object has no attribute 'upper'
+2025-08-03 09:53:32,901 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 09:53:32,936 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 09:53:32,936 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 09:53:44,163 - INFO - Error executing 'search layers based on metal or via': Output value must be a list.
+2025-08-03 10:00:06,210 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 10:00:06,226 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 10:00:06,233 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 10:00:13,222 - INFO - Error executing 'search layers based on metal or via': 'LefLayer' object has no attribute 'name'
+2025-08-03 10:04:13,474 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 10:04:13,503 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 10:04:13,503 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 10:19:36,495 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 10:19:36,530 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 10:19:36,532 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 10:47:50,742 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 10:47:50,766 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 10:47:50,767 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 10:57:44,677 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 10:57:44,699 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 10:57:44,702 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 10:57:44,702 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 10:57:44,702 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 10:57:44,702 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 10:57:44,702 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 10:57:44,702 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 10:57:44,706 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 10:57:44,707 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 10:57:44,708 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 10:57:44,709 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 10:57:44,710 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:01:36,040 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:01:36,060 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:01:36,060 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 11:01:36,061 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 11:01:36,061 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 11:01:36,062 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 11:01:36,063 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 11:01:36,064 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 11:01:36,064 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 11:01:36,065 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 11:01:36,065 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 11:01:36,066 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 11:01:36,067 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:35:12,870 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:35:12,894 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:35:12,910 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 11:35:12,912 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 11:35:12,917 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 11:35:12,917 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 11:35:12,917 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 11:35:12,917 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:41:59,072 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:41:59,100 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:41:59,102 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 11:41:59,102 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 11:41:59,108 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 11:41:59,109 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 11:41:59,109 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:46:53,679 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:46:53,709 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:46:53,709 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 11:46:53,709 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 11:46:53,709 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 11:46:53,712 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 11:46:53,712 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 11:46:53,712 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 11:46:53,712 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 11:46:53,717 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 11:46:53,717 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 11:46:53,717 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 11:46:53,717 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:50:38,328 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:50:38,354 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:50:38,354 - WARNING - Macro INV_B not found in LEF for instance I1...skipping.
+2025-08-03 11:50:38,360 - WARNING - Macro INV not found in LEF for instance I2...skipping.
+2025-08-03 11:50:38,360 - WARNING - Macro INV not found in LEF for instance I3...skipping.
+2025-08-03 11:50:38,360 - WARNING - Macro INV not found in LEF for instance I4...skipping.
+2025-08-03 11:50:38,360 - WARNING - Macro INV not found in LEF for instance I5...skipping.
+2025-08-03 11:50:38,363 - WARNING - Macro INV not found in LEF for instance I6...skipping.
+2025-08-03 11:50:38,364 - WARNING - Macro INV not found in LEF for instance I7...skipping.
+2025-08-03 11:50:38,365 - WARNING - Macro INV not found in LEF for instance I8...skipping.
+2025-08-03 11:50:38,366 - WARNING - Macro INV not found in LEF for instance I9...skipping.
+2025-08-03 11:50:38,366 - WARNING - Macro INV not found in LEF for instance I10...skipping.
+2025-08-03 11:50:38,368 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:52:18,014 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:52:18,031 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:52:18,031 - WARNING - Skipped 33 instances due to missing location data.
+2025-08-03 11:55:04,600 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def started...
+2025-08-03 11:55:04,618 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/small_1/complete5.8.def finished.
+2025-08-03 11:55:04,625 - WARNING - Skipped 33 instances due to missing location data.

@@ -92,6 +92,9 @@ class DrawManager:
 
     def draw_instances_rtree(self, bbox=None):
 
+        if len(self.design_data.inst_rtree) == 0:
+            return
+
         if bbox is None:
             bbox = self.design_data.inst_rtree.get_bounds()
 

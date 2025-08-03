@@ -71,6 +71,72 @@ class LefDefPredicate(PredicateBase):
         self.tableView = LefDefTableView()
 
 
+class GetLefLayers(LefDefPredicate):
+    def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.args = {
+            'metal or via': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Layers present in LEF',
+                'example': 'example : metal or via'
+            }
+
+        }
+
+    def run(self):
+        metal_or_via = self.args['metal or via']['user_value']
+
+        layers = self.lefParserImplement.get_layers(metal_or_via)
+
+
+        self.setOutputObject("name", [gname_index.getName(l.name_id) for l in layers])
+        self.setOutputObject("type", [l.type for l in layers])
+        self.setOutputObject("pitch", [l.pitch for l in layers])
+        self.setOutputObject("width", [l.width for l in layers])
+        self.setOutputObject("minwidth", [l.minwidth for l in layers])
+        self.setOutputObject("maxwidth", [l.maxwidth for l in layers])
+
+        return True
+
+
+class GetLefVias(LefDefPredicate):
+    def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.args = {
+            
+        }
+
+    def run(self):
+
+        vias = self.lefParserImplement.get_vias()
+
+
+        self.setOutputObject("name", [gname_index.getName(v.name_id) for v in vias])
+        self.setOutputObject("generated", [v.generated for v in vias])
+
+        return True
+    
+class GetLefMacros(LefDefPredicate):
+    def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.args = {
+            
+        }
+
+    def run(self):
+
+        macros = self.lefParserImplement.get_macros()
+
+        self.setOutputObject("name", [gname_index.getName(m.name_id) for m in macros])
+        self.setOutputObject("class type", [m.class_type for m in macros])
+        self.setOutputObject("size", [m.size for m in macros])
+
+        return True
+
 
 class GetViasForLayer(LefDefPredicate):
     def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
@@ -230,7 +296,20 @@ class LefDefUI(MainUI):
                                     self.sentralControl)
         self.all_predicates.addPredicate("design analysis", "search instances by name regexp, location etc", instObj)
 
+        layersObj = GetLefLayers(self.design_data,
+                                 self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                 self.sentralControl)
+        self.all_predicates.addPredicate("LEF analysis", "list layers", layersObj)
 
+        viasObj = GetLefVias(self.design_data,
+                                          self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                          self.sentralControl)
+        self.all_predicates.addPredicate("LEF analysis", "list vias", viasObj)
+
+        macrosObj = GetLefMacros(self.design_data,
+                                 self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                 self.sentralControl)
+        self.all_predicates.addPredicate("LEF analysis", "list macros", macrosObj)
 
 if __name__ == "__main__":
     run_BluePayload(LefDefUI)

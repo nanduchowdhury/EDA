@@ -105,12 +105,15 @@ class DesignData:
 
             (x_um, y_um) = self.defParserImplement.convert_to_micron(x_dbu, y_dbu)
 
-            macro = self.lefParserImplement.get_macro(cell_name)
-            if not macro:
+            macros = self.lefParserImplement.get_macros(cell_name)
+            if not macros:
                 logging.warning(f"Macro {cell_name} not found in LEF for instance {instance_name}...skipping.")
                 continue
 
-            width, height = macro.size
+            if len(macros) > 1:
+                logging.warning(f"Multiple macros found for {cell_name} in LEF, using first one.")
+
+            width, height = macros[0].size
 
             bbox = [x_um, y_um, x_um + width, y_um + height]
 
