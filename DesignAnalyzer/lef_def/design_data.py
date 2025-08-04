@@ -117,6 +117,9 @@ class DesignData:
 
             bbox = [x_um, y_um, x_um + width, y_um + height]
 
+            for i in range(4):
+                bbox[i] = int(bbox[i] * design_units)
+
             inst = Instance(cell_name_id=comp.cell_name_id, 
                                     type_id=comp.type_id, 
                                     location=bbox)

@@ -20,62 +20,6 @@ import numpy as np
 #
 ########################################################################
 
-class RulerWidget(QWidget):
-    def __init__(self, orientation=Qt.Horizontal, color_bg="navy", color_tick="white", parent=None):
-        super().__init__(parent)
-        self.orientation = orientation
-        self.min_val = 0
-        self.max_val = 100
-        self.color_bg = color_bg
-        self.color_tick = color_tick
-
-        if self.orientation == Qt.Horizontal:
-            self.setFixedHeight(30)
-        else:
-            self.setFixedWidth(40)
-
-    def setRange(self, min_val, max_val):
-        self.min_val = min_val
-        self.max_val = max_val
-        self.update()
-
-    def paintEvent(self, event):
-
-        painter = QPainter(self)
-        try:
-            painter.fillRect(self.rect(), QColor(self.color_bg))
-            painter.setPen(QPen(QColor(self.color_tick)))
-            painter.setFont(QFont("Arial", 6))
-
-            range_val = self.max_val - self.min_val
-
-            if range_val <= 0:
-                return
-
-            if self.orientation == Qt.Horizontal:
-                width = self.width()
-                step_px = 50
-                step_val = range_val * step_px / width
-                val = self.min_val
-                while val <= self.max_val:
-                    x = int((val - self.min_val) / range_val * width)
-                    painter.drawLine(x, 0, x, self.height() // 2)
-                    painter.drawText(x + 2, self.height() - 5, f"{val:.0f}")
-                    val += step_val
-            else:
-                height = self.height()
-                step_px = 50
-                step_val = range_val * step_px / height
-                val = self.min_val
-                while val <= self.max_val:
-                    y = int((val - self.min_val) / range_val * height)
-                    painter.drawLine(0, height - y, self.width() // 2, height - y)
-                    painter.drawText(15, height - y + 12, f"{val:.0f}")
-                    val += step_val
-        finally:
-            painter.end()
-
-
 class FixedRectItem(QGraphicsRectItem):
     def __init__(self, x, y, w, h):
         super().__init__(x, y, w, h)
@@ -109,23 +53,16 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.mainLayout.setSpacing(0)
 
-        # Rulers (bottom and right) with light-blue background
-        self.ruler_x = RulerWidget(Qt.Horizontal, color_bg="#2C3539")
-        self.ruler_y = RulerWidget(Qt.Vertical, color_bg="#2C3539")
-
-        # Plot area
+        # Use PlotItem for axes
         self.graphWidget = pg.GraphicsLayoutWidget()
-        self.view = self.graphWidget.addViewBox(lockAspect=False, enableMenu=False)
-        self.view.setMouseMode(pg.ViewBox.PanMode)
-        self.view.setMouseEnabled(x=True, y=True)
-        self.view.setLimits(xMin=0, xMax=1000, yMin=0, yMax=1000)
-        self.view.invertY(True)  # (0,0) is now bottom-left
-        self.view.setBackgroundColor("black")
+        self.plotItem = self.graphWidget.addPlot(row=0, col=0)
+        self.plotItem.showGrid(x=True, y=True, alpha=0.5)
+        self.plotItem.setMouseEnabled(x=True, y=True)
+        self.plotItem.setLimits(xMin=0, xMax=1000, yMin=0, yMax=1000)
+        self.plotItem.invertY(True)
+        self.graphWidget.setBackground("black")
 
-        # Grid
-        self.grid = pg.GridItem()
-        self.grid.setPen(pg.mkPen(color=(200, 200, 200), width=0.5))
-        self.view.addItem(self.grid)
+        self.view = self.plotItem.getViewBox()
 
         # Crosshair
         self.vLine = pg.InfiniteLine(angle=90, movable=True, pen=pg.mkPen('y'))
@@ -136,16 +73,7 @@ class PyQtGraphLayoutWithScales(QWidget):
         # Mouse move event
         self.proxy = pg.SignalProxy(self.view.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
-        # Layout with right and bottom rulers
-        centerLayout = QHBoxLayout()
-        centerLayout.setContentsMargins(0, 0, 0, 0)
-        centerLayout.setSpacing(0)
-        centerLayout.addWidget(self.graphWidget)
-        centerLayout.addWidget(self.ruler_y)
-
-        self.mainLayout.addLayout(centerLayout)
-        self.mainLayout.addWidget(self.ruler_x)
-
+        self.mainLayout.addWidget(self.graphWidget)
         self.setLayout(self.mainLayout)
 
         # Zoom factor
@@ -164,13 +92,9 @@ class PyQtGraphLayoutWithScales(QWidget):
             self.view.addItem(item)
             self.rect_items.append(item)
 
-        # Add back grid and crosshairs
-        self.view.addItem(self.grid)
         self.view.addItem(self.vLine)
         self.view.addItem(self.hLine)
         self.view.autoRange()
-        self.updateRulers()
-
 
     def drawConnectingPoints(self, points, color='white'):
         """
@@ -190,11 +114,26 @@ class PyQtGraphLayoutWithScales(QWidget):
         item.setPen(pen)
         self.view.addItem(item)
 
+    def mouseMoved(self, evt):
+        pos = evt[0]
+        if self.view.sceneBoundingRect().contains(pos):
+            mousePoint = self.view.mapSceneToView(pos)
+            self.vLine.setPos(mousePoint.x())
+            self.hLine.setPos(mousePoint.y())
 
-    def updateRulers(self):
-        rect = self.view.viewRect()
-        self.ruler_x.setRange(rect.left(), rect.right())
-        self.ruler_y.setRange(rect.top(), rect.bottom())
+    def set_view_limits(self, bbox):
+        """
+        Sets the plot limits according to the given diearea bounding box.
+        bbox should be (min_x, min_y, max_x, max_y)
+        """
+        min_x, min_y, max_x, max_y = bbox
+        self.plotItem.setLimits(xMin=min_x, xMax=max_x, yMin=min_y, yMax=max_y)
+        self.plotItem.setRange(xRange=(min_x, max_x), yRange=(min_y, max_y), padding=0)
+        self.view.autoRange()
+
+
+    # ... (zoom and pan methods unchanged)
+
 
     def mouseMoved(self, evt):
         pos = evt[0]
@@ -205,22 +144,18 @@ class PyQtGraphLayoutWithScales(QWidget):
 
     def zoomIn(self):
         self.view.scaleBy((1 / self.zoomFactor, 1 / self.zoomFactor))
-        self.updateRulers()
 
     def zoomOut(self):
         self.view.scaleBy((self.zoomFactor, self.zoomFactor))
-        self.updateRulers()
 
     def zoomFit(self):
         self.view.autoRange()
-        self.updateRulers()
 
 # --------- Pan Methods ----------
     def panLeft(self, factor=0.1):  # 10% of visible width
         rect = self.view.viewRect()
         dx = -factor * rect.width()
         self.view.translateBy(x=dx, y=0)
-        self.updateRulers()
 
         self.view.update()
         self.graphWidget.update()
@@ -229,7 +164,6 @@ class PyQtGraphLayoutWithScales(QWidget):
         rect = self.view.viewRect()
         dx = factor * rect.width()
         self.view.translateBy(x=dx, y=0)
-        self.updateRulers()
 
         self.view.update()
         self.graphWidget.update()
@@ -238,7 +172,6 @@ class PyQtGraphLayoutWithScales(QWidget):
         rect = self.view.viewRect()
         dy = -factor * rect.height()
         self.view.translateBy(x=0, y=dy)
-        self.updateRulers()
 
         self.view.update()
         self.graphWidget.update()
@@ -247,7 +180,6 @@ class PyQtGraphLayoutWithScales(QWidget):
         rect = self.view.viewRect()
         dy = factor * rect.height()
         self.view.translateBy(x=0, y=dy)
-        self.updateRulers()
 
         self.view.update()
         self.graphWidget.update()

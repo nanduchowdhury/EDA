@@ -251,7 +251,10 @@ class DefData:
     property_definitions: Dict[int, int] = field(default_factory=dict)
 
 class DefParser:
-    def __init__(self):
+    def __init__(self, lefParserImplement):
+
+        self.lefParserImplement = lefParserImplement
+
         self.def_data = DefData()
 
     def parse_version(self, line: str):
@@ -273,9 +276,9 @@ class DefParser:
 
     def parse_diearea(self, line: str):
         try:
-            # Example: DIEAREA ( 0 0 ) ( 1000 2000 ) ;
-            coords = re.findall(r'\(\s*(-?\d+)\s+(-?\d+)\s*\)', line)
-            points = [tuple(map(int, pt)) for pt in coords]
+            # Example: DIEAREA ( -480.0 -400.0 ) ( 15360.0 12400.0 ) ;
+            coords = re.findall(r'\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)', line)
+            points = [tuple(map(float, pt)) for pt in coords]
             self.def_data.diearea = DieArea(points=points)
         except Exception as e:
             print(f"Error DEF parsing diearea: line: {line} error: {e}")
@@ -422,19 +425,22 @@ class DefParser:
 
     def create_new_lines_list(self, lines: list):
         """
-        1. Concatenate all lines in 'lines' into a single string.
-        2. Split the string at each '+' (keeping the '+') to create multiple lines.
+        1. Remove comments (everything from '#' onward) from each line.
+        2. Concatenate all lines in 'lines' into a single string.
+        3. Split the string at each '+' (keeping the '+') to create multiple lines.
         Each resulting line (except the first) will start with '+'.
-        3. Return (header, attr_lines) where header is the first line (stripped)
+        4. Return (header, attr_lines) where header is the first line (stripped)
         and attr_lines is a list of lines starting with '+' (stripped).
         """
-        # Step 1: Concatenate all lines into a single string
+        # Step 1: Remove comments from each line
+        lines = [line.split('#', 1)[0].strip() for line in lines if line.strip()]
+        # Step 2: Concatenate all lines into a single string
         single_line = ' '.join(lines)
-        # Step 2: Split at each '+' (but keep the '+')
+        # Step 3: Split at each '+' (but keep the '+')
         split_lines = re.split(r'(?=\+)', single_line)
-        # Step 3: Strip whitespace from each line
+        # Step 4: Strip whitespace from each line
         split_lines = [l.strip() for l in split_lines if l.strip()]
-        # Step 4: First line is header, rest are attribute lines
+        # Step 5: First line is header, rest are attribute lines
         header = split_lines[0]
         attr_lines = split_lines[1:]
 
@@ -794,8 +800,8 @@ class DefParser:
             lines = self.clean_lines(lines)
             header, attr_lines = self.create_new_lines_list(lines)
 
-            print(f'Parsing net header: {header}')
-            print(f'Parsing net attributes: {attr_lines}')
+            # print(f'Parsing net header: {header}')
+            # print(f'Parsing net attributes: {attr_lines}')
 
 
             name_id = gname_index.set(header.split()[0])
@@ -1019,7 +1025,7 @@ class DefParser:
 
                     self.handle_wires(net, line)
                     
-                    print(f'Appended wire: {net.wires[-1]}')
+                    # print(f'Appended wire: {net.wires[-1]}')
 
                 i += 1
 
@@ -1030,34 +1036,59 @@ class DefParser:
 
 
     def handle_wires(self, net, line):
-        """
-        Parses DEF wire statement into NetWire objects.
-        1. Break line into tokens.
-        2. First token is wire-type.
-        3. Next all tokens up to '(' are appended to 'vias'.
-        4. If 'RECT' followed by '(': parse rectangle (4 points). Else: parse points up to last ')'.
-        5. Store each wire segment (vias, points/rects) as a NetWire.
-        6. Repeat until all tokens are processed.
-        """
+        
         tokens = line[1:].strip().split()  # Remove leading '+'
         wire_type = tokens[0]
         idx = 1
         n = len(tokens)
 
+        points = []
+        rects = []
+        wire_layer = None
+        skip_points_rects = False
+
         while idx < n:
-            # Step 3: Collect all keywords up to '('
-            vias = []
+
+            # Collect all keywords up to '('
+            keywords = []
             while idx < n and tokens[idx] != '(':
-                vias.append(tokens[idx])
+                keywords.append(tokens[idx])
                 idx += 1
 
+            if "VIRTUAL" in keywords or "MASK" in keywords:
+                skip_points_rects = True
+            else:
+                skip_points_rects = False
+
+            # Check for valid layer-name among keywords
+            for k in keywords:
+                if self.lefParserImplement.get_layer(k):
+                    wire_layer = gname_index.get_id(k)
+
+                    if points or rects:
+
+                        # print(f'Appending wire with existing points {points}, or rects {rects}')
+
+                        net.wires.append(NetWire(
+                        wire_type=wire_type,
+                        layer=wire_layer,
+                        points=points,
+                        rects=rects
+                        ))
+
+                        wire_layer = None
+                        points = []
+                        rects = []
+
+                    break
+
+
             # Step 4: Parse geometry
-            points = []
-            rects = []
+            
             # If we have a RECT followed by '(', parse rectangle
-            if vias and vias[-1] == "RECT" and idx < n and tokens[idx] == '(':
-                # Remove 'RECT' from vias
-                vias.pop()
+            if keywords and keywords[-1] == "RECT" and idx < n and tokens[idx] == '(':
+                # Remove 'RECT' from keywords
+                keywords.pop()
                 # Parse four points (RECT (x1 y1) (x2 y2))
                 rect_nums = []
                 for _ in range(2):  # Two points
@@ -1075,7 +1106,9 @@ class DefParser:
                         if len(pt) == 2:
                             rect_nums.extend(pt)
                 if len(rect_nums) == 4:
-                    rects.append(tuple(rect_nums))
+                    # if not skip_points_rects:
+                        rects.append(tuple(rect_nums))
+
             # Else, parse points up to last ')'
             elif idx < n and tokens[idx] == '(':
                 while idx < n and tokens[idx] == '(':
@@ -1093,26 +1126,33 @@ class DefParser:
                         idx += 1
                     idx += 1  # skip ')'
                     if len(pt) == 2:
-                        points.append(tuple(pt))
+                        # if not skip_points_rects:
+                            points.append(tuple(pt))
                 points = self.massage_points(points)
+                
+                # idx += 1
 
-            # Store this wire segment
-            if vias or points or rects:
-                net.wires.append(NetWire(
-                    wire_type=wire_type,
-                    vias=vias,
-                    points=points,
-                    rects=rects,
-                    raw=line
-                ))
+            # idx += 1
 
-            # Continue with next segment
-            # Skip any non-keyword tokens until next keyword or '('
-            while idx < n and tokens[idx] not in ('(', 'RECT') and not tokens[idx].isidentifier():
-                idx += 1
+            if idx >= n:
 
-            # If next token is a keyword, continue loop (vias will be collected again)
-            # If next token is 'RECT', let the loop collect
+                if points or rects:
+
+                    # print(f'Appending wire after loop-end: {points}, or rects {rects}')
+
+                    net.wires.append(NetWire(
+                        wire_type=wire_type,
+                        layer=wire_layer,
+                        points=points,
+                        rects=rects
+                    ))
+
+                    wire_layer = None
+                    points = []
+                    rects = []
+        
+
+
 
     def massage_points(self, points):
         """
@@ -1133,7 +1173,10 @@ class DefParser:
                 prev_x, prev_y = result[-1]
                 x = pt[0] if pt[0] != '*' else prev_x
                 y = pt[1] if pt[1] != '*' else prev_y
-                result.append((x, y))
+
+                # Make sure points are manhattan aligned
+                if x == prev_x or y == prev_y:
+                    result.append((x, y))
         return result
 
     def extract_point(self, tokens, idx):
@@ -1358,9 +1401,11 @@ class DefParser:
 class ParseWorker(QObject):
     finished = pyqtSignal(dict)
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, lefParserImplement):
         super().__init__()
+
         self.file_path = file_path
+        self.lefParserImplement = lefParserImplement
 
         self.num_threads = 10
 
@@ -1409,7 +1454,7 @@ class ParseWorker(QObject):
             combined_parser = self.merge_parsers(parsers)
         else:
             print("Running DEF parser single thread...")
-            parser = DefParser()
+            parser = DefParser(self.lefParserImplement)
             parser.parse(def_file_content)
             combined_parser = parser
 
@@ -1472,9 +1517,11 @@ class DefParserImplement(QObject):
     
     def_parser_finished_signal = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, lefParserImplement):
         super().__init__()
         
+        self.lefParserImplement = lefParserImplement
+
         self.parser_dict = {}
 
         self.all_workers = []
@@ -1482,7 +1529,7 @@ class DefParserImplement(QObject):
 
     def parse(self, file_path):
         if file_path:
-            worker = ParseWorker(file_path)
+            worker = ParseWorker(file_path, self.lefParserImplement)
             thread = QThread()
 
             self.all_workers.append(worker)
@@ -1537,6 +1584,18 @@ class DefParserImplement(QObject):
 
         return unit
     
+    def get_diearea(self):
+        diearea = None
+
+        for d, parser in self.parser_dict.items():
+            d = parser.def_data.diearea
+            if len(d.points) == 2:
+                x1, y1 = d.points[0]
+                x2, y2 = d.points[1]
+                diearea = (x1, y1, x2, y2)
+
+        return diearea
+    
     def convert_to_micron(self, x, y):
 
         unit = self.get_unit()
@@ -1546,6 +1605,14 @@ class DefParserImplement(QObject):
         y_um = y / unit
 
         return (x_um, y_um)
+    
+    def convert_to_design_unit(self, x, y):
+
+        unit = self.get_unit()
+        x = int(x * unit)
+        y = int(y * unit)
+
+        return (x, y)
 
     def get_components(self):
         all_components = {}

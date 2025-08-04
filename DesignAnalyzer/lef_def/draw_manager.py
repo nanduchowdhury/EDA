@@ -22,23 +22,8 @@ class DrawManager:
 
 
     def set_scale(self, bbox):
+        self.drawArea.set_view_limits(bbox)
 
-        self.bounding_box = bbox
-        (min_x, min_y, max_x, max_y) = bbox
-
-        # self.rightScale.setMinMax(min_y, max_y)
-        # self.bottomScale.setMinMax(min_x, max_x)
-
-        view_width = self.view.viewport().width()
-        view_height = self.view.viewport().height()
-
-        width_um = max_x - min_x
-        height_um = max_y - min_y
-
-        scale_x = view_width / width_um if width_um else 1
-        scale_y = view_height / height_um if height_um else 1
-        self.base_scale = min(scale_x, scale_y)
-        self._current_scale = 1.0
 
 
     def draw_nets(self, net_name=None, layer_name=None):
@@ -48,31 +33,19 @@ class DrawManager:
 
         nets = self.design_data.defParserImplement.get_nets()
 
-        if len(nets) != 0:
-            print(f'Number of nets: {len(nets)}')
-
         for nid in nets:
             if net_id is not None and nid != net_id:
                 continue
             
             wires = self.design_data.defParserImplement.get_wires_of_net(nid, layer_id)
 
-            if len(wires) != 0:
-                print(f'Number of wires in net {nid}: {len(wires)}')
-
             for wire in wires:
                 wire_rects = self.design_data.defParserImplement.get_wire_rects(wire)
-
-                if len(wire_rects) != 0:
-                    print(f'Number of rects in wire: {len(wire_rects)}')
 
                 self.drawArea.drawRects(wire_rects, QColor("blue"))
 
                 wire_points = self.design_data.defParserImplement.get_wire_points(wire)
                 
-                if len(wire_points) != 0:
-                    print(f'Number of points in wire: {len(wire_points)}')
-
                 self.drawArea.drawConnectingPoints(wire_points, QColor("yellow"))
 
 

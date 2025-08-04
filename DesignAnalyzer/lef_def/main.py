@@ -251,8 +251,12 @@ class LoadDesignToolItem(ToolBarItemAbstract):
     def slotDefParserFinished(self, message):
 
         self.design_data.resolveCompToInst()
-        
+
+        bbox = self.defParserImplement.get_diearea()
+        self.drawManager.set_scale(bbox)
+
         self.drawManager.draw_instances_rtree()
+        
         self.drawManager.draw_nets()
         
 
@@ -265,8 +269,9 @@ class LefDefUI(MainUI):
         self.bottomArea.create_input_tab("LEF")
         self.bottomArea.create_input_tab("DEF")
 
-        self.defParserImplement = DefParserImplement()
         self.lefParserImplement = LefParserImplement()
+        self.defParserImplement = DefParserImplement(self.lefParserImplement)
+        
 
         self.design_data = DesignData(self.lefParserImplement, self.defParserImplement)
 
