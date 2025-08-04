@@ -70,6 +70,57 @@ class DesignData:
         df = pd.DataFrame(data)
         return df
 
+    def apply_orient(self, bbox, orient):
+        """
+        Apply orientation to a bounding box.
+
+        Parameters:
+            bbox: list of [x1, y1, x2, y2]
+            orient: str, one of 'N', 'FN', 'S', 'FS', 'E', 'FE', 'W', 'FW'
+
+        Returns:
+            Transformed bbox as list: [x1, y1, x2, y2]
+        """
+        x1, y1, x2, y2 = bbox
+        cx = (x1 + x2) / 2
+        cy = (y1 + y2) / 2
+
+        # Translate to origin (centered around 0,0)
+        corners = [(x1 - cx, y1 - cy), (x2 - cx, y2 - cy)]
+
+        def flip_x(pt): return (-pt[0], pt[1])   # mirror over Y-axis
+        def flip_y(pt): return (pt[0], -pt[1])   # mirror over X-axis
+        def rotate_90(pt): return (pt[1], -pt[0])    # rotate +90 deg
+        def rotate_270(pt): return (-pt[1], pt[0])   # rotate -90 deg
+        def rotate_180(pt): return (-pt[0], -pt[1])
+
+        if orient == 'N':
+            transformed = corners
+        elif orient == 'FN':
+            transformed = [flip_x(p) for p in corners]
+        elif orient == 'S':
+            transformed = [rotate_180(p) for p in corners]
+        elif orient == 'FS':
+            transformed = [flip_x(rotate_180(p)) for p in corners]
+        elif orient == 'E':
+            transformed = [rotate_90(p) for p in corners]
+        elif orient == 'FE':
+            transformed = [flip_x(rotate_90(p)) for p in corners]
+        elif orient == 'W':
+            transformed = [rotate_270(p) for p in corners]
+        elif orient == 'FW':
+            transformed = [flip_x(rotate_270(p)) for p in corners]
+        else:
+            raise ValueError(f"Unsupported orientation: {orient}")
+
+        # Translate back to original center
+        tx1 = min(p[0] for p in transformed) + cx
+        ty1 = min(p[1] for p in transformed) + cy
+        tx2 = max(p[0] for p in transformed) + cx
+        ty2 = max(p[1] for p in transformed) + cy
+
+        return [tx1, ty1, tx2, ty2]
+
 
 
     def resolveCompToInst(self):
@@ -96,6 +147,7 @@ class DesignData:
             cell_name = gname_index.getName(comp.cell_name_id)
             type = gname_index.getName(comp.type_id)
             location = comp.location
+            orient = gname_index.getName(comp.orient) if comp.orient else None
 
             if not location:
                 location_missing_warning += 1
@@ -116,6 +168,8 @@ class DesignData:
             width, height = macros[0].size
 
             bbox = [x_um, y_um, x_um + width, y_um + height]
+
+            bbox = self.apply_orient(bbox, orient) if orient else bbox
 
             for i in range(4):
                 bbox[i] = int(bbox[i] * design_units)

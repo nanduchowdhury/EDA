@@ -146,11 +146,9 @@ class Region:
 @dataclass
 class Component:
     cell_name_id: int
+    orient: Optional[int] = None
     eeqmaster_id: Optional[int] = None
     source: Optional[str] = None
-    placed: Optional[Tuple[int, int, str]] = None
-    fixed: Optional[Tuple[int, int, str]] = None
-    cover: Optional[Tuple[int, int, str]] = None
     unplaced: bool = False
     halo: Optional[Tuple[bool, int, int, int, int]] = None  # (soft, left, bottom, right, top)
     routehalo: Optional[Tuple[int, str, str]] = None        # (haloDist, minLayer, maxLayer)
@@ -466,22 +464,22 @@ class DefParser:
                 elif line.startswith("+ SOURCE"):
                     comp.source = line.split()[2]
                 elif line.startswith("+ FIXED"):
-                    nums = re.findall(r'-?\d+', line)
-                    pt = (int(nums[0]), int(nums[1]))
+                    nums = re.findall(r'-?\d+(?:\.\d+)?', line)
+                    pt = (int(float(nums[0])), int(float(nums[1])))
                     orient = line.split()[-1]
-                    comp.fixed = (*pt, orient)
+                    comp.orient = gname_index.set(orient)
                     comp.location = pt
                 elif line.startswith("+ COVER"):
-                    nums = re.findall(r'-?\d+', line)
-                    pt = (int(nums[0]), int(nums[1]))
+                    nums = re.findall(r'-?\d+(?:\.\d+)?', line)
+                    pt = (int(float(nums[0])), int(float(nums[1])))
                     orient = line.split()[-1]
-                    comp.cover = (*pt, orient)
+                    comp.orient = gname_index.set(orient)
                     comp.location = pt
                 elif line.startswith("+ PLACED"):
-                    nums = re.findall(r'-?\d+', line)
-                    pt = (int(nums[0]), int(nums[1]))
+                    nums = re.findall(r'-?\d+(?:\.\d+)?', line)
+                    pt = (int(float(nums[0])), int(float(nums[1])))
                     orient = line.split()[-1]
-                    comp.placed = (*pt, orient)
+                    comp.orient = gname_index.set(orient)
                     comp.location = pt
                 elif line.startswith("+ UNPLACED"):
                     comp.unplaced = True
