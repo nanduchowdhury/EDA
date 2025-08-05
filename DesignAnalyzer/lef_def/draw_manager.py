@@ -40,13 +40,23 @@ class DrawManager:
             wires = self.design_data.defParserImplement.get_wires_of_net(nid, layer_id)
 
             for wire in wires:
+
+                layerId = wire.layer
+                color = self.design_data.layer_color_map.get(layerId, QColor("lightblue"))
+
                 wire_rects = self.design_data.defParserImplement.get_wire_rects(wire)
 
-                self.drawArea.drawRects(wire_rects, QColor("blue"))
+                if wire_rects and len(wire_rects) > 0:
+                    self.drawArea.drawRects(wire_rects, color)
 
                 wire_points = self.design_data.defParserImplement.get_wire_points(wire)
-                
-                self.drawArea.drawConnectingPoints(wire_points, QColor("yellow"))
+
+                if wire_points and len(wire_points) > 0:
+                    self.drawArea.drawConnectingPoints(wire_points, color)
+
+                print(f"Finished drawing {len(wire_rects)} rects and {len(wire_points)} points on layer {layerId} with color {color}")
+
+            self.drawArea.refresh()
 
 
     def draw_inst_names(self, name_list):
@@ -74,7 +84,7 @@ class DrawManager:
         visible_ids = list(self.design_data.inst_rtree.intersection(bbox))
 
         rects = self.get_instance_rects(visible_ids)
-        self.drawArea.drawRects(rects, QColor("red"))
+        self.drawArea.drawRects(rects, QColor("gray"))
 
     def get_instance_rects(self, instList):
         rect_list = []

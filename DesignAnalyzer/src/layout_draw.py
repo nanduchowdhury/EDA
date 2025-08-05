@@ -92,9 +92,12 @@ class PyQtGraphLayoutWithScales(QWidget):
             self.view.addItem(item)
             self.rect_items.append(item)
 
+
+    def refresh(self):
         self.view.addItem(self.vLine)
         self.view.addItem(self.hLine)
         self.view.autoRange()
+        
 
     def drawConnectingPoints(self, points, color='white'):
         """

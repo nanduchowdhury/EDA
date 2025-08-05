@@ -171,9 +171,10 @@ class PinPortLayer:
 @dataclass
 class PinPort:
     layers: List[PinPortLayer] = field(default_factory=list)
-    cover: Optional[Tuple[int, int, str]] = None
-    fixed: Optional[Tuple[int, int, str]] = None
-    placed: Optional[Tuple[int, int, str]] = None
+    cover: Optional[Tuple[int, int]] = None
+    fixed: Optional[Tuple[int, int]] = None
+    placed: Optional[Tuple[int, int]] = None
+    orient: Optional[int] = None
 
 @dataclass
 class PinAntenna:
@@ -587,19 +588,22 @@ class DefParser:
                     pt = tuple(map(int, re.findall(r'-?\d+', line)))
                     orient = tokens[-1]
                     if current_port:
-                        current_port.cover = (*pt, orient)
+                        current_port.cover = pt
+                        current_port.orient = gname_index.set(orient)
                 elif line.startswith("+ FIXED"):
                     tokens = line.split()
                     pt = tuple(map(int, re.findall(r'-?\d+', line)))
                     orient = tokens[-1]
                     if current_port:
-                        current_port.fixed = (*pt, orient)
+                        current_port.fixed = pt
+                        current_port.orient = gname_index.set(orient)
                 elif line.startswith("+ PLACED"):
                     tokens = line.split()
                     pt = tuple(map(int, re.findall(r'-?\d+', line)))
                     orient = tokens[-1]
                     if current_port:
-                        current_port.placed = (*pt, orient)
+                        current_port.placed = pt
+                        current_port.orient = gname_index.set(orient)
                 # ... handle other attributes as needed
 
             self.def_data.pins[name_id] = pin

@@ -255,8 +255,8 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         bbox = self.defParserImplement.get_diearea()
         self.drawManager.set_scale(bbox)
 
+        self.design_data.assign_layer_colors()
         self.drawManager.draw_instances_rtree()
-        
         self.drawManager.draw_nets()
         
 

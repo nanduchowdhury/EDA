@@ -36,6 +36,8 @@ class DesignData:
         self.inst_rtree = None
         self.inst_bbox = None
 
+        self.layer_color_map = {}
+
         self.instData = InstanceMap()
 
 
@@ -122,6 +124,8 @@ class DesignData:
         return [tx1, ty1, tx2, ty2]
 
 
+    def assign_layer_colors(self):
+        self.layer_color_map = self.lefParserImplement.assign_layer_colors()
 
     def resolveCompToInst(self):
         if not self.defParserImplement or not self.lefParserImplement:

@@ -730,48 +730,52 @@ class LefParser:
 
 
             elif line.startswith("VIARULE"):
+                viarule_name = line.split()[1]
                 block_lines = [line]
                 i += 1
                 while i < n:
                     l = lines[i].strip()
                     block_lines.append(l)
-                    if l.startswith("END"):
+                    if l.startswith("END") and l.endswith(viarule_name):
                         break
                     i += 1
                 self.parse_viarule(block_lines)
                 i += 1
 
             elif line.startswith("VIA"):
+                via_name = line.split()[1]
                 block_lines = [line]
                 i += 1
                 while i < n:
                     l = lines[i].strip()
                     block_lines.append(l)
-                    if l.startswith("END"):
+                    if l.startswith("END") and l.endswith(via_name):
                         break
                     i += 1
                 self.parse_via(block_lines)
                 i += 1
 
             elif line.startswith("SITE"):
+                site_name = line.split()[1]
                 block_lines = [line]
                 i += 1
                 while i < n:
                     l = lines[i].strip()
                     block_lines.append(l)
-                    if l.startswith("END"):
+                    if l.startswith("END") and l.endswith(site_name):
                         break
                     i += 1
                 self.parse_site(block_lines)
                 i += 1
 
             elif line.startswith("MACRO"):
+                macro_name = line.split()[1]
                 block_lines = [line]
                 i += 1
                 while i < n:
                     l = lines[i].strip()
                     block_lines.append(l)
-                    if l.startswith("END"):
+                    if l.startswith("END") and l.endswith(macro_name):
                         break
                     i += 1
                 self.parse_macro(block_lines)
@@ -779,12 +783,14 @@ class LefParser:
 
             # Keep LAYER at the very end - LAYER shows up in other blocks too.
             elif line.startswith("LAYER"):
+                layer_name = line.split()[1]
                 block_lines = [line]
                 i += 1
                 while i < n:
                     l = lines[i].strip()
                     block_lines.append(l)
-                    if l.startswith("END"):
+                    # Check for exact END <layer_name>
+                    if l.startswith("END") and l.endswith(layer_name):
                         break
                     i += 1
                 self.parse_layer(block_lines)
@@ -828,7 +834,34 @@ class LefParserImplement:
 
         return macros
 
-    
+
+    def assign_layer_colors(self):
+        """
+        Assigns colors to routing and cut layers using fixed color lists.
+        Each routing/cut layer gets a color from its respective list, cycling if needed.
+        Returns a dict: {layer_name_id: color}
+        """
+        routing_colors = ["red", "blue", "yellow", "green", "pink", "magenta", "purple", "orange", "brown"]
+        cut_colors = ["lightgreen", "lightblue", "lightyellow", "lightpink", "lighcyan"]
+
+        layer_color_map = {}
+        routing_idx = 0
+        cut_idx = 0
+
+        for l, parser in self.parser_dict.items():
+            for layer in parser.lef_data.layers:
+                color = "purple" # Default color
+                if layer.type == "ROUTING":
+                    color = routing_colors[routing_idx % len(routing_colors)]
+                    routing_idx += 1
+                elif layer.type == "CUT":
+                    color = cut_colors[cut_idx % len(cut_colors)]
+                    cut_idx += 1
+                layer_color_map[layer.name_id] = color
+
+        return layer_color_map
+
+
     def get_layers(self, metal_or_via=None):
         layers = []
         for l, parser in self.parser_dict.items():
