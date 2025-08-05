@@ -59,7 +59,8 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.plotItem.showGrid(x=True, y=True, alpha=0.5)
         self.plotItem.setMouseEnabled(x=True, y=True)
         self.plotItem.setLimits(xMin=0, xMax=1000, yMin=0, yMax=1000)
-        self.plotItem.invertY(True)
+        self.plotItem.invertY(False)  # Y axis: bottom=min, top=max
+        self.plotItem.getViewBox().invertX(False)  # X axis: left=min, right=max
         self.graphWidget.setBackground("black")
 
         self.view = self.plotItem.getViewBox()
@@ -72,6 +73,9 @@ class PyQtGraphLayoutWithScales(QWidget):
 
         # Mouse move event
         self.proxy = pg.SignalProxy(self.view.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
+
+        # Change cursor to cross when mouse enters the plot area
+        self.view.setCursor(Qt.CrossCursor)
 
         self.mainLayout.addWidget(self.graphWidget)
         self.setLayout(self.mainLayout)
@@ -97,7 +101,7 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.view.addItem(self.vLine)
         self.view.addItem(self.hLine)
         self.view.autoRange()
-        
+
 
     def drawConnectingPoints(self, points, color='white'):
         """

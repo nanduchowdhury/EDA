@@ -1,0 +1,11 @@
+{
+    "Files": {
+        "LEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/osu035.lef"
+        ],
+        "DEF": [
+            "C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def"
+        ]
+    },
+    "Cloud": {}
+}

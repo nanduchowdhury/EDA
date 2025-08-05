@@ -22,6 +22,7 @@ class DrawManager:
 
 
     def set_scale(self, bbox):
+        bbox = [v / self.design_data.defParserImplement.get_unit() for v in bbox]
         self.drawArea.set_view_limits(bbox)
 
 
@@ -52,11 +53,13 @@ class DrawManager:
                 wire_points = self.design_data.defParserImplement.get_wire_points(wire)
 
                 if wire_points and len(wire_points) > 0:
-                    self.drawArea.drawConnectingPoints(wire_points, color)
+                    wire_points_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in pt) for pt in wire_points]
+                    self.drawArea.drawConnectingPoints(wire_points_scaled, color)
 
                 print(f"Finished drawing {len(wire_rects)} rects and {len(wire_points)} points on layer {layerId} with color {color}")
 
-            self.drawArea.refresh()
+
+        self.drawArea.refresh()
 
 
     def draw_inst_names(self, name_list):
@@ -71,7 +74,9 @@ class DrawManager:
             id_list.append(inst_id)
 
         rects = self.get_instance_rects(id_list)
-        self.drawArea.drawRects(rects, QColor("white"))
+        rects_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in rect) for rect in rects]
+
+        self.drawArea.drawRects(rects_scaled, QColor("white"))
 
     def draw_instances_rtree(self, bbox=None):
 
@@ -84,7 +89,9 @@ class DrawManager:
         visible_ids = list(self.design_data.inst_rtree.intersection(bbox))
 
         rects = self.get_instance_rects(visible_ids)
-        self.drawArea.drawRects(rects, QColor("gray"))
+        rects_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in rect) for rect in rects]
+
+        self.drawArea.drawRects(rects_scaled, QColor("gray"))
 
     def get_instance_rects(self, instList):
         rect_list = []

@@ -174,13 +174,13 @@ class GetInstanceCoords(LefDefPredicate):
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'Name of the instance to search for',
-                'example': 'example : INST*'
+                'example': 'example : ^I0.*'
             },
             self.arg_cell_name: {
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'Name of the cell to search for',
-                'example': 'example : BUFF*'
+                'example': 'example : ^BUFF.*'
             }
         }
 

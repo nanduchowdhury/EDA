@@ -432,19 +432,19 @@ class MainUI(QMainWindow):
         leftLayout.addWidget(self.sourceDropDown)
 
 
-        leftLayout.addWidget(self._hline())
+        # leftLayout.addWidget(self._hline())
 
         self.analysisActionPanel = AnalysisActionPanel(self)
         leftLayout.addWidget(self.analysisActionPanel)
 
-        leftLayout.addWidget(self._hline())
+        # leftLayout.addWidget(self._hline())
 
         # Param area
         self.manageArgs = ManageArgs()
         self.manageArgs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         leftLayout.addWidget(self.manageArgs)
 
-        leftLayout.addWidget(self._hline())
+        # leftLayout.addWidget(self._hline())
 
         # Run + Stop buttons
         buttonRow = QHBoxLayout()
