@@ -84,15 +84,20 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.zoomFactor = 1.2
         self.view.autoRange()
 
-    def drawRects(self, rect_list, color='red'):
+    def drawRects(self, rect_list, color='red', pen_width=1.5, brush=False):
         
         # self.view.clear()
         # self.rect_items.clear()
 
         for x, y, w, h in rect_list:
             item = FixedRectItem(x, y, w, h)
-            item.setPen(pg.mkPen(color=color, width=1.5))
-            item.setBrush(pg.mkBrush(150, 100, 200, 100))
+            item.setPen(pg.mkPen(color=color, width=pen_width))
+
+            if brush:
+                item.setBrush(pg.mkBrush(150, 100, 200, 100))
+            else:
+                item.setBrush(QBrush(Qt.NoBrush))
+
             self.view.addItem(item)
             self.rect_items.append(item)
 
@@ -157,6 +162,15 @@ class PyQtGraphLayoutWithScales(QWidget):
 
     def zoomFit(self):
         self.view.autoRange()
+
+    def zoomBbox(self, bbox):
+        """
+        Zooms the view to the given bbox area.
+        bbox should be (min_x, min_y, max_x, max_y)
+        """
+        min_x, min_y, max_x, max_y = bbox
+        self.plotItem.setRange(xRange=(min_x, max_x), yRange=(min_y, max_y), padding=0)
+        # self.view.autoRange()
 
 # --------- Pan Methods ----------
     def panLeft(self, factor=0.1):  # 10% of visible width

@@ -138,7 +138,7 @@ class GetLefMacros(LefDefPredicate):
         return True
 
 
-class GetViasForLayer(LefDefPredicate):
+class ListVias(LefDefPredicate):
     def __init__(self, _design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
         super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
 
@@ -161,7 +161,9 @@ class GetViasForLayer(LefDefPredicate):
 
         return result
 
-class GetInstanceCoords(LefDefPredicate):
+
+
+class SelectObjects(LefDefPredicate):
     def __init__(self, _design_data,
                  _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
         super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
@@ -190,7 +192,96 @@ class GetInstanceCoords(LefDefPredicate):
         inst_regex = self.args[self.arg_inst_name]["user_value"]
         cell_regex = self.args[self.arg_cell_name]["user_value"]
 
-        df = self.design_data.query_instances(inst_regex, cell_regex)
+        ids = self.design_data.get_inst_ids_by_regex(inst_regex=inst_regex, cell_regex=cell_regex)
+        self.drawManager.select_unselect_draw_inst_ids(id_list=ids, do_what="SELECT")
+
+        return True
+    
+
+class ClearSelection(LefDefPredicate):
+    def __init__(self, _design_data,
+                 _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.args = {
+            
+        }
+
+    def run(self):
+
+        self.drawManager.clear_selection()
+
+        return True
+    
+
+class ZoomObjects(LefDefPredicate):
+    def __init__(self, _design_data,
+                 _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.arg_inst_name = "instance name"
+        self.arg_cell_name = "cell name"
+
+        self.args = {
+            self.arg_inst_name: {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the instance to search for',
+                'example': 'example : ^I0.*'
+            },
+            self.arg_cell_name: {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the cell to search for',
+                'example': 'example : ^BUFF.*'
+            }
+        }
+
+
+    def run(self):
+
+        inst_regex = self.args[self.arg_inst_name]["user_value"]
+        cell_regex = self.args[self.arg_cell_name]["user_value"]
+
+        ids = self.design_data.get_inst_ids_by_regex(inst_regex=inst_regex, cell_regex=cell_regex)
+        self.drawManager.select_unselect_draw_inst_ids(id_list=ids, do_what="SELECT")
+        self.drawManager.zoom_instances(ids)
+
+        return True
+
+
+
+class ListInstances(LefDefPredicate):
+    def __init__(self, _design_data,
+                 _defParserImplement, _lefParserImplement, _drawManager, _sentralControl):
+        super().__init__(_design_data, _defParserImplement, _lefParserImplement, _drawManager, _sentralControl)
+
+        self.arg_inst_name = "instance name"
+        self.arg_cell_name = "cell name"
+
+        self.args = {
+            self.arg_inst_name: {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the instance to search for',
+                'example': 'example : ^I0.*'
+            },
+            self.arg_cell_name: {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Name of the cell to search for',
+                'example': 'example : ^BUFF.*'
+            }
+        }
+
+
+    def run(self):
+
+        inst_regex = self.args[self.arg_inst_name]["user_value"]
+        cell_regex = self.args[self.arg_cell_name]["user_value"]
+
+        ids = self.design_data.get_inst_ids_by_regex(inst_regex=inst_regex, cell_regex=cell_regex)
+        df = self.design_data.get_inst_df(ids)
 
         for col_name in df.columns:
             self.setOutputObject(col_name, df[col_name].tolist())
@@ -208,7 +299,8 @@ class GetInstanceCoords(LefDefPredicate):
         print("🟢 Cell clicked:")
 
         for column, values in data_dict.items():
-            self.drawManager.draw_inst_names(values)
+            ids = self.design_data.get_inst_ids_by_name(name_list=values)
+            self.drawManager.select_unselect_draw_inst_ids(id_list=ids, do_what="SELECT")
 
 
 
@@ -253,10 +345,18 @@ class LoadDesignToolItem(ToolBarItemAbstract):
         self.design_data.resolveCompToInst()
 
         bbox = self.defParserImplement.get_diearea()
+
+        if bbox is None:
+            self.sentralControl.showMessage("No die area found in DEF file.")
+            return
+
         self.drawManager.set_scale(bbox)
 
         self.design_data.assign_layer_colors()
-        self.drawManager.draw_instances_rtree()
+
+        ids = self.design_data.get_inst_ids_by_bbox(bbox=bbox)
+        self.drawManager.select_unselect_draw_inst_ids(id_list=ids, do_what="DRAW")
+
         self.drawManager.draw_nets()
         
 
@@ -291,15 +391,30 @@ class LefDefUI(MainUI):
 
     def registerLefDefPredicates(self):
 
-        viaObj = GetViasForLayer(self.design_data,
+        listVias = ListVias(self.design_data,
                                  self.defParserImplement, self.lefParserImplement, self.drawManager,
                                  self.sentralControl)
-        self.all_predicates.addPredicate("design analysis", "search vias based on layer etc", viaObj)
+        self.all_predicates.addPredicate("design analysis", "list vias", listVias)
 
-        instObj = GetInstanceCoords(self.design_data,
+        listInstances = ListInstances(self.design_data,
                                     self.defParserImplement, self.lefParserImplement, self.drawManager,
                                     self.sentralControl)
-        self.all_predicates.addPredicate("design analysis", "search instances by name regexp, location etc", instObj)
+        self.all_predicates.addPredicate("design analysis", "list instances", listInstances)
+
+        selectUnselectObj = SelectObjects(self.design_data,
+                                                  self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                                  self.sentralControl)
+        self.all_predicates.addPredicate("design analysis", "select objects", selectUnselectObj)
+
+        clearSelectionObj = ClearSelection(self.design_data,
+                                           self.defParserImplement, self.lefParserImplement, self.drawManager,
+                                           self.sentralControl)
+        self.all_predicates.addPredicate("design analysis", "clear selection", clearSelectionObj)
+
+        zoomObj = ZoomObjects(self.design_data,
+                              self.defParserImplement, self.lefParserImplement, self.drawManager,
+                              self.sentralControl)
+        self.all_predicates.addPredicate("design analysis", "zoom objects", zoomObj)
 
         layersObj = GetLefLayers(self.design_data,
                                  self.defParserImplement, self.lefParserImplement, self.drawManager,

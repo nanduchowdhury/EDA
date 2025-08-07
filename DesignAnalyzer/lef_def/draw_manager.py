@@ -20,6 +20,9 @@ class DrawManager:
         self._current_scale = 1.0
         self.base_scale = 1.0
 
+        self.selected_instances = set()
+        self.selected_layer_rects = {}
+
 
     def set_scale(self, bbox):
         bbox = [v / self.design_data.defParserImplement.get_unit() for v in bbox]
@@ -48,7 +51,7 @@ class DrawManager:
                 wire_rects = self.design_data.defParserImplement.get_wire_rects(wire)
 
                 if wire_rects and len(wire_rects) > 0:
-                    self.drawArea.drawRects(wire_rects, color)
+                    self.drawArea.drawRects(rect_list=wire_rects, color=color)
 
                 wire_points = self.design_data.defParserImplement.get_wire_points(wire)
 
@@ -62,36 +65,31 @@ class DrawManager:
         self.drawArea.refresh()
 
 
-    def draw_inst_names(self, name_list):
+    def clear_selection(self):
+       
+        self.select_unselect_draw_inst_ids(id_list=self.selected_instances, do_what="UNSELECT")
 
-        id_list = []
+        self.selected_instances.clear()
+        self.selected_layer_rects.clear()
 
-        for name in name_list:
-            inst_id = gname_index.get_id(name)
-            if inst_id is None:
-                continue
+    
+    def select_unselect_draw_inst_ids(self, id_list, do_what="DRAW"):
+        
+        if not id_list:
+            return
 
-            id_list.append(inst_id)
+        self.selected_instances.update(id_list)
 
         rects = self.get_instance_rects(id_list)
         rects_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in rect) for rect in rects]
 
-        self.drawArea.drawRects(rects_scaled, QColor("white"))
+        if do_what == "DRAW":
+            self.drawArea.drawRects(rect_list=rects_scaled, color=QColor("gray"), brush=True)
+        elif do_what == "UNSELECT":
+            self.drawArea.drawRects(rect_list=rects_scaled, color=QColor("gray"))
+        elif do_what == "SELECT":
+            self.drawArea.drawRects(rect_list=rects_scaled, color=QColor("white"))
 
-    def draw_instances_rtree(self, bbox=None):
-
-        if len(self.design_data.inst_rtree) == 0:
-            return
-
-        if bbox is None:
-            bbox = self.design_data.inst_rtree.get_bounds()
-
-        visible_ids = list(self.design_data.inst_rtree.intersection(bbox))
-
-        rects = self.get_instance_rects(visible_ids)
-        rects_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in rect) for rect in rects]
-
-        self.drawArea.drawRects(rects_scaled, QColor("gray"))
 
     def get_instance_rects(self, instList):
         rect_list = []
@@ -112,6 +110,35 @@ class DrawManager:
             rect_list.append((x, y, w, h))
 
         return rect_list
+
+
+    def zoom_instances(self, instList):
+
+        rects = self.get_instance_rects(instList)
+        rects_scaled = [tuple(v / self.design_data.defParserImplement.get_unit() for v in rect) for rect in rects]
+
+        if not rects_scaled:
+            return
+
+        self.zoom_rects(rects_scaled)
+
+
+    def zoom_rects(self, rect_list):
+        """
+        Zooms the view to fit the given list of rectangles.
+        Each rectangle should be a tuple (x, y, w, h).
+        """
+        if not rect_list:
+            return
+
+        min_x = min(rect[0] for rect in rect_list)
+        min_y = min(rect[1] for rect in rect_list)
+        max_x = max(rect[0] + rect[2] for rect in rect_list)
+        max_y = max(rect[1] + rect[3] for rect in rect_list)
+
+        bbox = (min_x, min_y, max_x, max_y)
+
+        self.drawArea.zoomBbox(bbox)
 
 
     def draw_instances_1(self, instList, color):

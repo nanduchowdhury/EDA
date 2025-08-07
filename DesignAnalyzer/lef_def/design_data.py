@@ -41,27 +41,64 @@ class DesignData:
         self.instData = InstanceMap()
 
 
+    def get_inst_ids_by_bbox(self, bbox=None):
 
-    def query_instances(self, inst_regex, cell_regex):
-        """
-        Query instances by instance and cell regex.
-        Returns a pandas DataFrame with inst_name, cell_name, type, location.
-        """
-        data = []
+        if not bbox:
+            if len(self.design_data.inst_rtree) > 0:
+                    bbox = self.design_data.inst_rtree.get_bounds()
+
+        if not bbox:
+            return []
+        
+        bbox_ids = list(self.inst_rtree.intersection(bbox))
+
+        return bbox_ids
+
+    def get_inst_ids_by_name(self, name_list=None):
+
+        id_list = []
+
+        if name_list:
+            for name in name_list:
+                inst_id = gname_index.get_id(name)
+                if inst_id is None:
+                    continue
+                id_list.append(inst_id)
+
+        return id_list
+
+    def get_inst_ids_by_regex(self, inst_regex, cell_regex):
+
+        inst_list = []
         inst_pattern = re.compile(inst_regex) if inst_regex else None
         cell_pattern = re.compile(cell_regex) if cell_regex else None
 
         for inst_id, inst in self.instData.instance_data.items():
             inst_name = gname_index.getName(inst_id)
             cell_name = gname_index.getName(inst.cell_name_id)
-            type_name = gname_index.getName(inst.type_id)
-            location = inst.location
 
             # Apply regex filters
             inst_match = True if not inst_pattern else (inst_pattern.search(inst_name) if inst_name else False)
             cell_match = True if not cell_pattern else (cell_pattern.search(cell_name) if cell_name else False)
 
             if inst_match and cell_match:
+                inst_list.append(inst_id)
+
+        return inst_list
+
+
+    def get_inst_df(self, inst_list):
+        """
+        Get a DataFrame of instances with their names and locations.
+        """
+        data = []
+        for inst_id in inst_list:
+            inst = self.instData.instance_data.get(inst_id)
+            if inst:
+                inst_name = gname_index.getName(inst_id)
+                cell_name = gname_index.getName(inst.cell_name_id)
+                type_name = gname_index.getName(inst.type_id)
+                location = inst.location
                 data.append({
                     "inst_name": inst_name,
                     "cell_name": cell_name,
@@ -69,8 +106,8 @@ class DesignData:
                     "location": location
                 })
 
-        df = pd.DataFrame(data)
-        return df
+        return pd.DataFrame(data)
+
 
     def apply_orient(self, bbox, orient):
         """
