@@ -1536,3 +1536,115 @@
 2025-08-07 14:13:08,990 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
 2025-08-07 14:18:09,970 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
 2025-08-07 14:18:09,998 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 14:20:21,337 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 14:20:21,365 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 14:24:40,266 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-08-07 14:24:42,734 - INFO - Error: No response from LLM.
+2025-08-07 15:50:24,977 - INFO - Parse DEF C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/power3 (1).def started...
+2025-08-07 15:52:01,058 - INFO - Parse DEF C:/Users/nandu/OneDrive/Documents/power3_LEFDEF_case/power3 (1).def finished.
+2025-08-07 15:57:26,796 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 15:57:26,818 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:19:00,503 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:19:00,534 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:25:44,599 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:25:44,630 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:48:05,932 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:48:05,949 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:49:23,765 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:49:23,801 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:54:50,527 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:54:50,550 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 17:57:18,326 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 17:57:18,358 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 18:15:38,716 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 18:15:38,739 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 18:23:09,124 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def started...
+2025-08-07 18:23:09,165 - INFO - Parse DEF C:/Users/nandu/EDA/DesignAnalyzer/test/design_files/claude_case/seq_multipler.def finished.
+2025-08-07 20:10:32,687 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-08-07 20:10:35,059 - INFO - Error: No response from LLM.
+2025-08-07 20:12:18,873 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-08-07 20:12:21,222 - INFO - Error: No response from LLM.

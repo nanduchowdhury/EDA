@@ -223,8 +223,15 @@ class MainUI(QMainWindow):
 
         print(f"Received command: {command}, args: {args}")
 
+        pred = self.all_predicates.getPredicateObj(command)
+        if not pred:
+            raise ValueError(f"Analysis '{command}' got from LLM is not found.")
+        
+        for key, value in args.items():
+            pred.updateArgUserValue(key, value)
+
         self.analysisActionPanel.selectItem(command)
-        self.manageArgs.setArgValues(args)
+
         self.runButton.click()
         
 
@@ -549,8 +556,7 @@ class MainUI(QMainWindow):
         except ValueError:
             args_dict = {}
 
-        
-        self.manageArgs.setArgValues(args_dict)
+        self.manageArgs.showHideArgsGuiItems(args_dict)
 
 
     def registerPredicates(self):
@@ -858,7 +864,7 @@ class ManageArgs(QWidget):
 
             self.paramEdits.append((label, edit))
 
-    def setArgValues(self, args: dict):
+    def showHideArgsGuiItems(self, args: dict):
         """
         Show arg-name + value as label-edit pairs using metadata:
         - Label text = arg name
@@ -866,6 +872,13 @@ class ManageArgs(QWidget):
         - Edit text = default
         - Edit tooltip = example
         """
+
+        # First hide everything.
+        for j in range(0, self.max_args):
+            label, edit = self.paramEdits[j]
+            label.hide()
+            edit.hide()
+
         i = 0
         for i, (key, meta) in enumerate(args.items()):
             if i >= self.max_args:
@@ -876,17 +889,17 @@ class ManageArgs(QWidget):
             label.setText(key)
             label.setToolTip(meta.get('tool_tip', key))
 
-            edit.setText(str(meta.get('default', '')))
+            if meta.get('user_value') is not None:
+                edit.setText(str(meta['user_value']))
+            else:
+                edit.setText(str(meta.get('default', '')))
+
             edit.setToolTip(meta.get('example', ''))
 
             label.show()
             edit.show()
 
-        # Hide any remaining unused rows
-        for j in range(i + 1, self.max_args):
-            label, edit = self.paramEdits[j]
-            label.hide()
-            edit.hide()
+
 
 
     def getArgValues(self) -> dict:
@@ -1016,3 +1029,4 @@ class AnalysisActionPanel(QWidget):
         if item:
             self.listWidget.setCurrentItem(item)
             self.listWidget.scrollToItem(item)
+            self.listWidget.itemSelectionChanged.emit()

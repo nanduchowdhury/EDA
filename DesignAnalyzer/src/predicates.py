@@ -35,6 +35,19 @@ class PredicateBase():
     def setArg(self, name, value):
         self.args[name] = value
 
+    def updateArgUserValue(self, arg_name, value):
+
+        if arg_name not in self.args:
+            raise ValueError(f"Argument '{arg_name}' not found in predicate '{self.predicate_name}'.")
+        else:
+            self.args[arg_name]['user_value'] = value
+
+    def dump_args(self):
+        """
+        Returns a JSON string of the args dictionary.
+        """
+        return json.dumps(self.args, indent=4)
+
     def setUserValueArgs(self, args_dict):
         """
         Update only the 'user_value' fields in self.args
