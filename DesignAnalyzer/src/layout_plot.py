@@ -147,6 +147,9 @@ class BarChartView(BasePlotView):
 
         self.checkInputValidity()
 
+        self.plotItem.setLabel('bottom', self.x_col)
+        self.plotItem.setLabel('left', self.y_col)
+
         bar_width = 0.8
         for i, row in self.dataFrame.iterrows():
             x_val = i + 1
@@ -170,6 +173,61 @@ class BarChartView(BasePlotView):
 
     def zoomFit(self):
         self.view.autoRange()
+
+
+class ScatterPlotView(BasePlotView):
+    def __init__(self, x_col="X", y_col="Y", color_col=None, parent=None):
+        super().__init__(parent)
+        self.x_col = x_col
+        self.y_col = y_col
+        self.color_col = color_col
+        self.scatter_item = None
+
+    def setXYColumn(self, x_col, y_col):
+        self.x_col = x_col
+        self.y_col = y_col
+
+    def setColorColumn(self, color_col):
+        self.color_col = color_col
+
+    def setDataFrame(self, df):
+        self.dataFrame = df.copy()
+        self.updatePlot()
+
+    def checkInputValidity(self):
+        if self.dataFrame.empty:
+            raise ValueError("Input data is empty. Please set valid input data.")
+        if self.x_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.x_col}' not found in input data.")
+        if self.y_col not in self.dataFrame:
+            raise ValueError(f"Column '{self.y_col}' not found in input data.")
+        if self.dataFrame.shape[0] > 2000:
+            raise ValueError("Input data has too many rows. Please try on a smaller set.")
+
+    def updatePlot(self):
+        self.plotItem.clear()
+        self.checkInputValidity()
+
+        self.plotItem.setLabel('bottom', self.x_col)
+        self.plotItem.setLabel('left', self.y_col)
+
+        x = self.dataFrame[self.x_col].astype(float).values
+        y = self.dataFrame[self.y_col].astype(float).values
+
+        # Handle color column if provided
+        if self.color_col and self.color_col in self.dataFrame:
+            color_vals = self.dataFrame[self.color_col]
+            # Map unique values to colors
+            unique_vals = color_vals.unique()
+            color_map = {val: QColor(*[random.randint(50, 255) for _ in range(3)]) for val in unique_vals}
+            brushes = [pg.mkBrush(color_map[val]) for val in color_vals]
+        else:
+            brushes = [pg.mkBrush('blue')] * len(x)
+
+        spots = [{'pos': (x[i], y[i]), 'brush': brushes[i], 'data': i} for i in range(len(x))]
+        self.scatter_item = pg.ScatterPlotItem(spots=spots, size=8, pen=pg.mkPen('w', width=0.5))
+        self.plotItem.addItem(self.scatter_item)
+        self.zoomFit()
 
 
 # ---------------- Pie Chart ----------------

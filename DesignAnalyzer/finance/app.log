@@ -3930,3 +3930,16 @@ message: "Generative Language API has not been used in project 966683554322 befo
 }
 ].
 2025-07-27 11:43:35,586 - INFO - Error: No response from LLM.
+2025-08-08 17:37:42,660 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:37:42,840 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:38:41,916 - INFO - Error executing 'run PCA analysis': 'DimensionalityReducer' object has no attribute '_validate_columns'
+2025-08-08 17:41:21,436 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:41:21,485 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:41:38,207 - INFO - Error executing 'run PCA analysis': Columns not found in DataFrame: ["'Units", "Sold'", "'Revenue'"]
+2025-08-08 17:42:00,694 - INFO - Error executing 'run PCA analysis': Columns not found in DataFrame: ["'Units", "Sold'", "'Revenue'"]
+2025-08-08 17:42:34,138 - INFO - Error executing 'run PCA analysis': Columns not found in DataFrame: ['Units', 'Sold']
+2025-08-08 17:44:50,998 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:44:51,020 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:45:24,769 - INFO - Error executing 'run PCA analysis': 'list' object has no attribute 'columns'
+2025-08-08 17:50:03,211 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 17:50:03,248 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv

@@ -21,6 +21,8 @@ import pandas as pd
 
 from layout_plot import BarChartView
 
+from pca_analysis import DimensionalityReducer
+
 class PredicateBase():
     def __init__(self):
         self.predicate_name = ""  # Name of the predicate
@@ -281,6 +283,53 @@ class CreateBarChart(PredicateBase):
         input_table.highlightData(highlight_dict)
 
 
+
+class CreateScatterPlot(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.x_axis = None
+        self.y_axis = None
+
+        self.args = {
+            'x_axis': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the X-axis',
+                'example': 'example : Date or Category'
+            },
+            'y_axis': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Column to be used for the Y-axis',
+                'example': 'example : Sales or Profit'
+            },
+        }
+
+    def run(self):
+
+        self.x_axis = self.args['x_axis']['user_value']
+        self.y_axis = self.args['y_axis']['user_value']
+
+        drawArea = self.sentralControl.viewerTabs.addTabByType("SCATTER_PLOT", 
+                                    self.getShortName(),
+                                    self.getCompleteNameWithArgs())
+
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        df = df_list[0]
+
+        drawArea.setXYColumn(self.x_axis, self.y_axis)
+        drawArea.setDataFrame(df)
+
+        # drawArea.registerActionOnShowInTable(self.highlightInTable)
+
+        return True
+    
+
+
+
 class CreatePieChart(PredicateBase):
     def __init__(self, sentralControl):
         super().__init__()
@@ -323,6 +372,56 @@ class CreatePieChart(PredicateBase):
 
         return True
     
+
+
+class RunPCA(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.label_column = None
+        self.value_column = None
+
+        self.args = {
+            'column list': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Columns to be used for PCA',
+                'example': 'example : Column1, Column2, Column3'
+            }
+        }
+
+    def run(self):
+
+        # Split by "," and strip whitespace
+        column_list = self.args['column list']['user_value'].split(',')
+        column_list = [col.strip() for col in column_list if col.strip()]
+
+        if not column_list:
+            raise ValueError("No columns provided for PCA analysis.")
+
+        print(f"Running PCA on columns: {column_list}")
+
+        result = []
+
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        if not df_list or len(df_list) == 0:
+            raise ValueError("No data available for PCA analysis.")
+
+        df = df_list[0]
+
+        reducer = DimensionalityReducer(df, column_list)
+        reducer.run_pca(n_components=2)
+        result = reducer.get_pca_output()
+
+        for col_name in result.columns:
+            self.setOutputObject(col_name, result[col_name].tolist())
+            
+        return result
+
+
+
 
 
 class SqlQueryPredicate(PredicateBase, QObject):

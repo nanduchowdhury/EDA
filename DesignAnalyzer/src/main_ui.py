@@ -34,7 +34,7 @@ from session import Session
 
 from common import PlaceholderTextEdit, ScrollingLabel
 
-from predicates import Predicates, CreateBarChart, CreatePieChart, SqlQueryPredicate
+from predicates import Predicates, CreateBarChart, CreateScatterPlot, CreatePieChart, SqlQueryPredicate, RunPCA
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -564,11 +564,17 @@ class MainUI(QMainWindow):
         barChartObj = CreateBarChart(self.sentralControl)
         self.all_predicates.addPredicate("charts", "create bar chart", barChartObj)
 
+        scatterPlotObj = CreateScatterPlot(self.sentralControl)
+        self.all_predicates.addPredicate("charts", "create scatter plot", scatterPlotObj)
+
         pieChartObj = CreatePieChart(self.sentralControl)
         self.all_predicates.addPredicate("charts", "create pie chart", pieChartObj)
 
         sqlQueryPredicate = SqlQueryPredicate(self.sentralControl)
         self.all_predicates.addPredicate("SQL", "execute sql query", sqlQueryPredicate)
+
+        runPCAObj = RunPCA(self.sentralControl)
+        self.all_predicates.addPredicate("PCA", "run PCA analysis", runPCAObj)
 
 
 
