@@ -34,7 +34,7 @@ from session import Session
 
 from common import PlaceholderTextEdit, ScrollingLabel
 
-from predicates import Predicates, CreateBarChart, CreateScatterPlot, CreatePieChart, SqlQueryPredicate, RunPCA
+from predicates import Predicates, CreateBarChart, CreateScatterPlot, CreatePieChart, SqlQueryPredicate, RunPCA, RunKMeans
 
 from llm_manager import LLMManager, global_LLM_manager
 
@@ -575,6 +575,9 @@ class MainUI(QMainWindow):
 
         runPCAObj = RunPCA(self.sentralControl)
         self.all_predicates.addPredicate("PCA", "run PCA analysis", runPCAObj)
+
+        kmeansClustererObj = RunKMeans(self.sentralControl)
+        self.all_predicates.addPredicate("PCA", "run k-means clustering", kmeansClustererObj)
 
 
 

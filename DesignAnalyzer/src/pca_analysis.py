@@ -8,6 +8,10 @@ try:
 except ImportError:
     umap = None
 
+
+from sklearn.cluster import KMeans
+
+
 class DimensionalityReducer:
     def __init__(self, df: pd.DataFrame, columns: list):
         self.df = df.copy()
@@ -80,3 +84,70 @@ class DimensionalityReducer:
         if self.umap_result is None:
             raise ValueError("UMAP has not been run yet.")
         return pd.DataFrame(self.umap_result, columns=[f"UMAP{i+1}" for i in range(self.umap_result.shape[1])])
+    
+
+
+
+
+class KMeansClusterer:
+    def __init__(self, df: pd.DataFrame, columns: list):
+        self.df = df.copy()
+        self.columns = columns
+        self._validate_columns()
+        self.data = self.df[self.columns].values
+        self.kmeans_result = None
+
+    def _validate_columns(self):
+        missing_cols = [col for col in self.columns if col not in self.df.columns]
+        if missing_cols:
+            raise ValueError(f"Columns not found in DataFrame: {missing_cols}")
+        non_numeric_cols = [
+            col for col in self.columns
+            if not np.issubdtype(self.df[col].dtype, np.number)
+        ]
+        if non_numeric_cols:
+            raise ValueError(f"Non-numeric columns cannot be clustered: {non_numeric_cols}")
+        if self.df[self.columns].isnull().any().any():
+            raise ValueError("Data contains NaN values. Please clean before clustering.")
+        
+
+    def run_kmeans(self, n_clusters=3, random_state=42):
+        try:
+            kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
+            labels = kmeans.fit_predict(self.data)
+            self.kmeans_result = labels
+            # Return a dataframe with original data and cluster labels
+            result_df = self.df.copy()
+            result_df['Cluster'] = labels
+            return result_df
+        except Exception as e:
+            raise RuntimeError(f"KMeans clustering failed: {e}")
+
+    def assign_cluster_colors(self, df):
+        """
+        Assigns a color to each unique integer value in the 'Cluster' column of df.
+        Returns a new DataFrame with a 'Color' column.
+        """
+
+        if 'Cluster' not in df.columns:
+            raise ValueError("No 'Cluster' column found to assign colors.")
+
+        # Define a color palette (expand as needed)
+        color_palette = [
+            "blue", "orange", "green", "red", "purple",
+            "brown", "pink", "gray", "yellow", "cyan"
+        ]
+
+        clusters = sorted(df['Cluster'].unique())
+        color_map = {cluster: color_palette[i % len(color_palette)] for i, cluster in enumerate(clusters)}
+        df = df.copy()
+        df['Color'] = df['Cluster'].map(color_map)
+
+        return df
+
+    def get_cluster_labels(self):
+        if self.kmeans_result is None:
+            raise ValueError("KMeans has not been run yet.")
+        return self.kmeans_result
+    
+

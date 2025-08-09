@@ -21,7 +21,7 @@ import pandas as pd
 
 from layout_plot import BarChartView
 
-from pca_analysis import DimensionalityReducer
+from pca_analysis import DimensionalityReducer, KMeansClusterer
 
 class PredicateBase():
     def __init__(self):
@@ -420,6 +420,82 @@ class RunPCA(PredicateBase):
             
         return result
 
+
+
+class RunKMeans(PredicateBase):
+    def __init__(self, sentralControl):
+        super().__init__()
+        self.sentralControl = sentralControl
+
+        self.label_column = None
+        self.value_column = None
+
+        self.args = {
+            'column list': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'Columns to be used for PCA',
+                'example': 'example : Column1, Column2, Column3'
+            },
+            'number of clusters': {
+                'user_value': '',
+                'default': '3',
+                'tool_tip': 'Number of clusters for K-means',
+                'example': 'example : 4'
+            }
+        }
+
+    def run(self):
+
+        num_clusters = self.cleanArg(self.args['number of clusters']['user_value'])
+        if num_clusters and not num_clusters.isdigit():
+            raise ValueError("Number of clusters must be a positive integer.")
+        if not num_clusters:
+            num_clusters = self.args['number of clusters']['default']
+        num_clusters = int(num_clusters)
+
+        # Split by "," and strip whitespace
+        column_list = self.args['column list']['user_value'].split(',')
+        column_list = [col.strip() for col in column_list if col.strip()]
+
+        if not column_list:
+            raise ValueError("No columns provided for K-means analysis.")
+
+        result = []
+
+        # Get the table for which k-means need to run.
+        df_list = self.sentralControl.getDataForSelectedEntity()
+
+        if not df_list or len(df_list) == 0:
+            raise ValueError("No data available for K-means analysis.")
+        df = df_list[0]
+
+        # Run k-means clustering
+        clusterer = KMeansClusterer(df, column_list)
+        result = clusterer.run_kmeans(n_clusters=num_clusters)
+
+        result = clusterer.assign_cluster_colors(result)
+        # result = clusterer.get_cluster_labels()
+
+        # Show the k-means new table to user
+        for col_name in result.columns:
+            self.setOutputObject(col_name, result[col_name].tolist())
+
+
+        # Run scatter plot to visualize the clusters
+        if column_list and len(column_list) == 2:
+            drawArea = self.sentralControl.viewerTabs.addTabByType("SCATTER_PLOT", 
+                                        self.getShortName(),
+                                        self.getCompleteNameWithArgs())
+
+            drawArea.setXYColumn(column_list[0], column_list[1])
+            drawArea.setColorColumn("Color")
+            drawArea.setDataFrame(result)
+            
+        else:
+            self.sentralControl.showMessage("K-means clustering scatter-plot requires exactly 2 columns for visualization.")
+
+        return result
 
 
 

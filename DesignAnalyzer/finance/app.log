@@ -3943,3 +3943,70 @@ message: "Generative Language API has not been used in project 966683554322 befo
 2025-08-08 17:45:24,769 - INFO - Error executing 'run PCA analysis': 'list' object has no attribute 'columns'
 2025-08-08 17:50:03,211 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-08-08 17:50:03,248 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 18:02:58,511 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 18:02:58,552 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 22:56:01,572 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-08 22:56:02,036 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:13:59,979 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:14:00,057 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:14:29,834 - INFO - Error executing 'run k-means clustering': 'NoneType' object has no attribute 'columns'
+2025-08-09 10:16:38,307 - INFO - Error executing 'run k-means clustering': 'NoneType' object has no attribute 'columns'
+2025-08-09 10:20:23,187 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:20:23,218 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:21:22,162 - INFO - Error executing 'run k-means clustering': 'NoneType' object has no attribute 'columns'
+2025-08-09 10:25:28,811 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:25:28,832 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:25:50,204 - INFO - Error executing 'run k-means clustering': 'NoneType' object has no attribute 'columns'
+2025-08-09 10:30:53,640 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:30:53,717 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:31:15,698 - INFO - Error executing 'run k-means clustering': 'NoneType' object has no attribute 'columns'
+2025-08-09 10:37:49,722 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 10:37:49,757 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 14:48:03,580 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 14:48:03,627 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 14:48:48,509 - INFO - Error executing 'run k-means clustering': Column 'PCA1' not found in input data.
+2025-08-09 18:13:33,824 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:13:33,858 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:21:19,385 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:21:19,417 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:21:34,807 - INFO - Error executing 'run k-means clustering': int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2025-08-09 18:24:40,577 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:24:40,609 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-08-09 18:31:58,681 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 18:32:01,685 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 18:33:50,759 - INFO - Error executing 'create scatter plot': Column 'Price' not found in input data.
+2025-08-09 18:34:44,125 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 18:34:47,119 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 18:35:26,952 - INFO - Error executing 'create scatter plot': Input data has too many rows. Please try on a smaller set.
+2025-08-09 18:37:34,772 - INFO - Start reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 18:37:37,675 - INFO - End reading CSV file: C:/Users/nandu/OneDrive/Documents/1M-rows-CSV-case.csv
+2025-08-09 22:38:43,505 - WARNING - Retrying langchain_google_genai.chat_models._chat_with_retry.<locals>._chat_with_retry in 2.0 seconds as it raised PermissionDenied: 403 Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "serviceTitle"
+  value: "Generative Language API"
+}
+metadata {
+  key: "containerInfo"
+  value: "966683554322"
+}
+metadata {
+  key: "consumer"
+  value: "projects/966683554322"
+}
+metadata {
+  key: "activationUrl"
+  value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+, locale: "en-US"
+message: "Generative Language API has not been used in project 966683554322 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+, links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=966683554322"
+}
+].
+2025-08-09 22:38:45,887 - INFO - Error: No response from LLM.

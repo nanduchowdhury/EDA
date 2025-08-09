@@ -201,8 +201,6 @@ class ScatterPlotView(BasePlotView):
             raise ValueError(f"Column '{self.x_col}' not found in input data.")
         if self.y_col not in self.dataFrame:
             raise ValueError(f"Column '{self.y_col}' not found in input data.")
-        if self.dataFrame.shape[0] > 2000:
-            raise ValueError("Input data has too many rows. Please try on a smaller set.")
 
     def updatePlot(self):
         self.plotItem.clear()
