@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QTableView, QHeaderView
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
 from PyQt5.QtCore import Qt
 
+from PyQt5.QtWidgets import QMenu
 
 import pandas as pd
 
@@ -96,6 +97,24 @@ class ManageResultsTabs:
         return None
 
 
+class TableRmbMenuBase:
+    def __init__(self, name):
+        self.name = name
+
+    def onClick(self, tableView):
+        """Override in derived class to handle menu click."""
+        pass
+
+class TableRmbMenuSort(TableRmbMenuBase):
+    def __init__(self, name="Sort", ascending=True):
+        super().__init__(name)
+        self.ascending = ascending
+
+    def onClick(self, tableView):
+        # Sort the clicked column ascending as an example
+        tableView.sortColumn(tableView.rmb_clicked_col_index, self.ascending)
+
+
 class TableView(QTableView):
     def __init__(self, _model=None, parent=None):
         super().__init__(parent)
@@ -108,6 +127,18 @@ class TableView(QTableView):
         self.proxy_model.setSourceModel(self.model)
         self.setModel(self.proxy_model)
 
+
+        # Everything related to RMB
+        self._rmb_menu = None
+        self._rmb_menu_items = []
+        self.rmb_clicked_col_index = None
+        self.rmb_clicked_column_name = None
+        sort_l2h_menu_item = TableRmbMenuSort("Sort - low to high", True)
+        sort_h2l_menu_item = TableRmbMenuSort("Sort - high to low", False)
+        self.addRmbMenu(sort_l2h_menu_item)
+        self.addRmbMenu(sort_h2l_menu_item)
+
+
         self._onItemClickCallback = None
         self._onItemSelectedCallback = None
         self._default_alignment = Qt.AlignLeft | Qt.AlignVCenter
@@ -115,6 +146,34 @@ class TableView(QTableView):
         self.clicked.connect(self._handleClick)
         self.selectionModel().selectionChanged.connect(self._handleSelection)
         self.horizontalHeader().sectionClicked.connect(self._handleHeaderClick)
+
+
+    def addRmbMenu(self, itemObj):
+        if not hasattr(self, "_rmb_menu") or self._rmb_menu is None:
+            self._rmb_menu = QMenu(self)
+        self._rmb_menu_items.append(itemObj)
+        action = self._rmb_menu.addAction(itemObj.name)
+        # Connect the action to call the item's onClick with self as argument
+        action.triggered.connect(lambda checked, obj=itemObj: obj.onClick(self))
+
+
+    def contextMenuEvent(self, event):
+        # Get the position of the click
+        pos = event.pos()
+        # Map to global position for menu
+        global_pos = event.globalPos()
+        # Get the column index at the click position
+        col = self.columnAt(pos.x())
+        col_name = None
+        if col >= 0:
+            col_name = self.model.headerData(col, Qt.Horizontal)
+        # Optionally, pass col or col_name to your RMB menu items
+        if hasattr(self, "_rmb_menu") and self._rmb_menu is not None:
+            # Example: store for use in menu actions
+            self.rmb_clicked_col_index = col
+            self.rmb_clicked_column_name = col_name
+            self._rmb_menu.exec_(global_pos)
+
 
     def applyColumnColorGradient(self, col_name: str, lowColor: str, highColor: str):
         """Apply a color gradient to a column based on its values."""
@@ -600,14 +659,4 @@ class PandasTableModel(QAbstractTableModel):
         else:
             return str(section + 1)
 
-    def sort(self, column, order):
-        if self._df is None or column >= self.columnCount():
-            return
 
-        col_name = self._df.columns[column]
-        ascending = order == Qt.AscendingOrder
-
-        self.layoutAboutToBeChanged.emit()
-        self._df.sort_values(by=col_name, ascending=ascending, inplace=True, kind='mergesort')
-        self._df.reset_index(drop=True, inplace=True)
-        self.layoutChanged.emit()
