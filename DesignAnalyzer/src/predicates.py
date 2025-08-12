@@ -156,7 +156,14 @@ class PredicateBase():
 class Predicates:
     def __init__(self):
         self.predicates = {}  # group_name -> {predicate_name -> predicate_object}
+        self._hidden_groups = {}  # group_name -> True/False
 
+    def setGroupHidden(self, group_name, hidden: bool):
+        self._hidden_groups[group_name] = bool(hidden)
+
+    def isGroupHidden(self, group_name):
+        return self._hidden_groups.get(group_name, False)
+    
     def addPredicate(self, group_name, name, predicateObj):
         """
         Add a predicate to a specified group.

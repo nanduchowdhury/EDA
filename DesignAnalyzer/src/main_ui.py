@@ -286,6 +286,9 @@ class MainUI(QMainWindow):
         self.setup_logging()
 
 
+    def hidePredicateGroup(self, group_name):
+        self.all_predicates.setGroupHidden(group_name, True)
+
     def create_GUI(self):
 
         self.readSessionMenuObj = ReadSessionMenuItem(self.session, 
@@ -413,6 +416,10 @@ class MainUI(QMainWindow):
         self.analysisActionPanel.registerSelectionChangedSlot(self.updateParamLabels)
 
         for header in self.all_predicates.getAllGroups():
+            
+            if self.all_predicates.isGroupHidden(header):
+                continue
+
             group_preds = self.all_predicates.getAllGroupPredicates(header)
 
             for predicate in group_preds:

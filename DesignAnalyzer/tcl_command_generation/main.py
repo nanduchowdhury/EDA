@@ -242,8 +242,12 @@ class PdfUI(MainUI):
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
+        self.hidePredicateGroup("PCA")
+        self.hidePredicateGroup("SQL")
+        self.hidePredicateGroup("charts")
+
         pred = getTclCommands(self.sentralControl)
-        self.all_predicates.addPredicate("PDF", "get TCL commands from PDF", pred)
+        self.all_predicates.addPredicate("EDA", "list all TCL commands referred in PDF", pred)
 
         
 
