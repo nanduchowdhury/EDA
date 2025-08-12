@@ -193,7 +193,9 @@ class TableView(QTableView):
         self.model.setDataFrame(df)
         self.proxy_model.invalidateFilter()
         self.setModel(self.proxy_model)
+        
         self.resizeAllColumns()
+        self.resizeRowsToContents()
 
     def colorAlternateRows(self, color: str):
         """Color alternate rows with the given color and its lighter version."""
