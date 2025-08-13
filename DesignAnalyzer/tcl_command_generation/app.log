@@ -63,3 +63,198 @@
 2025-08-12 16:19:40,384 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
 2025-08-12 16:19:40,384 - INFO - Loading PDF data done.
 2025-08-12 16:23:25,843 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 20:05:36,124 - INFO - Loading PDF started.
+2025-08-12 20:05:36,153 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 20:05:36,535 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 20:05:36,551 - INFO - Loading PDF data done.
+2025-08-12 20:07:57,039 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 20:43:20,973 - INFO - Loading PDF started.
+2025-08-12 20:43:20,992 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 20:43:21,429 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 20:43:21,429 - INFO - Loading PDF data done.
+2025-08-12 20:47:06,419 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 20:47:25,229 - INFO - Error executing 'convert natural language to TCL commands': 1 validation error for OpenAIEmbeddings
+  Value error, Did not find openai_api_key, please add an environment variable `OPENAI_API_KEY` which contains it, or pass `openai_api_key` as a named parameter. [type=value_error, input_value={'model': 'text-embedding...20, 'http_client': None}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/value_error
+2025-08-12 21:07:27,002 - INFO - Loading PDF started.
+2025-08-12 21:07:27,015 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 21:07:27,400 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 21:07:27,400 - INFO - Loading PDF data done.
+2025-08-12 21:10:40,726 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 21:10:54,760 - INFO - Error executing 'convert natural language to TCL commands': The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable
+2025-08-12 22:03:29,028 - INFO - Loading PDF started.
+2025-08-12 22:03:29,052 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 22:03:29,442 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 22:03:29,442 - INFO - Loading PDF data done.
+2025-08-12 22:06:42,982 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 22:06:56,266 - INFO - Use pytorch device_name: cpu
+2025-08-12 22:06:56,266 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-08-12 22:06:56,297 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+2025-08-12 22:06:57,241 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/1.1" 401 0
+2025-08-12 22:07:48,693 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/1.1" 401 0
+2025-08-12 22:07:49,123 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/1.1" 401 0
+2025-08-12 22:07:49,494 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md HTTP/1.1" 401 0
+2025-08-12 22:07:50,458 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/1.1" 401 0
+2025-08-12 22:07:50,753 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json HTTP/1.1" 401 0
+2025-08-12 22:07:51,052 - DEBUG - https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json HTTP/1.1" 401 0
+2025-08-12 22:07:51,052 - INFO - Error executing 'convert natural language to TCL commands': sentence-transformers/all-MiniLM-L6-v2 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+2025-08-12 22:57:53,771 - INFO - Loading PDF started.
+2025-08-12 22:57:53,810 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 22:57:54,592 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 22:57:54,606 - INFO - Loading PDF data done.
+2025-08-12 23:01:47,127 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 23:02:01,023 - INFO - Error executing 'convert natural language to TCL commands': module 'google.generativeai' has no attribute 'Client'
+2025-08-12 23:11:24,633 - INFO - Loading PDF started.
+2025-08-12 23:11:24,684 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-12 23:11:25,491 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-12 23:11:25,491 - INFO - Loading PDF data done.
+2025-08-12 23:14:56,858 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-12 23:15:10,100 - INFO - Error executing 'convert natural language to TCL commands': 'GeminiRAG' object has no attribute 'rag'
+2025-08-12 23:18:12,937 - INFO - Loading PDF started.
+2025-08-12 23:18:12,970 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-12 23:18:13,503 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-12 23:18:13,503 - INFO - Loading PDF data done.
+2025-08-12 23:18:50,640 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:18:50,640 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:18:50,655 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:18:53,776 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:18:53,780 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:18:53,780 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:18:53,793 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:18:53,844 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-12 23:19:21,461 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,461 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,470 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,476 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,487 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,495 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,498 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,504 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,512 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:21,520 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:19:31,775 - INFO - Error executing 'convert natural language to TCL commands': 'list' object has no attribute 'items'
+2025-08-12 23:27:37,760 - INFO - Loading PDF started.
+2025-08-12 23:27:37,796 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-12 23:27:38,410 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-12 23:27:38,410 - INFO - Loading PDF data done.
+2025-08-12 23:28:13,323 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:28:13,323 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:28:13,339 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-12 23:28:16,445 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:28:16,451 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:28:16,462 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:28:16,464 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-12 23:28:16,523 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-12 23:28:44,495 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,495 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,495 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,519 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,524 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,529 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,529 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,537 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,542 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:44,542 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-12 23:28:54,452 - INFO - Error executing 'convert natural language to TCL commands': too many values to unpack (expected 2)
+2025-08-13 10:19:25,742 - INFO - Loading PDF started.
+2025-08-13 10:19:25,780 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-13 10:19:26,423 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-13 10:19:26,423 - INFO - Loading PDF data done.
+2025-08-13 10:20:00,820 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:20:00,820 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:20:00,832 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:20:03,670 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:20:03,685 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:20:03,695 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:20:03,695 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:20:03,756 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-13 10:20:29,800 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,800 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,800 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,821 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,822 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,829 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,832 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,832 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,840 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:29,843 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:20:38,059 - INFO - Error executing 'convert natural language to TCL commands': embed_content() got an unexpected keyword argument 'contents'
+2025-08-13 10:25:15,507 - INFO - Loading PDF started.
+2025-08-13 10:25:15,529 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-13 10:25:15,948 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-13 10:25:15,955 - INFO - Loading PDF data done.
+2025-08-13 10:25:46,323 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:25:46,342 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:25:46,347 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:25:51,030 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:25:51,030 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:25:51,049 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:25:51,057 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:25:51,121 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-13 10:26:18,476 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,481 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,488 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,500 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,507 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,515 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,521 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,527 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,533 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:18,541 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:26:30,418 - INFO - Error executing 'convert natural language to TCL commands': 'dict' object has no attribute 'embedding'
+2025-08-13 10:32:10,327 - INFO - Loading PDF started.
+2025-08-13 10:32:10,361 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-13 10:32:10,814 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-13 10:32:10,822 - INFO - Loading PDF data done.
+2025-08-13 10:32:56,646 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:32:56,663 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:32:56,676 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:33:04,072 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:33:04,078 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:33:04,088 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:33:04,099 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:33:04,228 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-13 10:34:16,434 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,450 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,475 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,521 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,521 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,545 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,554 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,576 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,588 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:16,604 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:34:43,343 - INFO - Error executing 'convert natural language to TCL commands': list indices must be integers or slices, not str
+2025-08-13 10:42:12,057 - INFO - Loading PDF started.
+2025-08-13 10:42:12,093 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/lefdefref.pdf
+2025-08-13 10:42:12,986 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/lefdefref.pdf read successfully.
+2025-08-13 10:42:12,986 - INFO - Loading PDF data done.
+2025-08-13 10:42:52,437 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:42:52,443 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:42:52,450 - WARNING - Cannot set gray non-stroke color because /'P1' is an invalid float value
+2025-08-13 10:42:55,892 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:42:55,892 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:42:55,903 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:42:55,905 - WARNING - Cannot set gray non-stroke color because /'P2' is an invalid float value
+2025-08-13 10:42:55,944 - WARNING - Cannot set gray non-stroke color because /'P3' is an invalid float value
+2025-08-13 10:43:23,741 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,741 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,741 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,758 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,759 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,766 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,770 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,772 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,780 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:43:23,786 - WARNING - Cannot set gray non-stroke color because /'P4' is an invalid float value
+2025-08-13 10:52:12,742 - INFO - Error executing 'convert natural language to TCL commands': module 'google.generativeai' has no attribute 'generate_content'
+2025-08-13 10:56:46,699 - INFO - Loading PDF started.
+2025-08-13 10:56:46,716 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf
+2025-08-13 10:56:46,903 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf read successfully.
+2025-08-13 10:56:46,903 - INFO - Loading PDF data done.
+2025-08-13 10:57:26,990 - INFO - Error executing 'convert natural language to TCL commands': module 'google.generativeai' has no attribute 'generate_content'
+2025-08-13 11:01:15,573 - INFO - Loading PDF started.
+2025-08-13 11:01:15,592 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf
+2025-08-13 11:01:15,730 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pdf read successfully.
+2025-08-13 11:01:15,730 - INFO - Loading PDF data done.

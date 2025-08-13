@@ -8,11 +8,8 @@ import pdfplumber
 import numpy as np
 
 
-
-
 import re
 import string
-
 
 
 import logging
@@ -31,6 +28,7 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 from predicates import Predicates, PredicateBase
 
 from ug_processor import UserGuideProcessor
+from RAG import GeminiRAG
 
 
 class LoadDataToolItem(ToolBarItemAbstract):
@@ -59,8 +57,43 @@ class LoadDataToolItem(ToolBarItemAbstract):
         self.sentralControl.showMessage("Loading PDF data done.")
 
 
+class TclCommandConversion(PredicateBase, QObject):
+    def __init__(self, sentralControl):
+        super().__init__()
+        QObject.__init__(self)
+
+        self.sentralControl = sentralControl
+
+        self.args = {
+            'nlp': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'natural language input',
+                'example': 'example : set multicycle path...'
+            }
+        }
+
+    def run(self):
+        
+        result = []
+
+        user_nlp = self.args['nlp']['user_value']
+
+        drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
+        pages_text = drawArea.getPagesText()   
+
+        print("Processing PDF pages for RAG...")
+
+
+        rag = GeminiRAG()
+        rag.load_from_list(pages_text, chunk_size=800, overlap=50)
+
+
+        response = rag.ask(user_nlp, top_k=3)
+        print(f"Response from Gemini RAG: {response}")
+
     
-class getTclCommands(PredicateBase, QObject):
+class GetTclCommands(PredicateBase, QObject):
     def __init__(self, sentralControl):
         super().__init__()
         QObject.__init__(self)
@@ -104,10 +137,13 @@ class PdfUI(MainUI):
         self.hidePredicateGroup("SQL")
         self.hidePredicateGroup("charts")
 
-        pred = getTclCommands(self.sentralControl)
-        self.all_predicates.addPredicate("EDA", "list all TCL commands referred in PDF", pred)
+        cmds = GetTclCommands(self.sentralControl)
+        self.all_predicates.addPredicate("EDA", "list all TCL commands referred in PDF", cmds)
 
-        
+        conv = TclCommandConversion(self.sentralControl)
+        self.all_predicates.addPredicate("EDA", "convert natural language to TCL commands", conv)
+
+
 
 if __name__ == "__main__":
     run_BluePayload(PdfUI)
