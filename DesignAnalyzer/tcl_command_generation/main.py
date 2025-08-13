@@ -28,7 +28,7 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 from predicates import Predicates, PredicateBase
 
 from ug_processor import UserGuideProcessor
-from RAG import GeminiRAG
+from RAG import GeminiRAG, GeminiTclRAG
 
 
 class LoadDataToolItem(ToolBarItemAbstract):
@@ -57,15 +57,16 @@ class LoadDataToolItem(ToolBarItemAbstract):
         self.sentralControl.showMessage("Loading PDF data done.")
 
 
-class TclCommandConversion(PredicateBase, QObject):
-    def __init__(self, sentralControl):
+class PdfChatPredicate(PredicateBase, QObject):
+    def __init__(self, sentralControl, gemini_rag):
         super().__init__()
         QObject.__init__(self)
 
         self.sentralControl = sentralControl
+        self.gemini_rag = gemini_rag
 
         self.args = {
-            'nlp': {
+            'user query': {
                 'user_value': '',
                 'default': '',
                 'tool_tip': 'natural language input',
@@ -77,45 +78,74 @@ class TclCommandConversion(PredicateBase, QObject):
         
         result = []
 
-        user_nlp = self.args['nlp']['user_value']
+        user_query = self.args['user query']['user_value']
 
         drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
         pages_text = drawArea.getPagesText()   
 
-        print("Processing PDF pages for RAG...")
+        pdf_base_name = drawArea.get_file_base_name()
+        print(f"Processing PDF pages for RAG for PDF file: {pdf_base_name}")
+
+        self.gemini_rag.set_doc_name(pdf_base_name)
+        self.gemini_rag.load_from_list(pages_text, chunk_size=800, overlap=50)
 
 
-        rag = GeminiRAG()
-        rag.load_from_list(pages_text, chunk_size=800, overlap=50)
-
-
-        response = rag.ask(user_nlp, top_k=3)
+        response = self.gemini_rag.ask(user_query, top_k=3)
         print(f"Response from Gemini RAG: {response}")
 
     
 class GetTclCommands(PredicateBase, QObject):
-    def __init__(self, sentralControl):
+    def __init__(self, sentralControl, gemini_tcl_rag, ug_processor):
         super().__init__()
         QObject.__init__(self)
 
         self.sentralControl = sentralControl
+        self.gemini_tcl_rag = gemini_tcl_rag
+        self.ug_processor = ug_processor
 
         self.args = {
-
+            'user query': {
+                'user_value': '',
+                'default': '',
+                'tool_tip': 'natural language input',
+                'example': 'example : set multicycle path...'
+            }
         }
 
     def run(self):
         
         result = []
 
+        user_query = self.args['user query']['user_value']
+
         drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
         pages_text = drawArea.getPagesText()        
 
-        ug_processor = UserGuideProcessor()
-        result_cmds, result_args = ug_processor.getCommandsAndArgs(pages_text)
+        
+        result_cmds, result_args = self.ug_processor.getCommandsAndArgs(pages_text)
 
         self.setOutputObject("Commands", result_cmds)
         self.setOutputObject("Args", result_args)
+
+
+
+        # Perform RAG using commands and args.
+        print(f"Running RAG with {len(result_cmds)} commands and {len(result_args)} args...")
+
+        pages_cmds_args = []
+        for cmd, args in zip(result_cmds, result_args):
+            pages_cmds_args.append(f"Command: {cmd}, Args: {args}")
+
+        pdf_base_name = drawArea.get_file_base_name()
+
+        self.gemini_tcl_rag.set_doc_name(pdf_base_name)
+        self.gemini_tcl_rag.load_from_list(pages_cmds_args, chunk_size=800, overlap=50)
+
+
+        response = self.gemini_tcl_rag.ask(user_query, top_k=3)
+        print(f"Response from Gemini RAG: {response}")
+
+
 
         return True
 
@@ -133,15 +163,19 @@ class PdfUI(MainUI):
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
+        self.gemini_rag = GeminiRAG()
+        self.gemini_tcl_rag = GeminiTclRAG()
+        self.ug_processor = UserGuideProcessor()
+
         self.hidePredicateGroup("PCA")
         self.hidePredicateGroup("SQL")
         self.hidePredicateGroup("charts")
 
-        cmds = GetTclCommands(self.sentralControl)
+        cmds = GetTclCommands(self.sentralControl, self.gemini_tcl_rag, self.ug_processor)
         self.all_predicates.addPredicate("EDA", "list all TCL commands referred in PDF", cmds)
 
-        conv = TclCommandConversion(self.sentralControl)
-        self.all_predicates.addPredicate("EDA", "convert natural language to TCL commands", conv)
+        chat = PdfChatPredicate(self.sentralControl, self.gemini_rag)
+        self.all_predicates.addPredicate("PDF", "chat with PDF to answer questions", chat)
 
 
 

@@ -4,6 +4,8 @@ import pickle
 import google.generativeai as genai
 import textwrap
 
+import os
+
 class GeminiRAG:
     """
     A class for Retrieval-Augmented Generation (RAG) using Google's Gemini models
@@ -24,6 +26,9 @@ class GeminiRAG:
         self.model = model
         self.embed_model = embed_model
         
+        self.doc_name = None  # To store the name of the document being processed
+        self.doc_name_changed = False
+
         # The embedding size for text-embedding-004 is 768.
         self.dimension = 768
         
@@ -32,6 +37,21 @@ class GeminiRAG:
         
         # Stores (page_num, chunk_text) for easy retrieval.
         self.documents = []
+
+        self.prompt_base_rules = textwrap.dedent("""
+            You are an AI assistant tasked with answering a question based on provided context.
+            Follow these rules:
+                1. Only use information from the provided context.
+                2. If the context does not contain the answer, state that you don't know.
+                3. Do not make up any information.
+                4. Cite the page number from the context where you found the information.
+        """)
+
+
+    def set_doc_name(self, doc_name):
+        self.doc_name = doc_name
+        self.doc_name_changed = True
+
 
     def embed_text(self, text):
         """
@@ -81,34 +101,47 @@ class GeminiRAG:
             self.index.add(np.array([embedding]))
             self.documents.append((page_num, text))
 
+    def get_index_filenames(self):
+        base = os.path.splitext(os.path.basename(self.doc_name))[0]
+        index_file = f"rag_index_{base}.faiss"
+        docs_file = f"rag_docs_{base}.pkl"
+        return index_file, docs_file
+
+
     def load_from_list(self, page_text_list, chunk_size=1000, overlap=100):
         """
         Loads data from a list of text content and builds the FAISS index.
-        The list should contain strings, where each string is the text of a page.
-        
-        Args:
-            page_text_list (list): A list of strings, where each string is the content of a page.
-            chunk_size (int): The maximum size of each text chunk.
-            overlap (int): The number of characters to overlap between chunks.
+        If index files exist for this doc_name, loads them instead of recomputing.
+        Otherwise, builds index and saves for future use.
         """
+
+        if not self.doc_name_changed:
+            return
+
+        self.doc_name_changed = False
+
+        index_file, docs_file = self.get_index_filenames()
+        if os.path.exists(index_file) and os.path.exists(docs_file):
+            self.load(index_file, docs_file)
+            print(f"[INFO] Loaded existing FAISS index and docs for '{self.doc_name}'")
+            return
+
+        # Build index from scratch
         for page_num, text in enumerate(page_text_list):
             print(f'Processing page {page_num + 1}...')
-
-            # The original code's chunking logic was flawed. 
-            # `textwrap.wrap` is a simple and effective way to chunk text.
-            # Using `textwrap.wrap` is not ideal for overlapping chunks.
-            # Let's revert to a corrected version of the original loop.
             start = 0
             while start < len(text):
                 end = start + chunk_size
                 chunk = text[start:end]
                 self.add_chunk(page_num, chunk)
                 start += chunk_size - overlap
-                
-            # If the last chunk is not a full chunk, add it as well.
             if len(text) - start > 0:
                 chunk = text[start:]
                 self.add_chunk(page_num, chunk)
+
+        # Save for next time
+        self.save(index_file, docs_file)
+        print(f"[INFO] Saved FAISS index and docs for '{self.doc_name}'")
 
 
     def retrieve(self, query, top_k=3):
@@ -137,12 +170,8 @@ class GeminiRAG:
             relevant_docs = self.retrieve(query, top_k)
             context = "\n\n".join([f"[Page {pg + 1}] {txt}" for pg, txt in relevant_docs])
             prompt = f"""
-            You are an AI assistant tasked with answering a question based on provided context.
-            Follow these rules:
-            1. Only use information from the provided context.
-            2. If the context does not contain the answer, state that you don't know.
-            3. Do not make up any information.
-            4. Cite the page number from the context where you found the information.
+            
+            {self.prompt_base_rules}
 
             Context:
             {context}
@@ -154,6 +183,10 @@ class GeminiRAG:
 
             # Corrected code: First, get the model object.
             model_instance = genai.GenerativeModel(self.model)
+
+            print(f"Querying Gemini model with prompt:\n{prompt}")
+            print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
 
             # Then, call generate_content on that object.
             response = model_instance.generate_content(
@@ -199,4 +232,27 @@ class GeminiRAG:
                 chunk = text[start:end]
                 self.add_chunk(page_num, chunk)
                 start += chunk_size - overlap
+
+
+class GeminiTclRAG(GeminiRAG):
+    """
+    A specialized version of GeminiRAG for handling TCL commands.
+    Inherits from GeminiRAG and can be extended with TCL-specific logic.
+    """
+    def __init__(self):
+        super().__init__()
+
+        self.prompt_base_rules = textwrap.dedent("""
+            You are an AI assistant tasked with picking the best command and args mapping the user query.
+            Follow these rules:
+                1. Only use information from the provided context.
+                2. If the context does not contain the answer, state that you don't know.
+                3. Do not make up any information.
+                4. Return the result strictly in this JSON format:
+                   {
+                     "command": "<command>",
+                     "args": { "arg1": "value1", "arg2": "value2", ... }
+                   }
+        """)
+
 

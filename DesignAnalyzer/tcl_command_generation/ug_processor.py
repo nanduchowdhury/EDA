@@ -13,6 +13,9 @@ from collections import defaultdict
 class UserGuideProcessor:
     def __init__(self):
 
+        self.result_cmds = []
+        self.result_args = []
+
         ##################################################################
         #
         # Make sure to download the vocabulary-model using following command:
@@ -32,7 +35,11 @@ class UserGuideProcessor:
     
     def getCommandsAndArgs(self, pages_text):
 
-        result_cmds = []
+        if len(self.result_cmds) > 0 and len(self.result_args) > 0:
+            return self.result_cmds, self.result_args
+
+        self.result_cmds = []
+        self.result_args = []
 
         print("Extracting commands from PDF...")
     
@@ -42,13 +49,12 @@ class UserGuideProcessor:
                 cmds = self.extract_commands(text)
                 commands.update(cmds)
 
-        result_cmds = list(commands)
+        self.result_cmds = list(commands)
 
-        print(f"Extracted {len(result_cmds)} commands from PDF.")
+        print(f"Extracted {len(self.result_cmds)} commands from PDF.")
 
-        result_args = []
         print(f"Extracting args for commands...")
-        for cmd in result_cmds:
+        for cmd in self.result_cmds:
             args = {}
             for page_num, text in enumerate(pages_text):
                 a = self.extract_args(text, cmd)
@@ -59,13 +65,13 @@ class UserGuideProcessor:
             s = json.dumps(args, indent=2)
             if s.startswith("{") and s.endswith("}"):
                 s = '"' + s[1:-1] + '"'
-            result_args.append(s)
+            self.result_args.append(s)
 
-        print(f"Extracted {len(result_args)} args from PDF.")
+        print(f"Extracted {len(self.result_args)} args from PDF.")
 
-        return result_cmds, result_args
+        return self.result_cmds, self.result_args
+    
 
-        
     def extract_commands(self, page_text, check_n_pre_post_words=3):
         """
         Extracts unique command words from page_text that:

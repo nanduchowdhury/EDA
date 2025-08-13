@@ -34,6 +34,8 @@ class PDFViewer(QWidget):
         self.preloaded_next = None
         self.preloaded_prev = None
 
+        self.pdf_text_pages = []
+
         self.initUI()
         self.setLayout(self.layout)
 
@@ -90,6 +92,12 @@ class PDFViewer(QWidget):
         self.btn_zoom_out.clicked.connect(self.zoom_out)
         self.btn_zoom_fit.clicked.connect(self.zoom_fit)
 
+    def get_file_base_name(self):
+        if self.current_pdf_file:
+            return self.current_pdf_file.split('/')[-1]
+        return None
+
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.control_box.move(self.width() - self.control_box.width() - 40, 10)
@@ -113,6 +121,8 @@ class PDFViewer(QWidget):
         self._loadPages(self.current_start, self.current_end)
         self._preload_next_chunk()
         self._preload_prev_chunk()
+
+        self.pdf_text_pages = []
 
         self.scroll_area.verticalScrollBar().valueChanged.connect(self.on_scroll)
 
@@ -297,9 +307,13 @@ class PDFViewer(QWidget):
     def getPagesText(self) -> List[str]:
         if not self.current_pdf_file:
             return []
-        pages_text = []
+        
+        if self.pdf_text_pages and len(self.pdf_text_pages) == self.total_pages:
+            return self.pdf_text_pages
+        
         with pdfplumber.open(self.current_pdf_file) as pdf:
             for page in pdf.pages:
                 text = page.extract_text()
-                pages_text.append(text if text else "")
-        return pages_text
+                self.pdf_text_pages.append(text if text else "")
+
+        return self.pdf_text_pages
