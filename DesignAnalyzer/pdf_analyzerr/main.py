@@ -22,6 +22,9 @@ from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
 from predicates import Predicates, PredicateBase
 
+from RAG import GeminiRAG
+
+
 class LoadDataToolItem(ToolBarItemAbstract):
     def __init__(self, inputTab, sentralControl):
         super().__init__("Load data")
@@ -75,7 +78,7 @@ class getPdfTablePredicate(PredicateBase, QObject):
         for col_name in table.columns:
             self.setOutputObject(col_name, table[col_name].tolist())
             
-        return result
+        return "success"
         
 
 
@@ -90,6 +93,13 @@ class PdfUI(MainUI):
                                                     self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
+
+        self.gemini_rag = GeminiRAG()
+
+        self.hidePredicateGroup("PCA")
+        self.hidePredicateGroup("SQL")
+        self.hidePredicateGroup("charts")
+
 
         pred = getPdfTablePredicate(self.sentralControl)
         self.all_predicates.addPredicate("PDF", "get tables from PDF", pred)

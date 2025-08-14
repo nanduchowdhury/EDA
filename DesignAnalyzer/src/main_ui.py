@@ -32,7 +32,7 @@ from bottom_area import BottomArea
 
 from session import Session
 
-from common import PlaceholderTextEdit, ScrollingLabel
+from common import PlaceholderTextEdit, ScrollingLabel, global_signals
 
 from predicates import Predicates, CreateBarChart, CreateScatterPlot, CreatePieChart, SqlQueryPredicate, RunPCA, RunKMeans
 
@@ -41,6 +41,7 @@ from llm_manager import LLMManager, global_LLM_manager
 from viewer_manager import ManageViewerTabs, ManageResultsTabs
 
 from error_log_manager import ErrorManager, UILogHandler
+
 
 import logging
 from datetime import datetime
@@ -219,7 +220,7 @@ class MainUI(QMainWindow):
     COMMAND_WIDTH = 900
 
     @pyqtSlot(str, dict)
-    def on_signal_update_command(self, command, args):
+    def on_signal_fire_predicate_run(self, command, args):
 
         print(f"Received command: {command}, args: {args}")
 
@@ -232,8 +233,9 @@ class MainUI(QMainWindow):
 
         self.analysisActionPanel.selectItem(command)
 
-        self.runButton.click()
-        
+        status = pred.execute()
+
+        global_signals.signal_finish_predicate_run.emit(status)
 
     def __init__(self, PLOT_OR_DRAW="BAR_CHART"):
         
@@ -277,7 +279,7 @@ class MainUI(QMainWindow):
                                 self.WINDOW_WIDTH, self.WINDOW_HEIGHT, 
                                 self.LAYOUT_WIDTH, self.LAYOUT_HEIGHT)
 
-        self.bottomArea.assistantManager.signal_update_command.connect(self.on_signal_update_command)
+        self.bottomArea.assistantManager.signal_fire_predicate_run.connect(self.on_signal_fire_predicate_run)
 
         
 
@@ -702,6 +704,10 @@ class SentralControl:
         self.viewerTabs = viewerTabs
         self.resultsManager = resultsManager
         self.sourceDropDown = sourceDropDown
+        
+        self.product_vertical = ""
+
+
         self.fileNameToData: Dict[str, Any] = {}
 
         self.global_error_manager = ErrorManager(self.parent, 

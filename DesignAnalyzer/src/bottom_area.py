@@ -381,7 +381,9 @@ class InputTab(QTabWidget):
 
 class AssistantManager(QObject):
 
-    signal_update_command = pyqtSignal(str, dict)
+    
+    
+    signal_fire_predicate_run = pyqtSignal(str, dict)
 
     def __init__(self, sentralControl, parent=None):
 
@@ -390,6 +392,8 @@ class AssistantManager(QObject):
         self.sentralControl = sentralControl
 
         global_signals.signal_update_sql_run_status.connect(self.on_signal_update_sql_run_status)
+        global_signals.signal_finish_predicate_run.connect(self.on_signal_finish_predicate_run)
+
 
         self.timeKeeer = TimeKeeper()
 
@@ -453,6 +457,27 @@ class AssistantManager(QObject):
         self.assistantInput.clear()
 
         # Get LLM response
+        print(f"Product vertical: {self.sentralControl.product_vertical}")
+
+        if self.sentralControl.product_vertical == "PDF_CHAT" or \
+                self.sentralControl.product_vertical == "EDA_TCL_GENERATOR":
+            s = {
+                "command_name": "chat with PDF to answer questions",
+                "args": {"user query": query}
+                }
+            self._handleCommandOrActionRun(s)
+        else:
+            self.get_llm_response(query)
+
+
+        # Put a newline and auto-scroll to bottom
+        self.assistantOutput.append("")
+        self.assistantOutput.verticalScrollBar().setValue(
+            self.assistantOutput.verticalScrollBar().maximum()
+        )
+
+    def get_llm_response(self, query):
+
         try:
             json_llm_response = global_LLM_manager.query(query)
         except Exception as e:
@@ -477,12 +502,6 @@ class AssistantManager(QObject):
             self.assistantOutput.append("<i>Unknown response type received.</i>")
 
 
-        # Put a newline and auto-scroll to bottom
-        self.assistantOutput.append("")
-        self.assistantOutput.verticalScrollBar().setValue(
-            self.assistantOutput.verticalScrollBar().maximum()
-        )
-
     def _handleOwnResponse(self, output):
 
         llm_own_resp = output.get("llm_own_answer", "")
@@ -495,7 +514,12 @@ class AssistantManager(QObject):
         command = "execute sql query"
         args = {"sql_query": sql_query}
 
-        self.signal_update_command.emit(command, args)
+        self.signal_fire_predicate_run.emit(command, args)
+
+
+    @pyqtSlot(str)
+    def on_signal_finish_predicate_run(self, status):
+        self.assistantOutput.append(f"<b>Assistant:</b> {status}")
 
 
     @pyqtSlot(dict)
@@ -514,7 +538,7 @@ class AssistantManager(QObject):
         command = output.get("command_name")
         args = output.get("args", [])
 
-        self.signal_update_command.emit(command, args)
+        self.signal_fire_predicate_run.emit(command, args)
 
         resp = f"<b>Assistant:</b> Use following action or analysis:\n \
                 \t\t <b>{command}</b> \n\

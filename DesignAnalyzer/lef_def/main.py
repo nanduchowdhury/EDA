@@ -159,7 +159,7 @@ class ListVias(LefDefPredicate):
         for key, values in result.items():
             self.setOutputObject(key, values)
 
-        return result
+        return "success"
 
 
 

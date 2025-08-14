@@ -156,7 +156,7 @@ class PredictNextMonths(PredicateBase):
         self.setOutputObject("Amount next few months", result)  # Store result as a list
         self.sentralControl.showMessage(f"Prediction search done.")
 
-        return result
+        return "success"
 
     def predict_next_months(self, data: list[float], num_months: int) -> list[float]:
         """
@@ -219,7 +219,7 @@ class HighlightTableColumnDataConditional(PredicateBase):
         table = self.sentralControl.getSelectedTable()
         h_vals = table.hilightColumnData(column_name, python_syntax_condition)
 
-        return result
+        return "success"
 
 class TableAlternateRowsColor(PredicateBase):
     def __init__(self, sentralControl):
@@ -244,7 +244,7 @@ class TableAlternateRowsColor(PredicateBase):
         table = self.sentralControl.getSelectedTable()
         table.colorAlternateRows(color)
 
-        return result
+        return "success"
 
 
 class TableApplyColumnColorGradient(PredicateBase):
@@ -284,7 +284,7 @@ class TableApplyColumnColorGradient(PredicateBase):
         table = self.sentralControl.getSelectedTable()
         table.applyColumnColorGradient(column_name, low_color, high_color)
 
-        return result
+        return "success"
 
 
 
@@ -349,8 +349,8 @@ class FormatTable(PredicateBase):
             textSize=textSize
         )
 
-        return result
-        
+        return "success"
+
 
 class FindOutlier(PredicateBase):
     def __init__(self, sentralControl):
@@ -397,8 +397,7 @@ class FindOutlier(PredicateBase):
 
         self.sentralControl.showMessage(f"Outlier search done.")
 
-        return result
-
+        return "success"
 
     
     def find_outlier_months(self, data: list[float], threshold: float = 0.9) -> list[str]:

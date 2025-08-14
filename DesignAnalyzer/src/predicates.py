@@ -151,7 +151,7 @@ class PredicateBase():
             return result
         except Exception as e:
             self.sentralControl.showMessage(f"Error executing '{self.predicate_name}': {e}")
-
+            return "failure"
 
 class Predicates:
     def __init__(self):
@@ -425,7 +425,7 @@ class RunPCA(PredicateBase):
         for col_name in result.columns:
             self.setOutputObject(col_name, result[col_name].tolist())
             
-        return result
+        return "success"
 
 
 
@@ -502,7 +502,7 @@ class RunKMeans(PredicateBase):
         else:
             self.sentralControl.showMessage("K-means clustering scatter-plot requires exactly 2 columns for visualization.")
 
-        return result
+        return "success"
 
 
 
@@ -563,7 +563,7 @@ class SqlQueryPredicate(PredicateBase, QObject):
                 for col_name in result.columns:
                     self.setOutputObject(col_name, result[col_name].tolist())
             
-            return result
+            return "success"
         
         except Exception as e:
 
@@ -574,7 +574,7 @@ class SqlQueryPredicate(PredicateBase, QObject):
                 "message": f"{str(e)}",
                 "result": None
             })
-            return None
+            return "failure"
 
         
     

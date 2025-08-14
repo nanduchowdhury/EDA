@@ -1,0 +1,30 @@
+2025-08-14 08:33:31,327 - INFO - Loading PDF started.
+2025-08-14 08:33:31,354 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf
+2025-08-14 08:33:31,445 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf read successfully.
+2025-08-14 08:33:31,445 - INFO - Loading PDF data done.
+2025-08-14 08:33:55,235 - WARNING - Cannot set gray non-stroke color because /'P17' is an invalid float value
+2025-08-14 09:07:33,618 - INFO - Error executing 'chat with PDF to answer questions': expected str, bytes or os.PathLike object, not NoneType
+2025-08-14 09:08:38,474 - INFO - Loading PDF started.
+2025-08-14 09:08:38,493 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf
+2025-08-14 09:08:38,575 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/genAI-circuits.pdf read successfully.
+2025-08-14 09:08:38,575 - INFO - Loading PDF data done.
+2025-08-14 09:08:46,967 - WARNING - Cannot set gray non-stroke color because /'P17' is an invalid float value
+2025-08-14 10:34:03,914 - INFO - Loading PDF started.
+2025-08-14 10:34:03,945 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/AI – Voice Bot.pdf
+2025-08-14 10:34:04,167 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/AI – Voice Bot.pdf read successfully.
+2025-08-14 10:34:04,167 - INFO - Loading PDF data done.
+2025-08-14 10:34:10,684 - WARNING - Cannot set gray non-stroke color because /'P43' is an invalid float value
+2025-08-14 11:07:06,436 - INFO - Loading PDF started.
+2025-08-14 11:07:06,464 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/AI – Voice Bot.pdf
+2025-08-14 11:07:06,695 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/AI – Voice Bot.pdf read successfully.
+2025-08-14 11:07:06,695 - INFO - Loading PDF data done.
+2025-08-14 11:07:12,346 - WARNING - Cannot set gray non-stroke color because /'P43' is an invalid float value
+2025-08-14 11:20:12,259 - INFO - Loading PDF started.
+2025-08-14 11:20:12,274 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pptx
+2025-08-14 11:20:12,344 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/scholar-km-pitch.pptx read successfully.
+2025-08-14 11:20:12,344 - INFO - Loading PDF data done.
+2025-08-14 11:20:28,580 - INFO - Error executing 'chat with PDF to answer questions': No /Root object! - Is this really a PDF?
+2025-08-14 11:21:25,853 - INFO - Loading PDF started.
+2025-08-14 11:21:25,888 - INFO - Reading PDF file: C:/Users/nandu/Downloads/DA-2025.pdf
+2025-08-14 11:21:26,234 - INFO - PDF file C:/Users/nandu/Downloads/DA-2025.pdf read successfully.
+2025-08-14 11:21:26,234 - INFO - Loading PDF data done.

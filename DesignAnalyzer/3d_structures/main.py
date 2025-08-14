@@ -68,7 +68,7 @@ class ComputePCA(PredicateBase):
         self.setOutputObject("result", result)  # Store result as a list
         logging.info(f"PCA computation done : result = {result}")
 
-        return result
+        return "success"
 
 class FindVolume(PredicateBase):
     def __init__(self, sentralControl):
@@ -101,7 +101,7 @@ class FindVolume(PredicateBase):
         self.setOutputObject("result", result)  # Store result as a list
         logging.info(f"Volume computation done.")
 
-        return result
+        return "success"
     
 class StructuresUI(MainUI):
     def __init__(self):

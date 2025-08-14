@@ -367,6 +367,7 @@ class TimeKeeper:
 class GlobalSignals(QObject):
 
     signal_update_sql_run_status = pyqtSignal(dict)
+    signal_finish_predicate_run = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
