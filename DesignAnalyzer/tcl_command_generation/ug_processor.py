@@ -34,42 +34,43 @@ class UserGuideProcessor:
 
     
     def getCommandsAndArgs(self, pages_text):
+        """
+        Extract commands and their arguments from a list of page texts.
 
-        if len(self.result_cmds) > 0 and len(self.result_args) > 0:
-            return self.result_cmds, self.result_args
+        Args:
+            pages_text (list[str]): List of page contents.
 
-        self.result_cmds = []
-        self.result_args = []
+        Returns:
+            dict: { command_name: {arg_name: arg_values_dict, ...}, ... }
+        """
+        if hasattr(self, "result_cmd_args") and self.result_cmd_args:
+            return self.result_cmd_args
+
+        self.result_cmd_args = {}
 
         print("Extracting commands from PDF...")
-    
         commands = set()
         for page_num, text in enumerate(pages_text):
             if text.strip():
                 cmds = self.extract_commands(text)
                 commands.update(cmds)
 
-        self.result_cmds = list(commands)
+        print(f"Extracted {len(commands)} commands from PDF.")
 
-        print(f"Extracted {len(self.result_cmds)} commands from PDF.")
-
-        print(f"Extracting args for commands...")
-        for cmd in self.result_cmds:
+        print("Extracting args for commands...")
+        for cmd in commands:
             args = {}
             for page_num, text in enumerate(pages_text):
                 a = self.extract_args(text, cmd)
                 args.update(a)
-            # self.setOutputObject(f"Args", args)
-            # print(f"Extracted command '{cmd}' with args: {json.dumps(args, indent=2)}")
 
-            s = json.dumps(args, indent=2)
-            if s.startswith("{") and s.endswith("}"):
-                s = '"' + s[1:-1] + '"'
-            self.result_args.append(s)
+            # Store directly in the dict
+            self.result_cmd_args[cmd] = args
 
-        print(f"Extracted {len(self.result_args)} args from PDF.")
+        print(f"Extracted arguments for {len(self.result_cmd_args)} commands from PDF.")
 
-        return self.result_cmds, self.result_args
+        return self.result_cmd_args
+
     
 
     def extract_commands(self, page_text, check_n_pre_post_words=3):

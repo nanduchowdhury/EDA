@@ -6,7 +6,7 @@ import os
 import pdfplumber
 
 import numpy as np
-
+import json
 
 import re
 import string
@@ -87,33 +87,23 @@ class GetTclCommands(PredicateBase, QObject):
         pages_text = drawArea.getPagesText()        
 
         
-        result_cmds, result_args = self.ug_processor.getCommandsAndArgs(pages_text)
+        cmds_and_args = self.ug_processor.getCommandsAndArgs(pages_text)
 
-        self.setOutputObject("Commands", result_cmds)
-        self.setOutputObject("Args", result_args)
+        all_cmds = list(cmds_and_args.keys())
+        self.setOutputObject("Commands", all_cmds)
 
-
+        all_args = [json.dumps(v, indent=2) for v in cmds_and_args.values()]
+        self.setOutputObject("Args", all_args)
 
         # Perform RAG using commands and args.
-        print(f"Running RAG with {len(result_cmds)} commands and {len(result_args)} args...")
+        print(f"Running RAG with {len(cmds_and_args)} commands and args...")
 
-        pages_cmds_args = []
-        for cmd, args in zip(result_cmds, result_args):
-            pages_cmds_args.append(f"Command: {cmd}, Args: {args}")
+        self.gemini_tcl_rag.set_cmds_and_args(cmds_and_args)
+        response = self.gemini_tcl_rag.ask(user_query)
 
-        pdf_base_name = drawArea.get_file_base_name()
-
-        self.gemini_tcl_rag.set_doc_name(pdf_base_name)
-        self.gemini_tcl_rag.load_from_list(pages_cmds_args, chunk_size=800, overlap=50)
-
-
-        response = self.gemini_tcl_rag.ask(user_query, top_k=3)
         print(f"Response from Gemini RAG: {response}")
 
-
-
         return response
-
 
 
 class PdfUI(MainUI):
@@ -121,7 +111,7 @@ class PdfUI(MainUI):
         super().__init__(PLOT_OR_DRAW="PDF")
         self.setWindowTitle("TCL commands Analyzerr")
 
-        self.sentralControl.product_vertical = "TCL_COMMAND_GENERATION"
+        self.sentralControl.product_vertical = "EDA_TCL_CMD_GENERATOR"
 
         self.bottomArea.create_input_tab("PDF")
 

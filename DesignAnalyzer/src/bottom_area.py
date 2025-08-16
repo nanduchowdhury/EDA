@@ -459,13 +459,22 @@ class AssistantManager(QObject):
         # Get LLM response
         print(f"Product vertical: {self.sentralControl.product_vertical}")
 
+
         if self.sentralControl.product_vertical == "PDF_CHAT" or \
-                self.sentralControl.product_vertical == "EDA_TCL_GENERATOR":
+            self.sentralControl.product_vertical == "EDA_TCL_CMD_GENERATOR":
+
+            cmd_name = ""
+            if self.sentralControl.product_vertical == "PDF_CHAT":
+                cmd_name = "chat with PDF to answer questions"
+            elif self.sentralControl.product_vertical == "EDA_TCL_CMD_GENERATOR":
+                cmd_name = "list all TCL commands referred in PDF"
+
             s = {
-                "command_name": "chat with PDF to answer questions",
+                "command_name": cmd_name,
                 "args": {"user query": query}
                 }
             self._handleCommandOrActionRun(s)
+            
         else:
             self.get_llm_response(query)
 

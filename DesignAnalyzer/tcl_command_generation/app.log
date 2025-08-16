@@ -319,3 +319,86 @@ If this is a private repository, make sure to pass a token having permission to 
 2025-08-13 18:59:00,541 - INFO - Loading PDF data done.
 2025-08-13 19:03:29,215 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
 2025-08-13 19:03:52,210 - INFO - Error executing 'list all TCL commands referred in PDF': 'UserGuideProcessor' object has no attribute 'result_cmds'
+2025-08-14 12:18:27,859 - INFO - Loading PDF started.
+2025-08-14 12:18:27,875 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 12:18:28,373 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 12:18:28,373 - INFO - Loading PDF data done.
+2025-08-14 12:22:47,316 - INFO - Loading PDF started.
+2025-08-14 12:22:47,334 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 12:22:47,682 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 12:22:47,682 - INFO - Loading PDF data done.
+2025-08-14 12:29:03,962 - INFO - Loading PDF started.
+2025-08-14 12:29:03,993 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 12:29:04,306 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 12:29:04,307 - INFO - Loading PDF data done.
+2025-08-14 12:32:30,886 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 15:45:33,132 - INFO - Loading PDF started.
+2025-08-14 15:45:33,148 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 15:45:33,653 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 15:45:33,653 - INFO - Loading PDF data done.
+2025-08-14 15:47:59,806 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 15:54:57,192 - INFO - Loading PDF started.
+2025-08-14 15:54:57,217 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 15:54:57,616 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 15:54:57,616 - INFO - Loading PDF data done.
+2025-08-14 15:58:25,726 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 16:21:17,776 - INFO - Loading PDF started.
+2025-08-14 16:21:17,792 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 16:21:18,199 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 16:21:18,199 - INFO - Loading PDF data done.
+2025-08-14 16:24:56,072 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 16:44:04,844 - INFO - Loading PDF started.
+2025-08-14 16:44:04,876 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 16:44:05,218 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 16:44:05,218 - INFO - Loading PDF data done.
+2025-08-14 16:46:49,232 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 16:49:46,258 - INFO - Error executing 'list all TCL commands referred in PDF': too many values to unpack (expected 2)
+2025-08-14 16:51:40,993 - INFO - Error executing 'list all TCL commands referred in PDF': too many values to unpack (expected 2)
+2025-08-14 19:19:49,511 - INFO - Loading PDF started.
+2025-08-14 19:19:49,552 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 19:19:50,151 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 19:19:50,151 - INFO - Loading PDF data done.
+2025-08-14 19:23:38,099 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-14 20:03:22,486 - INFO - Loading PDF started.
+2025-08-14 20:03:22,517 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-14 20:03:22,999 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-14 20:03:22,999 - INFO - Loading PDF data done.
+2025-08-14 20:06:56,615 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 08:57:50,074 - INFO - Loading PDF started.
+2025-08-15 08:57:50,119 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 08:57:50,555 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 08:57:50,555 - INFO - Loading PDF data done.
+2025-08-15 09:00:41,761 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 09:03:59,879 - INFO - Error executing 'list all TCL commands referred in PDF': module 'google.generativeai' has no attribute 'generate_text'
+2025-08-15 09:13:21,689 - INFO - Loading PDF started.
+2025-08-15 09:13:21,718 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 09:13:22,095 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 09:13:22,095 - INFO - Loading PDF data done.
+2025-08-15 09:15:02,943 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 09:32:26,986 - INFO - Loading PDF started.
+2025-08-15 09:32:27,014 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 09:32:27,392 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 09:32:27,392 - INFO - Loading PDF data done.
+2025-08-15 09:35:33,214 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 13:25:18,813 - INFO - Loading PDF started.
+2025-08-15 13:25:18,838 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 13:25:19,401 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 13:25:19,401 - INFO - Loading PDF data done.
+2025-08-15 13:29:52,604 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 13:34:39,399 - INFO - Error executing 'list all TCL commands referred in PDF': 'str' object has no attribute 'get'
+2025-08-15 13:55:21,412 - INFO - Loading PDF started.
+2025-08-15 13:55:21,446 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 13:55:21,916 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 13:55:21,916 - INFO - Loading PDF data done.
+2025-08-15 13:56:34,823 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 14:01:12,905 - INFO - Error executing 'list all TCL commands referred in PDF': Expecting value: line 1 column 1 (char 0)
+2025-08-15 14:14:56,195 - INFO - Loading PDF started.
+2025-08-15 14:14:56,220 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 14:14:56,651 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 14:14:56,651 - INFO - Loading PDF data done.
+2025-08-15 14:18:31,690 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value
+2025-08-15 18:42:29,468 - INFO - Loading PDF started.
+2025-08-15 18:42:29,478 - INFO - Reading PDF file: C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf
+2025-08-15 18:42:29,864 - INFO - PDF file C:/Users/nandu/OneDrive/Documents/primeTime_UG.pdf read successfully.
+2025-08-15 18:42:29,864 - INFO - Loading PDF data done.
+2025-08-15 18:45:24,363 - WARNING - Cannot set gray non-stroke color because /'R17405' is an invalid float value

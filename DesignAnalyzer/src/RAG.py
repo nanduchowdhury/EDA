@@ -4,6 +4,9 @@ import pickle
 import google.generativeai as genai
 import textwrap
 
+import json
+import re
+
 import os
 
 class GeminiRAG:
@@ -234,25 +237,184 @@ class GeminiRAG:
                 start += chunk_size - overlap
 
 
-class GeminiTclRAG(GeminiRAG):
-    """
-    A specialized version of GeminiRAG for handling TCL commands.
-    Inherits from GeminiRAG and can be extended with TCL-specific logic.
-    """
-    def __init__(self):
-        super().__init__()
 
-        self.prompt_base_rules = textwrap.dedent("""
-            You are an AI assistant tasked with picking the best command and args mapping the user query.
+
+class GeminiTclRAG:
+    def __init__(self, api_key='AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', model="gemini-1.5-flash"):
+        """
+        page_text: dict {page_number: text} OR list[str] (page texts)
+        """
+        genai.configure(api_key=api_key)
+        
+        self.model = model
+
+        self.cmds_and_args = None
+        self.cmds = None
+
+        self.prompt_for_cmd = textwrap.dedent("""
+            You are an AI assistant tasked with picking the best command and mapping the user question.
             Follow these rules:
                 1. Only use information from the provided context.
-                2. If the context does not contain the answer, state that you don't know.
-                3. Do not make up any information.
+                2. Find the command that best matches the user question.
+                3. Assign values to args based on what user has specified in the question.
                 4. Return the result strictly in this JSON format:
                    {
-                     "command": "<command>",
+                     "command": "<command>"
+                   }
+        """)
+
+        self.prompt_for_arg = textwrap.dedent("""
+            You are an AI assistant tasked with picking the best and required args & values as per the user question.
+            Follow these rules:
+                1. Only use information from the provided context.
+                2. Find the args that best matches the user question and the command mentioned below.
+                3. Assign values to args based on what user has specified in the question.
+                4. Return the result strictly in this JSON format:
+                   {
                      "args": { "arg1": "value1", "arg2": "value2", ... }
                    }
         """)
+
+
+
+    def set_cmds_and_args(self, cmds_and_args):
+        
+        self.cmds_and_args = cmds_and_args
+
+        self.cmds = list(self.cmds_and_args.keys())
+        
+
+    def ask(self, user_query):
+        """
+        Ask the Gemini model for the best command and args based on the user query.
+        
+        Args:
+            user_query (str): The user's natural language query.
+
+        Returns:
+            str: The response from the Gemini model.
+        """
+        if not self.cmds_and_args:
+            raise ValueError("Commands and args must be set before asking.")
+
+        # First, ask for the command.
+        cmd_response = self.ask_cmd(user_query)
+        print(f"ask_cmd response: {cmd_response}")
+
+        if isinstance(cmd_response, str):
+            cmd_response = json.loads(cmd_response)
+        cmd = cmd_response.get("command")
+
+        if cmd and cmd in self.cmds_and_args:
+            args_response = self.ask_args(cmd, user_query)
+            print(f"ask_args response: {args_response}")
+
+            if isinstance(args_response, str):
+                args_response = json.loads(args_response)
+
+            args = args_response.get("args")
+            args_str = self.get_all_key_value_as_flat_from_json(args)
+
+            return f"{cmd} {args_str}"
+
+        raise ValueError(f"Gemini returned '{cmd}' not found in available commands.")
+        
+
+
+    def ask_cmd(self, query):
+
+        prompt = f"""
+            
+            {self.prompt_for_cmd}
+
+            Context:
+            {self.cmds}
+
+            Question: {query}
+            
+            Answer:
+            """
+
+        model_instance = genai.GenerativeModel(self.model)
+
+        print(f"Querying Gemini model for cmd with prompt:\n{prompt}")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
+        # Then, call generate_content on that object.
+        response = model_instance.generate_content(
+            contents=[prompt]
+        )
+
+        return self.extract_json_from_response(response.text)
+
+
+    def ask_args(self, cmd, query):
+        prompt = f"""
+
+            {self.prompt_for_arg}
+
+            Context:
+            {self.cmds_and_args[cmd]}
+
+            Command: {cmd}
+
+            Question: {query}
+            
+            Answer:
+            """
+
+        model_instance = genai.GenerativeModel(self.model)
+
+        print(f"Querying Gemini model for args with prompt:\n{prompt}")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
+        # Then, call generate_content on that object.
+        response = model_instance.generate_content(
+            contents=[prompt]
+        )
+
+        return self.extract_json_from_response(response.text)
+
+
+    def extract_json_from_response(self, text):
+        # Find the first JSON object in the string
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            return json.loads(json_str)
+        else:
+            raise ValueError("No JSON object found in Gemini response.")
+
+
+    def get_all_key_value_as_flat_from_json(self, json_data):
+        """
+        Recursively extract all keys and values from a nested JSON (dict/list)
+        and return them as a single flat space-separated string.
+        
+        Args:
+            json_data (dict | list | str | int | float | bool | None)
+        
+        Returns:
+            str: Flattened keys and values as a single string.
+        """
+        flat_parts = []
+
+        def _flatten(data):
+            if isinstance(data, dict):
+                for k, v in data.items():
+                    flat_parts.append(str(k))
+                    _flatten(v)
+            elif isinstance(data, list):
+                for item in data:
+                    _flatten(item)
+            else:
+                flat_parts.append(str(data))
+
+        _flatten(json_data)
+        return " ".join(flat_parts)
+
+
+
+
 
 
