@@ -6,6 +6,9 @@ import json
 import re
 import string
 
+import os
+import pickle
+
 from collections import defaultdict
 
 
@@ -15,6 +18,9 @@ class UserGuideProcessor:
 
         self.result_cmds = []
         self.result_args = []
+
+        self.doc_name = None
+        self.result_cmd_args = {}
 
         ##################################################################
         #
@@ -33,21 +39,63 @@ class UserGuideProcessor:
         self.nlp = spacy.load("en_core_web_sm")
 
     
+    def set_doc_name(self, doc_name):
+        self.doc_name = doc_name
+        self.result_cmd_args = {}
+
+    def _get_cache_path(self):
+        """Return the path for the cache file based on doc_name."""
+        return f"{self.doc_name}_cmd_args.pkl"
+
+    def load_from_cache(self):
+        """Load command-args dict from disk if available."""
+        cache_path = self._get_cache_path()
+        if os.path.exists(cache_path):
+            with open(cache_path, "rb") as f:
+                print(f"Loading command-args dict from cache: {cache_path}")
+                return pickle.load(f)
+        return None
+
+    def save_to_cache(self, data):
+        """Save command-args dict to disk."""
+        cache_path = self._get_cache_path()
+        with open(cache_path, "wb") as f:
+            pickle.dump(data, f)
+        print(f"Saved command-args dict to cache: {cache_path}")
+
+    def is_cache_available(self):
+        
+        # 1. Try memory cache
+        if self.result_cmd_args:
+            return True
+
+        # 2. Try disk cache
+        cached = self.load_from_cache()
+        if cached is not None:
+            self.result_cmd_args = cached
+            return True
+        
+        return False
+
     def getCommandsAndArgs(self, pages_text):
         """
         Extract commands and their arguments from a list of page texts.
-
+        Uses disk cache to avoid re-extraction.
+        
         Args:
             pages_text (list[str]): List of page contents.
 
         Returns:
             dict: { command_name: {arg_name: arg_values_dict, ...}, ... }
         """
-        if hasattr(self, "result_cmd_args") and self.result_cmd_args:
+        
+        # 1. Check if we have cached data
+        if self.is_cache_available():
             return self.result_cmd_args
+        
 
+        # 3. Extract fresh
         self.result_cmd_args = {}
-
         print("Extracting commands from PDF...")
         commands = set()
         for page_num, text in enumerate(pages_text):
@@ -63,13 +111,15 @@ class UserGuideProcessor:
             for page_num, text in enumerate(pages_text):
                 a = self.extract_args(text, cmd)
                 args.update(a)
-
-            # Store directly in the dict
             self.result_cmd_args[cmd] = args
 
         print(f"Extracted arguments for {len(self.result_cmd_args)} commands from PDF.")
 
+        # 4. Save to disk cache
+        self.save_to_cache(self.result_cmd_args)
+
         return self.result_cmd_args
+
 
     
 

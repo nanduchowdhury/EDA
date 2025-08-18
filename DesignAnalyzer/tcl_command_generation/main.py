@@ -57,9 +57,35 @@ class LoadDataToolItem(ToolBarItemAbstract):
         self.sentralControl.showMessage("Loading PDF data done.")
 
 
+class ShowAllTclCommandsAndArgsMenuItem(MenuItemAbstract):
+    def __init__(self, sentralControl, ug_processor):
+
+        self.sentralControl = sentralControl
+        self.ug_processor = ug_processor
+
+    def onClick(self):
+        drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
+
+        pdf_base_name = drawArea.get_file_base_name()
+        self.ug_processor.set_doc_name(pdf_base_name)
+
+        pages_text = None
+        if not self.ug_processor.is_cache_available():
+            pages_text = drawArea.getPagesText()
+        cmds_and_args = self.ug_processor.getCommandsAndArgs(pages_text)
+        
+
+        all_cmds = list(cmds_and_args.keys())
+        all_args = [json.dumps(v, indent=2) for v in cmds_and_args.values()]
+
+        outputs = {}
+        outputs["Commands"] = all_cmds
+        outputs["Args"] = all_args
+
+        self.invoke_results("TCL Commands and Args", "TCL commands and their arguments extracted from PDF", outputs)
 
     
-class GetTclCommands(PredicateBase, QObject):
+class VibeTclCoding(PredicateBase, QObject):
     def __init__(self, sentralControl, gemini_tcl_rag, ug_processor):
         super().__init__()
         QObject.__init__(self)
@@ -84,16 +110,14 @@ class GetTclCommands(PredicateBase, QObject):
         user_query = self.args['user query']['user_value']
 
         drawArea = self.sentralControl.viewerTabs.getSelectedTabWidget()
-        pages_text = drawArea.getPagesText()        
 
-        
+        pdf_base_name = drawArea.get_file_base_name()
+        self.ug_processor.set_doc_name(pdf_base_name)
+
+        pages_text = None
+        if not self.ug_processor.is_cache_available():
+            pages_text = drawArea.getPagesText()
         cmds_and_args = self.ug_processor.getCommandsAndArgs(pages_text)
-
-        all_cmds = list(cmds_and_args.keys())
-        self.setOutputObject("Commands", all_cmds)
-
-        all_args = [json.dumps(v, indent=2) for v in cmds_and_args.values()]
-        self.setOutputObject("Args", all_args)
 
         # Perform RAG using commands and args.
         print(f"Running RAG with {len(cmds_and_args)} commands and args...")
@@ -113,23 +137,33 @@ class PdfUI(MainUI):
 
         self.sentralControl.product_vertical = "EDA_TCL_CMD_GENERATOR"
 
+        self.predicateHolderWidget.hide()
+
         self.bottomArea.create_input_tab("PDF")
+
+
+        self.gemini_tcl_rag = GeminiTclRAG()
+        self.ug_processor = UserGuideProcessor()
+
 
         self.loadDataToolbarItem = LoadDataToolItem(self.bottomArea.inputTab, 
                                                     self.sentralControl)
         
         self.menu.createToolbarItem(self.loadDataToolbarItem)
 
+        self.showAllTclCommandsAndArgsMenuItem = ShowAllTclCommandsAndArgsMenuItem(self.sentralControl, 
+                                        self.ug_processor)
+
+        self.menu.createMenuItem("Actions", "Show TCL Commands", self.showAllTclCommandsAndArgsMenuItem)
+
         
-        self.gemini_tcl_rag = GeminiTclRAG()
-        self.ug_processor = UserGuideProcessor()
 
         self.hidePredicateGroup("PCA")
         self.hidePredicateGroup("SQL")
         self.hidePredicateGroup("charts")
 
-        cmds = GetTclCommands(self.sentralControl, self.gemini_tcl_rag, self.ug_processor)
-        self.all_predicates.addPredicate("EDA", "list all TCL commands referred in PDF", cmds)
+        cmds = VibeTclCoding(self.sentralControl, self.gemini_tcl_rag, self.ug_processor)
+        self.all_predicates.addPredicate("EDA", "vibe generate TCL commands based on PDF", cmds)
 
 
 

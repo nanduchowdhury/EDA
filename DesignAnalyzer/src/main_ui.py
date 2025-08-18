@@ -237,6 +237,22 @@ class MainUI(QMainWindow):
 
         global_signals.signal_finish_predicate_run.emit(status)
 
+    
+
+    @pyqtSlot(str, str, list, pd.DataFrame, QTableView)
+    def on_signal_fire_results_tab(self, tab_name, tab_tool_tip, outputs, df, tableView):
+
+
+        self.resultsManager.addNewTab(tab_name, tab_tool_tip, tableView)
+        model = self.resultsManager.setOutputsForTab(tab_name, outputs)
+
+        self.sentralControl.addEntryForResults(tab_name)
+        self.sentralControl.addDataForResultsEntity(tab_name, df)
+
+
+
+
+
     def __init__(self, PLOT_OR_DRAW="BAR_CHART"):
         
         super().__init__()
@@ -260,6 +276,10 @@ class MainUI(QMainWindow):
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
 
+        self.predicateHolderWidget = None
+        self.resultTabsHolderWidget = None
+
+
         self.mainLayout = QVBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
@@ -281,7 +301,7 @@ class MainUI(QMainWindow):
 
         self.bottomArea.assistantManager.signal_fire_predicate_run.connect(self.on_signal_fire_predicate_run)
 
-        
+        global_signals.signal_fire_results_tab.connect(self.on_signal_fire_results_tab)
 
         self.registerPredicates()
 
@@ -438,7 +458,7 @@ class MainUI(QMainWindow):
         outerLayout.setSpacing(8)  # Small spacing between left and right
 
         # ----------------- LEFT HALF -----------------
-        leftWidget = QWidget()
+        self.predicateHolderWidget = QWidget()
         leftLayout = QVBoxLayout()
         leftLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -474,10 +494,11 @@ class MainUI(QMainWindow):
 
         # Push everything upward
         leftLayout.addStretch()
-        leftWidget.setLayout(leftLayout)
+        self.predicateHolderWidget.setLayout(leftLayout)
+
 
         # ----------------- RIGHT HALF -----------------
-        rightWidget = QWidget()
+        self.resultTabsHolderWidget = QWidget()
         rightLayout = QVBoxLayout()
         rightLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -488,17 +509,17 @@ class MainUI(QMainWindow):
         resultsTabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         rightLayout.addWidget(resultsTabs, stretch=1)
 
-        rightWidget.setLayout(rightLayout)
+        self.resultTabsHolderWidget.setLayout(rightLayout)
 
         # ----------------- Combine with Separator -----------------
-        outerLayout.addWidget(leftWidget, stretch=1)
+        outerLayout.addWidget(self.predicateHolderWidget, stretch=1)
 
         vline = QFrame()
         vline.setFrameShape(QFrame.VLine)
         vline.setFrameShadow(QFrame.Sunken)
         outerLayout.addWidget(vline)
 
-        outerLayout.addWidget(rightWidget, stretch=1)
+        outerLayout.addWidget(self.resultTabsHolderWidget, stretch=1)
 
         self.commandArea.setLayout(outerLayout)
 
@@ -531,28 +552,13 @@ class MainUI(QMainWindow):
 
         # Execute the predicate
         try:
-            result = predicate.execute()
+            predicate.execute()
             # print(f"Result of '{predicate_name}': {result}")
         except Exception as e:
             print(f"Error running predicate '{predicate_name}': {e}")
             raise
 
-        # Fetch all output argument names and their corresponding values
-        outputs = list(predicate.iterateOutputs())
 
-        if outputs:
-            unique_tab_name = predicate.getShortName()
-
-            self.resultsManager.addNewTab(unique_tab_name, 
-                                        predicate.getCompleteNameWithArgs(), _tableView=predicate.tableView)
-            model = self.resultsManager.setOutputsForTab(unique_tab_name, outputs)
-
-            self.sentralControl.addEntryForResults(unique_tab_name)
-            self.sentralControl.addDataForResultsEntity(unique_tab_name, 
-                                                        predicate.getDataFrame())
-
-
-            predicate.onPostRun()
 
 
 

@@ -8,6 +8,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from abc import ABC, abstractmethod
 
+import pandas as pd
+
+from common import global_signals
+
 
 class ToolBarItemAbstract(ABC):
     # Mapping label keywords to QStyle.StandardPixmap enums
@@ -101,6 +105,18 @@ class MenuItemAbstract(ABC):
     @abstractmethod
     def onClick(self):
         pass
+
+    def invoke_results(self, results_tab_name, tab_tool_tip, outputs):
+        
+        output_list = list(self._iterateOutputs(outputs))
+
+        global_signals.signal_fire_results_tab.emit(
+            results_tab_name, tab_tool_tip, output_list, pd.DataFrame(output_list), None
+        )
+
+    def _iterateOutputs(self, outputs):
+        for name, values in outputs.items():
+            yield name, values
 
 
 class MainMenuAndTBar:

@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QListWidget, QTextEdit, QLabel, QListWidgetItem
+from PyQt5.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
 from PyQt5.QtGui import QColor, QPainter, QTextCursor
 from PyQt5.QtCore import Qt, QTimer, QPoint, QObject, pyqtSignal
 
@@ -13,6 +13,7 @@ from abc import ABC, abstractmethod
 import time
 from datetime import datetime
 
+import pandas as pd
 
 class TabWidgetRmbMenu(ABC):
     def __init__(self, name: str):
@@ -368,6 +369,8 @@ class GlobalSignals(QObject):
 
     signal_update_sql_run_status = pyqtSignal(dict)
     signal_finish_predicate_run = pyqtSignal(str)
+
+    signal_fire_results_tab = pyqtSignal(str, str, list, pd.DataFrame, QTableView)
 
     def __init__(self):
         super().__init__()

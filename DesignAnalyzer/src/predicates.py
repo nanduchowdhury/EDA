@@ -148,7 +148,25 @@ class PredicateBase():
     def execute(self):
         try:
             result = self.run()
+
+
+            # Fetch all output argument names and their corresponding values
+            outputs = list(self.iterateOutputs())
+
+            if outputs:
+
+                unique_tab_name = self.getShortName()
+
+                global_signals.signal_fire_results_tab.emit(unique_tab_name,
+                                                            self.getCompleteNameWithArgs(),
+                                                            outputs, self.getDataFrame(),
+                                                            self.tableView)
+
+
+                self.onPostRun()
+
             return result
+
         except Exception as e:
             self.sentralControl.showMessage(f"Error executing '{self.predicate_name}': {e}")
             return "failure"

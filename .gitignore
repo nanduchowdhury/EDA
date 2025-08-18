@@ -3,3 +3,4 @@ DesignAnalyzer/src/nc_ispd19.json
 DesignAnalyzer/test/finance/products-1000000.csv
 DesignAnalyzer/tcl_command_generation/rag_docs_primeTime_UG.pkl
 DesignAnalyzer/tcl_command_generation/rag_index_primeTime_UG.faiss
+DesignAnalyzer/tcl_command_generation/primeTime_UG.pdf_cmd_args.pkl

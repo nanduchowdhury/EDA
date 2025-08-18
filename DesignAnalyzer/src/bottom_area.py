@@ -467,14 +467,14 @@ class AssistantManager(QObject):
             if self.sentralControl.product_vertical == "PDF_CHAT":
                 cmd_name = "chat with PDF to answer questions"
             elif self.sentralControl.product_vertical == "EDA_TCL_CMD_GENERATOR":
-                cmd_name = "list all TCL commands referred in PDF"
+                cmd_name = "vibe generate TCL commands based on PDF"
 
             s = {
                 "command_name": cmd_name,
                 "args": {"user query": query}
                 }
             self._handleCommandOrActionRun(s)
-            
+
         else:
             self.get_llm_response(query)
 
@@ -549,12 +549,15 @@ class AssistantManager(QObject):
 
         self.signal_fire_predicate_run.emit(command, args)
 
-        resp = f"<b>Assistant:</b> Use following action or analysis:\n \
-                \t\t <b>{command}</b> \n\
-            \t with arguments: \n\
-                \t\t <b>{args}</b>"
-        
-        self.assistantOutput.append(resp)
+        if self.sentralControl.product_vertical != "PDF_CHAT" and \
+            self.sentralControl.product_vertical != "EDA_TCL_CMD_GENERATOR":
+
+            resp = f"<b>Assistant:</b> Use following action or analysis:\n \
+                    \t\t <b>{command}</b> \n\
+                \t with arguments: \n\
+                    \t\t <b>{args}</b>"
+            
+            self.assistantOutput.append(resp)
         
 
 
