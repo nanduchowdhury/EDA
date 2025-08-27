@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
+from PyQt6.QtCore import Qt, QTimer, QObject, pyqtSignal
 
 import sys
 import os

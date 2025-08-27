@@ -1,9 +1,9 @@
 
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QAction, QToolTip
-from PyQt5.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint, QEvent
-from PyQt5.QtGui import QPainter, QPen, QColor, QFont
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
+from PyQt6.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QToolTip
+from PyQt6.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint, QEvent
+from PyQt6.QtGui import QPainter, QPen, QColor, QFont, QAction
 
 
 from matplotlib.figure import Figure
@@ -18,7 +18,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
 
 import os
 import folium
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -234,8 +234,8 @@ class BasePiePlotView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.view = QGraphicsView()
-        self.view.setRenderHint(QPainter.Antialiasing)
-        self.view.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        self.view.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.view.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.scene = QGraphicsScene()
         self.view.setScene(self.scene)
 
@@ -256,7 +256,7 @@ class BasePiePlotView(QWidget):
         self.view.scale(1 / self._zoomFactor, 1 / self._zoomFactor)
 
     def zoomFit(self):
-        self.view.fitInView(self.scene.itemsBoundingRect(), Qt.KeepAspectRatio)
+        self.view.fitInView(self.scene.itemsBoundingRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def panLeft(self):
         self.view.horizontalScrollBar().setValue(
@@ -289,14 +289,14 @@ class BasePiePlotView(QWidget):
         # Vertical lines
         x = rect.left()
         while x < rect.right():
-            line = self.scene.addLine(x, rect.top(), x, rect.bottom(), QPen(QColor('gray'), 0.5, Qt.DotLine))
+            line = self.scene.addLine(x, rect.top(), x, rect.bottom(), QPen(QColor('gray'), 0.5, Qt.PenStyle.DotLine))
             self._gridLines.append(line)
             x += spacing
 
         # Horizontal lines
         y = rect.top()
         while y < rect.bottom():
-            line = self.scene.addLine(rect.left(), y, rect.right(), y, QPen(QColor('gray'), 0.5, Qt.DotLine))
+            line = self.scene.addLine(rect.left(), y, rect.right(), y, QPen(QColor('gray'), 0.5, Qt.PenStyle.DotLine))
             self._gridLines.append(line)
             y += spacing
 
@@ -305,7 +305,7 @@ class BasePiePlotView(QWidget):
         self._gridLines.clear()
 
     def eventFilter(self, source, event):
-        if event.type() == QEvent.Wheel and source is self.view.viewport():
+        if event.type() == QEvent.Type.Wheel and source is self.view.viewport():
             zoomIn = event.angleDelta().y() > 0
             if zoomIn:
                 self.zoomIn()

@@ -74,11 +74,8 @@ QTabBar::tab {
     background: #ffffff;
     color: #003366;
     padding: 4px 8px;
-    border: 1px solid #7bb3dd;
-    border-bottom: none;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    font-size: 14px;
+    border: none;
+    font-size: 9px;
     font-weight: bold;
     margin-right: 1px;
 }
@@ -120,7 +117,7 @@ QTableWidget {
     gridline-color: #aacfe5;
     border: 1px solid #aacfe5;
     color: #002b55;
-    font-size: 14px;
+    font-size: 9px;
 }
 
 /* QHeaderView::section (Table Headers) */
@@ -128,7 +125,7 @@ QHeaderView::section {
     background-color: #d0eaff;
     color: #002b55;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 9px;
     padding: 4px 6px;
     border: 1px solid #aacfe5;
     height: 22px;

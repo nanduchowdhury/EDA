@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem, QSizePolicy
-from PyQt5.QtCore import Qt, QRectF, QPointF
-from PyQt5.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem, QSizePolicy
+from PyQt6.QtCore import Qt, QRectF, QPointF
+from PyQt6.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
 import pyqtgraph as pg
 
 import math
@@ -43,7 +43,7 @@ class PyQtGraphLayoutWithScales(QWidget):
         ##############################################
         # self.setFixedSize(width, height)
         # self.setMinimumSize(width, height)
-        # self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.rect_items = []
         self.initUI()
@@ -75,7 +75,7 @@ class PyQtGraphLayoutWithScales(QWidget):
         self.proxy = pg.SignalProxy(self.view.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
         # Change cursor to cross when mouse enters the plot area
-        self.view.setCursor(Qt.CrossCursor)
+        self.view.setCursor(Qt.CursorShape.CrossCursor)
 
         self.mainLayout.addWidget(self.graphWidget)
         self.setLayout(self.mainLayout)
@@ -96,7 +96,7 @@ class PyQtGraphLayoutWithScales(QWidget):
             if brush:
                 item.setBrush(pg.mkBrush(150, 100, 200, 100))
             else:
-                item.setBrush(QBrush(Qt.NoBrush))
+                item.setBrush(QBrush(Qt.BrushStyle.NoBrush))
 
             self.view.addItem(item)
             self.rect_items.append(item)

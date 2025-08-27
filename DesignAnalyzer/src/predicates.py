@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal
+from PyQt6.QtCore import Qt, QTimer, QObject, pyqtSignal
 
 from abc import ABC, abstractmethod
 

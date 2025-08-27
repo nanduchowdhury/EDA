@@ -1,6 +1,8 @@
 
 import sys
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
+
+from PyQt6.QtGui import QFont
 
 class BluePayload:
     def __init__(self):
@@ -16,10 +18,18 @@ class BluePayload:
             raise ValueError("Payload UI class not set. Use setPayload() before execute().")
 
         app = QApplication(sys.argv)
+
+        # This is for migrating to PyQt6.
+        app.setFont(QFont("Segoe UI", 9))
+        app.setStyleSheet("""
+                QWidget { font-size: 9pt; }
+                QTabBar::tab { font-size: 9pt; }
+            """)
+
         window = self.payload_class()  # create instance of the class
         window.create_GUI()
         window.show()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())
 
 
 def run_BluePayload(bluePayload_ui_obj):

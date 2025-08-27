@@ -1,7 +1,7 @@
 
 
-from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
-from PyQt5.QtCore import QTimer, Qt
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
+from PyQt6.QtCore import QTimer, Qt
 import sys
 
 import logging
@@ -18,9 +18,9 @@ class UILogHandler(logging.Handler):
         self.ui_log_callback(now, log_entry)
 
 
-from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
-from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtGui import QPalette, QBrush, QLinearGradient, QColor
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
+from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtGui import QPalette, QBrush, QLinearGradient, QColor
 import sys
 
 class ErrorManager:
@@ -66,7 +66,7 @@ class ErrorManager:
         gradient.setColorAt(0.0, QColor("#cce7ff"))
         gradient.setColorAt(1.0, QColor("#e6f2ff"))
         palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(gradient))
+        palette.setBrush(QPalette.ColorRole.Window, QBrush(gradient))
         self.popup.setAutoFillBackground(True)
         self.popup.setPalette(palette)
 

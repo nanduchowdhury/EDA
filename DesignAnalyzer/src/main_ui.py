@@ -1,18 +1,18 @@
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
     QAbstractItemView, QTableWidget, QTableWidgetItem, QSizePolicy, QLineEdit,
-    QAction, QFileDialog, QMessageBox, QFrame, QTableView, QGridLayout, 
+    QFileDialog, QMessageBox, QFrame, QTableView, QGridLayout, 
     QStyleOptionComboBox, QStyle, QStylePainter, QScrollArea
 )
 
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
 
 
-from PyQt5.QtGui import QBrush, QColor, QTextCharFormat, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem
+from PyQt6.QtGui import QBrush, QColor, QTextCharFormat, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem, QAction
 
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt6.QtCore import Qt, pyqtSlot
 
 import sys
 
@@ -24,6 +24,7 @@ import threading
 
 from typing import Any, Dict
 import pandas as pd
+from sklearn.preprocessing import scale
 
 from main_menu import MainMenuAndTBar
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
@@ -260,6 +261,10 @@ class MainUI(QMainWindow):
         self.PLOT_OR_DRAW = PLOT_OR_DRAW
 
         self.setWindowTitle("Analyzerr")
+
+        # This is for migrating to PyQt6.
+        self.adjustHighResolutionUI()
+
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
         self.apply_global_styles()
@@ -306,6 +311,32 @@ class MainUI(QMainWindow):
         self.registerPredicates()
 
         self.setup_logging()
+
+
+    def adjustHighResolutionUI(self):
+        app = QApplication.instance()
+        screen = app.primaryScreen()
+        dpi = screen.logicalDotsPerInch() / 96.0  # 96 is the "baseline" DPI
+        scale = 1 / dpi
+
+        # app.setFont(QFont("Segoe UI", 8))
+        # app.setStyleSheet("QWidget { font-size: 9pt; }")
+
+        h_scale = scale
+        v_scale = scale
+
+        if scale >= 1.0:
+            h_scale = 0.7
+            v_scale = 0.71
+
+        self.WINDOW_WIDTH = int(self.WINDOW_WIDTH * h_scale)
+        self.WINDOW_HEIGHT = int(self.WINDOW_HEIGHT * v_scale)
+
+        self.LAYOUT_WIDTH = int(self.LAYOUT_WIDTH * h_scale)
+        self.LAYOUT_HEIGHT = int(self.LAYOUT_HEIGHT * v_scale)
+
+        self.COMMAND_WIDTH = int(self.COMMAND_WIDTH * h_scale)
+
 
 
     def hidePredicateGroup(self, group_name):
@@ -464,7 +495,7 @@ class MainUI(QMainWindow):
 
         # Source DropDown
         self.sourceDropDown = SourceDropDown()
-        self.sourceDropDown.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.sourceDropDown.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         leftLayout.addWidget(self.sourceDropDown)
 
 
@@ -477,7 +508,7 @@ class MainUI(QMainWindow):
 
         # Param area
         self.manageArgs = ManageArgs()
-        self.manageArgs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.manageArgs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         leftLayout.addWidget(self.manageArgs)
 
         # leftLayout.addWidget(self._hline())
@@ -506,7 +537,7 @@ class MainUI(QMainWindow):
 
         
         resultsTabs = self.resultsManager.getTabWidget()
-        resultsTabs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        resultsTabs.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         rightLayout.addWidget(resultsTabs, stretch=1)
 
         self.resultTabsHolderWidget.setLayout(rightLayout)
@@ -515,8 +546,8 @@ class MainUI(QMainWindow):
         outerLayout.addWidget(self.predicateHolderWidget, stretch=1)
 
         vline = QFrame()
-        vline.setFrameShape(QFrame.VLine)
-        vline.setFrameShadow(QFrame.Sunken)
+        vline.setFrameShape(QFrame.Shape.VLine)
+        vline.setFrameShadow(QFrame.Shadow.Sunken)
         outerLayout.addWidget(vline)
 
         outerLayout.addWidget(self.resultTabsHolderWidget, stretch=1)
@@ -529,8 +560,8 @@ class MainUI(QMainWindow):
     def _hline(self):
         """Returns a horizontal separator line."""
         line = QFrame()
-        line.setFrameShape(QFrame.HLine)
-        line.setFrameShadow(QFrame.Sunken)
+        line.setFrameShape(QFrame.Shape.HLine)
+        line.setFrameShadow(QFrame.Shape.Sunken)
         return line
 
 
@@ -610,8 +641,8 @@ class SourceDropDown(QComboBox):
         self.setStyleSheet("""
             QComboBox {
                 border: 2px solid blue;
-                padding: 4px;
-                font-size: 16px;
+                padding: 2px;
+                font-size: 11px;
             }
         """)
 
@@ -622,7 +653,7 @@ class SourceDropDown(QComboBox):
         if header not in self.header_to_index:
             model = self.model()
             item = QStandardItem(header)
-            item.setFlags(Qt.ItemIsEnabled)  # Non-selectable
+            item.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Non-selectable
             font = item.font()
             font.setBold(True)
             item.setFont(font)
@@ -637,7 +668,7 @@ class SourceDropDown(QComboBox):
 
         model = self.model()
         item = QStandardItem(f"  {name}")  # Indent for readability
-        item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+        item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
 
         item.setToolTip(name)  # Tooltip on hover for full name
         model.appendRow(item)
@@ -660,7 +691,7 @@ class SourceDropDown(QComboBox):
         model = self.model()
         item = model.item(index)
 
-        if not item or not (item.flags() & Qt.ItemIsSelectable):
+        if not item or not (item.flags() & Qt.ItemFlag.ItemIsSelectable):
             return None, None  # If a header or invalid is selected
 
         name = item.text().strip()
@@ -672,30 +703,14 @@ class SourceDropDown(QComboBox):
         model = self.model()
         for i in range(model.rowCount()):
             item = model.item(i)
-            if item.flags() & Qt.ItemIsSelectable:
+            if item.flags() & Qt.ItemFlag.ItemIsSelectable:
                 font = item.font()
                 font.setBold(i == self.currentIndex())
                 item.setFont(font)
 
         self.update()
 
-    
-    def paintEvent(self, event):
-        # Custom painter to draw selected item in bold in collapsed state
-        opt = QStyleOptionComboBox()
-        self.initStyleOption(opt)
 
-        painter = QStylePainter(self)
-        painter.drawComplexControl(QStyle.CC_ComboBox, opt)
-
-        # Draw bold current text manually
-        font = self.font()
-        font.setBold(True)
-        painter.setFont(font)
-
-        text = self.currentText()
-        alignment = Qt.AlignVCenter | Qt.TextSingleLine
-        painter.drawItemText(opt.rect, alignment, self.palette(), self.isEnabled(), text)
 
 
 class SentralControl:
@@ -882,7 +897,7 @@ class ManageArgs(QWidget):
             label.setToolTip(label.text())
 
             edit = QLineEdit()
-            edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
             label.hide()
             edit.hide()
@@ -960,8 +975,8 @@ class AnalysisActionPanel(QWidget):
         # Search box
         self.searchBox = QTextEdit()
         self.searchBox.setPlaceholderText("Search for actions and analysis")
-        self.searchBox.setFixedHeight(35)
-        self.searchBox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.searchBox.setFixedHeight(20)
+        self.searchBox.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout.addWidget(self.searchBox)
 
         # List Widget
@@ -969,8 +984,8 @@ class AnalysisActionPanel(QWidget):
         layout.addWidget(self.listWidget)
 
         self.listWidget.setSortingEnabled(False)
-        self.listWidget.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.listWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.listWidget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.listWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.searchBox.textChanged.connect(self._onSearch)
 
@@ -983,8 +998,8 @@ class AnalysisActionPanel(QWidget):
             group_item.setFont(group_font)
             
             # Set group item as non-selectable
-            group_item.setFlags(Qt.ItemIsEnabled)
-            group_item.setFlags(Qt.NoItemFlags)
+            group_item.setFlags(Qt.ItemFlag.ItemIsEnabled)
+            group_item.setFlags(Qt.ItemFlag.NoItemFlags)
 
 
             self.listWidget.addItem(group_item)
@@ -998,7 +1013,7 @@ class AnalysisActionPanel(QWidget):
         # Add predicate under group
         display_text = f"\t{predicate_name}"
         item = QListWidgetItem(display_text)
-        item.setData(Qt.UserRole, predicate_name)
+        item.setData(Qt.ItemDataRole.UserRole, predicate_name)
         item.setToolTip(f"<b>{predicate_name}</b>")
 
         group_item = self.group_items[group_name]  # assuming you stored it
@@ -1020,7 +1035,7 @@ class AnalysisActionPanel(QWidget):
 
         for i in range(self.listWidget.count()):
             item = self.listWidget.item(i)
-            pred_name = item.data(Qt.UserRole)
+            pred_name = item.data(Qt.ItemDataRole.UserRole)
             if pred_name:
                 lower_pred = pred_name.lower()
                 if search_text in lower_pred:
@@ -1047,7 +1062,7 @@ class AnalysisActionPanel(QWidget):
     def getSelectedItem(self):
         selected = self.listWidget.selectedItems()
         for item in selected:
-            pred_name = item.data(Qt.UserRole)
+            pred_name = item.data(Qt.ItemDataRole.UserRole)
             if pred_name:
                 return pred_name
         return None

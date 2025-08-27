@@ -1,14 +1,15 @@
 
 import re
-from PyQt5.QtWidgets import (
-    QMainWindow, QAction, QPushButton, QMenuBar, QToolBar,
+from PyQt6.QtWidgets import (
+    QMainWindow, QPushButton, QMenuBar, QToolBar,
     QMenu, QApplication, QStyle, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 )
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtCore import Qt
 from abc import ABC, abstractmethod
 
 import pandas as pd
+from torch import layout
 
 from common import global_signals
 
@@ -17,28 +18,28 @@ class ToolBarItemAbstract(ABC):
     # Mapping label keywords to QStyle.StandardPixmap enums
     ICON_MAP = {
         # Zoom in/out: small lens / large lens approximations
-        'zoom in': QStyle.SP_FileDialogContentsView,     # looks like magnifier
-        'zoom out': QStyle.SP_FileDialogDetailedView,
-        'zoom fit': QStyle.SP_DialogResetButton,        # another magnifier style
+        'zoom in': QStyle.StandardPixmap.SP_FileIcon,     # looks like magnifier
+        'zoom out': QStyle.StandardPixmap.SP_FileDialogDetailedView,
+        'zoom fit': QStyle.StandardPixmap.SP_DialogResetButton,        # another magnifier style
 
-        "up": QStyle.SP_ArrowUp,  # generic up arrow
-        "down": QStyle.SP_ArrowDown,  # generic down arrow
-        'left': QStyle.SP_ArrowBack,  # generic left arrow
-        'right': QStyle.SP_ArrowForward,  # generic right arrow
+        "up": QStyle.StandardPixmap.SP_ArrowUp,  # generic up arrow
+        "down": QStyle.StandardPixmap.SP_ArrowDown,  # generic down arrow
+        'left': QStyle.StandardPixmap.SP_ArrowBack,  # generic left arrow
+        'right': QStyle.StandardPixmap.SP_ArrowForward,  # generic right arrow
 
         # Others as before
-        'save': QStyle.SP_DialogSaveButton,
-        'clear': QStyle.SP_TrashIcon,
-        'delete': QStyle.SP_TrashIcon,
-        'reset': QStyle.SP_DialogResetButton,
-        'apply': QStyle.SP_DialogApplyButton,
-        'close': QStyle.SP_DialogCloseButton,
-        'exit': QStyle.SP_DialogCloseButton,
-        'help': QStyle.SP_DialogHelpButton,
-        'settings': QStyle.SP_FileDialogDetailedView,
-        'info': QStyle.SP_MessageBoxInformation,
-        'warning': QStyle.SP_MessageBoxWarning,
-        'error': QStyle.SP_MessageBoxCritical,
+        'save': QStyle.StandardPixmap.SP_DialogSaveButton,
+        'clear': QStyle.StandardPixmap.SP_TrashIcon,
+        'delete': QStyle.StandardPixmap.SP_TrashIcon,
+        'reset': QStyle.StandardPixmap.SP_DialogResetButton,
+        'apply': QStyle.StandardPixmap.SP_DialogApplyButton,
+        'close': QStyle.StandardPixmap.SP_DialogCloseButton,
+        'exit': QStyle.StandardPixmap.SP_DialogCloseButton,
+        'help': QStyle.StandardPixmap.SP_DialogHelpButton,
+        'settings': QStyle.StandardPixmap.SP_FileDialogDetailedView,
+        'info': QStyle.StandardPixmap.SP_MessageBoxInformation,
+        'warning': QStyle.StandardPixmap.SP_MessageBoxWarning,
+        'error': QStyle.StandardPixmap.SP_MessageBoxCritical,
     }
 
     def __init__(self, label: str):
@@ -60,7 +61,7 @@ class ToolBarItemAbstract(ABC):
         else:
             self.button.setText(label)  # fallback to text if no icon found
 
-        self.button.setFixedSize(32, 32)  # square buttons
+        self.button.setFixedSize(20, 20)  # square buttons
 
         self.button.setStyleSheet("""
             QPushButton {
@@ -145,8 +146,9 @@ class MainMenuAndTBar:
     def createToolbarGroupItems(self, group_name: str, item_objs: list):
         group_widget = QWidget()
         layout = QHBoxLayout(group_widget)
-        layout.setContentsMargins(4, 2, 4, 2)  # margin inside the group box
-        layout.setSpacing(4)
+        
+        layout.setContentsMargins(2, 1, 2, 1)  # no margin
+        layout.setSpacing(0)                   # no spacing between buttons
 
         for item_obj in item_objs:
             btn = item_obj.getButton()

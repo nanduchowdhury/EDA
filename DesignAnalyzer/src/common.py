@@ -1,10 +1,10 @@
 
-from PyQt5.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
-from PyQt5.QtGui import QColor, QPainter, QTextCursor
-from PyQt5.QtCore import Qt, QTimer, QPoint, QObject, pyqtSignal
+from PyQt6.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
+from PyQt6.QtGui import QColor, QPainter, QTextCursor
+from PyQt6.QtCore import Qt, QTimer, QPoint, QObject, pyqtSignal
 
 
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QTabWidget, QMenu, QDialog, QVBoxLayout, QHBoxLayout,
     QPushButton, QWidget
 )
@@ -76,7 +76,7 @@ class TabWidgetRmbPopOut(TabWidgetRmbMenu):
                 super().reject()
 
         self.dialog = CustomDialog()
-        self.dialog.exec_()
+        self.dialog.exec()
 
     def on_close(self):
         if self.popped_out and self.tab_content_widget:
@@ -94,7 +94,7 @@ class TabWidget(QTabWidget):
         super().__init__(parent)
         self._rmb_menu_items = []
 
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
 
     def addRmbMenu(self, menu_item_list):
@@ -122,7 +122,7 @@ class TabWidget(QTabWidget):
 
             action.triggered.connect(create_handler(item, tab_index))
 
-        menu.exec_(global_pos)
+        menu.exec(global_pos)
 
 
 
@@ -163,7 +163,7 @@ class PlaceholderTextEdit(QTextEdit):
 
     def _init_placeholder(self):
         """Initializes the placeholder appearance."""
-        self.setTextColor(Qt.gray)
+        self.setTextColor(Qt.GlobalColor.gray)
         # self.blockSignals(True)
         self.setPlainText(self._placeholder_text)
         # self.blockSignals(False)
@@ -175,7 +175,7 @@ class PlaceholderTextEdit(QTextEdit):
             content = self.toPlainText()
             if content != self._placeholder_text:
                 self._placeholder_visible = False
-                self.setTextColor(Qt.black)
+                self.setTextColor(Qt.GlobalColor.black)
                 self.blockSignals(True)
                 self.setPlainText(content)
                 self.blockSignals(False)
@@ -190,7 +190,7 @@ class PlaceholderTextEdit(QTextEdit):
         super().focusInEvent(event)
         if self._placeholder_visible:
             self.clear()
-            self.setTextColor(Qt.black)
+            self.setTextColor(Qt.GlobalColor.black)
             self._placeholder_visible = False
 
     def focusOutEvent(self, event):
@@ -215,11 +215,11 @@ class PlaceholderTextEdit(QTextEdit):
 
     def keyPressEvent(self, event):
 
-        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
             if self._enter_press_callback:
                 self._enter_press_callback()
-        
-        elif event.key() == Qt.Key_Up:
+
+        elif event.key() == Qt.Key.Key_Up:
             if self._history and self._history_index > 0:
                 self._history_index -= 1
                 
@@ -228,7 +228,7 @@ class PlaceholderTextEdit(QTextEdit):
                 self.blockSignals(False)
 
                 self.moveCursor(QTextCursor.End)
-        elif event.key() == Qt.Key_Down:
+        elif event.key() == Qt.Key.Key_Down:
             if self._history and self._history_index < len(self._history) - 1:
                 self._history_index += 1
 
@@ -237,7 +237,7 @@ class PlaceholderTextEdit(QTextEdit):
                 self.blockSignals(False)
 
                 self.moveCursor(QTextCursor.End)
-        elif event.key() == Qt.Key_Tab:
+        elif event.key() == Qt.Key.Key_Tab:
             self._applySuggestion()
         else:
             super().keyPressEvent(event)
@@ -272,7 +272,7 @@ class ScrollingLabel(QLabel):
         self._timer.timeout.connect(self._on_timer)
         self._timer.start(speed)
 
-        self.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         self.setMinimumHeight(20)
 
     def setText(self, text):
@@ -314,7 +314,8 @@ class ScrollingLabel(QLabel):
             painter.drawText(x, y, self._text)
             x += text_width + 50  # space between repetitions
 
-
+        # Only call end() if you created the painter yourself
+        painter.end()
 
 class TimeKeeper:
     def __init__(self):

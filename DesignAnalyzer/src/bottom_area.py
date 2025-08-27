@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
     QFileDialog, QLabel, QListWidgetItem, QGridLayout
 )
-from PyQt5.QtCore import Qt, QTimer, QObject, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import Qt, QTimer, QObject, pyqtSignal, pyqtSlot
 
 
 import os
@@ -98,7 +98,7 @@ class BottomArea(QObject):
         # --- Left side: QTabWidget (Data Info, Logs, Assistant) ---
         self.tabWidget = TabWidget()
         self.tabWidget.addRmbMenu([TabWidgetRmbPopOut(self.windowWidth, self.windowHeight)])
-        self.tabWidget.setTabPosition(QTabWidget.West)
+        self.tabWidget.setTabPosition(QTabWidget.TabPosition.West)
 
         # Data Info tab
         self.designInfoTab = QWidget()
@@ -126,8 +126,8 @@ class BottomArea(QObject):
 
         # --- Right side: system info label ---
         self.sysInfoLabel = QLabel()
-        self.sysInfoLabel.setStyleSheet("font-size: 16px; color: gray;")
-        self.sysInfoLabel.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.sysInfoLabel.setStyleSheet("font-size: 12px; color: gray;")
+        self.sysInfoLabel.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.sysInfoLabel.setMinimumWidth(200)
 
         # Add both to horizontal layout
@@ -216,7 +216,7 @@ class InputTab(QTabWidget):
         group_layout = QVBoxLayout(group_widget)
 
         label = QLabel(f"Select {group_name} sources")
-        label.setAlignment(Qt.AlignLeft)
+        label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         group_layout.addWidget(label)
 
         group_tab = QTabWidget()
@@ -405,7 +405,7 @@ class AssistantManager(QObject):
         self.assistantOutput.setReadOnly(True)
         self.assistantOutput.setPlaceholderText("Assistant Output")
         self.assistantOutput.setStyleSheet("background-color: #f9f9f9;")
-        self.assistantOutput.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.assistantOutput.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
         # Input + Send Button row
         inputRow = QHBoxLayout()

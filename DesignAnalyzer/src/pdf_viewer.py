@@ -3,12 +3,12 @@ import pdfplumber
 import pandas as pd
 from typing import List
 
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton,
     QScrollArea, QLineEdit, QFrame
 )
-from PyQt5.QtGui import QPixmap, QImage, QColor, QPainter
-from PyQt5.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QImage, QColor, QPainter
+from PyQt6.QtCore import Qt
 
 import logging
 
@@ -52,7 +52,7 @@ class PDFViewer(QWidget):
         # Control box (top-right floating, NOT added to layout)
         self.control_box = QFrame(self)
         self.control_box.setParent(self)
-        self.control_box.setFrameShape(QFrame.Box)
+        self.control_box.setFrameShape(QFrame.Shape.Box)
         self.control_box.setStyleSheet("background-color: white; border: 1px solid gray;")
         self.control_box.setFixedSize(340, 100)
 
@@ -265,7 +265,7 @@ class PDFViewer(QWidget):
 
         img = self.original_images[idx].copy()
         painter = QPainter(img)
-        painter.setPen(Qt.NoPen)
+        painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(255, 255, 0, 100))
         r = fitz.Rect(rect)
         zoom = self.zoom_factor

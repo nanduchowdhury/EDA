@@ -1,15 +1,15 @@
 
 
-from PyQt5.QtWidgets import QTableView, QHeaderView
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
-from PyQt5.QtCore import Qt
+from PyQt6.QtWidgets import QTableView, QHeaderView
+from PyQt6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
+from PyQt6.QtCore import Qt
 
-from PyQt5.QtWidgets import QMenu
+from PyQt6.QtWidgets import QMenu
 
 import pandas as pd
 
-from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
-from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex, QSortFilterProxyModel
+from PyQt6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
+from PyQt6.QtCore import QAbstractTableModel, QVariant, QModelIndex, QSortFilterProxyModel
 
 from layout_draw import PyQtGraphLayoutWithScales
 from layout_plot import BasePlotView, BarChartView, ScatterPlotView, WorldMapWidget, PieChartView
@@ -141,7 +141,7 @@ class TableView(QTableView):
 
         self._onItemClickCallback = None
         self._onItemSelectedCallback = None
-        self._default_alignment = Qt.AlignLeft | Qt.AlignVCenter
+        self._default_alignment = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
 
         self.clicked.connect(self._handleClick)
         self.selectionModel().selectionChanged.connect(self._handleSelection)
@@ -166,13 +166,13 @@ class TableView(QTableView):
         col = self.columnAt(pos.x())
         col_name = None
         if col >= 0:
-            col_name = self.model.headerData(col, Qt.Horizontal)
+            col_name = self.model.headerData(col, Qt.Orientation.Horizontal)
         # Optionally, pass col or col_name to your RMB menu items
         if hasattr(self, "_rmb_menu") and self._rmb_menu is not None:
             # Example: store for use in menu actions
             self.rmb_clicked_col_index = col
             self.rmb_clicked_column_name = col_name
-            self._rmb_menu.exec_(global_pos)
+            self._rmb_menu.exec(global_pos)
 
 
     def applyColumnColorGradient(self, col_name: str, lowColor: str, highColor: str):
@@ -208,7 +208,7 @@ class TableView(QTableView):
 
     def sortColumn(self, column: int, ascending: bool = True):
         """Sorts the table based on column index."""
-        order = Qt.AscendingOrder if ascending else Qt.DescendingOrder
+        order = Qt.SortOrder.AscendingOrder if ascending else Qt.DescendingOrder
         self.sortByColumn(column, order)
 
     def filterColumn(self, column: int, regExp: str):
@@ -267,8 +267,8 @@ class TableView(QTableView):
     def _handleClick(self, index):
         """Called when a cell is clicked."""
         if self._onItemClickCallback and index.isValid():
-            col_name = self.model.headerData(index.column(), Qt.Horizontal)
-            value = self.model.data(index, Qt.DisplayRole)
+            col_name = self.model.headerData(index.column(), Qt.Orientation.Horizontal)
+            value = self.model.data(index, Qt.ItemDataRole.DisplayRole)
             self._onItemClickCallback({col_name: [value]})
 
     def _handleSelection(self, selected, deselected):
@@ -280,8 +280,8 @@ class TableView(QTableView):
         for index in selected.indexes():
             if not index.isValid():
                 continue
-            col_name = self.model.headerData(index.column(), Qt.Horizontal)
-            value = self.model.data(index, Qt.DisplayRole)
+            col_name = self.model.headerData(index.column(), Qt.Orientation.Horizontal)
+            value = self.model.data(index, Qt.ItemDataRole.DisplayRole)
             result.setdefault(col_name, []).append(value)
 
         if result:
@@ -292,7 +292,7 @@ class TableView(QTableView):
         if not self._onItemSelectedCallback:
             return
 
-        col_name = self.model.headerData(logicalIndex, Qt.Horizontal)
+        col_name = self.model.headerData(logicalIndex, Qt.Orientation.Horizontal)
         column_data = self.model._df.iloc[:, logicalIndex].astype(str).tolist()
         self._onItemSelectedCallback({col_name: column_data})
 
@@ -337,7 +337,7 @@ class TableView(QTableView):
             self.setShowGrid(False)
         else:
             self.setShowGrid(True)
-            self.setGridStyle(Qt.SolidLine)
+            self.setGridStyle(Qt.PenStyle.SolidLine)
             css = "\nQTableView::item {"
             if style in ['horizontal', 'both']:
                 css += " border-top: 1px solid gray; border-bottom: 1px solid gray;"
@@ -348,11 +348,11 @@ class TableView(QTableView):
 
     def setTextAlignment(self, alignment: str):
         align_map = {
-            "left": Qt.AlignLeft | Qt.AlignVCenter,
-            "center": Qt.AlignCenter,
-            "right": Qt.AlignRight | Qt.AlignVCenter
+            "left": Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            "center": Qt.AlignmentFlag.AlignCenter,
+            "right": Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
         }
-        self._default_alignment = align_map.get(alignment.lower(), Qt.AlignLeft | Qt.AlignVCenter)
+        self._default_alignment = align_map.get(alignment.lower(), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         self.viewport().update()
 
     def setDataFormat(self, font=None, grid=None, alignment=None, textColor=None, textSize=None):
@@ -444,14 +444,14 @@ class ManageViewerTabs(QWidget):
 
             # Create a tile frame
             frame = QFrame()
-            frame.setFrameShape(QFrame.Box)
+            frame.setFrameShape(QFrame.Shape.Box)
             frame.setStyleSheet("QFrame { background-color: #f5f5f5; }")
             frame.setFixedSize(300, 200)
             frame_layout = QVBoxLayout(frame)
 
             # Add a title label
             label = QLabel(tab_name)
-            label.setAlignment(Qt.AlignCenter)
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             label.setStyleSheet("font-weight: bold;")
             frame_layout.addWidget(label)
 
@@ -482,12 +482,12 @@ class ManageViewerTabs(QWidget):
         pixmap = widget.grab()
 
         # Resize to a smaller thumbnail size
-        thumbnail = pixmap.scaled(280, 140, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        thumbnail = pixmap.scaled(280, 140, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
         # Set into QLabel
         label = QLabel()
         label.setPixmap(thumbnail)
-        label.setAlignment(Qt.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet("background-color: white; border: 1px solid #ccc;")
         return label
 
@@ -551,7 +551,7 @@ class PandasTableModel(QAbstractTableModel):
         self._df = df if df is not None else pd.DataFrame()
         self._highlight_rules = {}  # {col_name: [values]}
         self._sort_column = None
-        self._sort_order = Qt.AscendingOrder
+        self._sort_order = Qt.SortOrder.AscendingOrder
         self._alternate_row_colors = None
         self._column_gradient = None  # (col_name, lowColor, highColor)
 
@@ -568,7 +568,7 @@ class PandasTableModel(QAbstractTableModel):
         self.dataChanged.emit(
             self.index(0, 0),
             self.index(self.rowCount() - 1, self.columnCount() - 1),
-            [Qt.BackgroundRole]
+            [Qt.ItemDataRole.BackgroundRole]
         )
 
     def rowCount(self, parent=QModelIndex()):
@@ -583,7 +583,7 @@ class PandasTableModel(QAbstractTableModel):
         self.dataChanged.emit(
             self.index(0, 0),
             self.index(self.rowCount() - 1, self.columnCount() - 1),
-            [Qt.BackgroundRole]
+            [Qt.ItemDataRole.BackgroundRole]
         )
 
     def setColumnGradient(self, col_name, lowColor, highColor):
@@ -591,22 +591,22 @@ class PandasTableModel(QAbstractTableModel):
         self.dataChanged.emit(
             self.index(0, 0),
             self.index(self.rowCount() - 1, self.columnCount() - 1),
-            [Qt.BackgroundRole]
+            [Qt.ItemDataRole.BackgroundRole]
         )
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid() or self._df is None:
             return QVariant()
 
         row, col = index.row(), index.column()
 
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             return str(self._df.iat[row, col])
 
-        elif role == Qt.TextAlignmentRole:
-            return getattr(self.parent(), '_default_alignment', Qt.AlignLeft | Qt.AlignVCenter)
+        elif role == Qt.ItemDataRole.TextAlignmentRole:
+            return getattr(self.parent(), '_default_alignment', Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
-        elif role == Qt.BackgroundRole:
+        elif role == Qt.ItemDataRole.BackgroundRole:
             # Gradient coloring
             grad_color = self._handleGradientColoring(row, col)
             if grad_color:
@@ -653,10 +653,10 @@ class PandasTableModel(QAbstractTableModel):
                 return QColor(int(r), int(g), int(b))
         return None
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role != Qt.DisplayRole or self._df is None:
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        if role != Qt.ItemDataRole.DisplayRole or self._df is None:
             return QVariant()
-        if orientation == Qt.Horizontal:
+        if orientation == Qt.Orientation.Horizontal:
             return str(self._df.columns[section])
         else:
             return str(section + 1)

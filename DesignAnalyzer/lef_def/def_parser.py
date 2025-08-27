@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
 
 import json
 import re

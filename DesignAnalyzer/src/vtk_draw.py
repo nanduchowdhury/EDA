@@ -1,7 +1,7 @@
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import vtk
 import numpy as np
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 class VTKWidgetWrapper(QWidget):
     def __init__(self, width=600, height=400, parent=None):
@@ -13,7 +13,7 @@ class VTKWidgetWrapper(QWidget):
         ##############################################
         # self.setFixedSize(width, height)
         # self.setMinimumSize(width, height)
-        # self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
