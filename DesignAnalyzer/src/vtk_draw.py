@@ -1,7 +1,7 @@
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 import vtk
 import numpy as np
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 class VTKWidgetWrapper(QWidget):
     def __init__(self, width=600, height=400, parent=None):

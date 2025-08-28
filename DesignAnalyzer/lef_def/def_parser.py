@@ -1,5 +1,5 @@
 
-from PyQt6.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
+from PySide6.QtCore import QThread, Signal, QObject, Slot, Signal
 
 import json
 import re
@@ -1401,7 +1401,7 @@ class DefParser:
 
 
 class ParseWorker(QObject):
-    finished = pyqtSignal(dict)
+    finished = Signal(dict)
 
     def __init__(self, file_path, lefParserImplement):
         super().__init__()
@@ -1445,7 +1445,7 @@ class ParseWorker(QObject):
         return merged
 
 
-    @pyqtSlot()
+    @Slot()
     def run(self):
         with open(self.file_path, 'r') as def_file:
             def_file_content = def_file.read()
@@ -1517,7 +1517,7 @@ class ParseWorker(QObject):
     
 class DefParserImplement(QObject):
     
-    def_parser_finished_signal = pyqtSignal(str)
+    def_parser_finished_signal = Signal(str)
 
     def __init__(self, lefParserImplement):
         super().__init__()

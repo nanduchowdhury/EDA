@@ -1,65 +1,53 @@
+from PySide6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+    QLineEdit, QFrame
+)
+from PySide6.QtCore import Qt, QModelIndex, QPointF
+from PySide6.QtPdf import QPdfDocument, QPdfSearchModel
+from PySide6.QtPdfWidgets import QPdfView
+
+
 import fitz  # PyMuPDF
 import pdfplumber
 import pandas as pd
 from typing import List
-
-from PyQt6.QtWidgets import (
-    QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton,
-    QScrollArea, QLineEdit, QFrame
-)
-from PyQt6.QtGui import QPixmap, QImage, QColor, QPainter
-from PyQt6.QtCore import Qt
+from PySide6.QtGui import QImage
 
 import logging
 
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 logging.getLogger("pdfplumber").setLevel(logging.WARNING)
 
-
 class PDFViewer(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.pdf_doc = None
-        self.page_images = []
-        self.original_images = []
+        self.pdf_doc = QPdfDocument(self)
         self.current_pdf_file = None
-        self.matches = []
+        self.search_model = QPdfSearchModel(self)
         self.current_match_index = -1
-        self.zoom_factor = 2.0
-
-        # Lazy loading control
-        self.total_pages = 0
-        self.current_start = 1
-        self.current_end = 1
-        self.preloaded_next = None
-        self.preloaded_prev = None
-
-        self.pdf_text_pages = []
 
         self.initUI()
         self.setLayout(self.layout)
 
     def initUI(self):
         self.layout = QVBoxLayout(self)
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
 
-        self.content_widget = QWidget()
-        self.content_layout = QVBoxLayout(self.content_widget)
-        self.scroll_area.setWidget(self.content_widget)
-        self.layout.addWidget(self.scroll_area)
+        # The actual PDF view widget
+        self.pdf_view = QPdfView()
+        self.pdf_view.setZoomMode(QPdfView.ZoomMode.FitToWidth)
+        self.pdf_view.setPageMode(QPdfView.PageMode.MultiPage)
 
-        # Control box (top-right floating, NOT added to layout)
+        self.layout.addWidget(self.pdf_view)
+
+        # Floating control box
         self.control_box = QFrame(self)
         self.control_box.setParent(self)
         self.control_box.setFrameShape(QFrame.Shape.Box)
         self.control_box.setStyleSheet("background-color: white; border: 1px solid gray;")
         self.control_box.setFixedSize(340, 100)
 
-        # Controls layout (two rows)
         ctrl_layout = QVBoxLayout()
         row1 = QHBoxLayout()
-        # Use Unicode double arrows for up/down
         self.btn_scroll_top = QPushButton("⇑")
         self.btn_scroll_bottom = QPushButton("⇓")
         self.search_input = QLineEdit()
@@ -92,228 +80,132 @@ class PDFViewer(QWidget):
         self.btn_zoom_out.clicked.connect(self.zoom_out)
         self.btn_zoom_fit.clicked.connect(self.zoom_fit)
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.control_box.move(self.width() - self.control_box.width() - 40, 10)
+
+    # --------------------
+    # Load PDF
+    # --------------------
+    def loadPdf(self, pdf_file: str):
+        self.current_pdf_file = pdf_file
+        self.pdf_doc.load(pdf_file)
+        self.pdf_view.setDocument(self.pdf_doc)
+        self.search_model.setDocument(self.pdf_doc)
+        self.current_match_index = -1
+
+    # --------------------
+    # Zoom Controls
+    # --------------------
+    def zoom_in(self):
+        self.pdf_view.setZoomFactor(self.pdf_view.zoomFactor() + 0.25)
+
+    def zoom_out(self):
+        self.pdf_view.setZoomFactor(max(0.5, self.pdf_view.zoomFactor() - 0.25))
+
+    def zoom_fit(self):
+        self.pdf_view.setZoomMode(QPdfView.ZoomMode.FitInView)
+
+    # --------------------
+    # Navigation
+    # --------------------
+    def scroll_to_top(self):
+        self.pdf_view.setPageMode(QPdfView.PageMode.MultiPage)
+        self.pdf_view.pageNavigator().jump(0, QPointF(0.0, 0.0))
+
+    def scroll_to_bottom(self):
+        last_page = self.pdf_doc.pageCount() - 1
+        self.pdf_view.pageNavigator().jump(last_page, QPointF(1.0, 1.0))
+
+    # --------------------
+    # Search & Highlight
+    # --------------------
+
+    def search_text(self, direction='down'):
+        text = self.search_input.text().strip()
+        if not text:
+            return
+
+        # Run search
+        self.search_model.setSearchString(text)
+
+        if self.search_model.rowCount(QModelIndex()) == 0:
+            return
+
+        if direction == 'down':
+            self.current_match_index = (self.current_match_index + 1) % self.search_model.rowCount(QModelIndex())
+        elif direction == 'up':
+            self.current_match_index = (self.current_match_index - 1) % self.search_model.rowCount(QModelIndex())
+
+        match_count = self.search_model.rowCount(QModelIndex())
+        print(f"Match {self.current_match_index + 1} of {match_count}")
+
+        idx = self.search_model.index(self.current_match_index, 0)
+        page = idx.data(QPdfSearchModel.Role.Page.value)
+
+        self.pdf_view.pageNavigator().jump(page, QPointF(0, 0))
+        self.pdf_view.setCurrentSearchResultIndex(self.current_match_index)
+
+        print(f"Jumped to page {page}")
+
+    # --------------------
+    # Helpers
+    # --------------------
     def get_file_base_name(self):
         if self.current_pdf_file:
             return self.current_pdf_file.split('/')[-1]
         return None
 
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.control_box.move(self.width() - self.control_box.width() - 40, 10)
 
-    # --------------------
-    # Main PDF loading logic
-    # --------------------
+
+
+class PDFViewerWithExtract(PDFViewer):  # extend the QtPdf-based viewer
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._pdfplumber_pages = None
+        self._fitz_doc = None
+
     def loadPdf(self, pdf_file: str):
-        self.current_pdf_file = pdf_file
-        self.pdf_doc = fitz.open(pdf_file)
-        self.matches.clear()
-        self.current_match_index = -1
+        super().loadPdf(pdf_file)
 
-        self.total_pages = len(self.pdf_doc)
-        self.current_start = 1
-        self.current_end = min(10, self.total_pages)
-
-        self.preloaded_next = None
-        self.preloaded_prev = None
-
-        self._loadPages(self.current_start, self.current_end)
-        self._preload_next_chunk()
-        self._preload_prev_chunk()
-
-        self.pdf_text_pages = []
-
-        self.scroll_area.verticalScrollBar().valueChanged.connect(self.on_scroll)
-
-    def _renderPages(self, start: int, end: int):
-        rendered = []
-        for page_num in range(start - 1, end):
-            page = self.pdf_doc[page_num]
-            pix = page.get_pixmap(matrix=fitz.Matrix(self.zoom_factor, self.zoom_factor))
-            if pix.alpha:
-                img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGBA8888)
-            else:
-                img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
-            rendered.append(img.copy())
-        return rendered
-
-    def _loadPages(self, start: int, end: int, preloaded_images=None):
-        start = max(1, start)
-        end = min(self.total_pages, end)
-
-        for i in reversed(range(self.content_layout.count())):
-            widget = self.content_layout.itemAt(i).widget()
-            if widget:
-                widget.deleteLater()
-
-        self.page_images.clear()
-        self.original_images.clear()
-
-        if preloaded_images is None:
-            preloaded_images = self._renderPages(start, end)
-
-        for i, img in enumerate(preloaded_images):
-            label = QLabel()
-            label.setPixmap(QPixmap.fromImage(img))
-            self.content_layout.addWidget(label)
-            page_obj = self.pdf_doc[start - 1 + i]
-            self.page_images.append((page_obj, label))
-            self.original_images.append(img)
-
-        self.current_start = start
-        self.current_end = end
-
-        self._preload_next_chunk()
-        self._preload_prev_chunk()
-
-    def _preload_next_chunk(self):
-        if self.current_end < self.total_pages:
-            start = self.current_end + 1
-            end = min(start + 9, self.total_pages)
-            imgs = self._renderPages(start, end)
-            self.preloaded_next = (start, end, imgs)
-        else:
-            self.preloaded_next = None
-
-    def _preload_prev_chunk(self):
-        if self.current_start > 1:
-            end = self.current_start - 1
-            start = max(1, end - 9)
-            imgs = self._renderPages(start, end)
-            self.preloaded_prev = (start, end, imgs)
-        else:
-            self.preloaded_prev = None
-
-    def on_scroll(self, value):
-        bar = self.scroll_area.verticalScrollBar()
-        max_val = bar.maximum()
-        min_val = bar.minimum()
-
-        if value >= max_val - 50 and self.preloaded_next:
-            start, end, imgs = self.preloaded_next
-            self._loadPages(start, end, preloaded_images=imgs)
-        elif value <= min_val + 50 and self.preloaded_prev:
-            start, end, imgs = self.preloaded_prev
-            self._loadPages(start, end, preloaded_images=imgs)
-
-    # --------------------
-    # Zoom Controls
-    # --------------------
-    def zoom_in(self):
-        self.zoom_factor = min(self.zoom_factor + 0.25, 5.0)
-        self._loadPages(self.current_start, self.current_end)
-
-    def zoom_out(self):
-        self.zoom_factor = max(self.zoom_factor - 0.25, 0.5)
-        self._loadPages(self.current_start, self.current_end)
-
-    def zoom_fit(self):
-        self.zoom_factor = 1.0
-        self._loadPages(self.current_start, self.current_end)
-
-    # --------------------
-    # Navigation
-    # --------------------
-    def scroll_to_top(self):
-        self.scroll_area.verticalScrollBar().setValue(0)
-
-    def scroll_to_bottom(self):
-        bar = self.scroll_area.verticalScrollBar()
-        bar.setValue(bar.maximum())
-
-    # --------------------
-    # Search & Highlight
-    # --------------------
-    def search_text(self, direction='down'):
-        text = self.search_input.text().strip()
-        if not text or not self.pdf_doc:
-            return
-
-        if not hasattr(self, '_last_search_text') or self._last_search_text != text:
-            self.matches = []
-            self.current_match_index = -1
-            self._last_search_text = text
-            for page_num, page in enumerate(self.pdf_doc):
-                text_instances = page.search_for(text, quads=False)
-                for inst in text_instances:
-                    self.matches.append((page_num, inst))
-
-        if not self.matches:
-            return
-
-        if direction == 'down':
-            self.current_match_index = (self.current_match_index + 1) % len(self.matches)
-        elif direction == 'up':
-            self.current_match_index = (self.current_match_index - 1) % len(self.matches)
-
-        page_num, rect = self.matches[self.current_match_index]
-
-        if not (self.current_start - 1 <= page_num <= self.current_end - 1):
-            start = (page_num // 10) * 10 + 1
-            end = min(start + 9, self.total_pages)
-            self._loadPages(start, end)
-
-        self.highlight_match(page_num, rect)
-
-    def highlight_match(self, page_num, rect):
-        if not (self.current_start - 1 <= page_num <= self.current_end - 1):
-            return
-
-        idx = page_num - (self.current_start - 1)
-        page, label = self.page_images[idx]
-
-        img = self.original_images[idx].copy()
-        painter = QPainter(img)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(255, 255, 0, 100))
-        r = fitz.Rect(rect)
-        zoom = self.zoom_factor
-        painter.drawRect(int(r.x0 * zoom), int(r.y0 * zoom),
-                         int(r.width * zoom), int(r.height * zoom))
-        painter.end()
-
-        label.setPixmap(QPixmap.fromImage(img))
-        label_pos = label.pos().y()
-        self.scroll_area.verticalScrollBar().setValue(label_pos - 20)
+        # also open with fitz/pdfplumber for extraction
+        self._fitz_doc = fitz.open(pdf_file)
+        self._pdfplumber_pages = pdfplumber.open(pdf_file)
 
     # --------------------
     # Extraction helpers
     # --------------------
-    def getAllTables(self) -> List:
-        if not self.current_pdf_file:
+    def getPagesText(self) -> List[str]:
+        if not self._pdfplumber_pages:
+            return []
+        texts = []
+        for page in self._pdfplumber_pages.pages:
+            text = page.extract_text()
+            texts.append(text if text else "")
+        return texts
+
+    def getAllTables(self) -> List[pd.DataFrame]:
+        if not self._pdfplumber_pages:
             return []
         tables = []
-        with pdfplumber.open(self.current_pdf_file) as pdf:
-            for page in pdf.pages:
-                for table in page.extract_tables():
-                    tables.append(pd.DataFrame(table))
+        for page in self._pdfplumber_pages.pages:
+            for table in page.extract_tables():
+                tables.append(pd.DataFrame(table))
         return tables
 
     def getAllImages(self) -> List[QImage]:
         images = []
-        if not self.pdf_doc:
+        if not self._fitz_doc:
             return []
-        for page in self.pdf_doc:
-            img_list = page.get_images(full=True)
-            for img in img_list:
+        for page in self._fitz_doc:
+            for img in page.get_images(full=True):
                 xref = img[0]
-                base_img = self.pdf_doc.extract_image(xref)
+                base_img = self._fitz_doc.extract_image(xref)
                 img_bytes = base_img["image"]
-                image = QImage.fromData(img_bytes)
-                images.append(image)
+                qimg = QImage.fromData(img_bytes)
+                images.append(qimg)
         return images
 
-    def getPagesText(self) -> List[str]:
-        if not self.current_pdf_file:
-            return []
-        
-        if self.pdf_text_pages and len(self.pdf_text_pages) == self.total_pages:
-            return self.pdf_text_pages
-        
-        with pdfplumber.open(self.current_pdf_file) as pdf:
-            for page in pdf.pages:
-                text = page.extract_text()
-                self.pdf_text_pages.append(text if text else "")
 
-        return self.pdf_text_pages
+

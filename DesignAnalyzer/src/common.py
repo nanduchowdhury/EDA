@@ -1,10 +1,10 @@
 
-from PyQt6.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
-from PyQt6.QtGui import QColor, QPainter, QTextCursor
-from PyQt6.QtCore import Qt, QTimer, QPoint, QObject, pyqtSignal
+from PySide6.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
+from PySide6.QtGui import QColor, QPainter, QTextCursor
+from PySide6.QtCore import Qt, QTimer, QPoint, QObject, Signal
 
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QTabWidget, QMenu, QDialog, QVBoxLayout, QHBoxLayout,
     QPushButton, QWidget
 )
@@ -368,10 +368,10 @@ class TimeKeeper:
 
 class GlobalSignals(QObject):
 
-    signal_update_sql_run_status = pyqtSignal(dict)
-    signal_finish_predicate_run = pyqtSignal(str)
+    signal_update_sql_run_status = Signal(dict)
+    signal_finish_predicate_run = Signal(str)
 
-    signal_fire_results_tab = pyqtSignal(str, str, list, pd.DataFrame, QTableView)
+    signal_fire_results_tab = Signal(str, str, list, pd.DataFrame, QTableView)
 
     def __init__(self):
         super().__init__()

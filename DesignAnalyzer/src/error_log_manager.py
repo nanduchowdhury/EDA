@@ -1,7 +1,7 @@
 
 
-from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
-from PyQt6.QtCore import QTimer, Qt
+from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
+from PySide6.QtCore import QTimer, Qt
 import sys
 
 import logging
@@ -18,9 +18,9 @@ class UILogHandler(logging.Handler):
         self.ui_log_callback(now, log_entry)
 
 
-from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
-from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtGui import QPalette, QBrush, QLinearGradient, QColor
+from PySide6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QApplication
+from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QPalette, QBrush, QLinearGradient, QColor
 import sys
 
 class ErrorManager:

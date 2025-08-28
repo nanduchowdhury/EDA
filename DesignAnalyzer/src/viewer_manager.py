@@ -1,22 +1,22 @@
 
 
-from PyQt6.QtWidgets import QTableView, QHeaderView
-from PyQt6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QTableView, QHeaderView
+from PySide6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
+from PySide6.QtCore import Qt
 
-from PyQt6.QtWidgets import QMenu
+from PySide6.QtWidgets import QMenu
 
 import pandas as pd
 
-from PyQt6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
-from PyQt6.QtCore import QAbstractTableModel, QVariant, QModelIndex, QSortFilterProxyModel
+from PySide6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QScrollArea, QGridLayout, QStackedLayout, QFrame
+from PySide6.QtCore import QAbstractTableModel, QModelIndex, QSortFilterProxyModel
 
 from layout_draw import PyQtGraphLayoutWithScales
 from layout_plot import BasePlotView, BarChartView, ScatterPlotView, WorldMapWidget, PieChartView
 
 from vtk_draw import VTKWidgetWrapper
 
-from pdf_viewer import PDFViewer
+from pdf_viewer import PDFViewer, PDFViewerWithExtract
 
 from common import TabWidget, TabWidgetRmbPopOut
 
@@ -509,7 +509,7 @@ class ManageViewerTabs(QWidget):
         elif viewer_type == "WORLD_MAP":
             tab_widget = WorldMapWidget()
         elif viewer_type == "PDF":
-            tab_widget = PDFViewer(parent=self)
+            tab_widget = PDFViewerWithExtract(parent=self)
 
         if tab_widget:
             if not tab_name:
@@ -596,7 +596,7 @@ class PandasTableModel(QAbstractTableModel):
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid() or self._df is None:
-            return QVariant()
+            return None
 
         row, col = index.row(), index.column()
 
@@ -620,7 +620,7 @@ class PandasTableModel(QAbstractTableModel):
             if highlight_color:
                 return highlight_color
 
-        return QVariant()
+        return None
 
     def _handleAlternateRowColoring(self, row):
         if self._alternate_row_colors:
@@ -655,7 +655,7 @@ class PandasTableModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         if role != Qt.ItemDataRole.DisplayRole or self._df is None:
-            return QVariant()
+            return None
         if orientation == Qt.Orientation.Horizontal:
             return str(self._df.columns[section])
         else:

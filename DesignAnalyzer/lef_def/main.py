@@ -1,6 +1,6 @@
 
-from PyQt6.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
-from PyQt6.QtCore import Qt, QVariant
+from PySide6.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+from PySide6.QtCore import Qt
 
 import sys
 import os
@@ -36,7 +36,7 @@ class LefDefPandasTableModel(PandasTableModel):
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
 
         if not index.isValid() or self._df is None:
-            return QVariant()
+            return None
 
         row, col = index.row(), index.column()
         col_name = self._df.columns[col]

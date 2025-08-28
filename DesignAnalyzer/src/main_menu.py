@@ -1,11 +1,11 @@
 
 import re
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QMainWindow, QPushButton, QMenuBar, QToolBar,
     QMenu, QApplication, QStyle, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 )
-from PyQt6.QtGui import QIcon, QAction
-from PyQt6.QtCore import Qt
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtCore import Qt
 from abc import ABC, abstractmethod
 
 import pandas as pd

@@ -1,9 +1,9 @@
 
 import pyqtgraph as pg
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
-from PyQt6.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QToolTip
-from PyQt6.QtCore import Qt, pyqtSignal, QObject, QUrl, QPoint, QEvent
-from PyQt6.QtGui import QPainter, QPen, QColor, QFont, QAction
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene
+from PySide6.QtWidgets import QGraphicsRectItem, QGraphicsProxyWidget, QMenu, QToolTip
+from PySide6.QtCore import Qt, Signal, QObject, QUrl, QPoint, QEvent
+from PySide6.QtGui import QPainter, QPen, QColor, QFont, QAction
 
 
 from matplotlib.figure import Figure
@@ -18,7 +18,7 @@ from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
 
 import os
 import folium
-from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtWebEngineWidgets import QWebEngineView
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -318,7 +318,7 @@ class BasePiePlotView(QWidget):
 
 
 class PieChartView(BasePiePlotView):
-    sliceClicked = pyqtSignal(str)  # Emits label when a slice is clicked
+    sliceClicked = Signal(str)  # Emits label when a slice is clicked
 
     def __init__(self, parent=None, label_col='Label', value_col='Value'):
         super().__init__(parent)

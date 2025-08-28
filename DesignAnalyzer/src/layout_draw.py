@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem, QSizePolicy
-from PyQt6.QtCore import Qt, QRectF, QPointF
-from PyQt6.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsRectItem, QLabel, QGraphicsPathItem, QSizePolicy
+from PySide6.QtCore import Qt, QRectF, QPointF
+from PySide6.QtGui import QPainter, QColor, QPen, QFont, QPainterPath, QBrush
 import pyqtgraph as pg
 
 import math

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QCheckBox, QComboBox, QTextEdit, QPushButton, QLabel,
     QListWidget, QTabWidget, QGraphicsView, QListWidgetItem,
@@ -7,12 +7,12 @@ from PyQt6.QtWidgets import (
     QStyleOptionComboBox, QStyle, QStylePainter, QScrollArea
 )
 
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QObject, pyqtSlot, QAbstractTableModel
+from PySide6.QtCore import Qt, QThread, Signal, QObject, Slot, QAbstractTableModel
 
 
-from PyQt6.QtGui import QBrush, QColor, QTextCharFormat, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem, QAction
+from PySide6.QtGui import QBrush, QColor, QTextCharFormat, QCursor, QPen, QPainter, QFont, QStandardItemModel, QStandardItem, QAction
 
-from PyQt6.QtCore import Qt, pyqtSlot
+from PySide6.QtCore import Qt, Slot
 
 import sys
 
@@ -220,7 +220,7 @@ class MainUI(QMainWindow):
 
     COMMAND_WIDTH = 900
 
-    @pyqtSlot(str, dict)
+    @Slot(str, dict)
     def on_signal_fire_predicate_run(self, command, args):
 
         print(f"Received command: {command}, args: {args}")
@@ -240,7 +240,7 @@ class MainUI(QMainWindow):
 
     
 
-    @pyqtSlot(str, str, list, pd.DataFrame, QTableView)
+    @Slot(str, str, list, pd.DataFrame, QTableView)
     def on_signal_fire_results_tab(self, tab_name, tab_tool_tip, outputs, df, tableView):
 
 
@@ -262,7 +262,7 @@ class MainUI(QMainWindow):
 
         self.setWindowTitle("Analyzerr")
 
-        # This is for migrating to PyQt6.
+        # This is for migrating to PySide6.
         self.adjustHighResolutionUI()
 
         self.setFixedSize(self.WINDOW_WIDTH, self.WINDOW_HEIGHT)

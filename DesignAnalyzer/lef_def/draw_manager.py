@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy, QFrame, QGridLayout
-from PyQt6.QtCore import Qt, QRectF, QPointF, QTimer
-from PyQt6.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsRectItem, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy, QFrame, QGridLayout
+from PySide6.QtCore import Qt, QRectF, QPointF, QTimer
+from PySide6.QtGui import QBrush, QColor, QCursor, QPen, QPainter, QFont
 
 from global_name_index import gname_index
 

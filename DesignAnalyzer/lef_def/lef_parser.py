@@ -1,7 +1,7 @@
 
 from collections import defaultdict
 
-from PyQt6.QtCore import QThread, pyqtSignal, QObject, pyqtSlot, pyqtSignal
+from PySide6.QtCore import QThread, Signal, QObject, Slot, Signal
 
 import json
 import re

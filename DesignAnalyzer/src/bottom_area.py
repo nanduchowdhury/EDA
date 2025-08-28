@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
     QFileDialog, QLabel, QListWidgetItem, QGridLayout
 )
-from PyQt6.QtCore import Qt, QTimer, QObject, pyqtSignal, pyqtSlot
+from PySide6.QtCore import Qt, QTimer, QObject, Signal, Slot
 
 
 import os
@@ -383,7 +383,7 @@ class AssistantManager(QObject):
 
     
     
-    signal_fire_predicate_run = pyqtSignal(str, dict)
+    signal_fire_predicate_run = Signal(str, dict)
 
     def __init__(self, sentralControl, parent=None):
 
@@ -526,12 +526,12 @@ class AssistantManager(QObject):
         self.signal_fire_predicate_run.emit(command, args)
 
 
-    @pyqtSlot(str)
+    @Slot(str)
     def on_signal_finish_predicate_run(self, status):
         self.assistantOutput.append(f"<b>Assistant:</b> {status}")
 
 
-    @pyqtSlot(dict)
+    @Slot(dict)
     def on_signal_update_sql_run_status(self, result):
         
         if self.timeKeeer.isStarted():
