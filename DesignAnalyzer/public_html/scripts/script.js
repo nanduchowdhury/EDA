@@ -3,11 +3,13 @@
 const burger = document.getElementById('burger');
 const menu = document.getElementById('menuItems');
 
-burger.addEventListener('click', () => {
-  menu.classList.toggle('active');
-  const expanded = menu.classList.contains('active');
-  menu.setAttribute('aria-expanded', expanded);
-});
+if(burger) {
+  burger.addEventListener('click', () => {
+    menu.classList.toggle('active');
+    const expanded = menu.classList.contains('active');
+    menu.setAttribute('aria-expanded', expanded);
+  });
+}
 
 // Toggle submenu on menu item click
 document.querySelectorAll('.menu-item').forEach(item => {
@@ -98,27 +100,13 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
     sharedSubmenu.classList.remove('active');
   });
 
+if (sharedSubmenu) {
   // Prevent click inside submenu from closing it
   sharedSubmenu.addEventListener('click', (e) => {
     e.stopPropagation();
   });
-  
+}
 
-///////////////////////////////////////////////////
-// Handle Python class enrollment form
-//////////////////////////////////////////////////
-document.getElementById('enrollForm').onsubmit = async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData
-    });
-    const message = await response.text();
-    alert(message); // Show popup with server response
-    form.reset();
-};
 
 
 
