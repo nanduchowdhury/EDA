@@ -286,7 +286,7 @@ footer a:hover {
   flex: 1;
   min-width: 250px;
   padding: 1em;
-  background-color: #559ef2;
+  background: linear-gradient(to top left, #add8e6, #00008b);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
