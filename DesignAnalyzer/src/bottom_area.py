@@ -210,6 +210,12 @@ class InputTab(QTabWidget):
         self.createGoogleCloudSourceTab("Cloud", "Google Cloud Storage")
         self.createSnowflakeSourceTab("Cloud", "Snowflake")
 
+        self.createSourceGroupTab("IoT")
+        self.createIoTKafkaTab("IoT", "Kafka")
+
+        self.createSourceGroupTab("Web")
+        self.createWebSourceTab("Web Sources", "Web Page")
+
     def createSourceGroupTab(self, group_name):
         """Create a new group tab that holds source tabs, with a label above."""
         group_widget = QWidget()
@@ -253,6 +259,44 @@ class InputTab(QTabWidget):
         tab_layout.addLayout(content_layout)
 
         # Add the source tab
+        self.group_tabs[group_name].addTab(tab_widget, source_name)
+
+
+    def createIoTKafkaTab(self, group_name, source_name):
+        if group_name not in self.group_tabs:
+            raise ValueError(f"Group '{group_name}' not found. Call createSourceGroupTab() first.")
+
+        tab_widget = QWidget()
+        grid_layout = QGridLayout(tab_widget)
+
+        label_server = QLabel("Bootstrap Server")
+        self.kafkaServerEdit = QTextEdit()
+        self.kafkaServerEdit.setFixedHeight(30)
+        grid_layout.addWidget(label_server, 0, 0)
+        grid_layout.addWidget(self.kafkaServerEdit, 0, 1)
+
+        label_topic = QLabel("Topic")
+        self.kafkaTopic = QTextEdit()
+        self.kafkaTopic.setFixedHeight(30)
+        grid_layout.addWidget(label_topic, 1, 0)
+        grid_layout.addWidget(self.kafkaTopic, 1, 1)
+
+        self.group_tabs[group_name].addTab(tab_widget, source_name)
+
+
+    def createWebSourceTab(self, group_name, source_name):
+        if group_name not in self.group_tabs:
+            raise ValueError(f"Group '{group_name}' not found. Call createSourceGroupTab() first.")
+
+        tab_widget = QWidget()
+        grid_layout = QGridLayout(tab_widget)
+
+        label_url = QLabel("URL")
+        self.webUrlEdit = QTextEdit()
+        self.webUrlEdit.setFixedHeight(30)
+        grid_layout.addWidget(label_url, 0, 0)
+        grid_layout.addWidget(self.webUrlEdit, 0, 1)
+
         self.group_tabs[group_name].addTab(tab_widget, source_name)
 
 

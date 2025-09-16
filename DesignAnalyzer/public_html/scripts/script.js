@@ -62,16 +62,12 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
 
     const submenuMap = {
       solution: [
-        { text: "Integrated AI", href: "index.html#Integrated-AI" },
-        { text: "Visualization", href: "index.html#Visualization" },
-        { text: "Performance & Capacity", href: "index.html#Performance" }
+        { text: "Integrated AI", href: "analytics.html#Integrated-AI" },
+        { text: "Visualization", href: "analytics.html#Visualization" },
+        { text: "Performance & Capacity", href: "analytics.html#Performance" }
       ],
       products: [
-        { text: "Analyzerr", href: "index.html#Analyzerr" }
-      ],
-      company: [
-        { text: "About", href: "index.html#About" },
-        { text: "Contact", href: "index.html#Contact" }
+        { text: "Analyzerr", href: "analytics.html#Analyzerr" }
       ]
     };
 
