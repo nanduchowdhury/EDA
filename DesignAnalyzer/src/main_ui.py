@@ -80,16 +80,26 @@ class WriteSessionMenuItem(MenuItemAbstract):
             group_dict = {}
             sources = self.inputTab.getAllGroupSources(group)
             for source in sources:
-                items = self.inputTab.getAllItemsInList(group, source)
-                group_dict[source] = items  # accumulate items for each source
-            self.session.setAttr(group, group_dict)  # set once per group
+                widget = self.inputTab.getWidgetForSource(group, source)
+                if isinstance(widget, QListWidget):
+                    items = self.inputTab.getAllItemsInList(group, source)
+                    group_dict[source] = items
+                elif isinstance(widget, QTextEdit):
+                    group_dict[source] = widget.toPlainText()
+                elif isinstance(widget, QLineEdit):
+                    group_dict[source] = widget.text()
+                else:
+                    # raise exception or handle other widget types if needed
+                    raise TypeError(f"Unsupported widget type for input-tab: {type(widget)}")
+
+            self.session.setAttr(group, group_dict)
 
         self.session.dump()
 
         filename, _ = QFileDialog.getSaveFileName(
             parent=None,
             caption="Create new session JSON File",
-            directory=".",
+            dir=".",
             filter="Text Files (*.json);;All Files (*)"
         )
 

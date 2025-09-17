@@ -214,7 +214,7 @@ class InputTab(QTabWidget):
         self.createIoTKafkaTab("IoT", "Kafka")
 
         self.createSourceGroupTab("Web")
-        self.createWebSourceTab("Web Sources", "Web Page")
+        self.createWebSourceTab("Web", "URL")
 
     def createSourceGroupTab(self, group_name):
         """Create a new group tab that holds source tabs, with a label above."""
@@ -293,6 +293,7 @@ class InputTab(QTabWidget):
 
         label_url = QLabel("URL")
         self.webUrlEdit = QTextEdit()
+        self.list_widgets[(group_name, source_name)] = self.webUrlEdit
         self.webUrlEdit.setFixedHeight(30)
         grid_layout.addWidget(label_url, 0, 0)
         grid_layout.addWidget(self.webUrlEdit, 0, 1)
@@ -397,6 +398,9 @@ class InputTab(QTabWidget):
     def addItems(self, group_name, source_name, file_paths):
         for file_path in file_paths:
             self._addItem(group_name, source_name, file_path)
+
+    def getWidgetForSource(self, group, source):
+        return self.list_widgets.get((group, source), None)
 
     def getAllItemsInList(self, group_name, source_name):
         list_widget = self.list_widgets[(group_name, source_name)]
