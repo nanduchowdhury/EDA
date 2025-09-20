@@ -15,6 +15,7 @@ from datetime import datetime
 
 import pandas as pd
 
+
 class TabWidgetRmbMenu(ABC):
     def __init__(self, name: str):
         self.name = name
@@ -371,7 +372,7 @@ class GlobalSignals(QObject):
     signal_update_sql_run_status = Signal(dict)
     signal_finish_predicate_run = Signal(str)
 
-    signal_fire_results_tab = Signal(str, str, list, pd.DataFrame, QTableView)
+    signal_fire_results_tab = Signal(str, str, list, pd.DataFrame, QWidget)
 
     def __init__(self):
         super().__init__()

@@ -217,7 +217,7 @@ class HighlightTableColumnDataConditional(PredicateBase):
         result = []
 
         table = self.sentralControl.getSelectedTable()
-        h_vals = table.hilightColumnData(column_name, python_syntax_condition)
+        h_vals = table.base_table.hilightColumnData(column_name, python_syntax_condition)
 
         return "success"
 
@@ -242,7 +242,7 @@ class TableAlternateRowsColor(PredicateBase):
         result = []
 
         table = self.sentralControl.getSelectedTable()
-        table.colorAlternateRows(color)
+        table.base_table.colorAlternateRows(color)
 
         return "success"
 
@@ -282,7 +282,7 @@ class TableApplyColumnColorGradient(PredicateBase):
         result = []
 
         table = self.sentralControl.getSelectedTable()
-        table.applyColumnColorGradient(column_name, low_color, high_color)
+        table.base_table.applyColumnColorGradient(column_name, low_color, high_color)
 
         return "success"
 

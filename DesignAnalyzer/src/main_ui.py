@@ -39,7 +39,7 @@ from predicates import Predicates, CreateBarChart, CreateScatterPlot, CreatePieC
 
 from llm_manager import LLMManager, global_LLM_manager
 
-from viewer_manager import ManageViewerTabs, ManageResultsTabs
+from viewer_manager import ManageViewerTabs, ManageResultsTabs, TableWithFilter
 
 from error_log_manager import ErrorManager, UILogHandler
 
@@ -250,11 +250,11 @@ class MainUI(QMainWindow):
 
     
 
-    @Slot(str, str, list, pd.DataFrame, QTableView)
-    def on_signal_fire_results_tab(self, tab_name, tab_tool_tip, outputs, df, tableView):
+    @Slot(str, str, list, pd.DataFrame, QWidget)
+    def on_signal_fire_results_tab(self, tab_name, tab_tool_tip, outputs, df, tableWithFilter):
 
 
-        self.resultsManager.addNewTab(tab_name, tab_tool_tip, tableView)
+        self.resultsManager.addNewTab(tab_name, tab_tool_tip, tableWithFilter)
         model = self.resultsManager.setOutputsForTab(tab_name, outputs)
 
         self.sentralControl.addEntryForResults(tab_name)

@@ -1,6 +1,6 @@
 
 
-from PySide6.QtWidgets import QTableView, QHeaderView
+from PySide6.QtWidgets import QTableView, QHeaderView, QAbstractItemView, QSizePolicy, QHBoxLayout, QLineEdit
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
 from PySide6.QtCore import Qt
 
@@ -29,14 +29,14 @@ class ManageResultsTabs:
         self.tabWidget = TabWidget()
         self.tabWidget.addRmbMenu([TabWidgetRmbPopOut(self.windowWidth, self.windowHeight)])
 
-        self.tables = {}           # tabName -> ResultsTableView
+        self.tables = {}           # tabName -> ResultsTableWithFilter
         self.commands = {}         # tabName -> analysisCommand
 
         self.defaultResultsTabName = "Result"
 
         self.addNewTab(self.defaultResultsTabName, "Default analysis command")
 
-    def addNewTab(self, tabName, analysisCommand, _tableView=None):
+    def addNewTab(self, tabName, analysisCommand, _tableWithFilter=None):
         if tabName in self.tables:
             return  # avoid duplicates
 
@@ -45,19 +45,19 @@ class ManageResultsTabs:
         tab = QWidget()
         layout = QVBoxLayout()
 
-        tableView = _tableView
+        tableWithFilter = _tableWithFilter
 
-        if _tableView == None:
-            tableView = ResultsTableView()
+        if _tableWithFilter == None:
+            tableWithFilter = ResultsTableWithFilter()
 
-        layout.addWidget(tableView)
+        layout.addWidget(tableWithFilter)
         tab.setLayout(layout)
 
         index = self.tabWidget.addTab(tab, tabName)
         self.tabWidget.setTabToolTip(index, analysisCommand)
         self.tabWidget.setCurrentIndex(index)
 
-        self.tables[tabName] = tableView
+        self.tables[tabName] = tableWithFilter
         self.commands[tabName] = analysisCommand
 
     def removeTabByTitle(self, tabName: str):
@@ -86,14 +86,14 @@ class ManageResultsTabs:
         return tabName in self.tables
 
     def setOutputsForTab(self, tabName, outputs):
-        tableView = self.tables.get(tabName)
-        if tableView:
-            tableView.setOutputs(outputs)
+        tableWithFilter = self.tables.get(tabName)
+        if tableWithFilter:
+            tableWithFilter.setOutputs(outputs)
 
     def getDataFrameForTab(self, tabName):
-        tableView = self.tables.get(tabName)
-        if tableView:
-            return tableView.getDataFrame()
+        tableWithFilter = self.tables.get(tabName)
+        if tableWithFilter:
+            return tableWithFilter.base_table.getDataFrame()
         return None
 
 
@@ -115,7 +115,116 @@ class TableRmbMenuSort(TableRmbMenuBase):
         tableView.sortColumn(tableView.rmb_clicked_col_index, self.ascending)
 
 
-class TableView(QTableView):
+class FilterRow(QWidget):
+    def __init__(self, base_table, parent=None):
+        super().__init__(parent)
+        self.base_table = base_table
+        self.layout = QHBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.line_edits = []
+
+        # Connect signals for resizing and moving columns
+        header = self.base_table.horizontalHeader()
+        header.sectionResized.connect(self.syncWidths)
+        header.sectionMoved.connect(self.syncWidths)
+        header.geometriesChanged.connect(self.syncWidths)
+
+    def update_filter_display(self):
+        # Remove old edits if any
+        for le in self.line_edits:
+            self.layout.removeWidget(le)
+            le.deleteLater()
+        self.line_edits.clear()
+
+        for i in range(self.base_table.model.columnCount()):
+            le = QLineEdit()
+            le.setPlaceholderText("Filter…")
+            le.setStyleSheet("""
+                QLineEdit {
+                    border: 1px solid #aaa;
+                    border-right: 2px ridge #888;
+                    border-bottom: 2px ridge #888;
+                    border-radius: 3px;
+                    padding: 2px 4px;
+                    background: #fafbfc;
+                    color: blue; /* user text */
+                }
+                QLineEdit[echoMode="0"]::placeholder {  /* placeholder text */
+                    color: gray;
+                    font-style: italic;
+                }
+            """)
+
+            le.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+            le.returnPressed.connect(lambda col=i, edit=le: self.base_table.filterColumn(col, edit.text()))
+            self.line_edits.append(le)
+            self.layout.addWidget(le, 0)  # 0 = no stretch
+            
+        self.syncWidths()
+
+
+    def syncWidths(self):
+        header = self.base_table.horizontalHeader()
+        total_width = 0
+        for i, le in enumerate(self.line_edits):
+            w = header.sectionSize(i)
+            le.setFixedWidth(w)
+            total_width += w
+        # Set the filter row's width to match the table's viewport
+        self.setFixedWidth(total_width)
+
+    def resizeEvent(self, event):
+        self.syncWidths()
+        super().resizeEvent(event)
+
+
+class TableWithFilter(QWidget):
+    def __init__(self, model=None, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        self.base_table = BaseTableView(model)
+        self.filter_row = FilterRow(self.base_table, self)
+
+        # --- Add QScrollArea for filter row ---
+        self.filter_scroll = QScrollArea()
+        self.filter_scroll.setWidgetResizable(True)
+        self.base_table.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.filter_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # already set, keep this
+        self.filter_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.filter_scroll.setFrameShape(QFrame.NoFrame)
+        self.filter_scroll.setWidget(self.filter_row)
+        # After self.filter_scroll.setWidget(self.filter_row)
+
+        self.filter_row.setFixedHeight(25)  # Set a fixed height for the filter row
+        self.filter_scroll.setFixedHeight(25)  # Match the height of the filter row
+
+        self.base_table.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+
+        layout.addWidget(self.filter_scroll)
+        layout.addWidget(self.base_table)
+        self.setLayout(layout)
+
+        self.base_table.horizontalScrollBar().valueChanged.connect(self._sync_filter_row_scroll)
+
+
+    def shift_filter_row(self):
+        vertical_header_width = self.base_table.verticalHeader().width()
+        print(f'Vertical header width: {vertical_header_width}')
+        self.filter_scroll.setViewportMargins(vertical_header_width, 0, 0, 0)
+
+
+    def _sync_filter_row_scroll(self, value):
+        # Scroll the filter row horizontally to match the table
+        self.filter_scroll.horizontalScrollBar().setValue(value)
+
+
+    def loadFromDataFrame(self, df: pd.DataFrame):
+        self.base_table.loadFromDataFrame(df)
+        self.shift_filter_row()
+        self.filter_row.update_filter_display()
+
+class BaseTableView(QTableView):
     def __init__(self, _model=None, parent=None):
         super().__init__(parent)
         
@@ -196,6 +305,7 @@ class TableView(QTableView):
         
         self.resizeAllColumns()
         self.resizeRowsToContents()
+
 
     def colorAlternateRows(self, color: str):
         """Color alternate rows with the given color and its lighter version."""
@@ -368,7 +478,7 @@ class TableView(QTableView):
 
 
 
-class ResultsTableView(TableView):
+class ResultsTableWithFilter(TableWithFilter):
     def __init__(self, _model=None, parent=None):
         super().__init__(_model, parent)
 
@@ -524,11 +634,11 @@ class ManageViewerTabs(QWidget):
         return None
 
     def _createTableWidget(self):
-        return TableView()
+        return TableWithFilter()
 
     def setTableDataFrameInputTab(self, df):
         input_tab = self.getInputTabWidget()
-        if isinstance(input_tab, QTableView):
+        if isinstance(input_tab.base_table, BaseTableView):
             input_tab.loadFromDataFrame(df)
 
     def getSelectedTabWidget(self):

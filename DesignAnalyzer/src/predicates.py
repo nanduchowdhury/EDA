@@ -29,7 +29,7 @@ class PredicateBase():
         self.args = {}            # input arguments
         self.outputs = {}         # output data
 
-        self.tableView = None
+        self.tableWithFilter = None
 
     def setPredicateName(self, name):
         self.predicate_name = name
@@ -160,7 +160,7 @@ class PredicateBase():
                 global_signals.signal_fire_results_tab.emit(unique_tab_name,
                                                             self.getCompleteNameWithArgs(),
                                                             outputs, self.getDataFrame(),
-                                                            self.tableView)
+                                                            self.tableWithFilter)
 
 
                 self.onPostRun()
@@ -305,7 +305,7 @@ class CreateBarChart(PredicateBase):
         }
 
         input_table = self.sentralControl.viewerTabs.getInputTabWidget()
-        input_table.highlightData(highlight_dict)
+        input_table.base_table.highlightData(highlight_dict)
 
 
 

@@ -14,7 +14,7 @@ from blue_payload import run_BluePayload
 from main_ui import MainUI
 from main_menu import MenuItemAbstract, ToolBarItemAbstract
 
-from viewer_manager import ResultsTableView, PandasTableModel
+from viewer_manager import ResultsTableWithFilter, PandasTableModel
 
 from predicates import Predicates, PredicateBase
 
@@ -51,7 +51,7 @@ class LefDefPandasTableModel(PandasTableModel):
         return base_result
     
 
-class LefDefTableView(ResultsTableView):
+class LefDefTableWithFilter(ResultsTableWithFilter):
     def __init__(self, parent=None):
         super().__init__(LefDefPandasTableModel(), parent)
 
@@ -68,7 +68,7 @@ class LefDefPredicate(PredicateBase):
         self.drawManager = _drawManager
         self.sentralControl = _sentralControl
 
-        self.tableView = LefDefTableView()
+        self.tableWithFilter = LefDefTableWithFilter()
 
 
 class GetLefLayers(LefDefPredicate):

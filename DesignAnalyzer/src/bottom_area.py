@@ -107,7 +107,7 @@ class BottomArea(QObject):
         designLayout = QVBoxLayout()
         designLayout.addWidget(self.designInfoText)
         self.designInfoTab.setLayout(designLayout)
-        self.tabWidget.addTab(self.designInfoTab, "Data Info")
+        self.tabWidget.addTab(self.designInfoTab, "Insights")
 
         # Logs tab
         self.logsTab = QWidget()
