@@ -1,6 +1,6 @@
 
-from PySide6.QtWidgets import QTableView, QListWidget, QTextEdit, QLabel, QListWidgetItem
-from PySide6.QtGui import QColor, QPainter, QTextCursor
+from PySide6.QtWidgets import QTableView, QListWidget, QTextEdit, QLineEdit, QLabel, QListWidgetItem
+from PySide6.QtGui import QColor, QPainter, QTextCursor, QKeyEvent
 from PySide6.QtCore import Qt, QTimer, QPoint, QObject, Signal
 
 
@@ -137,6 +137,75 @@ class CustomListWidget(QListWidget):
             if self.item(i).text() == text:
                 return  # Item already exists, don't add it
         self.addItem(text)  # Add only if not found
+
+
+class CustomLineEdit(QLineEdit):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._enter_callback = None
+        self._enter_args = ()
+        self._enter_kwargs = {}
+        self._history = []
+        self._history_index = -1
+        # store colors
+        self._text_color = "black"
+        self._placeholder_color = "gray"
+        self._applyColors()
+
+    # ---- Callback with optional args ----
+    def setEnterCallback(self, callback, *args, **kwargs):
+        self._enter_callback = callback
+        self._enter_args = args
+        self._enter_kwargs = kwargs
+
+    # ---- History navigation ----
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+            text = self.text().strip()
+            if text:
+                if not self._history or self._history[-1] != text:
+                    self._history.append(text)
+                self._history_index = len(self._history)
+
+            if self._enter_callback:
+                self._enter_callback(text, *self._enter_args, **self._enter_kwargs)
+            return
+
+        elif event.key() == Qt.Key.Key_Up:
+            if self._history and self._history_index > 0:
+                self._history_index -= 1
+                self.setText(self._history[self._history_index])
+            return
+
+        elif event.key() == Qt.Key.Key_Down:
+            if self._history and self._history_index < len(self._history) - 1:
+                self._history_index += 1
+                self.setText(self._history[self._history_index])
+            elif self._history_index == len(self._history) - 1:
+                self._history_index = len(self._history)
+                self.clear()
+            return
+
+        super().keyPressEvent(event)
+
+    # ---- Color controls ----
+    def setTextColor(self, color: str):
+        self._text_color = color
+        self._applyColors()
+
+    def setPlaceholderColor(self, color: str):
+        self._placeholder_color = color
+        self._applyColors()
+
+    def _applyColors(self):
+        self.setStyleSheet(f"""
+            QLineEdit {{
+                color: {self._text_color};
+            }}
+            QLineEdit:placeholder-shown {{
+                color: {self._placeholder_color};
+            }}
+        """)
 
 
 

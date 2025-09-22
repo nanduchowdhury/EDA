@@ -2,7 +2,9 @@
 
 from PySide6.QtWidgets import QTableView, QHeaderView, QAbstractItemView, QSizePolicy, QHBoxLayout, QLineEdit
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSortFilterProxyModel, QRegularExpression
+
+
 
 from PySide6.QtWidgets import QMenu
 
@@ -18,7 +20,7 @@ from vtk_draw import VTKWidgetWrapper
 
 from pdf_viewer import PDFViewer, PDFViewerWithExtract
 
-from common import TabWidget, TabWidgetRmbPopOut
+from common import TabWidget, TabWidgetRmbPopOut, CustomLineEdit
 
 class ManageResultsTabs:
     def __init__(self, windowWidth=600, windowHeight=400):
@@ -138,26 +140,13 @@ class FilterRow(QWidget):
         self.line_edits.clear()
 
         for i in range(self.base_table.model.columnCount()):
-            le = QLineEdit()
+            le = CustomLineEdit()
             le.setPlaceholderText("Filter…")
-            le.setStyleSheet("""
-                QLineEdit {
-                    border: 1px solid #aaa;
-                    border-right: 2px ridge #888;
-                    border-bottom: 2px ridge #888;
-                    border-radius: 3px;
-                    padding: 2px 4px;
-                    background: #fafbfc;
-                    color: blue; /* user text */
-                }
-                QLineEdit[echoMode="0"]::placeholder {  /* placeholder text */
-                    color: gray;
-                    font-style: italic;
-                }
-            """)
-
             le.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-            le.returnPressed.connect(lambda col=i, edit=le: self.base_table.filterColumn(col, edit.text()))
+            le.setTextColor("blue")
+
+            le.setEnterCallback(lambda text, col=i: self.base_table.proxy_model.setColumnFilter(col, text))
+
             self.line_edits.append(le)
             self.layout.addWidget(le, 0)  # 0 = no stretch
             
@@ -224,6 +213,38 @@ class TableWithFilter(QWidget):
         self.shift_filter_row()
         self.filter_row.update_filter_display()
 
+
+
+class MultiColumnFilterProxyModel(QSortFilterProxyModel):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._filters = {}  # {column_index: QRegularExpression}
+
+    def setColumnFilter(self, column: int, pattern: str):
+        """Set regex filter for a specific column."""
+        if pattern:
+            self._filters[column] = QRegularExpression(pattern, QRegularExpression.PatternOption.CaseInsensitiveOption)
+        else:
+            self._filters.pop(column, None)  # remove if empty
+        self.invalidateFilter()
+
+    def clearFilters(self):
+        """Remove all filters."""
+        self._filters.clear()
+        self.invalidateFilter()
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        model = self.sourceModel()
+
+        for col, regex in self._filters.items():
+            index = model.index(source_row, col, source_parent)
+            data = str(model.data(index, Qt.ItemDataRole.DisplayRole) or "")
+            if not regex.match(data).hasMatch():
+                return False  # reject row if any column doesn't match
+        return True
+
+
+
 class BaseTableView(QTableView):
     def __init__(self, _model=None, parent=None):
         super().__init__(parent)
@@ -232,7 +253,7 @@ class BaseTableView(QTableView):
         if _model == None:
             self.model = PandasTableModel()
 
-        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model = MultiColumnFilterProxyModel(self)
         self.proxy_model.setSourceModel(self.model)
         self.setModel(self.proxy_model)
 
@@ -323,8 +344,7 @@ class BaseTableView(QTableView):
 
     def filterColumn(self, column: int, regExp: str):
         """Applies regex-based filtering to a specific column."""
-        self.proxy_model.setFilterKeyColumn(column)
-        self.proxy_model.setFilterRegularExpression(regExp)
+        self.proxy_model.setColumnFilter(column, regExp)
 
     def getColumnIndexByName(self, column_name):
         """Return column index given column name, or -1 if not found."""
