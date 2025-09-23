@@ -1,0 +1,6 @@
+2025-09-22 14:56:03,977 - INFO - Start reading url: https://www.up-rera.in/projects
+2025-09-22 14:56:04,022 - DEBUG - Starting new HTTPS connection (1): www.up-rera.in:443
+2025-09-22 14:56:14,993 - DEBUG - https://www.up-rera.in:443 "GET /projects HTTP/1.1" 200 None
+2025-09-22 14:56:30,882 - INFO - End reading url: https://www.up-rera.in/projects
+2025-09-22 16:41:25,213 - INFO - Start reading url: https://www.up-rera.in/projects
+2025-09-22 16:41:25,318 - INFO - End reading url: https://www.up-rera.in/projects

@@ -2,8 +2,9 @@
 
 from PySide6.QtWidgets import QTableView, QHeaderView, QAbstractItemView, QSizePolicy, QHBoxLayout, QLineEdit
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QColor, QBrush, QFont
-from PySide6.QtCore import Qt, QSortFilterProxyModel, QRegularExpression
+from PySide6.QtCore import Qt, QSortFilterProxyModel, QRegularExpression, QMimeData
 
+from PySide6.QtGui import QDrag, QMouseEvent, QPixmap
 
 
 from PySide6.QtWidgets import QMenu
@@ -185,6 +186,9 @@ class TableWithFilter(QWidget):
         self.filter_scroll.setWidget(self.filter_row)
         # After self.filter_scroll.setWidget(self.filter_row)
 
+        header = DraggableHeader(Qt.Orientation.Horizontal, self.base_table)
+        self.base_table.setHorizontalHeader(header)
+
         self.filter_row.setFixedHeight(25)  # Set a fixed height for the filter row
         self.filter_scroll.setFixedHeight(25)  # Match the height of the filter row
 
@@ -212,6 +216,32 @@ class TableWithFilter(QWidget):
         self.base_table.loadFromDataFrame(df)
         self.shift_filter_row()
         self.filter_row.update_filter_display()
+
+
+
+class DraggableHeader(QHeaderView):
+    def __init__(self, orientation, parent=None):
+        super().__init__(orientation, parent)
+        self.setSectionsMovable(True)
+
+    def mouseMoveEvent(self, event: QMouseEvent):
+        if event.buttons() & Qt.MouseButton.LeftButton:
+            index = self.logicalIndexAt(event.pos())
+            if index >= 0:
+                col_name = self.model().headerData(index, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+                if col_name:
+                    drag = QDrag(self)
+                    mime_data = QMimeData()
+                    mime_data.setText(col_name)
+                    drag.setMimeData(mime_data)
+
+                    # Optional: create a pixmap for drag preview
+                    pixmap = QPixmap(self.sectionSize(index), self.height())
+                    pixmap.fill(Qt.GlobalColor.transparent)
+                    drag.setPixmap(pixmap)
+
+                    drag.exec(Qt.DropAction.CopyAction)
+        super().mouseMoveEvent(event)
 
 
 
@@ -495,6 +525,21 @@ class BaseTableView(QTableView):
         if alignment:
             self.setTextAlignment(alignment)
 
+    def mouseMoveEvent(self, event):
+        if event.buttons() & Qt.MouseButton.LeftButton:
+            indexes = self.selectedIndexes()
+            if indexes:
+                # Collect selected cell values
+                values = [str(self.model().data(idx)) for idx in indexes]
+                text = ", ".join(values)
+
+                drag = QDrag(self)
+                mime_data = QMimeData()
+                mime_data.setText(text)
+                drag.setMimeData(mime_data)
+
+                drag.exec(Qt.DropAction.CopyAction)
+        super().mouseMoveEvent(event)
 
 
 

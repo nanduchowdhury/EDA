@@ -208,6 +208,17 @@ class CustomLineEdit(QLineEdit):
         """)
 
 
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasText():
+            event.acceptProposedAction()
+        else:
+            super().dragEnterEvent(event)
+
+    def dropEvent(self, event):
+        self.setText(event.mimeData().text())
+        event.acceptProposedAction()
+
+
 
 class PlaceholderTextEdit(QTextEdit):
     def __init__(self, placeholder_text="", parent=None):
