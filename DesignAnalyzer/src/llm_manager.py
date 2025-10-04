@@ -208,7 +208,15 @@ class LLMManager:
 
         # Call GPT4All
         with self.llm.chat_session():
-            response = self.llm.generate(prompt, max_tokens=300).strip()
+            
+            # response = self.llm.generate(prompt, max_tokens=300).strip()
+
+            response = self.llm.generate(
+                        prompt,
+                        max_tokens=300,
+                        temp=0.7,
+                        top_p=0.9
+                    ).strip()
 
         print(f"Model response:\n{response}\n")
 
@@ -224,7 +232,7 @@ class LLMManager:
             
 
 
-# global_LLM_manager = LLMManager()
+global_LLM_manager = LLMManager()
 
-global_LLM_manager = GeminiLangChainLLMManager()
+# global_LLM_manager = GeminiLangChainLLMManager()
 

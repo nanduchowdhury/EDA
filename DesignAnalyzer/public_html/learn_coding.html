@@ -47,6 +47,17 @@
 
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16878177004"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16878177004');
+</script>
+
+
 <body>
 
 <!-- Social Icons Bar -->
@@ -83,7 +94,7 @@
     <p>
       Register for an interactive session on Python-basics<br>
       It's a <u>45 minutes</u> session<br>
-      Price is <u>INR 299</u><br>
+      Date is <u>6th October 2025 - 7PM IST</u><br>
       Avail now absolutely <u>FREE</u>
     </p>
   </div>
@@ -95,8 +106,14 @@
         <label for="name">Full Name:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+        <label for="whatsapp">WhatsApp Number:</label><br>
+        <span>+91</span>
+        <input type="tel" id="whatsapp" name="whatsapp" 
+              pattern="[0-9]{10}" 
+              maxlength="10"
+              title="Enter a 10-digit WhatsApp number" 
+              required><br><br>
+
 
         <input type="submit" value="Enroll Now">
     </form>
@@ -116,7 +133,7 @@
     <h3 style="color: black;">After enroll</h3>
     <p>
       <ul>
-        <li>Enroll in the above form. Please make sure to provide valid email-id.</li>
+        <li>Enroll in the above form. Please make sure to provide valid whatsapp number.</li>
         <li>We will let you know zoom or Google-meet links for the live class.</li>
         <li>You will be able to join the class scheduled for [date and time].</li>
       </ul>

@@ -4248,3 +4248,17 @@ message: "Generative Language API has not been used in project 966683554322 befo
 2025-09-22 12:41:30,340 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-09-22 12:49:51,885 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
 2025-09-22 12:49:51,926 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:13:21,812 - INFO - Error: No response from LLM.
+2025-10-02 22:14:55,455 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:15:03,960 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:18:08,619 - INFO - Error: No response from LLM.
+2025-10-02 22:19:03,225 - INFO - Execution error: Execution failed on sql 'SELECT * FROM csv_data\_name WHERE Region = 'Noida'': unrecognized token: "\"
+2025-10-02 22:34:38,254 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:34:38,365 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:35:07,925 - INFO - Error: GPT4All.generate() got an unexpected keyword argument 'n_threads'
+2025-10-02 22:40:00,327 - INFO - Start reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:40:00,450 - INFO - End reading CSV file: C:/Users/nandu/EDA/DesignAnalyzer/test/finance/sample_sales_data.csv
+2025-10-02 22:43:06,000 - INFO - Error: No response from LLM.
+2025-10-02 22:55:37,061 - INFO - Error: No response from LLM.
+2025-10-02 22:56:35,430 - INFO - Error executing 'run PCA analysis': Non-numeric columns cannot be analyzed: ['Region']
+2025-10-02 22:56:46,965 - INFO - Error executing 'run PCA analysis': PCA failed: n_components=2 must be between 0 and min(n_samples, n_features)=1 with svd_solver='covariance_eigh'
