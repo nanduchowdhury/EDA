@@ -11,6 +11,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     fclose($file);
 
-    echo "Thank you for enrolling, $name! We have saved your WhatsApp number.";
+    echo "Thank you for enrolling, $name! We will send you a link to the Python class on your WhatsApp number.";
 }
 ?>
