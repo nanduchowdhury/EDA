@@ -231,19 +231,23 @@ body {
 }
 
 .highlight-box-blue {
-  background: linear-gradient(to top right, #add8e6, #00008b);
+  background: linear-gradient(to top right, #00008b, #add8e6);
 }
 
 .highlight-box-orange {
-  background: linear-gradient(to top right, #ef9169, #f75104);
+  background: linear-gradient(to top right, #f75104, #ef9169);
 }
 
 .highlight-box-green {
-  background: linear-gradient(to top right, #a0c770, #546a32);
+  background: linear-gradient(to top right, #546a32, #a0c770);
 }
 
 .highlight-box-black {
-  background: linear-gradient(to top right, #878786, #0b1200);
+  background: linear-gradient(to top right, #0b1200, #878786);
+}
+
+.highlight-box-magenta {
+  background: linear-gradient(to top right, #79313b, #f42148);
 }
 
 /* Body padding so content not hidden behind fixed header */
@@ -275,7 +279,7 @@ footer a:hover {
   color: blue;
 }
 
-.boxes-conrtainer {
+.boxes-container {
   display: flex;
   justify-content: space-between;
   gap: 1em;
@@ -286,8 +290,7 @@ footer a:hover {
   flex: 1;
   min-width: 250px;
   padding: 1em;
-  background: linear-gradient(to top left, #add8e6, #00008b);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
