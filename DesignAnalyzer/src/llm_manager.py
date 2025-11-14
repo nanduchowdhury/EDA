@@ -36,22 +36,14 @@ from langchain.schema import AIMessage, HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 
-class GeminiLangChainLLMManager:
-    def __init__(self, 
-                 api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', 
-                 model_name: str = "gemini-1.5-flash", 
-                 temperature: float = 0.2):
+class baseLLMManager:
+    def __init__(self):
 
         self.columns: List[str] = []
         self.commands: List[Dict[str, List[str]]] = []
         self.chat_history: List[Dict[str, str]] = []  # user_query + gemini_response
         self.context_window_size: int = 5
 
-        self.llm = ChatGoogleGenerativeAI(
-            model=model_name,
-            google_api_key=api_key,
-            temperature=temperature
-        )
 
     def set_context_window_size(self, window_size: int = 5):
         self.context_window_size = window_size
@@ -65,21 +57,27 @@ class GeminiLangChainLLMManager:
     def addColumnName(self, columnName: str):
         self.columns.append(columnName)
 
-    def query(self, user_prompt: str) -> Optional[Dict]:
-        if not self.commands and not self.columns:
-            raise ValueError("No commands or columns defined.")
 
-        prompt = self._construct_prompt(user_prompt)
-        print("\n🔹 Prompt sent to Gemini:\n", prompt)
+    def processLlmResponse(self, llm_response, user_query: str):
 
         try:
-            response = self.llm([HumanMessage(content=prompt)])
-            reply = response.content.strip()
-            print("\n🔸 Gemini Response:\n", reply)
+            # Normalize different response shapes to a single string
+            if hasattr(llm_response, "content"):
+                reply = llm_response.content.strip()
+            elif isinstance(llm_response, (list, tuple)) and len(llm_response) > 0:
+                first = llm_response[0]
+                if hasattr(first, "content"):
+                    reply = first.content.strip()
+                else:
+                    reply = str(first).strip()
+            elif isinstance(llm_response, str):
+                reply = llm_response.strip()
+            else:
+                reply = str(llm_response).strip()
 
             # Save the user-Gemini pair in chat history
             self.chat_history.append({
-                "user_query": user_prompt.strip(),
+                "user_query": user_query.strip(),
                 "gemini_response": reply
             })
 
@@ -90,8 +88,10 @@ class GeminiLangChainLLMManager:
             return result
 
         except Exception as e:
-            print("❌ Failed to parse Gemini response:", e)
+            print("❌ Failed to parse LLM response:", e)
             return None
+
+
 
     def _construct_prompt(self, user_prompt: str) -> str:
         # Format last N history entries
@@ -163,6 +163,33 @@ class GeminiLangChainLLMManager:
 
 
 
+class GeminiLangChainLLMManager(baseLLMManager):
+    def __init__(self, 
+                 api_key: str = 'AIzaSyCCbq3FWvyrS1jnStHeDt3Xzgi8A1E7McI', 
+                 model_name: str = "gemini-1.5-flash", 
+                 temperature: float = 0.2):
+        super().__init__()
+
+        self.llm = ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=api_key,
+            temperature=temperature
+        )
+
+
+    def query(self, user_prompt: str) -> Optional[Dict]:
+        if not self.commands and not self.columns:
+            raise ValueError("No commands or columns defined.")
+
+        prompt = self._construct_prompt(user_prompt)
+        print("\n🔹 Prompt sent to Gemini:\n", prompt)
+
+        response = self.llm([HumanMessage(content=prompt)])
+        result = self.processLlmResponse(response, user_prompt)
+        return result
+
+
+
 ###############################################################################
 #
 # This class uses downloaded inhouse model. Please check
@@ -171,18 +198,14 @@ class GeminiLangChainLLMManager:
 ###############################################################################
 
 
-class LLMManager:
+class LLMManager(baseLLMManager):
     def __init__(self, model_path: str = "mistral-7b-instruct-v0.1.Q4_0.gguf"):
-        
+        super().__init__()
+
         # model_path = "tinyllama-1.1b-chat-v1.0.Q4_0.gguf"
 
         self.llm = GPT4All(model_path)
 
-        self.commands: List[Dict] = []  # List of dicts: {"command": str, "args": List[str]}
-
-    def addCommandAndArgs(self, command: str, args: List[str]):
-        """Register a command and its argument names."""
-        self.commands.append({"command": command, "args": args})
 
     def query(self, input_text: str) -> Optional[Tuple[str, Dict[str, str]]]:
         """Use the model to find best matching command and extract argument values."""
@@ -195,16 +218,8 @@ class LLMManager:
             args_str = ", ".join(cmd["args"]) if cmd["args"] else "none"
             command_list += f"{idx + 1}. {cmd['command']} (Args: {args_str})\n"
 
-        prompt = (
-            "You are a helpful assistant. Your job is to identify one command from the list of commands that best matches the user query.\n"
-            "You are also to extract any argument values provided by the user.\n"
-            "Return the result strictly in this JSON format:\n"
-            '{\n  "command": "<command>",\n  "args": { "arg1": "value1", "arg2": "value2", ... }\n}\n\n'
-            f"User Query: {input_text.strip()}\n\n"
-            f"Available Commands:\n{command_list}\n"
-        )
-
-        print(f"Prompt sent to model:\n{prompt}\n")
+        prompt = self._construct_prompt(input_text)
+        print("\n🔹 Prompt sent to local-LLM:\n", prompt)
 
         # Call GPT4All
         with self.llm.chat_session():
@@ -220,15 +235,8 @@ class LLMManager:
 
         print(f"Model response:\n{response}\n")
 
-        # Parse JSON
-        try:
-            parsed = json.loads(response)
-            command = parsed["command"]
-            args = parsed.get("args", {})
-            return command, args
-        except Exception as e:
-            print("Failed to parse response as JSON:", e)
-            return None
+        result = self.processLlmResponse(response, input_text)
+        return result
             
 
 

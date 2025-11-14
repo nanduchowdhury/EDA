@@ -559,6 +559,8 @@ class SqlQueryPredicate(PredicateBase, QObject):
 
             result = manager.executeSql(actual_query)
 
+            print(f"SQL query result:\n{result}")
+
             if result.shape == (1, 1):
                 global_signals.signal_update_sql_run_status.emit({
                     "status": "success",
