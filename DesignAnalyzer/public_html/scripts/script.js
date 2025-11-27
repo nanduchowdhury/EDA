@@ -68,7 +68,11 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
       ],
       products: [
         { text: "Analyzerr", href: "analytics.html#Analyzerr" }
-      ]
+      ],
+      Education: [
+        { text: "Our Approach", href: "education_consultancy.html#Approach" },
+        { text: "Our Deliverables", href: "education_consultancy.html#Deliverables" }
+      ],
     };
 
 
