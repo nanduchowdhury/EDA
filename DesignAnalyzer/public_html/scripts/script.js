@@ -73,6 +73,10 @@ document.querySelectorAll('.menu-item, #burger').forEach(el => {
         { text: "Our Approach", href: "education_consultancy.html#Approach" },
         { text: "Our Deliverables", href: "education_consultancy.html#Deliverables" }
       ],
+      Travel: [
+        { text: "Our Approach", href: "travel_consultancy.html#Approach" },
+        { text: "Our Deliverables", href: "travel_consultancy.html#Deliverables" }
+      ],
     };
 
 
